@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:cxf="http://camel.apache.org/schema/cxf"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd          http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+    http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd         
+    http://camel.apache.org/schema/spring 
+    http://camel.apache.org/schema/spring/camel-spring.xsd          
+    http://camel.apache.org/schema/cxf 
+    http://camel.apache.org/schema/cxf/camel-cxf.xsd">
     <!-- Proyecto apache camel que permite realizar un proxy entre servicios 
 		del tipo SOAP -->
-    <camelContext id="s03-proxy" xmlns="http://camel.apache.org/schema/spring">
-        <!-- Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
+    <camelContext id="s03-proxy" xmlns="http://camel.apache.org/schema/spring" 
+    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:web="http://www.webserviceX.NET">
+           <!-- Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
 			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
 			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
 			archivo properties. Por defecto en opensfhit es develop -->
@@ -17,13 +25,41 @@
                 maximumRedeliveries="{{camel.timeout.max-delivery}}" redeliveryDelay="{{camel.timeout.redelivery-delay}}"/>
         </onException>
 
+		<onException>
+			<exception>cl.wom.exception.services.ServiceError</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<log loggingLevel="ERROR" message="encontro un error" />
+			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+				<simple>${exception.codigoError}</simple>
+			</setHeader>
+			<setHeader headerName="messageError"><simple>Bad Request - ${exception.message}</simple></setHeader>
+			<!-- <to uri="velocity:velocity/SOAPResponse.vm" /> -->
+		</onException>
+
         <!-- Ruta camel que expone un servicio SOAP basado en una publicación del 
 			mismo tipo -->
+			
         <route streamCache="true">
-            
             <from uri="cxf:http://0.0.0.0:8888/salesSupport/uss?wsdlURL=classpath:wsdl/definition.wsdl&amp;serviceName={http://www.webserviceX.NET}GlobalWeather&amp;portName={http://www.webserviceX.NET}GlobalWeatherSoap&amp;dataFormat=MESSAGE"/>
-           <!--  <to uri="cxf:http://{{soap.service.host}}:{{soap.service.port}}{{soap.service.resource}}?dataFormat=MESSAGE"/> -->
+            <!--  <to uri="cxf:http://{{soap.service.host}}:{{soap.service.port}}{{soap.service.resource}}?dataFormat=MESSAGE"/> -->
             <log loggingLevel="INFO" message="pasando por servicio proxy"/>
+            
+           <setHeader headerName="country">
+           	<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/web:GetCitiesByCountry/web:CountryName/text()</xpath>
+           </setHeader>
+            
+            <choice>
+				<when>
+					<simple>${headers.country} == "1"</simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				<otherwise>
+				<!-- 	<to uri="velocity:velocity/SOAPResponse2.vm" /> -->
+				</otherwise>
+			</choice>
             
             <!-- TODO: invocar registraTX() "Inicio de Activación en RED" sentencia SQL Base Operaciones -->
             <!-- TODO: Procesar condicion de retorno de la base de operaciones -->
@@ -36,6 +72,8 @@
             <!-- TODO: Procesar condicion de retorno de la base de datos BSCS -->
 			<!-- TODO: invoca registraTx() "Termino REgistro en BSCS" en Base Operaciones -->
 			<!-- TODO: Procesar condicion de retorno de la base de operaciones -->            
+        
+        
         </route>
     </camelContext>
 </beans>
