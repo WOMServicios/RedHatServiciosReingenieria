@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://camel.apache.org/schema/spring 
+	http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<camelContext
+	    id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
+		xmlns="http://camel.apache.org/schema/spring">
+		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
+			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
+			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
+			archivo properties. Por defecto en opensfhit es develop -->
+		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
+		
+		<propertyPlaceholder id="placeholder"
+			location="classpath:application.properties" />
+			
+		<onException>
+			<exception>cl.wom.exception.services.ServiceError</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<log loggingLevel="ERROR" message="errorr" />
+			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+				<simple>${exception.codigoError}</simple>
+			</setHeader>
+			<setHeader headerName="messageError"><simple>Bad Request - ${exception.message}</simple></setHeader>
+			<to uri="velocity:velocity/400.vm" />
+		</onException>
+
+		<route streamCache="true">
+			<from
+				uri="restlet:http://localhost:8888/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/eligibility/?restletMethod=post" />
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="campo1">
+				<jsonpath>$.extensionData.key1</jsonpath>
+			</setHeader>
+
+			<choice>
+				<when>
+					<simple>${headers.campo1} == ""</simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/200.vm" />
+				</otherwise>
+			</choice>
+		</route>
+
+		<route streamCache="true">
+			<from
+				uri="restlet:http://localhost:8888/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/?restletMethod=post" />
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="campo1">
+				<jsonpath>$.requestId</jsonpath>
+			</setHeader>
+
+			<choice>
+				<when>
+					<simple>${headers.campo1} == ""</simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/200.vm" />
+				</otherwise>
+			</choice>
+		</route>
+
+		<route streamCache="true">
+			<from
+				uri="restlet:http://localhost:8888/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/?restletMethod=patch" />
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="campo1">
+				<jsonpath>$.requestId</jsonpath>
+			</setHeader>
+
+			<choice>
+				<when>
+					<simple>${headers.campo1} == ""</simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/200.vm" />
+				</otherwise>
+			</choice>
+		</route>
+
+		<route streamCache="true">
+			<from
+				uri="restlet:http://localhost:8888/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/cancel/?restletMethod=post" />
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="campo1">
+				<jsonpath>$.requestId</jsonpath>
+			</setHeader>
+
+			<choice>
+				<when>
+					<simple>${headers.campo1} == ""</simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/200.vm" />
+				</otherwise>
+			</choice>
+		</route>
+
+		<route streamCache="true">
+			<from
+				uri="restlet:http://localhost:8888/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/refund/?restletMethod=post" />
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="campo1">
+				<jsonpath>$.requestId</jsonpath>
+			</setHeader>
+
+			<choice>
+				<when>
+					<simple>${headers.campo1} == ""</simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/200.vm" />
+				</otherwise>
+			</choice>
+		</route>
+
+	</camelContext>
+</beans>
