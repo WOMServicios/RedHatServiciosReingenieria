@@ -1,0 +1,9 @@
+{
+  "responseCode": "prueba1",
+  "responseMessage": "${headers.messageError}",
+  "paymentProviderTransactionId": "ERROR 300",
+  "extensionData": {
+    "key1": "12232",
+    "key2": "21121" 
+  }
+}
