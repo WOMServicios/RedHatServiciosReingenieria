@@ -8,12 +8,12 @@
 		proyecto por medio de comando Maven -->
 	<fileSets>
 	
-		<fileSet filtered="true" packaged="false">
-			<directory>src/test/java</directory>
-			<includes>
-				<include>**/*.java</include>
-			</includes>
-		</fileSet>	
+<!-- 		<fileSet filtered="true" packaged="false"> -->
+<!-- 			<directory>src/test/java</directory> -->
+<!-- 			<includes> -->
+<!-- 				<include>**/*.java</include> -->
+<!-- 			</includes> -->
+<!-- 		</fileSet>	 -->
 		<fileSet filtered="true" packaged="false">
 			<directory>src/main/java</directory>
 			<includes>

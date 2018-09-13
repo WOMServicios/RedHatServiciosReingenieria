@@ -12,15 +12,55 @@
             <exception>java.lang.Exception</exception>
             <redeliveryPolicy
                 maximumRedeliveries="{{camel.timeout.max-delivery}}" redeliveryDelay="{{camel.timeout.redelivery-delay}}"/>
+           
+            <handled>
+				<constant>true</constant>
+			</handled>
+			
             <log loggingLevel="ERROR" message="error al enviar el mesaje"/>
+            
+            <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+				<simple>${exception.codigoError}</simple>
+			</setHeader>
+			
+			<setHeader headerName="messageError"><simple>Bad Request - ${exception.message}</simple></setHeader>
+			
             <to uri="velocity:velocity/sqlException-json.vm"/>
         </onException>
+        
         <!-- Esta ruta se encarga de imprimir las variables de: ambiente y log. 
 			Se ejecuta solo 1 vez -->
+			
         <route id="_route5">
             <from id="_from3" uri="timer://foo?repeatCount=1"/>
             <log id="_log1" loggingLevel="INFO" message="PROPERTIE DE AMBIENTE: {{env:PFX_ENV}}"/>
             <log id="_log2" loggingLevel="INFO" message="NIVEL DE LOG: {{env:LOGLEVEL}}"/>
+            
+<!--             Set de Argumentos -->
+            <setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="campo1">
+				<jsonpath>$.extensionData.key1</jsonpath>
+				<!-- <convertBodyTo type="java.lang.String"/> -->
+			</setHeader>
+			
+<!-- 				Condiciones para el manejo de excepciones -->
+			<choice>
+				<when>
+					<simple>${headers.campo1} == ""</simple>
+						
+					<throwException exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+		
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/200.vm" />
+				</otherwise>
+			</choice>    
         </route>
         <route id="_route1" streamCache="true">
             <from id="_from1" uri="restlet:http://0.0.0.0:${portProxy}/${resourceService}?restletMethod=get"/>
