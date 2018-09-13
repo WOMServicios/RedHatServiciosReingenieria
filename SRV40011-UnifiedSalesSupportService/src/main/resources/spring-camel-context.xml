@@ -1,98 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:cxf="http://camel.apache.org/schema/cxf"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+	xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
     http://www.springframework.org/schema/beans 
     http://www.springframework.org/schema/beans/spring-beans.xsd         
     http://camel.apache.org/schema/spring 
     http://camel.apache.org/schema/spring/camel-spring.xsd          
     http://camel.apache.org/schema/cxf 
     http://camel.apache.org/schema/cxf/camel-cxf.xsd">
-    <!-- Proyecto apache camel que permite realizar un proxy entre servicios 
+	<!-- this is the JDBC data source which uses a MySQL database -->
+	<bean class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" id="dataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/ws_prueba" />
+		<property name="username" value="root" />
+		<property name="password" value="asdqwe123" />
+	</bean>
+
+
+
+
+	<!-- configure the Camel SQL component to use the JDBC data source -->
+	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- Proyecto apache camel que permite realizar un proxy entre servicios 
 		del tipo SOAP -->
-    <camelContext id="s03-proxy" xmlns="http://camel.apache.org/schema/spring" 
-    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
-    xmlns:web="http://www.webserviceX.NET">
-           <!-- Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
+
+	<camelContext id="s03-proxy" xmlns="http://camel.apache.org/schema/spring"
+		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:web="http://www.webserviceX.NET">
+		<!-- Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
 			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
 			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
 			archivo properties. Por defecto en opensfhit es develop -->
-<!--         <propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
-        <propertyPlaceholder id="placeholder" location="classpath:application.properties"/>
-        <onException>
-            <exception>java.lang.Exception</exception>
-            <redeliveryPolicy
-                maximumRedeliveries="{{camel.timeout.max-delivery}}" redeliveryDelay="{{camel.timeout.redelivery-delay}}"/>
-        </onException>
+		<!-- <propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
+		<propertyPlaceholder id="placeholder"
+			location="classpath:application.properties" />
+		<onException>
+			<exception>java.lang.Exception</exception>
+			<redeliveryPolicy maximumRedeliveries="{{camel.timeout.max-delivery}}"
+				redeliveryDelay="{{camel.timeout.redelivery-delay}}" />
+		</onException>
 
-<!-- 		<onException>
-			<exception>cl.wom.exception.services.ServiceError</exception>
-			<handled>
-				<constant>true</constant>
-			</handled>
-			<log loggingLevel="ERROR" message="encontro un error" />
-			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-				<simple>${exception.codigoError}</simple>
-			</setHeader>
-			<setHeader headerName="messageError">
-				<simple>Bad Request - ${exception.message}</simple>
-			</setHeader>
-			<to uri="velocity:velocity/SOAPResponse.vm" />
-		</onException> -->
+		<!-- <onException> <exception>cl.wom.exception.services.ServiceError</exception> 
+			<handled> <constant>true</constant> </handled> <log loggingLevel="ERROR" 
+			message="encontro un error" /> <setHeader headerName="Exchange.HTTP_RESPONSE_CODE"> 
+			<simple>${exception.codigoError}</simple> </setHeader> <setHeader headerName="messageError"> 
+			<simple>Bad Request - ${exception.message}</simple> </setHeader> <to uri="velocity:velocity/SOAPResponse.vm" 
+			/> </onException> -->
 
-        <!-- Ruta camel que expone un servicio SOAP basado en una publicación del 
+		<!-- Ruta camel que expone un servicio SOAP basado en una publicación del 
 			mismo tipo -->
-			
-        <route streamCache="true">
-            <from uri="cxf:http://0.0.0.0:8888/salesSupport/uss?wsdlURL=classpath:wsdl/definition.wsdl&amp;serviceName={http://www.webserviceX.NET}GlobalWeather&amp;portName={http://www.webserviceX.NET}GlobalWeatherSoap&amp;dataFormat=MESSAGE"/>
-            <!--  <to uri="cxf:http://{{soap.service.host}}:{{soap.service.port}}{{soap.service.resource}}?dataFormat=MESSAGE"/> -->
-            <log loggingLevel="INFO" message="pasando por servicio proxy"/>
-            
-           <setHeader headerName="param">
-           		<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/web:GetCitiesByCountry/web:CountryName/text()</xpath>
-           </setHeader>
-           
-           <to uri="velocity:velocity/activateVoLTENetworkRequest.vm" />
-           <to uri="cxf:http://0.0.0.0:8889/activateVoLTENetwork/?dataFormat=MESSAGE" />
-           <log loggingLevel="INFO" message="respuesta activateVoLTENetwork body: ${body}" />
-           
-<!--            <convertBodyTo type="org.w3c.dom.Document"/> -->
-           <setHeader headerName="resultCode">
-           		<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/Result/ResultCode/text()</xpath>
-           </setHeader>
-           
+
+		<route streamCache="true">
+			<from
+				uri="cxf:http://0.0.0.0:8888/salesSupport/uss?wsdlURL=classpath:wsdl/definition.wsdl&amp;serviceName={http://www.webserviceX.NET}GlobalWeather&amp;portName={http://www.webserviceX.NET}GlobalWeatherSoap&amp;dataFormat=MESSAGE" />
+			<!-- <to uri="cxf:http://{{soap.service.host}}:{{soap.service.port}}{{soap.service.resource}}?dataFormat=MESSAGE"/> -->
+			<log loggingLevel="INFO" message="pasando por servicio proxy" />
+
+			<setHeader headerName="param">
+				<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/web:GetCitiesByCountry/web:CountryName/text()
+				</xpath>
+			</setHeader>
+			<to uri="sql-stored:insert_ID(INTEGER ${headers.param})?dataSource=dataSource" />
+
+
+			<to uri="sql:select * from auditoria 
+				?dataSource=dataSource" />
+			<log message=" select apache : ${body}" />
+
+			<to uri="velocity:velocity/activateVoLTENetworkRequest.vm" />
+			<to
+				uri="cxf:http://0.0.0.0:8889/activateVoLTENetwork/?dataFormat=MESSAGE" />
+			<log loggingLevel="INFO" message="respuesta activateVoLTENetwork body: ${body}" />
+
+			<!-- <convertBodyTo type="org.w3c.dom.Document"/> -->
+			<setHeader headerName="resultCode">
+				<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/Result/ResultCode/text()
+				</xpath>
+			</setHeader>
+
+			<!-- <to uri="sql-stored:insert_ID(INTEGER ${headers.resultCode}) ?dataSource=dataSource" 
+				/> -->
+
+			<!-- <to uri="sql:insert into respuesta values(null,'insert6') ?dataSource=dataSource"/> -->
+
 			<choice>
 				<when>
 					<simple>${headers.resultCode} != 1</simple>
-					<log message="aqui se debe implementar el otro TO al servicio o lo que corresponda" />
-					<transform><simple>sdsad</simple></transform>
+					<log
+						message="aqui se debe implementar el otro TO al servicio o lo que corresponda" />
+					<transform>
+						<simple>sdsad</simple>
+					</transform>
 				</when>
 			</choice>
-           
-            
-            <!-- TODO: invocar registraTX() "Inicio de Activación en RED" sentencia SQL Base Operaciones -->
-            <!-- TODO: Procesar condicion de retorno de la base de operaciones -->
-            <!-- TODO: invocar activateVoLTENetwork(msisdn,imsi)TELNET en el Gateway SPG (Gateway Service Provider Gateway)-->
-            <!-- TODO: Procesar condicion de retorno del Gateway SPG-->
-            <!-- TODO: invocar registraTX() "Termino de Activación en RED" sentencia SQL Base Operaciones -->
-            <!-- TODO: Procesar condicion de retorno de la base de operaciones -->
-            <!-- TODO: invoca resgistraTx() "Inicio de registro en el BSCS (Business Support & Control System)" sentencia SQL en la Base Operaciones-->
-            <!-- TODO: invoca activateVoLTEBSCS(msisdn) sentencia PL/SQL base de datos BSCS-->
-            <!-- TODO: Procesar condicion de retorno de la base de datos BSCS -->
+
+
+			<!-- TODO: invocar registraTX() "Inicio de Activación en RED" sentencia 
+				SQL Base Operaciones -->
+			<!-- TODO: Procesar condicion de retorno de la base de operaciones -->
+			<!-- TODO: invocar activateVoLTENetwork(msisdn,imsi)TELNET en el Gateway 
+				SPG (Gateway Service Provider Gateway) -->
+			<!-- TODO: Procesar condicion de retorno del Gateway SPG -->
+			<!-- TODO: invocar registraTX() "Termino de Activación en RED" sentencia 
+				SQL Base Operaciones -->
+			<!-- TODO: Procesar condicion de retorno de la base de operaciones -->
+			<!-- TODO: invoca resgistraTx() "Inicio de registro en el BSCS (Business 
+				Support & Control System)" sentencia SQL en la Base Operaciones -->
+			<!-- TODO: invoca activateVoLTEBSCS(msisdn) sentencia PL/SQL base de datos 
+				BSCS -->
+			<!-- TODO: Procesar condicion de retorno de la base de datos BSCS -->
 			<!-- TODO: invoca registraTx() "Termino REgistro en BSCS" en Base Operaciones -->
-			<!-- TODO: Procesar condicion de retorno de la base de operaciones -->            
-        </route>
-        
-        
-        <!-- Servicio virtual temporal activateVoLTENetwork-->
+			<!-- TODO: Procesar condicion de retorno de la base de operaciones -->
+		</route>
+
+
+		<!-- Servicio virtual temporal activateVoLTENetwork -->
 		<route streamCache="true">
-			<from uri="cxf:http://0.0.0.0:8889/activateVoLTENetwork/?wsdlURL=classpath:wsdl/definition.wsdl&amp;serviceName={http://www.webserviceX.NET}GlobalWeather&amp;portName={http://www.webserviceX.NET}GlobalWeatherSoap&amp;dataFormat=MESSAGE" />
-			<log loggingLevel="INFO" message="dentro del servicio activateVoLTENetwork body: ${body}" />
+			<from
+				uri="cxf:http://0.0.0.0:8889/activateVoLTENetwork/?wsdlURL=classpath:wsdl/definition.wsdl&amp;serviceName={http://www.webserviceX.NET}GlobalWeather&amp;portName={http://www.webserviceX.NET}GlobalWeatherSoap&amp;dataFormat=MESSAGE" />
+			<log loggingLevel="INFO"
+				message="dentro del servicio activateVoLTENetwork body: ${body}" />
 
 			<to uri="velocity:velocity/activateVoLTENetworkResponse.vm" />
-			
-			
-		</route>  	      
-        
-    </camelContext>
+
+		</route>
+
+	</camelContext>
 </beans>
