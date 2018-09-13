@@ -40,36 +40,30 @@
 			<to uri="velocity:velocity/SOAPResponse.vm" />
 		</onException> -->
 
-        <!-- Ruta camel que expone un servicio SOAP basado en una publicación del 
-			mismo tipo -->
-			
         <route streamCache="true">
             <from uri="cxf:http://0.0.0.0:8888/salesSupport/uss?wsdlURL=classpath:wsdl/definition.wsdl&amp;serviceName={http://www.webserviceX.NET}GlobalWeather&amp;portName={http://www.webserviceX.NET}GlobalWeatherSoap&amp;dataFormat=MESSAGE"/>
             <!--  <to uri="cxf:http://{{soap.service.host}}:{{soap.service.port}}{{soap.service.resource}}?dataFormat=MESSAGE"/> -->
-            <log loggingLevel="INFO" message="pasando por servicio proxy"/>
+            <log loggingLevel="INFO" message="pasando por servicio autoProvisionVoLTE2"/>
             
            <setHeader headerName="param">
            		<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/web:GetCitiesByCountry/web:CountryName/text()</xpath>
            </setHeader>
-           
            <to uri="velocity:velocity/activateVoLTENetworkRequest.vm" />
            <to uri="cxf:http://0.0.0.0:8889/activateVoLTENetwork/?dataFormat=MESSAGE" />
-           <log loggingLevel="INFO" message="respuesta activateVoLTENetwork body: ${body}" />
+           <log loggingLevel="INFO" message="respuesta activateVoLTENetwork body: ${body}"/>
            
-<!--            <convertBodyTo type="org.w3c.dom.Document"/> -->
-           <setHeader headerName="resultCode">
+ 	       <setHeader headerName="resultCode">
            		<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/Result/ResultCode/text()</xpath>
            </setHeader>
-           
+    
 			<choice>
 				<when>
 					<simple>${headers.resultCode} != 1</simple>
 					<log message="aqui se debe implementar el otro TO al servicio o lo que corresponda" />
-					<transform><simple>sdsad</simple></transform>
+					<transform><simple>Cierre</simple></transform>
 				</when>
 			</choice>
-           
-            
+                      
             <!-- TODO: invocar registraTX() "Inicio de Activación en RED" sentencia SQL Base Operaciones -->
             <!-- TODO: Procesar condicion de retorno de la base de operaciones -->
             <!-- TODO: invocar activateVoLTENetwork(msisdn,imsi)TELNET en el Gateway SPG (Gateway Service Provider Gateway)-->

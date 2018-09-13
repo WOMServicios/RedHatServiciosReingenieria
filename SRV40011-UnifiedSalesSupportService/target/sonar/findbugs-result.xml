@@ -1,96 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<BugCollection version="3.1.0-RC6" sequence="0" timestamp="1536758334000" analysisTimestamp="1536759707569" release="">
+<BugCollection version="3.1.0-RC6" sequence="0" timestamp="1536842738000" analysisTimestamp="1536842964764" release="">
   <Project>
-    <Jar>/home/cquezada/Desktop/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/classes/cl/wom/exception/services/ServiceError.class</Jar>
-    <Jar>/home/cquezada/Desktop/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/classes/cl/wom/middleware/proxy/SpringBootSoapProxyApplication.class</Jar>
-    <AuxClasspathEntry>/home/cquezada/Desktop/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/classes</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/boot/spring-boot-starter-web/1.4.1.RELEASE/spring-boot-starter-web-1.4.1.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/1.4.1.RELEASE/spring-boot-starter-tomcat-1.4.1.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/8.5.5/tomcat-embed-core-8.5.5.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/8.5.5/tomcat-embed-el-8.5.5.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/8.5.5/tomcat-embed-websocket-8.5.5.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/hibernate/hibernate-validator/5.2.4.Final/hibernate-validator-5.2.4.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/jboss/logging/jboss-logging/3.3.0.Final/jboss-logging-3.3.0.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/com/fasterxml/classmate/1.3.1/classmate-1.3.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.8.3/jackson-databind-2.8.3.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.8.3/jackson-annotations-2.8.3.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.8.3/jackson-core-2.8.3.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/spring-web/4.3.3.RELEASE/spring-web-4.3.3.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/spring-aop/4.3.3.RELEASE/spring-aop-4.3.3.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/spring-webmvc/4.3.3.RELEASE/spring-webmvc-4.3.3.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/spring-expression/4.3.3.RELEASE/spring-expression-4.3.3.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/boot/spring-boot-starter-undertow/1.4.1.RELEASE/spring-boot-starter-undertow-1.4.1.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/io/undertow/undertow-core/1.3.25.Final/undertow-core-1.3.25.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/jboss/xnio/xnio-api/3.3.6.Final/xnio-api-3.3.6.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/jboss/xnio/xnio-nio/3.3.6.Final/xnio-nio-3.3.6.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/io/undertow/undertow-servlet/1.3.25.Final/undertow-servlet-1.3.25.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/jboss/spec/javax/annotation/jboss-annotations-api_1.2_spec/1.0.0.Final/jboss-annotations-api_1.2_spec-1.0.0.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/io/undertow/undertow-websockets-jsr/1.3.25.Final/undertow-websockets-jsr-1.3.25.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/jboss/spec/javax/websocket/jboss-websocket-api_1.1_spec/1.1.0.Final/jboss-websocket-api_1.1_spec-1.1.0.Final.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/glassfish/javax.el/3.0.0/javax.el-3.0.0.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/camel/camel-cxf/2.18.1.redhat-000021/camel-cxf-2.18.1.redhat-000021.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/camel/camel-core/2.18.1.redhat-000021/camel-core-2.18.1.redhat-000021.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/camel/camel-spring/2.18.1.redhat-000021/camel-spring-2.18.1.redhat-000021.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/spring-tx/4.3.3.RELEASE/spring-tx-4.3.3.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/camel/camel-cxf-transport/2.18.1.redhat-000021/camel-cxf-transport-2.18.1.redhat-000021.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-frontend-jaxrs/3.1.5.redhat-630283/cxf-rt-frontend-jaxrs-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.0.1/javax.ws.rs-api-2.0.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-rs-security-oauth/3.1.5.redhat-630283/cxf-rt-rs-security-oauth-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-rs-client/3.1.5.redhat-630283/cxf-rt-rs-client-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/net/oauth/core/oauth-provider/20100527/oauth-provider-20100527.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/net/oauth/core/oauth/20100527/oauth-20100527.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/spring-core/4.3.3.RELEASE/spring-core-4.3.3.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/spring-beans/4.3.3.RELEASE/spring-beans-4.3.3.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/spring-context/4.3.3.RELEASE/spring-context-4.3.3.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-bindings-soap/3.1.5.redhat-630283/cxf-rt-bindings-soap-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-wsdl/3.1.5.redhat-630283/cxf-rt-wsdl-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/wsdl4j/wsdl4j/1.6.3/wsdl4j-1.6.3.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-databinding-jaxb/3.1.5.redhat-630283/cxf-rt-databinding-jaxb-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/com/sun/xml/bind/jaxb-core/2.2.11.redhat-2/jaxb-core-2.2.11.redhat-2.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/camel/camel-spring-boot/2.18.1.redhat-000021/camel-spring-boot-2.18.1.redhat-000021.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/com/sun/xml/bind/jaxb-impl/2.2.11.redhat-2/jaxb-impl-2.2.11.redhat-2.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/boot/spring-boot-starter/1.4.1.RELEASE/spring-boot-starter-1.4.1.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/boot/spring-boot/1.4.1.RELEASE/spring-boot-1.4.1.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/1.4.1.RELEASE/spring-boot-autoconfigure-1.4.1.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/springframework/boot/spring-boot-starter-logging/1.4.1.RELEASE/spring-boot-starter-logging-1.4.1.RELEASE.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/ch/qos/logback/logback-classic/1.1.7/logback-classic-1.1.7.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/ch/qos/logback/logback-core/1.1.7/logback-core-1.1.7.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.21/jcl-over-slf4j-1.7.21.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/slf4j/jul-to-slf4j/1.7.21/jul-to-slf4j-1.7.21.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/slf4j/log4j-over-slf4j/1.7.21/log4j-over-slf4j-1.7.21.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-frontend-jaxws/3.1.5.redhat-630283/cxf-rt-frontend-jaxws-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/xml-resolver/xml-resolver/1.2.0.redhat-10/xml-resolver-1.2.0.redhat-10.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/ow2/asm/asm/5.0.4/asm-5.0.4.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-core/3.1.5.redhat-630283/cxf-core-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/codehaus/woodstox/woodstox-core-asl/4.4.1/woodstox-core-asl-4.4.1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/codehaus/woodstox/stax2-api/3.1.4/stax2-api-3.1.4.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/ws/xmlschema/xmlschema-core/2.2.1.redhat-1/xmlschema-core-2.2.1.redhat-1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-bindings-xml/3.1.5.redhat-630283/cxf-rt-bindings-xml-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-frontend-simple/3.1.5.redhat-630283/cxf-rt-frontend-simple-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-ws-addr/3.1.5.redhat-630283/cxf-rt-ws-addr-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-ws-policy/3.1.5.redhat-630283/cxf-rt-ws-policy-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/neethi/neethi/3.0.3.redhat-1/neethi-3.0.3.redhat-1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-transports-http/3.1.5.redhat-630283/cxf-rt-transports-http-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-spring-boot-starter-jaxws/3.1.5.redhat-630283/cxf-spring-boot-starter-jaxws-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-spring-boot-autoconfigure/3.1.5.redhat-630283/cxf-spring-boot-autoconfigure-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/javax/validation/validation-api/1.1.0.Final-redhat-1/validation-api-1.1.0.Final-redhat-1.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/apache/cxf/cxf-rt-transports-http-jetty/3.1.5.redhat-630283/cxf-rt-transports-http-jetty-3.1.5.redhat-630283.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/eclipse/jetty/jetty-server/9.3.11.v20160721/jetty-server-9.3.11.v20160721.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/eclipse/jetty/jetty-util/9.3.11.v20160721/jetty-util-9.3.11.v20160721.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/eclipse/jetty/jetty-io/9.3.11.v20160721/jetty-io-9.3.11.v20160721.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/eclipse/jetty/jetty-security/9.3.11.v20160721/jetty-security-9.3.11.v20160721.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/eclipse/jetty/jetty-continuation/9.3.11.v20160721/jetty-continuation-9.3.11.v20160721.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/eclipse/jetty/jetty-http/9.3.11.v20160721/jetty-http-9.3.11.v20160721.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/.m2/repository/org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/Desktop/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/sonar/findbugs/annotations.jar</AuxClasspathEntry>
-    <AuxClasspathEntry>/home/cquezada/Desktop/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/sonar/findbugs/jsr305.jar</AuxClasspathEntry>
-    <WrkDir>/home/cquezada/Desktop/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/sonar</WrkDir>
+    <Jar>/home/kayajooks/git/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/classes/cl/wom/exception/services/ServiceError.class</Jar>
+    <Jar>/home/kayajooks/git/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/classes/cl/wom/middleware/proxy/SpringBootSoapProxyApplication.class</Jar>
+    <AuxClasspathEntry>/home/kayajooks/git/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/boot/spring-boot-starter-web/1.4.1.RELEASE/spring-boot-starter-web-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/boot/spring-boot-starter-tomcat/1.4.1.RELEASE/spring-boot-starter-tomcat-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/tomcat/embed/tomcat-embed-core/8.5.5/tomcat-embed-core-8.5.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/tomcat/embed/tomcat-embed-el/8.5.5/tomcat-embed-el-8.5.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/tomcat/embed/tomcat-embed-websocket/8.5.5/tomcat-embed-websocket-8.5.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/hibernate/hibernate-validator/5.2.4.Final/hibernate-validator-5.2.4.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/jboss/logging/jboss-logging/3.3.0.Final/jboss-logging-3.3.0.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/com/fasterxml/classmate/1.3.1/classmate-1.3.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.8.3/jackson-databind-2.8.3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.8.3/jackson-annotations-2.8.3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.8.3/jackson-core-2.8.3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/spring-web/4.3.3.RELEASE/spring-web-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/spring-aop/4.3.3.RELEASE/spring-aop-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/spring-webmvc/4.3.3.RELEASE/spring-webmvc-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/spring-expression/4.3.3.RELEASE/spring-expression-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/boot/spring-boot-starter-undertow/1.4.1.RELEASE/spring-boot-starter-undertow-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/io/undertow/undertow-core/1.3.25.Final/undertow-core-1.3.25.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/jboss/xnio/xnio-api/3.3.6.Final/xnio-api-3.3.6.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/jboss/xnio/xnio-nio/3.3.6.Final/xnio-nio-3.3.6.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/io/undertow/undertow-servlet/1.3.25.Final/undertow-servlet-1.3.25.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/jboss/spec/javax/annotation/jboss-annotations-api_1.2_spec/1.0.0.Final/jboss-annotations-api_1.2_spec-1.0.0.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/io/undertow/undertow-websockets-jsr/1.3.25.Final/undertow-websockets-jsr-1.3.25.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/jboss/spec/javax/websocket/jboss-websocket-api_1.1_spec/1.1.0.Final/jboss-websocket-api_1.1_spec-1.1.0.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/glassfish/javax.el/3.0.0/javax.el-3.0.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/camel/camel-cxf/2.18.1.redhat-000021/camel-cxf-2.18.1.redhat-000021.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/camel/camel-core/2.18.1.redhat-000021/camel-core-2.18.1.redhat-000021.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/camel/camel-spring/2.18.1.redhat-000021/camel-spring-2.18.1.redhat-000021.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/spring-tx/4.3.3.RELEASE/spring-tx-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/camel/camel-cxf-transport/2.18.1.redhat-000021/camel-cxf-transport-2.18.1.redhat-000021.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-frontend-jaxrs/3.1.5.redhat-630283/cxf-rt-frontend-jaxrs-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/javax/ws/rs/javax.ws.rs-api/2.0.1/javax.ws.rs-api-2.0.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-rs-security-oauth/3.1.5.redhat-630283/cxf-rt-rs-security-oauth-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-rs-client/3.1.5.redhat-630283/cxf-rt-rs-client-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/net/oauth/core/oauth-provider/20100527/oauth-provider-20100527.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/net/oauth/core/oauth/20100527/oauth-20100527.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/spring-core/4.3.3.RELEASE/spring-core-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/spring-beans/4.3.3.RELEASE/spring-beans-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/spring-context/4.3.3.RELEASE/spring-context-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-bindings-soap/3.1.5.redhat-630283/cxf-rt-bindings-soap-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-wsdl/3.1.5.redhat-630283/cxf-rt-wsdl-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/wsdl4j/wsdl4j/1.6.3/wsdl4j-1.6.3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-databinding-jaxb/3.1.5.redhat-630283/cxf-rt-databinding-jaxb-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/com/sun/xml/bind/jaxb-core/2.2.11.redhat-2/jaxb-core-2.2.11.redhat-2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/camel/camel-velocity/2.18.1.redhat-000021/camel-velocity-2.18.1.redhat-000021.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/velocity/velocity/1.7/velocity-1.7.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/commons-lang/commons-lang/2.6.0.redhat-5/commons-lang-2.6.0.redhat-5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/com/sun/xml/bind/jaxb-impl/2.2.11.redhat-2/jaxb-impl-2.2.11.redhat-2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/camel/camel-spring-boot/2.18.1.redhat-000021/camel-spring-boot-2.18.1.redhat-000021.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/camel/camel-restlet/2.18.1.redhat-000021/camel-restlet-2.18.1.redhat-000021.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/restlet/jee/org.restlet/2.3.6/org.restlet-2.3.6.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/restlet/jee/org.restlet.ext.httpclient/2.3.6/org.restlet.ext.httpclient-2.3.6.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/commons-codec/commons-codec/1.10/commons-codec-1.10.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/httpcomponents/httpclient/4.5.2/httpclient-4.5.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/httpcomponents/httpcore/4.4.5/httpcore-4.4.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/httpcomponents/httpmime/4.5.2/httpmime-4.5.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/net/jcip/jcip-annotations/1.0/jcip-annotations-1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/commons-logging/commons-logging/1.2.0.redhat-2/commons-logging-1.2.0.redhat-2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/james/apache-mime4j-core/0.7.2/apache-mime4j-core-0.7.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/boot/spring-boot-starter/1.4.1.RELEASE/spring-boot-starter-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/boot/spring-boot/1.4.1.RELEASE/spring-boot-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/1.4.1.RELEASE/spring-boot-autoconfigure-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/boot/spring-boot-starter-logging/1.4.1.RELEASE/spring-boot-starter-logging-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/ch/qos/logback/logback-classic/1.1.7/logback-classic-1.1.7.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/ch/qos/logback/logback-core/1.1.7/logback-core-1.1.7.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.21/jcl-over-slf4j-1.7.21.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/slf4j/jul-to-slf4j/1.7.21/jul-to-slf4j-1.7.21.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/slf4j/log4j-over-slf4j/1.7.21/log4j-over-slf4j-1.7.21.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-frontend-jaxws/3.1.5.redhat-630283/cxf-rt-frontend-jaxws-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/xml-resolver/xml-resolver/1.2.0.redhat-10/xml-resolver-1.2.0.redhat-10.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/ow2/asm/asm/5.0.4/asm-5.0.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-core/3.1.5.redhat-630283/cxf-core-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/codehaus/woodstox/woodstox-core-asl/4.4.1/woodstox-core-asl-4.4.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/codehaus/woodstox/stax2-api/3.1.4/stax2-api-3.1.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/ws/xmlschema/xmlschema-core/2.2.1.redhat-1/xmlschema-core-2.2.1.redhat-1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-bindings-xml/3.1.5.redhat-630283/cxf-rt-bindings-xml-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-frontend-simple/3.1.5.redhat-630283/cxf-rt-frontend-simple-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-ws-addr/3.1.5.redhat-630283/cxf-rt-ws-addr-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-ws-policy/3.1.5.redhat-630283/cxf-rt-ws-policy-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/neethi/neethi/3.0.3.redhat-1/neethi-3.0.3.redhat-1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-transports-http/3.1.5.redhat-630283/cxf-rt-transports-http-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-spring-boot-starter-jaxws/3.1.5.redhat-630283/cxf-spring-boot-starter-jaxws-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-spring-boot-autoconfigure/3.1.5.redhat-630283/cxf-spring-boot-autoconfigure-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/javax/validation/validation-api/1.1.0.Final-redhat-1/validation-api-1.1.0.Final-redhat-1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/apache/cxf/cxf-rt-transports-http-jetty/3.1.5.redhat-630283/cxf-rt-transports-http-jetty-3.1.5.redhat-630283.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/eclipse/jetty/jetty-server/9.3.11.v20160721/jetty-server-9.3.11.v20160721.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/eclipse/jetty/jetty-util/9.3.11.v20160721/jetty-util-9.3.11.v20160721.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/eclipse/jetty/jetty-io/9.3.11.v20160721/jetty-io-9.3.11.v20160721.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/eclipse/jetty/jetty-security/9.3.11.v20160721/jetty-security-9.3.11.v20160721.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/eclipse/jetty/jetty-continuation/9.3.11.v20160721/jetty-continuation-9.3.11.v20160721.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/eclipse/jetty/jetty-http/9.3.11.v20160721/jetty-http-9.3.11.v20160721.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/.m2/repository/org/springframework/boot/spring-boot-devtools/1.4.1.RELEASE/spring-boot-devtools-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/git/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/sonar/findbugs/annotations.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/kayajooks/git/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/sonar/findbugs/jsr305.jar</AuxClasspathEntry>
+    <WrkDir>/home/kayajooks/git/RedHatServiciosReingenieria/SRV40011-UnifiedSalesSupportService/target/sonar</WrkDir>
   </Project>
   <Errors errors="0" missingClasses="0"></Errors>
-  <FindBugsSummary timestamp="Wed, 12 Sep 2018 10:18:54 -0300" total_classes="2" referenced_classes="39" total_bugs="0" total_size="27" num_packages="2" java_version="1.8.0_181" vm_version="25.181-b13" cpu_seconds="12.41" clock_seconds="3.65" peak_mbytes="424.91" alloc_mbytes="1664.00" gc_seconds="0.03">
+  <FindBugsSummary timestamp="Thu, 13 Sep 2018 09:45:38 -0300" total_classes="2" referenced_classes="39" total_bugs="0" total_size="27" num_packages="2" java_version="1.8.0_181" vm_version="25.181-b13" cpu_seconds="9.70" clock_seconds="2.97" peak_mbytes="413.94" alloc_mbytes="1703.50" gc_seconds="0.02">
     <FileStats path="cl/wom/exception/services/ServiceError.java" bugCount="0" size="21"/>
     <FileStats path="cl/wom/middleware/proxy/SpringBootSoapProxyApplication.java" bugCount="0" size="6"/>
     <PackageStats package="cl.wom.exception.services" total_bugs="0" total_types="1" total_size="21">
@@ -100,19 +115,17 @@
       <ClassStats class="cl.wom.middleware.proxy.SpringBootSoapProxyApplication" sourceFile="SpringBootSoapProxyApplication.java" interface="false" size="6" bugs="0"/>
     </PackageStats>
     <FindBugsProfile>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="524" invocations="545" avgMicrosecondsPerInvocation="962" maxMicrosecondsPerInvocation="38880" standardDeviationMicrosecondsPerInvocation="2627"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="201" invocations="551" avgMicrosecondsPerInvocation="365" maxMicrosecondsPerInvocation="985" standardDeviationMicrosecondsPerInvocation="92"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="197" invocations="39" avgMicrosecondsPerInvocation="5060" maxMicrosecondsPerInvocation="42186" standardDeviationMicrosecondsPerInvocation="8829"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="142" invocations="39" avgMicrosecondsPerInvocation="3659" maxMicrosecondsPerInvocation="24916" standardDeviationMicrosecondsPerInvocation="6479"/>
-      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="140" invocations="138" avgMicrosecondsPerInvocation="1018" maxMicrosecondsPerInvocation="8146" standardDeviationMicrosecondsPerInvocation="1355"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="86" invocations="5" avgMicrosecondsPerInvocation="17266" maxMicrosecondsPerInvocation="84068" standardDeviationMicrosecondsPerInvocation="33405"/>
-      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="82" invocations="506" avgMicrosecondsPerInvocation="163" maxMicrosecondsPerInvocation="3907" standardDeviationMicrosecondsPerInvocation="295"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="69" invocations="39" avgMicrosecondsPerInvocation="1775" maxMicrosecondsPerInvocation="22929" standardDeviationMicrosecondsPerInvocation="3907"/>
-      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="68" invocations="71" avgMicrosecondsPerInvocation="958" maxMicrosecondsPerInvocation="31541" standardDeviationMicrosecondsPerInvocation="3834"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="50" invocations="39" avgMicrosecondsPerInvocation="1306" maxMicrosecondsPerInvocation="21501" standardDeviationMicrosecondsPerInvocation="3466"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="50" invocations="39" avgMicrosecondsPerInvocation="1292" maxMicrosecondsPerInvocation="14094" standardDeviationMicrosecondsPerInvocation="3093"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="45" invocations="39" avgMicrosecondsPerInvocation="1171" maxMicrosecondsPerInvocation="11991" standardDeviationMicrosecondsPerInvocation="2281"/>
-      <ClassProfile name="edu.umd.cs.findbugs.detect.CalledMethods" totalMilliseconds="34" invocations="39" avgMicrosecondsPerInvocation="874" maxMicrosecondsPerInvocation="7448" standardDeviationMicrosecondsPerInvocation="1541"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="364" invocations="545" avgMicrosecondsPerInvocation="669" maxMicrosecondsPerInvocation="31941" standardDeviationMicrosecondsPerInvocation="1735"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="288" invocations="551" avgMicrosecondsPerInvocation="522" maxMicrosecondsPerInvocation="51394" standardDeviationMicrosecondsPerInvocation="2376"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="160" invocations="39" avgMicrosecondsPerInvocation="4112" maxMicrosecondsPerInvocation="27215" standardDeviationMicrosecondsPerInvocation="6684"/>
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="114" invocations="138" avgMicrosecondsPerInvocation="827" maxMicrosecondsPerInvocation="6939" standardDeviationMicrosecondsPerInvocation="1029"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="112" invocations="39" avgMicrosecondsPerInvocation="2887" maxMicrosecondsPerInvocation="19804" standardDeviationMicrosecondsPerInvocation="5068"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="73" invocations="71" avgMicrosecondsPerInvocation="1035" maxMicrosecondsPerInvocation="46692" standardDeviationMicrosecondsPerInvocation="5520"/>
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="62" invocations="506" avgMicrosecondsPerInvocation="123" maxMicrosecondsPerInvocation="2072" standardDeviationMicrosecondsPerInvocation="235"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="54" invocations="39" avgMicrosecondsPerInvocation="1395" maxMicrosecondsPerInvocation="13334" standardDeviationMicrosecondsPerInvocation="2545"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="38" invocations="39" avgMicrosecondsPerInvocation="981" maxMicrosecondsPerInvocation="10175" standardDeviationMicrosecondsPerInvocation="2099"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="37" invocations="5" avgMicrosecondsPerInvocation="7566" maxMicrosecondsPerInvocation="36504" standardDeviationMicrosecondsPerInvocation="14472"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="35" invocations="39" avgMicrosecondsPerInvocation="904" maxMicrosecondsPerInvocation="7023" standardDeviationMicrosecondsPerInvocation="1492"/>
     </FindBugsProfile>
   </FindBugsSummary>
   <ClassFeatures></ClassFeatures>
