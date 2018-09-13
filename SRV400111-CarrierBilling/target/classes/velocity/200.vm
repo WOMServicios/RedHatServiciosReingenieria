@@ -1,0 +1,9 @@
+{
+  "responseCode": "${header.idCliente}",
+  "responseMessage": "El servicio ha sido exitoso",
+  "paymentProviderTransactionId": "fdssdfds",
+  "extensionData": {
+    "key1": "12232",
+    "key2": "21121" 
+  }
+}
