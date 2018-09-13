@@ -80,6 +80,7 @@
 				</xpath>
 			</setHeader>
 
+<<<<<<< HEAD
 			<!-- <to uri="sql-stored:insert_ID(INTEGER ${headers.resultCode}) ?dataSource=dataSource" 
 				/> -->
 
@@ -111,6 +112,41 @@
 			<!-- TODO: invoca activateVoLTEBSCS(msisdn) sentencia PL/SQL base de datos 
 				BSCS -->
 			<!-- TODO: Procesar condicion de retorno de la base de datos BSCS -->
+=======
+        <route streamCache="true">
+            <from uri="cxf:http://0.0.0.0:8888/salesSupport/uss?wsdlURL=classpath:wsdl/definition.wsdl&amp;serviceName={http://www.webserviceX.NET}GlobalWeather&amp;portName={http://www.webserviceX.NET}GlobalWeatherSoap&amp;dataFormat=MESSAGE"/>
+            <!--  <to uri="cxf:http://{{soap.service.host}}:{{soap.service.port}}{{soap.service.resource}}?dataFormat=MESSAGE"/> -->
+            <log loggingLevel="INFO" message="pasando por servicio autoProvisionVoLTE2"/>
+            
+           <setHeader headerName="param">
+           		<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/web:GetCitiesByCountry/web:CountryName/text()</xpath>
+           </setHeader>
+           <to uri="velocity:velocity/activateVoLTENetworkRequest.vm" />
+           <to uri="cxf:http://0.0.0.0:8889/activateVoLTENetwork/?dataFormat=MESSAGE" />
+           <log loggingLevel="INFO" message="respuesta activateVoLTENetwork body: ${body}"/>
+           
+ 	       <setHeader headerName="resultCode">
+           		<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/Result/ResultCode/text()</xpath>
+           </setHeader>
+    
+			<choice>
+				<when>
+					<simple>${headers.resultCode} != 1</simple>
+					<log message="aqui se debe implementar el otro TO al servicio o lo que corresponda" />
+					<transform><simple>Cierre</simple></transform>
+				</when>
+			</choice>
+                      
+            <!-- TODO: invocar registraTX() "Inicio de Activación en RED" sentencia SQL Base Operaciones -->
+            <!-- TODO: Procesar condicion de retorno de la base de operaciones -->
+            <!-- TODO: invocar activateVoLTENetwork(msisdn,imsi)TELNET en el Gateway SPG (Gateway Service Provider Gateway)-->
+            <!-- TODO: Procesar condicion de retorno del Gateway SPG-->
+            <!-- TODO: invocar registraTX() "Termino de Activación en RED" sentencia SQL Base Operaciones -->
+            <!-- TODO: Procesar condicion de retorno de la base de operaciones -->
+            <!-- TODO: invoca resgistraTx() "Inicio de registro en el BSCS (Business Support & Control System)" sentencia SQL en la Base Operaciones-->
+            <!-- TODO: invoca activateVoLTEBSCS(msisdn) sentencia PL/SQL base de datos BSCS-->
+            <!-- TODO: Procesar condicion de retorno de la base de datos BSCS -->
+>>>>>>> 3591ba9996f6c6d98124a6b5bf9eb386e54f4cd1
 			<!-- TODO: invoca registraTx() "Termino REgistro en BSCS" en Base Operaciones -->
 			<!-- TODO: Procesar condicion de retorno de la base de operaciones -->
 		</route>

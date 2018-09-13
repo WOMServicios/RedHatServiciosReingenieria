@@ -2,5 +2,5 @@ projectKey=cl.wom.services:SRV40011-UnifiedSalesSupportService
 serverUrl=http://10.120.1.130/sonar
 serverVersion=6.5.0.27846
 dashboardUrl=http://10.120.1.130/sonar/dashboard/index/cl.wom.services:SRV40011-UnifiedSalesSupportService
-ceTaskId=AWXOBIjiSyrFNYjr1qcB
-ceTaskUrl=http://10.120.1.130/sonar/api/ce/task?id=AWXOBIjiSyrFNYjr1qcB
+ceTaskId=AWXS-rL1SyrFNYjr1qcP
+ceTaskUrl=http://10.120.1.130/sonar/api/ce/task?id=AWXS-rL1SyrFNYjr1qcP
