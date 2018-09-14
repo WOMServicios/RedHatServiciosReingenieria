@@ -14,8 +14,8 @@
 		destroy-method="close" id="dataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/ws_prueba" />
-		<property name="username" value="root" />
-		<property name="password" value="asdqwe123" />
+		<property name="username" value="${wom.database.username}" />
+		<property name="password" value="${wom.database.password}" />
 	</bean>
 
 	<!-- configure the Camel SQL component to use the JDBC data source -->
@@ -34,7 +34,7 @@
 		<!-- <propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
 		<propertyPlaceholder id="placeholder"
 			location="classpath:application.properties,classpath:sql.properties" />
-			
+
 
 		<onException>
 			<exception>java.lang.Exception</exception>
@@ -45,7 +45,7 @@
 
 		<route streamCache="true">
 			<from
-				uri="cxf:http://localhost:8888/activateVoLTENetwork/?wsdlURL=classpath:wsdl/AutoProvisionVoLTE.wsdl&amp;serviceName={http://ws.webservices.pos.nextel.cl.com}AutoProvisionVoLTE&amp;portName={http://ws.webservices.pos.nextel.cl.com}AutoProvisionVoLTESOAP&amp;dataFormat=MESSAGE" />
+				uri="cxf:http://{{srv40011.soap.v1.0.host}}:{{srv40011.activateVoLTENetwork.soap.v1.0.port}}/{{srv40011.activateVoLTENetwork.soap.v1.0.name}}/?wsdlURL={{srv40011.activateVoLTENetwork.soap.v1.0.wsdlURL}}&amp;serviceName={{srv40011.activateVoLTENetwork.soap.v1.0.serviceName}}&amp;portName={{srv40011.activateVoLTENetwork.soap.v1.0.portName}}&amp;dataFormat=MESSAGE" />
 
 			<setProperty propertyName="autoProvisioningType">
 				<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/ws:NewOperation/AutoProvisioningType/text()
@@ -64,18 +64,17 @@
 
 
 			<to
-				uri="cxf:http://localhost:8889/activateVoLTENetwork/?dataFormat=MESSAGE" />
+				uri="cxf:http://{{srv40011.soap.v1.0.host}}:{{srv40011.activateVoLTENetwork2.soap.v1.0.port}}/{{srv40011.activateVoLTENetwork.soap.v1.0.name}}/?dataFormat=MESSAGE" />
 
 
 			<split>
-			
+
 				<simple>true</simple>
 				<setHeader headerName="id">
-				<simple>${property.autoProvisioningType}</simple>
-			</setHeader>
-				
-				<to
-					uri="sql:{{sql.registerFechaEnd}}" />
+					<simple>${property.autoProvisioningType}</simple>
+				</setHeader>
+
+				<to uri="sql:{{sql.registerFechaEnd}}" />
 			</split>
 
 
@@ -92,6 +91,14 @@
 					<transform>
 						<simple>respuesta NO OK</simple>
 					</transform>
+					<to
+						uri="cxf:http://{{srv40011.soap.v1.0.host}}:{{srv40011.activateVoLTEBSCS.soap.v1.0.port}}/{{srv40011.activateVoLTEBSCS.soap.v1.0.name}}/?wsdlURL={{srv40011.activateVoLTENetwork.soap.v1.0.wsdlURL}}&amp;serviceName={{srv40011.activateVoLTENetwork.soap.v1.0.serviceName}}&amp;portName={{srv40011.activateVoLTENetwork.soap.v1.0.portName}}&amp;dataFormat=MESSAGE" />
+					
+					<setHeader headerName="resultCode">
+						<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/Result/ResultCode/text()
+						</xpath>
+					</setHeader>
+					
 				</when>
 				<when>
 					<simple>${headers.resultCode} == 1</simple>
@@ -103,12 +110,44 @@
 
 		</route>
 
-
+		<!-- soap virtual activateVoLTENetwork -->
 		<route streamCache="true">
 			<from
-				uri="cxf:http://localhost:8889/activateVoLTENetwork/?wsdlURL=classpath:wsdl/AutoProvisionVoLTE.wsdl&amp;serviceName={http://ws.webservices.pos.nextel.cl.com}AutoProvisionVoLTE&amp;portName={http://ws.webservices.pos.nextel.cl.com}AutoProvisionVoLTESOAP&amp;dataFormat=MESSAGE" />
+				uri="cxf:http://{{srv40011.soap.v1.0.host}}:{{srv40011.activateVoLTENetwork2.soap.v1.0.port}}/{{srv40011.activateVoLTENetwork.soap.v1.0.name}}/?wsdlURL={{srv40011.activateVoLTENetwork.soap.v1.0.wsdlURL}}&amp;serviceName={{srv40011.activateVoLTENetwork.soap.v1.0.serviceName}}&amp;portName={{srv40011.activateVoLTENetwork.soap.v1.0.portName}}&amp;dataFormat=MESSAGE" />
 
 			<to uri="velocity:velocity/activateVoLTENetworkResponse.vm" />
+
+		</route>
+
+		<!-- soap virtual activateVoLTEBSCS -->
+		<route streamCache="true">
+			<from
+				uri="cxf:http://{{srv40011.soap.v1.0.host}}:{{srv40011.activateVoLTEBSCS.soap.v1.0.port}}/{{srv40011.activateVoLTEBSCS.soap.v1.0.name}}/?wsdlURL={{srv40011.activateVoLTENetwork.soap.v1.0.wsdlURL}}&amp;serviceName={{srv40011.activateVoLTENetwork.soap.v1.0.serviceName}}&amp;portName={{srv40011.activateVoLTENetwork.soap.v1.0.portName}}&amp;dataFormat=MESSAGE" />
+
+			<log message="soap virtual activateVoLTEBSCS" />
+
+
+			<to uri="velocity:velocity/activateVoLTENetworkResponse.vm" />
+			
+			<choice>
+				<when>
+					<simple>${headers.resultCode} != 1</simple>
+					<log
+						message="aqui se debe implementar el otro TO al servicio o lo que corresponda2" />
+					<transform>
+						<simple>respuesta NO OK</simple>
+					</transform>
+					
+					
+				</when>
+				<when>
+					<simple>${headers.resultCode} == 1</simple>
+					<transform>
+						<simple>OK</simple>
+					</transform>
+				</when>
+			</choice>
+			
 
 		</route>
 
