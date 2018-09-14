@@ -1,0 +1,3 @@
+cl/wom/exception/services/ServiceError.class
+cl/wom/beans/AutoProvisionVoLTE.class
+cl/wom/middleware/proxy/SpringBootSoapProxyApplication.class

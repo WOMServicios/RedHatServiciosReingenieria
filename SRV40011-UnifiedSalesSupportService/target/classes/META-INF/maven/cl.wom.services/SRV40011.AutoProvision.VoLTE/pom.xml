@@ -16,7 +16,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring.boot-version>1.4.1.RELEASE</spring.boot-version>
-		<fabric8.version>2.2.170.redhat-000019</fabric8.version>
+		<fabric8.version>2.2.170</fabric8.version>
+		<!-- fabric8.version>2.2.170.redhat-000019</fabric8.version-->
 	</properties>
 
 	<parent>
@@ -90,44 +91,50 @@
 			<artifactId>cxf-rt-frontend-jaxws</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-transports-http</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-spring-boot-starter-jaxws -->
 		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-spring-boot-starter-jaxws</artifactId>
-			<scope>provided</scope>
+    		<groupId>org.apache.cxf</groupId>
+    		<artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+    		<version>3.2.6</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-transports-http-jetty -->
 		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-transports-http-jetty</artifactId>
-			<scope>provided</scope>
+    		<groupId>org.apache.cxf</groupId>
+    		<artifactId>cxf-rt-transports-http-jetty</artifactId>
+    		<version>3.2.6</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-sql</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<scope>provided</scope>
 		</dependency>
-<dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-<!--     <version>5.1.39</version> -->
-</dependency>
-
+		
+		<dependency>
+    		<groupId>mysql</groupId>
+    		<artifactId>mysql-connector-java</artifactId>
+			<!--<version>5.1.39</version> -->
+		</dependency>
 	
 	</dependencies>
 
