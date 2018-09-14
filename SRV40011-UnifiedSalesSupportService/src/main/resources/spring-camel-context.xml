@@ -42,7 +42,7 @@
 				redeliveryDelay="{{camel.timeout.redelivery-delay}}" />
 		</onException>
 
-
+<!-- autoProvisionVoLTE  -->
 		<route streamCache="true">
 			<from
 				uri="cxf:http://{{srv40011.soap.v1.0.host}}:{{srv40011.activateVoLTENetwork.soap.v1.0.port}}/{{srv40011.activateVoLTENetwork.soap.v1.0.name}}/?wsdlURL={{srv40011.activateVoLTENetwork.soap.v1.0.wsdlURL}}&amp;serviceName={{srv40011.activateVoLTENetwork.soap.v1.0.serviceName}}&amp;portName={{srv40011.activateVoLTENetwork.soap.v1.0.portName}}&amp;dataFormat=MESSAGE" />
@@ -52,7 +52,7 @@
 				</xpath>
 			</setProperty>
 
-
+<!-- se realiza el insert en la base de datos iniciando la fecha -->
 			<split>
 				<simple>true</simple>
 				<to uri="sql:{{sql.registerFechaInit}}" />
@@ -88,23 +88,23 @@
 					<simple>${headers.resultCode} != 1</simple>
 					<log
 						message="aqui se debe implementar el otro TO al servicio o lo que corresponda" />
-					<transform>
-						<simple>respuesta NO OK</simple>
-					</transform>
+					<setHeader headerName="no_ok">
+						<constant>NO OK</constant>
+					</setHeader>
 					<to
 						uri="cxf:http://{{srv40011.soap.v1.0.host}}:{{srv40011.activateVoLTEBSCS.soap.v1.0.port}}/{{srv40011.activateVoLTEBSCS.soap.v1.0.name}}/?wsdlURL={{srv40011.activateVoLTENetwork.soap.v1.0.wsdlURL}}&amp;serviceName={{srv40011.activateVoLTENetwork.soap.v1.0.serviceName}}&amp;portName={{srv40011.activateVoLTENetwork.soap.v1.0.portName}}&amp;dataFormat=MESSAGE" />
-					
+
 					<setHeader headerName="resultCode">
 						<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/Result/ResultCode/text()
 						</xpath>
 					</setHeader>
-					
+
 				</when>
 				<when>
 					<simple>${headers.resultCode} == 1</simple>
-					<transform>
-						<simple>OK</simple>
-					</transform>
+					<setHeader headerName="no_ok">
+						<constant>OK</constant>
+					</setHeader>
 				</when>
 			</choice>
 
@@ -128,26 +128,31 @@
 
 
 			<to uri="velocity:velocity/activateVoLTENetworkResponse.vm" />
-			
+
+			<setHeader headerName="resultCode">
+				<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/Result/ResultCode/text()
+				</xpath>
+			</setHeader>
+
 			<choice>
 				<when>
 					<simple>${headers.resultCode} != 1</simple>
 					<log
 						message="aqui se debe implementar el otro TO al servicio o lo que corresponda2" />
-					<transform>
-						<simple>respuesta NO OK</simple>
-					</transform>
-					
-					
+
+					<setHeader headerName="no_ok">
+						<constant>NO OK</constant>
+					</setHeader>
+
 				</when>
 				<when>
 					<simple>${headers.resultCode} == 1</simple>
-					<transform>
-						<simple>OK</simple>
-					</transform>
+					<setHeader headerName="no_ok">
+						<constant>OK</constant>
+					</setHeader>
 				</when>
 			</choice>
-			
+
 
 		</route>
 
