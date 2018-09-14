@@ -7,7 +7,7 @@ soap:encodingStyle="http://www.w3.org/2003/05/soap-encoding">
 	</soap:Body>
 	<Result>
 		<AutoProvisioningType>1</AutoProvisioningType>
-		<IMSI>${headers.param}</IMSI>
+		<IMSI>${headers.id}</IMSI>
 		<MSISDN>Valor Variable2</MSISDN>
 		<SRVCC-Capability>1</SRVCC-Capability>
 	<Result>

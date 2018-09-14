@@ -9,6 +9,8 @@
             <s:element minOccurs="0" maxOccurs="1" name="CountryName" type="s:string" />
           </s:sequence>
         </s:complexType>
+        
+        
       </s:element>
       <s:element name="GetWeatherResponse">
         <s:complexType>

@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: middleware-rest-proxy-base
 Implementation-Version: 1.0.0
-Built-By: alejandro
+Built-By: cquezada
 Implementation-Vendor-Id: cl.wom.middleware.proxy
-Build-Jdk: 1.8.0_181
+Build-Jdk: 1.8.0_151
 Implementation-URL: http://projects.spring.io/spring-boot/middleware-r
  est-proxy-base/
 Created-By: Maven Integration for Eclipse
