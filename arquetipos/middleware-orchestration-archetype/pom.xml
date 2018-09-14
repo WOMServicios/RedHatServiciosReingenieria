@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>cl.wom.middleware.arquetype</groupId>
+	<artifactId>middleware-orchestration-archetype</artifactId>
+	<version>1.0.0</version>
+
+	<name>middleware-WOM-archetype</name>
+	
+
+ 	<distributionManagement>
+        <repository>
+           <id>wom-local-repository</id>
+           <url>http://maven.wom.cl:8081/repository/wom-local-repository/</url>
+       </repository>
+    </distributionManagement>
+<!-- 	<distributionManagement> -->
+<!--         <repository> -->
+<!--                 <id>releases</id> -->
+<!--                 <url>http://localhost:8081/nexus/content/repositories/releases</url> -->
+<!--         </repository> -->
+ 
+<!--         <snapshotRepository> -->
+<!--                 <id>snapshots</id> -->
+<!--                 <name>Internal Snapshots</name> -->
+<!--                 <url>http://localhost:8081/nexus/content/repositories/snapshots</url> -->
+<!--         </snapshotRepository> -->
+<!-- 	</distributionManagement> -->
+    <build>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.archetype</groupId>
+                <artifactId>archetype-packaging</artifactId>
+                <version>2.2</version>
+            </extension>
+        </extensions>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-archetype-plugin</artifactId>
+                    <version>2.2</version>
+                    </plugin>
+            </plugins>
+        </pluginManagement>
+            <resources>
+                <resource>
+                    <directory>src/main/resources</directory>
+                    <filtering>false</filtering>
+                </resource>
+                <resource>
+                    <directory>src/main/resources-filtered</directory>
+                    <filtering>true</filtering>
+                    <includes>
+                        <include>**/archetype-metadata.xml</include>
+                    </includes>
+                </resource>
+        </resources>
+    </build>
+
+</project>

@@ -1,0 +1,41 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd          http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+	<bean class="cl.wom.middleware.proxy.Sleep" id="sleepTimeOut" />
+	<bean class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" id="dataSource">
+		<property name="driverClassName" value="${driverClassName}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${dbusername}" />
+		<property name="password" value="${dbpassword}" />
+	</bean>
+	<camelContext id="camelContext-ef69c7da-6aaa-4d5b-bc3e-21d0f582c205"
+		xmlns="http://camel.apache.org/schema/spring">
+		<propertyPlaceholder id="placeholder"
+			location="classpath:application.properties" />
+		<onException>
+			<exception>java.lang.Exception</exception>
+			<redeliveryPolicy maximumRedeliveries="{{camel.timeout.max-delivery}}"
+				redeliveryDelay="{{camel.timeout.redelivery-delay}}" />
+		</onException>
+		<route id="_route5">
+			<from id="_from3" uri="timer://foo?repeatCount=1" />
+			<log id="_log5" loggingLevel="INFO"
+				message="PROPERTIE DE AMBIENTE: {{env:PFX_ENV}}" />
+			<log id="_log6" loggingLevel="INFO" message="NIVEL DE LOG: {{env:LOGLEVEL}}" />
+		</route>
+		<route id="callSPRoute" streamCache="true">
+			<from id="_from1"
+				uri="restlet:http://0.0.0.0:${port}/${restContext}?restletMethods=post" />
+			<log id="_log1" message="${symbol_dollar}{body}" />
+			<log id="_log2" message="${symbol_dollar}{headers}" />
+			<to id="_to1" uri="sql-stored:classpath:spTemplate.sql?dataSource=dataSource" />
+			<log id="_log3" message="${symbol_dollar}{body}" />
+			<log id="_log4" message="${symbol_dollar}{headers}" />
+		</route>
+	</camelContext>
+</beans>

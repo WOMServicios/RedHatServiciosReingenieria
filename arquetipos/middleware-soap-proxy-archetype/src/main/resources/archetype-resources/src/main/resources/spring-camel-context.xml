@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd          http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    <!-- Proyecto apache camel que permite realizar un proxy entre servicios 
+		del tipo SOAP -->
+    <camelContext id="s03-proxy" xmlns="http://camel.apache.org/schema/spring">
+        <!-- Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
+			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
+			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
+			archivo properties. Por defecto en opensfhit es develop -->
+        <propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/>
+        <!-- <propertyPlaceholder id="placeholder" location="classpath:application.properties"/> -->
+        <onException>
+            <exception>java.lang.Exception</exception>
+            <redeliveryPolicy
+                maximumRedeliveries="{{camel.timeout.max-delivery}}" redeliveryDelay="{{camel.timeout.redelivery-delay}}"/>
+        </onException>
+        <!-- Esta ruta se encarga de imprimir las variables de: ambiente y log. 
+			Se ejecuta solo 1 vez -->
+        <route id="_route5">
+            <from id="_from3" uri="timer://foo?repeatCount=1"/>
+            <log id="_log1" loggingLevel="INFO" message="PROPERTIE DE AMBIENTE: {{env:PFX_ENV}}"/>
+            <log id="_log2" loggingLevel="INFO" message="NIVEL DE LOG: {{env:LOGLEVEL}}"/>
+        </route>
+        <!-- Ruta camel que expone un servicio SOAP basado en una publicación del 
+			mismo tipo -->
+        <route id="_route1" streamCache="true">
+            <!-- TODO: queda pendiente cambiar el namespace y probar, ver readme.pm -->
+            <from id="_from1" uri="cxf:http://0.0.0.0:${portProxy}${resourceService}?wsdlURL=classpath:wsdl/definition.wsdl&amp;serviceName={http://www.webserviceX.NET}GlobalWeather&amp;portName={http://www.webserviceX.NET}GlobalWeatherSoap&amp;dataFormat=MESSAGE"/>
+            <to id="_to1" uri="cxf:http://{{soap.service.host}}:{{soap.service.port}}{{soap.service.resource}}?dataFormat=MESSAGE"/>
+            <log id="_log1" loggingLevel="INFO" message="pasando por servicio proxy"/>
+        </route>
+    </camelContext>
+</beans>

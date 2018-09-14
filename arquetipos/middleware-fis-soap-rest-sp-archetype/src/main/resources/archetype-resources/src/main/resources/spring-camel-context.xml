@@ -1,0 +1,63 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd         http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd          http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd">
+    <bean class="cl.wom.middleware.proxy.Sleep" id="sleepTimeOut"/>
+    <bean class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close" id="dataSource">
+        <property name="driverClassName" value="${driverClassName}" />
+	<property name="url" value="${url}" />
+	<property name="username" value="${dbusername}" />
+	<property name="password" value="${dbpassword}" />
+    </bean>
+    <camelContext id="camelContext-ef69c7da-6aaa-4d5b-bc3e-21d0f582c205" xmlns="http://camel.apache.org/schema/spring">
+        <propertyPlaceholder id="placeholder" location="classpath:application.properties"/>
+        <onException>
+            <exception>java.lang.Exception</exception>
+            <redeliveryPolicy
+                maximumRedeliveries="{{camel.timeout.max-delivery}}" redeliveryDelay="{{camel.timeout.redelivery-delay}}"/>
+        </onException>
+        <route id="_route5">
+            <from id="_from3" uri="timer://foo?repeatCount=1"/>
+            <log id="_log5" loggingLevel="INFO" message="PROPERTIE DE AMBIENTE: {{env:PFX_ENV}}"/>
+            <log id="_log6" loggingLevel="INFO" message="NIVEL DE LOG: {{env:LOGLEVEL}}"/>
+        </route>
+        <route id="callSPRouteRest" streamCache="true">
+            <from id="_from1" uri="restlet:http://0.0.0.0:${restPort}/${restContext}?restletMethods=post"/>
+            <to id="_to2" uri="direct:directSP"/>
+        </route>
+        <route id="callSPRouteSOAP" streamCache="true">
+            <from id="_from2" uri="cxf:http://0.0.0.0:${soapPort}/${soapContext}?wsdlURL=classpath:wsdl/test.wsdl&amp;serviceName={http://javainuse.com}SOATestEndpointService&amp;portName={http://javainuse.com}SOATestEndpoint&amp;dataFormat=MESSAGE"/>
+            <log id="_log7" message="${symbol_dollar}{body}"/>
+            <setHeader headerName="p_userid" id="p_userid">
+                <xpath resultType="java.lang.String">//*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='inputSOATest']/p_userid/text()</xpath>
+            </setHeader>
+            <log id="_log8" message="${symbol_dollar}{headers}"/>
+            <to id="_to4" uri="direct:directSP"/>
+            <log id="_log9" message="${symbol_dollar}{body[o_username]}"/>
+            <setHeader headerName="o_username" id="_setHeader1">
+                <simple>${symbol_dollar}{body[o_username]}</simple>
+            </setHeader>
+            <setHeader headerName="o_createdby" id="_setHeader2">
+                <simple>${symbol_dollar}{body[o_createdby]}</simple>
+            </setHeader>
+            <setHeader headerName="o_date" id="_setHeader3">
+                <simple>${symbol_dollar}{body[o_date]}</simple>
+            </setHeader>
+            <to id="_to3" uri="velocity:velocity/soapresponse.vm"/>
+            <log id="_log10" message="${symbol_dollar}{headers}"/>
+            <log id="_log11" message="${symbol_dollar}{body}"/>
+        </route>
+        <route id="directSP">
+            <from id="_from4" uri="direct:directSP"/>
+            <log id="_log1" message="${symbol_dollar}{body}"/>
+            <log id="_log2" message="${symbol_dollar}{headers}"/>
+            <to id="_to1" uri="sql-stored:classpath:sql/spTemplate.sql?dataSource=dataSource"/>
+            <log id="_log3" message="${symbol_dollar}{body}"/>
+            <log id="_log4" message="${symbol_dollar}{headers}"/>
+        </route>
+    </camelContext>
+</beans>

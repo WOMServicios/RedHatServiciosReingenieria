@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:sub="http://soap.crmapi.util.redknee.com/subscriptions/xsd/Subscriptions-v2.0" xmlns:ns="http://soap.crmapi.util.redknee.com/common/xsd/2011/05" xmlns:ns1="http://soap.crmapi.util.redknee.com/common/xsd/2008/08" xmlns:ns2="http://soap.crmapi.util.redknee.com/subscriptions/xsd/2011/01" xmlns:ns3="http://soap.crmapi.util.redknee.com/servicesandbundles/xsd/2011/01">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <sub:createBundleAdjustments>
+         <sub:header>
+            <!--Optional:-->
+            <ns:password>?</ns:password>
+            <!--Optional:-->
+            <ns:transactionID>?</ns:transactionID>
+            <!--Optional:-->
+            <ns:username>${headers.phoneNumber}</ns:username>
+            <!--Optional:-->
+            <ns:agentID>?</ns:agentID>
+            <!--Zero or more repetitions:-->
+            <ns:parameters>
+               <ns1:name>?</ns1:name>
+               <ns1:value>?</ns1:value>
+            </ns:parameters>
+         </sub:header>
+      </sub:createBundleAdjustments>
+   </soapenv:Body>
+</soapenv:Envelope>

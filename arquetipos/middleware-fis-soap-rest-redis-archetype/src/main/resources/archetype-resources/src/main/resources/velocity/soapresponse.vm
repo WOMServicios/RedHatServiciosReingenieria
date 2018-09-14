@@ -1,0 +1,11 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:jav="http://javainuse.com">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <jav:outputSOATest>
+         <value>${symbol_dollar}{body}</value>
+      </jav:outputSOATest>
+   </soapenv:Body>
+</soapenv:Envelope>

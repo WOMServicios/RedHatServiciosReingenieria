@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd" name="camel-store-procedure"
+    xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <fileSets>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>src/main/java</directory>
+      <includes>
+        <include>**/*.java</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>src/main/java</directory>
+      <includes>
+        <include>**/*.MF</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>src/main/resources</directory>
+      <includes>
+        <include>**/*.xml</include>
+        <include>**/*.properties</include>
+        <include>**/*.sql</include>
+        <include>**/*.wsdl</include>
+        <include>**/*.vm</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>src/main/resources</directory>
+      <includes>
+        <include>**/*.</include>
+        <include>**/*.sql</include>
+        <include>**/*.wsdl</include>
+        <include>**/*.vm</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>.settings</directory>
+      <includes>
+        <include>**/*.xml</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>.settings</directory>
+      <includes>
+        <include>**/*.component</include>
+        <include>**/*.prefs</include>
+      </includes>
+    </fileSet>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory></directory>
+      <includes>
+        <include>.classpath</include>
+        <include>.project</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory></directory>
+      <includes>
+        <include>README.md</include>
+        <include>.gitignore</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+  <requiredProperties>
+	<requiredProperty key="restContext">
+		<defaultValue>spcall</defaultValue>
+        </requiredProperty>
+	<requiredProperty key="restPort">
+		<defaultValue>8889</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="soapContext">
+		<defaultValue>fis/srvTest/1.0</defaultValue>
+        </requiredProperty>
+	<requiredProperty key="soapPort">
+		<defaultValue>8888</defaultValue>
+        </requiredProperty>
+	<requiredProperty key="templateSP">
+		<defaultValue>SYSTEM.getDBUSERByUserId(INTEGER ${headers.p_userid},OUT VARCHAR o_username,OUT VARCHAR o_createdby,OUT DATE o_date)</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="driverClassName">
+		<defaultValue>oracle.jdbc.OracleDriver</defaultValue>
+        </requiredProperty>
+	<requiredProperty key="url">
+		<defaultValue>jdbc:oracle:thin:@localhost:1521/XE</defaultValue>
+        </requiredProperty>
+	<requiredProperty key="dbusername">
+		<defaultValue>system</defaultValue>
+        </requiredProperty>
+        <requiredProperty key="dbpassword">
+		<defaultValue>oracle</defaultValue>
+        </requiredProperty>		
+  </requiredProperties>
+</archetype-descriptor>

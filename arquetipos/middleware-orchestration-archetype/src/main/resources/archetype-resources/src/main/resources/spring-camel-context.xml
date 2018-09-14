@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:http-conf="http://cxf.apache.org/transports/http/configuration"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="              http://www.springframework.org/schema/beans      http://www.springframework.org/schema/beans/spring-beans.xsd              http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd               http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd http://cxf.apache.org/transports/http/configuration         http://cxf.apache.org/schemas/configuration/http-conf.xsd">
+    <bean class="cl.wom.middleware.proxy.ValidaResponseProxy" id="validaEstado"/>
+    
+    <!-- Maneja el timeout del onException, esta configurado en 20 seg. -->
+    <http-conf:conduit name="*.http-conduit">
+        <http-conf:client AutoRedirect="true" ReceiveTimeout="20000"/>
+    </http-conf:conduit>
+    
+    <!-- En caso de tener problemas con el tamaño del response, procedemos a descomentar la linea
+    ubicada abajo, con eso, eliminaremos el problema.-->
+    <!-- <bean id="streamStrategy" class="org.apache.camel.impl.DefaultStreamCachingStrategy">
+	  <property name="spoolThreshold" value="-1"/>
+	</bean>  -->
+    
+    <!-- Se agregan los xml del servicio que se expone, para este ejemplo utilizaremos: 
+		xmlns:mob="http://soap.crmapi.util.redknee.com/mobilenumbers/xsd/MobileNumbers-v2.0" 
+		xmlns:ns="http://soap.crmapi.util.redknee.com/common/xsd/2011/05" -->
+    <camelContext id="s03-proxy" streamCache="true"
+        xmlns="http://camel.apache.org/schema/spring"
+        xmlns:mob="http://soap.crmapi.util.redknee.com/mobilenumbers/xsd/MobileNumbers-v2.0"
+        xmlns:ns="http://soap.crmapi.util.redknee.com/common/xsd/2011/05"
+        xmlns:ns1="http://soap.crmapi.util.redknee.com/common/xsd/2008/08" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+        <!-- Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
+			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
+			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
+			archivo properties. Por defecto en opensfhit es develop -->
+        <propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/>
+        <!-- <propertyPlaceholder id="placeholder" location="classpath:application.properties"/> -->
+        <onException>
+            <exception>java.net.SocketTimeoutException</exception>
+            <handled>
+                <simple>true</simple>
+            </handled>
+            <setHeader headerName="codeError">
+                <constant>504</constant>
+            </setHeader>
+            <setHeader headerName="messageError">
+                <simple>Bad Request -${exception.message}</simple>
+            </setHeader>
+            <log loggingLevel="ERROR" message="error al enviar el mesaje TimeOut [${exception.message}]"/>
+            <choice id="_choice2">
+                <when id="_when2">
+                    <simple>${headers.rest} == 'true' </simple>
+                    <setHeader headerName="Content-Type" id="_setHeader1">
+                        <constant>application/json</constant>
+                    </setHeader>
+                    <to uri="velocity:velocity/sqlTimeOut-json.vm"/>
+                    <stop id="_stop1"/>
+                </when>
+            </choice>
+            <to uri="velocity:velocity/sqlTimeOut.vm"/>
+        </onException>
+        <onException>
+            <exception>java.lang.Exception</exception>
+            <handled>
+                <simple>true</simple>
+            </handled>
+            <setHeader headerName="messageError">
+                <simple>Bad Request -${exception.message}</simple>
+            </setHeader>
+            <log loggingLevel="ERROR" message="error al enviar el mesaje Fault [${exception.message}]"/>
+            <choice id="_choice2">
+                <when id="_when2">
+                    <simple>${headers.rest} == 'true' </simple>
+                    <setHeader headerName="Content-Type" id="_setHeader1">
+                        <constant>application/json</constant>
+                    </setHeader>
+                    <to uri="velocity:velocity/sqlFault-json.vm"/>
+                    <stop id="_stop1"/>
+                </when>
+            </choice>
+            <to id="_to1" uri="velocity:velocity/sqlFault.vm"/>
+        </onException>
+        <!-- Esta ruta se encarga de imprimir las variables de: ambiente y log. 
+			Se ejecuta solo 1 vez -->
+        <route id="_route5">
+            <from id="_from1" uri="timer://foo?repeatCount=1"/>
+            <log id="_log3" loggingLevel="INFO" message="PROPERTIE DE AMBIENTE: {{env:PFX_ENV}}"/>
+            <log id="_log4" loggingLevel="INFO" message="NIVEL DE LOG: {{env:LOGLEVEL}}"/>
+        </route>
+        <!-- Exponemos un servicio REST -->
+        <route id="_route6" streamCache="true">
+            <from id="consultaInfoClientePost" uri="restlet:http://0.0.0.0:8889/esb/ConsultaInfoCliente/Services/PSConsultaDatosClienteREST/ConsultaInfoCliente?restletMethods=get"/>
+            <to id="_to3" uri="procesaSoapRest"/>
+        </route>
+        <!-- Exponemos un servicio SOAP -->
+        <route id="_route7" streamCache="true">
+            <from id="_to1" uri="cxf:http://0.0.0.0:${portProxy}/service.asmx?wsdlURL=classpath:wsdl/baseExample.wsdl&amp;serviceName={http://www.webserviceX.NET}GlobalWeather&amp;portName={http://www.webserviceX.NET}GlobalWeatherSoap&amp;dataFormat=MESSAGE"/>
+            <to id="_to4" uri="procesaSoapRest"/>
+        </route>
+        <!-- Sacamos la logina de exponer los servicios en la misma ruta, esto 
+			en caso de exponer rutas que tengan la misma logica -->
+        <route id="_route1" streamCache="true">
+            <from id="_from2" uri="procesaSoapRest"/>
+            <choice id="_choice1">
+                <when id="_when1">
+                    <!-- En caso de validar si es tun tipo POST y GET haremos la segmentacion 
+						en base al metodo utilizado -->
+                    <simple>${header.CamelHttpMethod} == 'GET'</simple>
+                    <!-- No crearemo codigo directamente en los if, realizaremos el llamado 
+						a una ruta, donde en esta ruta realizaremos el desarrollo -->
+                    <to id="_to2g" uri="direct:procesoGET"/>
+                </when>
+                <when id="_when2">
+                    <simple>${header.CamelHttpMethod} == 'POST'</simple>
+                    <!-- No crearemo codigo directamente en los if, realizaremos el llamado 
+						a una ruta, donde en esta ruta realizaremos el desarrollo -->
+                    <to id="_to2p" uri="direct:procesoPOST"/>
+                </when>
+                <otherwise id="_otherwise3">
+                    <to id="_to2o" uri="velocity:velocity/sqlRecuperaDetalleLlamadosDefault-json2.vm"/>
+                </otherwise>
+            </choice>
+        </route>
+        <!-- Realizaremos el proceso del IF en una nueva RUTA -->
+        <route id="_route2">
+            <!-- En caso de necesitar enviar el mensaje al componente de auditoria 
+				descomentamos la lina de abajo que envia el mensaje al route WireTap -->
+            <!-- <wireTap id="_wireTap1" uri="direct:wire" /> -->
+            <!-- Si el servicio llama a una segunda operacion, debemos descomentar 
+				el siguiente codigo -->
+            <!-- <choice> <when> <simple>${headers.content-encoding}</simple> <marshal 
+				id="_marshal1"><gzip/></marshal> <unmarshal id="_unmarshal2"><gzip/></unmarshal> 
+				</when> </choice> -->
+            <!-- Rescatamos desde el request enviado el valor transactionID y lo seteamos 
+				en el atributo "phoneNumber" en el header para luego pasarlo al velocity -->
+            <!-- Realizamos el llamado al velocity para setear el request del servicio 
+				orquestado -->
+            <!-- Se debe poner despues de cada TO que se realiza a un servicio, no 
+				un velocity y lo utilizamos para valiar el estado de la respuesta y lanzar 
+				la excepcion -->
+            <!-- En el caso de los nuevos virtualizados debemos validar si en la cabecera 
+				viene el valor content-encoding, ya que con esto evitaremos el problema de 
+				compresion de cabecera -->
+            <from id="_from2g" uri="direct:procesoGET"/>
+            <!-- Despues de llamar al velocity, seteamos la operacion que queremos 
+				ejecutar del servicio destino -->
+            <setHeader headerName="phoneNumber" id="_setHeader1P">
+                <xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/mob:getMobileNumber/mob:header/ns:transactionID/text()</xpath>
+            </setHeader>
+            <to id="_to2" uri="velocity:velocity/requestorq.vm"/>
+            <setHeader headerName="SOAPAction" id="_setHeader2G">
+                <constant>{{orquestacion.operacion}}</constant>
+            </setHeader>
+            <to id="_toorq" uri="{{orquestacion.endpoint}}"/>
+            <bean id="_bean2" method="validaCodigoResponse" ref="validaEstado"/>
+            <choice id="_choice2">
+                <when id="_when3">
+                    <simple>${headers.content-encoding}</simple>
+                    <unmarshal id="_unmarshal1">
+                        <gzip/>
+                    </unmarshal>
+                </when>
+            </choice>
+            <log id="_log7G" loggingLevel="INFO" message="mensaje GET TO ${body}"/>
+        </route>
+        <route id="_route4">
+            <from id="_from4" uri="direct:otherwise"/>
+            <log id="_log1" loggingLevel="INFO" message="Paso a OtherWise"/>
+        </route>
+        <route id="_route3">
+            <from id="_from3" uri="direct:procesoPOST"/>
+            <setHeader headerName="phoneNumber" id="_setHeader1PP">
+                <xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/mob:getMobileNumber/mob:header/ns:transactionID/text()</xpath>
+            </setHeader>
+            <to id="_tovelo" uri="velocity:velocity/requestorq.vm"/>
+            <setHeader headerName="SOAPAction" id="_setHeader2P">
+                <constant>{{orquestacion.operacion}}</constant>
+            </setHeader>
+            <to id="_toorqe" uri="{{orquestacion.endpoint}}"/>
+            <log id="_log7P" loggingLevel="INFO" message="mensaje POST TO ${body}"/>
+        </route>
+        <!-- Utilizaremos este route para enviar la informacion al componente que 
+			se encargara de la auditoria. Por el momento estara en blanco y luego sera 
+			desarrollado -->
+        <route id="_route12" streamCache="true">
+            <from id="_from2w" uri="direct:wireTap"/>
+            <log id="_log2" loggingLevel="INFO" message="paso por auditoria"/>
+            <!-- <log id="_log4" message=" LOG AUDITORIA ${headers.hola}"/> <log id="_log2" 
+				message="mensaje en el body: ${body}"/> <log id="_log3" message="mensaje 
+				en el header: ${headers}"/> -->
+        </route>
+    </camelContext>
+</beans>
