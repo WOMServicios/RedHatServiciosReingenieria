@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: WOM - SOAP Proxy Base Service
 Implementation-Version: 1.0.0
-Built-By: cquezada
+Built-By: cris
 Implementation-Vendor-Id: cl.wom.services
-Build-Jdk: 1.8.0_151
+Build-Jdk: 1.8.0_181
 Implementation-URL: 
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.
