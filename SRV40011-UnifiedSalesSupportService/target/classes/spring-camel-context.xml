@@ -33,7 +33,8 @@
 			archivo properties. Por defecto en opensfhit es develop -->
 		<!-- <propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
 		<propertyPlaceholder id="placeholder"
-			location="classpath:application.properties" />
+			location="classpath:application.properties,classpath:sql.properties" />
+			
 
 		<onException>
 			<exception>java.lang.Exception</exception>
@@ -43,16 +44,39 @@
 
 
 		<route streamCache="true">
-			<from uri="cxf:http://localhost:8888/activateVoLTENetwork/?wsdlURL=classpath:wsdl/AutoProvisionVoLTE.wsdl&amp;serviceName={http://ws.webservices.pos.nextel.cl.com}AutoProvisionVoLTE&amp;portName={http://ws.webservices.pos.nextel.cl.com}AutoProvisionVoLTESOAP&amp;dataFormat=MESSAGE" />
-	
-	
-			<to uri="sql-stored:registerTx_in()?dataSource=dataSource" />	
-	
+			<from
+				uri="cxf:http://localhost:8888/activateVoLTENetwork/?wsdlURL=classpath:wsdl/AutoProvisionVoLTE.wsdl&amp;serviceName={http://ws.webservices.pos.nextel.cl.com}AutoProvisionVoLTE&amp;portName={http://ws.webservices.pos.nextel.cl.com}AutoProvisionVoLTESOAP&amp;dataFormat=MESSAGE" />
+
+			<setProperty propertyName="autoProvisioningType">
+				<xpath resultType="java.lang.Integer">/soapenv:Envelope/soapenv:Body/ws:NewOperation/AutoProvisioningType/text()
+				</xpath>
+			</setProperty>
 
 
- 			
-			<to uri="cxf:http://localhost:8889/activateVoLTENetwork/?dataFormat=MESSAGE" />
+			<split>
+				<simple>true</simple>
+				<to uri="sql:{{sql.registerFechaInit}}" />
+			</split>
 
+
+			<log loggingLevel="INFO"
+				message="pasando por servicio REST body: ${property.autoProvisioningType}" />
+
+
+			<to
+				uri="cxf:http://localhost:8889/activateVoLTENetwork/?dataFormat=MESSAGE" />
+
+
+			<split>
+			
+				<simple>true</simple>
+				<setHeader headerName="id">
+				<simple>${property.autoProvisioningType}</simple>
+			</setHeader>
+				
+				<to
+					uri="sql:{{sql.registerFechaEnd}}" />
+			</split>
 
 
 			<setHeader headerName="resultCode">
@@ -69,11 +93,12 @@
 						<simple>respuesta NO OK</simple>
 					</transform>
 				</when>
-				<otherwise>
+				<when>
+					<simple>${headers.resultCode} == 1</simple>
 					<transform>
 						<simple>OK</simple>
 					</transform>
-				</otherwise>
+				</when>
 			</choice>
 
 		</route>
@@ -83,9 +108,7 @@
 			<from
 				uri="cxf:http://localhost:8889/activateVoLTENetwork/?wsdlURL=classpath:wsdl/AutoProvisionVoLTE.wsdl&amp;serviceName={http://ws.webservices.pos.nextel.cl.com}AutoProvisionVoLTE&amp;portName={http://ws.webservices.pos.nextel.cl.com}AutoProvisionVoLTESOAP&amp;dataFormat=MESSAGE" />
 
-			<to uri="sql-stored:registerTx_out(INTEGER 3)?dataSource=dataSource" />
-
-			<to uri="velocity:velocity/activateVoLTENetworkResponse.vm" /> 
+			<to uri="velocity:velocity/activateVoLTENetworkResponse.vm" />
 
 		</route>
 
