@@ -32,7 +32,7 @@
 
 		<route streamCache="true">
 			<from
-				uri="restlet:http://localhost:8888/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/eligibility/?restletMethod=post" />
+				uri="restlet:http://localhost:8883/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/eligibility/?restletMethod=post" />
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>
@@ -55,9 +55,89 @@
 			</choice>
 		</route>
 
+
+
+		<!-- Servicio GetOfers -->
 		<route streamCache="true">
 			<from
-				uri="restlet:http://localhost:8888/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/?restletMethod=post" />
+				uri="restlet:http://localhost:8884/CarrierBilling/GetOffers/?restletMethod=post" />
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="msisdn">
+				<jsonpath>$.msisdn</jsonpath>
+			</setHeader>
+
+			<choice>
+				<when>
+					<simple>${headers.msisdn} == ""</simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/200GetOffers.vm" />
+				</otherwise>
+			</choice>
+		</route>
+		
+		<!-- Servicio Offers -->
+		<route streamCache="true">
+			<from
+				uri="restlet:http://localhost:8885/CarrierBilling/Offers/?restletMethod=post" />
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="credential">
+				<jsonpath>$.credential</jsonpath>
+			</setHeader>
+
+			<choice>
+				<when>
+					<simple>${headers.credential} == ""</simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/200Offers.vm" />
+				</otherwise>
+			</choice>
+		</route>
+		
+		<!-- Servicio ListOfers -->
+		<route streamCache="true">
+			<from
+				uri="restlet:http://localhost:8886/CarrierBilling/ListOffers/?restletMethod=post" />
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="msisdn">
+				<jsonpath>$.msisdn</jsonpath>
+			</setHeader>
+
+			<choice>
+				<when>
+					<simple>${headers.msisdn} == ""</simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/200ListOffers.vm" />
+				</otherwise>
+			</choice>
+		</route>
+		
+		<route streamCache="true">
+			<from
+				uri="restlet:http://localhost:8880/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/?restletMethod=post" />
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>
@@ -82,7 +162,7 @@
 
 		<route streamCache="true">
 			<from
-				uri="restlet:http://localhost:8888/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/?restletMethod=patch" />
+				uri="restlet:http://localhost:8881/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/?restletMethod=patch" />
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>
@@ -107,7 +187,7 @@
 
 		<route streamCache="true">
 			<from
-				uri="restlet:http://localhost:8888/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/cancel/?restletMethod=post" />
+				uri="restlet:http://localhost:8882/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/cancel/?restletMethod=post" />
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>
@@ -132,7 +212,7 @@
 
 		<route streamCache="true">
 			<from
-				uri="restlet:http://localhost:8888/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/refund/?restletMethod=post" />
+				uri="restlet:http://localhost:8887/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/refund/?restletMethod=post" />
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>

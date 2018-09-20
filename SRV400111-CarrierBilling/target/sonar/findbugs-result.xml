@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<BugCollection version="3.1.0-RC6" sequence="0" timestamp="1536961324000" analysisTimestamp="1536962888106" release="">
+  <Project>
+    <Jar>/home/cris/WOM/WOM_proyectos/RedHatServiciosReingenieria/SRV400111-CarrierBilling/target/classes/cl/wom/exception/services/ServiceError.class</Jar>
+    <Jar>/home/cris/WOM/WOM_proyectos/RedHatServiciosReingenieria/SRV400111-CarrierBilling/target/classes/cl/wom/middleware/proxy/SpringBootRestProxyApplication.class</Jar>
+    <AuxClasspathEntry>/home/cris/WOM/WOM_proyectos/RedHatServiciosReingenieria/SRV400111-CarrierBilling/target/classes</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/boot/spring-boot-starter-undertow/1.4.1.RELEASE/spring-boot-starter-undertow-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/io/undertow/undertow-core/1.3.25.Final/undertow-core-1.3.25.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/jboss/logging/jboss-logging/3.3.0.Final/jboss-logging-3.3.0.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/jboss/xnio/xnio-api/3.3.6.Final/xnio-api-3.3.6.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/jboss/xnio/xnio-nio/3.3.6.Final/xnio-nio-3.3.6.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/io/undertow/undertow-servlet/1.3.25.Final/undertow-servlet-1.3.25.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/jboss/spec/javax/annotation/jboss-annotations-api_1.2_spec/1.0.0.Final/jboss-annotations-api_1.2_spec-1.0.0.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/io/undertow/undertow-websockets-jsr/1.3.25.Final/undertow-websockets-jsr-1.3.25.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/jboss/spec/javax/websocket/jboss-websocket-api_1.1_spec/1.1.0.Final/jboss-websocket-api_1.1_spec-1.1.0.Final.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/glassfish/javax.el/3.0.0/javax.el-3.0.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-stream-starter/2.18.0/camel-stream-starter-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/boot/spring-boot-starter/1.4.1.RELEASE/spring-boot-starter-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/boot/spring-boot-starter-logging/1.4.1.RELEASE/spring-boot-starter-logging-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/ch/qos/logback/logback-classic/1.1.7/logback-classic-1.1.7.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/ch/qos/logback/logback-core/1.1.7/logback-core-1.1.7.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/slf4j/jcl-over-slf4j/1.7.21/jcl-over-slf4j-1.7.21.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/slf4j/jul-to-slf4j/1.7.21/jul-to-slf4j-1.7.21.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/slf4j/log4j-over-slf4j/1.7.21/log4j-over-slf4j-1.7.21.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/yaml/snakeyaml/1.17/snakeyaml-1.17.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-stream/2.18.0/camel-stream-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-core-starter/2.18.0/camel-core-starter-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/com/github/ben-manes/caffeine/caffeine/2.3.3/caffeine-2.3.3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-velocity/2.18.0/camel-velocity-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/velocity/velocity/1.7/velocity-1.7.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/commons-collections/commons-collections/3.2.2/commons-collections-3.2.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/commons-lang/commons-lang/2.4/commons-lang-2.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/com/sun/xml/bind/jaxb-core/2.2.11/jaxb-core-2.2.11.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/com/sun/xml/bind/jaxb-impl/2.2.11/jaxb-impl-2.2.11.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-core/2.18.0/camel-core-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/slf4j/slf4j-api/1.7.21/slf4j-api-1.7.21.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-spring/2.18.0/camel-spring-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/spring-core/4.3.3.RELEASE/spring-core-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/spring-aop/4.3.3.RELEASE/spring-aop-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/spring-context/4.3.3.RELEASE/spring-context-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/spring-beans/4.3.3.RELEASE/spring-beans-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/spring-expression/4.3.3.RELEASE/spring-expression-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/spring-tx/4.3.3.RELEASE/spring-tx-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-spring-boot-starter/2.18.0/camel-spring-boot-starter-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-spring-boot/2.18.0/camel-spring-boot-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-restlet/2.18.0/camel-restlet-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/restlet/jee/org.restlet/2.3.6/org.restlet-2.3.6.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/restlet/jee/org.restlet.ext.httpclient/2.3.6/org.restlet.ext.httpclient-2.3.6.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/httpcomponents/httpclient/4.5.2/httpclient-4.5.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/httpcomponents/httpcore/4.4.5/httpcore-4.4.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/httpcomponents/httpmime/4.5.2/httpmime-4.5.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/net/jcip/jcip-annotations/1.0/jcip-annotations-1.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/commons-logging/commons-logging/1.2/commons-logging-1.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/james/apache-mime4j-core/0.7.2/apache-mime4j-core-0.7.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/activemq/activemq-camel/5.13.4/activemq-camel-5.13.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/activemq/activemq-spring/5.13.4/activemq-spring-5.13.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/xbean/xbean-spring/4.5/xbean-spring-4.5.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/activemq/activemq-broker/5.13.4/activemq-broker-5.13.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/activemq/activemq-openwire-legacy/5.13.4/activemq-openwire-legacy-5.13.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/activemq/activemq-pool/5.13.4/activemq-pool-5.13.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/activemq/activemq-jms-pool/5.13.4/activemq-jms-pool-5.13.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/geronimo/specs/geronimo-jms_1.1_spec/1.1.1/geronimo-jms_1.1_spec-1.1.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/activemq/activemq-client/5.13.4/activemq-client-5.13.4.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/fusesource/hawtbuf/hawtbuf/1.11/hawtbuf-1.11.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/geronimo/specs/geronimo-j2ee-management_1.1_spec/1.0.1/geronimo-j2ee-management_1.1_spec-1.0.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/geronimo/specs/geronimo-jta_1.0.1B_spec/1.0.1/geronimo-jta_1.0.1B_spec-1.0.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/commons/commons-pool2/2.4.2/commons-pool2-2.4.2.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-jms/2.18.0/camel-jms-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/spring-jms/4.3.3.RELEASE/spring-jms-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/spring-messaging/4.3.3.RELEASE/spring-messaging-4.3.3.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-http/2.18.0/camel-http-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-http-common/2.18.0/camel-http-common-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/commons-httpclient/commons-httpclient/3.1/commons-httpclient-3.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/commons-codec/commons-codec/1.10/commons-codec-1.10.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/boot/spring-boot-devtools/1.4.1.RELEASE/spring-boot-devtools-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/boot/spring-boot/1.4.1.RELEASE/spring-boot-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/springframework/boot/spring-boot-autoconfigure/1.4.1.RELEASE/spring-boot-autoconfigure-1.4.1.RELEASE.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/apache/camel/camel-jsonpath/2.18.0/camel-jsonpath-2.18.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/com/jayway/jsonpath/json-path/2.2.0/json-path-2.2.0.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/net/minidev/json-smart/2.2.1/json-smart-2.2.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/net/minidev/accessors-smart/1.1/accessors-smart-1.1.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/.m2/repository/org/ow2/asm/asm/5.0.3/asm-5.0.3.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/WOM/WOM_proyectos/RedHatServiciosReingenieria/SRV400111-CarrierBilling/target/sonar/findbugs/annotations.jar</AuxClasspathEntry>
+    <AuxClasspathEntry>/home/cris/WOM/WOM_proyectos/RedHatServiciosReingenieria/SRV400111-CarrierBilling/target/sonar/findbugs/jsr305.jar</AuxClasspathEntry>
+    <WrkDir>/home/cris/WOM/WOM_proyectos/RedHatServiciosReingenieria/SRV400111-CarrierBilling/target/sonar</WrkDir>
+  </Project>
+  <Errors errors="0" missingClasses="0"></Errors>
+  <FindBugsSummary timestamp="Fri, 14 Sep 2018 18:42:04 -0300" total_classes="2" referenced_classes="39" total_bugs="0" total_size="27" num_packages="2" java_version="1.8.0_181" vm_version="25.181-b13" cpu_seconds="7.40" clock_seconds="2.11" peak_mbytes="409.73" alloc_mbytes="1746.00" gc_seconds="0.25">
+    <FileStats path="cl/wom/exception/services/ServiceError.java" bugCount="0" size="21"/>
+    <FileStats path="cl/wom/middleware/proxy/SpringBootRestProxyApplication.java" bugCount="0" size="6"/>
+    <PackageStats package="cl.wom.exception.services" total_bugs="0" total_types="1" total_size="21">
+      <ClassStats class="cl.wom.exception.services.ServiceError" sourceFile="ServiceError.java" interface="false" size="21" bugs="0"/>
+    </PackageStats>
+    <PackageStats package="cl.wom.middleware.proxy" total_bugs="0" total_types="1" total_size="6">
+      <ClassStats class="cl.wom.middleware.proxy.SpringBootRestProxyApplication" sourceFile="SpringBootRestProxyApplication.java" interface="false" size="6" bugs="0"/>
+    </PackageStats>
+    <FindBugsProfile>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassInfoAnalysisEngine" totalMilliseconds="277" invocations="544" avgMicrosecondsPerInvocation="510" maxMicrosecondsPerInvocation="25273" standardDeviationMicrosecondsPerInvocation="1574"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.ClassDataAnalysisEngine" totalMilliseconds="144" invocations="550" avgMicrosecondsPerInvocation="263" maxMicrosecondsPerInvocation="749" standardDeviationMicrosecondsPerInvocation="93"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FieldItemSummary" totalMilliseconds="85" invocations="39" avgMicrosecondsPerInvocation="2198" maxMicrosecondsPerInvocation="19936" standardDeviationMicrosecondsPerInvocation="4032"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FindNoSideEffectMethods" totalMilliseconds="67" invocations="39" avgMicrosecondsPerInvocation="1728" maxMicrosecondsPerInvocation="12494" standardDeviationMicrosecondsPerInvocation="2996"/>
+      <ClassProfile name="edu.umd.cs.findbugs.OpcodeStack$JumpInfoFactory" totalMilliseconds="61" invocations="138" avgMicrosecondsPerInvocation="445" maxMicrosecondsPerInvocation="3674" standardDeviationMicrosecondsPerInvocation="604"/>
+      <ClassProfile name="edu.umd.cs.findbugs.util.TopologicalSort" totalMilliseconds="44" invocations="504" avgMicrosecondsPerInvocation="88" maxMicrosecondsPerInvocation="1955" standardDeviationMicrosecondsPerInvocation="168"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.JavaClassAnalysisEngine" totalMilliseconds="39" invocations="71" avgMicrosecondsPerInvocation="560" maxMicrosecondsPerInvocation="15471" standardDeviationMicrosecondsPerInvocation="1959"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.NoteDirectlyRelevantTypeQualifiers" totalMilliseconds="37" invocations="39" avgMicrosecondsPerInvocation="965" maxMicrosecondsPerInvocation="11585" standardDeviationMicrosecondsPerInvocation="2036"/>
+      <ClassProfile name="edu.umd.cs.findbugs.classfile.engine.bcel.MethodGenFactory" totalMilliseconds="33" invocations="5" avgMicrosecondsPerInvocation="6700" maxMicrosecondsPerInvocation="32011" standardDeviationMicrosecondsPerInvocation="12657"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.BuildObligationPolicyDatabase" totalMilliseconds="25" invocations="39" avgMicrosecondsPerInvocation="661" maxMicrosecondsPerInvocation="6326" standardDeviationMicrosecondsPerInvocation="1205"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.FunctionsThatMightBeMistakenForProcedures" totalMilliseconds="23" invocations="39" avgMicrosecondsPerInvocation="612" maxMicrosecondsPerInvocation="7576" standardDeviationMicrosecondsPerInvocation="1436"/>
+      <ClassProfile name="edu.umd.cs.findbugs.detect.OverridingEqualsNotSymmetrical" totalMilliseconds="23" invocations="39" avgMicrosecondsPerInvocation="604" maxMicrosecondsPerInvocation="10381" standardDeviationMicrosecondsPerInvocation="1678"/>
+    </FindBugsProfile>
+  </FindBugsSummary>
+  <ClassFeatures></ClassFeatures>
+  <History></History>
+</BugCollection>

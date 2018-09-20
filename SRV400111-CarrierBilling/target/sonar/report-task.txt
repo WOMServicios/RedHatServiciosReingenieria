@@ -1,0 +1,6 @@
+projectKey=cl.wom.middleware.proxy:SRV400111-CarrierBilling
+serverUrl=http://10.120.1.130/sonar
+serverVersion=6.5.0.27846
+dashboardUrl=http://10.120.1.130/sonar/dashboard/index/cl.wom.middleware.proxy:SRV400111-CarrierBilling
+ceTaskId=AWXaII7tSyrFNYjr1qcl
+ceTaskUrl=http://10.120.1.130/sonar/api/ce/task?id=AWXaII7tSyrFNYjr1qcl
