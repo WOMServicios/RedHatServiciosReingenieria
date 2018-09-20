@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Implementation-Title: SRV40021-DNAComercial
 Implementation-Version: 1.0.0
-Built-By: cquezada
+Built-By: cris
 Implementation-Vendor-Id: cl.wom.middleware.proxy
-Build-Jdk: 1.8.0_151
+Build-Jdk: 1.8.0_181
 Implementation-URL: http://projects.spring.io/spring-boot/SRV40021-DNA
  Comercial/
 Created-By: Maven Integration for Eclipse

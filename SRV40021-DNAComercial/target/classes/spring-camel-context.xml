@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd          http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+    http://camel.apache.org/schema/spring 
+    http://camel.apache.org/schema/spring/camel-spring.xsd">
     <camelContext id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af" xmlns="http://camel.apache.org/schema/spring">
-        <!-- Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
-			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
+        <!--Cargamos el archivo de propiedades correspondiente al ambiente 
+        	NOTA: Esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
 			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
 			archivo properties. Por defecto en opensfhit es develop -->
-        <propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/>
-        <!-- 		<propertyPlaceholder id="placeholder" location="classpath:application.properties" /> -->
+		<!-- <propertyPlaceholder id="placeholder" location="classpath:${env:PFX_ENV}.properties"/>  -->	
+        <propertyPlaceholder id="placeholder" location="classpath:application.properties"/>
         <onException>
             <exception>java.lang.Exception</exception>
             <redeliveryPolicy
@@ -17,11 +21,11 @@
         </onException>
         <!-- Esta ruta se encarga de imprimir las variables de: ambiente y log. 
 			Se ejecuta solo 1 vez -->
-        <route id="_route5">
+        <!--  route id="_route5">
             <from id="_from3" uri="timer://foo?repeatCount=1"/>
             <log id="_log1" loggingLevel="INFO" message="PROPERTIE DE AMBIENTE: {{env:PFX_ENV}}"/>
             <log id="_log2" loggingLevel="INFO" message="NIVEL DE LOG: {{env:LOGLEVEL}}"/>
-        </route>
+        </route-->
         <route id="_route1" streamCache="true">
             <from id="_from1" uri="restlet:http://0.0.0.0:8888/saldo/cliente/1?restletMethod=get"/>
             <to id="_to2" uri="restlet:http://jsonplaceholder.typicode.com/posts/1?restletMethod=get"/>
