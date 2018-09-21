@@ -14,6 +14,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring.boot-version>1.4.1.RELEASE</spring.boot-version>
 		<fabric8.version>2.2.170</fabric8.version>
+		<java.version>1.8</java.version>
 	</properties>
 
 	<parent>
@@ -31,6 +32,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
@@ -95,7 +97,7 @@
 			<artifactId>activemq-camel</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+	
 		<dependency>
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-pool</artifactId>
@@ -112,20 +114,45 @@
 			<artifactId>camel-http</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-		  <groupId>org.apache.camel</groupId>
-		  <artifactId>camel-jsonpath</artifactId>
-		<scope>provided</scope>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jsonpath</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
-	</dependencies>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-sql</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<scope>provided</scope>
+		</dependency>
+			<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jdbc</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-stream</artifactId>
+            <scope>provided</scope>
+        </dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc7</artifactId>
+			<version>12.1.0</version>
+		</dependency>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -136,3 +163,5 @@
 	</build>
 
 </project>
+
+

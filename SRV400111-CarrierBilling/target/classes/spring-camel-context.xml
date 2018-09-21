@@ -5,6 +5,27 @@
 	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
+	
+<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url"
+			value="jdbc:oracle:thin:@10.120.241.44:1540:BSCSUAT" />
+		<property name="username" value="VMD" />
+		<property name="password" value="VMD" />
+	</bean>
+
+	<!-- configure the Camel SQL component to use the JDBC data source -->
+	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="rowProcessor"
+		class="cl.wom.util.ClienteProcessor">
+	</bean>
+	
+	
 	<camelContext
 	    id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
 		xmlns="http://camel.apache.org/schema/spring">
@@ -15,7 +36,8 @@
 		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
 		
 		<propertyPlaceholder id="placeholder"
-			location="classpath:application.properties" />
+			location="classpath:application.properties,classpath:sql.properties" />
+
 			
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
@@ -72,6 +94,15 @@
 					<to uri="velocity:velocity/200GetCarrierBillingElegibilityCheck.vm" />
 				</otherwise>
 			</choice>
+			
+				<setBody>
+				<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>
+
+			</setBody>
+
+			<to uri="jdbc:dataSource" />
+			<log message="column: ${body[MERCADO]}" />
+			<to uri="bean:rowProcessor" />
 		</route>
 
 
