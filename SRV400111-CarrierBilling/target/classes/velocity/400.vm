@@ -1,9 +1,4 @@
 {
-  "responseCode": "prueba",
-  "responseMessage": "${headers.messageError}",
-  "paymentProviderTransactionId": "ERRRRRRRRRRROR",
-  "extensionData": {
-    "key1": "12232",
-    "key2": "21121" 
-  }
+    "responseCode": “ERROR",
+    "responseMessage": “request failed"
 }
