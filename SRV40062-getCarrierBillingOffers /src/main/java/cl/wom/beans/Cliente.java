@@ -22,9 +22,19 @@ public class Cliente implements Serializable {
 	private Timestamp fechaActivacion;
 	private String mercado;
 	private BigDecimal cargoBasico;
+	private String dnNum;
+	
 
 	public Cliente() {
 
+	}
+
+	public String getDnNum() {
+		return dnNum;
+	}
+
+	public void setDnNum(String dnNum) {
+		this.dnNum = dnNum;
 	}
 
 	public String getRut() {
