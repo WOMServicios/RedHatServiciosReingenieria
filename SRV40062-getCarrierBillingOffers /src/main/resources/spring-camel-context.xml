@@ -158,15 +158,13 @@
 							<simple>${property.customerIdProperty} == null</simple>
 							
 							<to uri="velocity:velocity/getInfoSuscriptorCarrierBilling.vm" />
-							
-							
-							
+		
 						</when>
 				</when>
 			</choice>
-							<setHeader headerName="Content-Type">
-								<constant>application/json</constant>
-							</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
 		</route>
 	</camelContext>
 </beans>

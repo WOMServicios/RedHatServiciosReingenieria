@@ -9,135 +9,127 @@ public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String rut;
+	private String msisdn;
 	private BigDecimal customerId;
-	private BigDecimal customerIdHigh;
-	private BigDecimal contractId;
-	private String numCelular;
+	private BigDecimal codId;
+	private BigDecimal rateplan;
 	private String tipoContrato;
-	private String rateplan;
-	private BigDecimal antiguedad;
-	private String ciclo;
-	private char estadoContrato;
+	private char estado;
 	private Timestamp fechaActivacion;
-	private String mercado;
-	private BigDecimal cargoBasico;
+
+
+	
 
 	public Cliente() {
 
 	}
 
-	public String getRut() {
-		return rut;
+
+
+
+	public String getMsisdn() {
+		return msisdn;
 	}
 
-	public void setRut(String rut) {
-		this.rut = rut;
+
+
+
+	public void setMsisdn(String msisdn) {
+		this.msisdn = msisdn;
 	}
+
+
+
 
 	public BigDecimal getCustomerId() {
 		return customerId;
 	}
 
+
+
+
 	public void setCustomerId(BigDecimal customerId) {
 		this.customerId = customerId;
 	}
 
-	public BigDecimal getCustomerIdHigh() {
-		return customerIdHigh;
+
+
+
+	public BigDecimal getCodId() {
+		return codId;
 	}
 
-	public void setCustomerIdHigh(BigDecimal customerIdHigh) {
-		this.customerIdHigh = customerIdHigh;
+
+
+
+	public void setCodId(BigDecimal codId) {
+		this.codId = codId;
 	}
 
-	public BigDecimal getContractId() {
-		return contractId;
+
+
+
+	public BigDecimal getRateplan() {
+		return rateplan;
 	}
 
-	public void setContractId(BigDecimal contractId) {
-		this.contractId = contractId;
+
+
+
+	public void setRateplan(BigDecimal rateplan) {
+		this.rateplan = rateplan;
 	}
 
-	public String getNumCelular() {
-		return numCelular;
-	}
 
-	public void setNumCelular(String numCelular) {
-		this.numCelular = numCelular;
-	}
+
 
 	public String getTipoContrato() {
 		return tipoContrato;
 	}
 
+
+
+
 	public void setTipoContrato(String tipoContrato) {
 		this.tipoContrato = tipoContrato;
 	}
 
-	public String getRateplan() {
-		return rateplan;
+
+
+
+	public char getEstado() {
+		return estado;
 	}
 
-	public void setRateplan(String rateplan) {
-		this.rateplan = rateplan;
+
+
+
+	public void setEstado(char estado) {
+		this.estado = estado;
 	}
 
-	public BigDecimal getAntiguedad() {
-		return antiguedad;
-	}
 
-	public void setAntiguedad(BigDecimal antiguedad) {
-		this.antiguedad = antiguedad;
-	}
 
-	public String getCiclo() {
-		return ciclo;
-	}
-
-	public void setCiclo(String ciclo) {
-		this.ciclo = ciclo;
-	}
-
-	public char getEstadoContrato() {
-		return estadoContrato;
-	}
-
-	public void setEstadoContrato(char estadoContrato) {
-		this.estadoContrato = estadoContrato;
-	}
 
 	public Timestamp getFechaActivacion() {
 		return fechaActivacion;
 	}
 
+
+
+
 	public void setFechaActivacion(Timestamp fechaActivacion) {
 		this.fechaActivacion = fechaActivacion;
 	}
 
-	public String getMercado() {
-		return mercado;
-	}
 
-	public void setMercado(String mercado) {
-		this.mercado = mercado;
-	}
 
-	public BigDecimal getCargoBasico() {
-		return cargoBasico;
-	}
-
-	public void setCargoBasico(BigDecimal cargoBasico) {
-		this.cargoBasico = cargoBasico;
-	}
 
 	@Override
 	public String toString() {
-		return "Cliente [rut=" + rut + ", customerId=" + customerId + ", customerIdHigh=" + customerIdHigh
-				+ ", contractId=" + contractId + ", numCelular=" + numCelular + ", tipoContrato=" + tipoContrato
-				+ ", rateplan=" + rateplan + ", antiguedad=" + antiguedad + ", ciclo=" + ciclo + ", estadoContrato="
-				+ estadoContrato + ", fechaActivacion=" + fechaActivacion + ", mercado=" + mercado + ", cargoBasico="
-				+ cargoBasico + "]";
+		return "Cliente [msisdn=" + msisdn + ", customerId=" + customerId + ", codId=" + codId + ", rateplan="
+				+ rateplan + ", tipoContrato=" + tipoContrato + ", estado=" + estado + ", fechaActivacion="
+				+ fechaActivacion + "]";
 	}
 
 	

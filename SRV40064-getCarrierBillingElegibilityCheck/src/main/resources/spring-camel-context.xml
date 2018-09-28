@@ -52,7 +52,7 @@
 		<!-- getcarrierbillingelegibilitycheck -->
 		<route streamCache="true">
 			<from
-				uri="restlet:http://localhost:8880/getcarrierbillingelegibilitycheck/rest/v1.0/?restletMethod=post" />
+				uri="restlet:http://10.120.145.160:9080/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/elegibility/?restletMethod=post" />
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>
