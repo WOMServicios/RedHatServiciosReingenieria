@@ -6,21 +6,38 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<bean id="dataSource"
+	<bean id="dataSourceBSCSDESA"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName"
 			value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url"
-			value="jdbc:oracle:thin:@10.120.241.44:1540:BSCSUAT" />
-		<property name="username" value="VMD" />
-		<property name="password" value="VMD" />
-	</bean>
+			value="jdbc:oracle:thin:@cluxds03:1550:BSCSDESA" />
+		<property name="username" value="OPSH_BSCSREP_SYSADM_CBI" />
+		<property name="password" value="knh#5tgl20k0lpm.l" />
+			
+	</bean>  
+	
+ 	<bean id="dataSourceWAPPLDESA"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url"
+			value="jdbc:oracle:thin:@10.120.148.136:1521:WAPPLDESA" />
+		<property name="username" value="CARRIERBILLING" />
+		<property name="password" value="carrierdes09"  />
+
+	</bean>  
+	
 
 	<!-- configure the Camel SQL component to use the JDBC data source -->
-	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-
+	<!--  	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource" ref="dataSource2" />
+			
+	</bean> --> 
+	<!--  <bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource"  ref="data" />
+	</bean>  -->
+  
 	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
 	</bean>
 
@@ -80,11 +97,13 @@
 					<setBody>
 						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>
 					</setBody>
-
-					<to uri="jdbc:dataSource" />
-
-					<to uri="bean:clienteProcessor" />
 					
+
+					<to uri="jdbc:dataSourceBSCSDESA" />
+					<log loggingLevel="WARN" message="ejecuto la query getInfoSuscriptorCarrierBilling"/>
+					<to uri="bean:clienteProcessor" />
+					<log loggingLevel="WARN" message="clienteProcessor getInfoSuscriptorCarrierBillin"/>
+						
 					
 						<when>
 							<simple>${body.rut} != null</simple>
@@ -99,68 +118,89 @@
 								<simple>${body.customerIdHigh}</simple>
 							</setProperty>
 		
-							<setProperty propertyName="numCelularProperty">
-								<simple>${body.numCelular}</simple>
-							</setProperty>
-		
-		
 							<!-- query devolvera 0 / 1 si es cero se saldra getSuscripcionesCarrierExist -->
-		
-							<!-- <setBody> <simple>{{sql.getSuscripcionesCarrierExist}}</simple> 
-								<when> si es no ok sale del flujo  	<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" /> </when> <when> si es cero continua </when> 
-								</setBody> <to uri="jdbc:dataSource" /> -->
-		
-							<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion 
-								activa -busca el msisdn mas antiguo de la cuenta -->
-							<setBody>
-								<simple>{{sql.getCustomerContractMoreOld}}</simple>
-							</setBody>
-		
-							<to uri="jdbc:dataSource" />
+							
+							
+		<!-- 
+							<setBody> 
+								<simple>{{sql.getSuscripcionesCarrierExist}}</simple> 
+							</setBody> 
+							
+							<to uri="jdbc:dataSourceWAPPLDESA" />	
+							<log loggingLevel="WARN" message="ejecuto la query getSuscripcionesCarrierExist"/>
 							<to uri="bean:clienteProcessor" />
-		
-								<when>
-									<simple>${body.dnNum} != ""</simple>
-									<!-- valida la cuenta pagadora getCustomerPagador -->
-			
+							<log loggingLevel="WARN" message="clienteProcessor getSuscripcionesCarrierExist"/>
+							
+								<when> 
+									<simple>${body.rut} != 0</simple>
+									<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />
+							    </when> 
+							    <when>
+							    	<simple>${body.rut} == 0</simple> -->
+							    		<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion 
+								activa -busca el msisdn mas antiguo de la cuenta -->
 									<setBody>
-										<simple>{{sql.getCustomerPagador}}</simple>
+										<simple>{{sql.getCustomerContractMoreOld}}</simple>
 									</setBody>
-									<to uri="jdbc:dataSource" />
-									<to uri="bean:clienteProcessor" />
-			
-									<when>
-										<!-- si es igual continua el flujo -->
-										<simple>${body.customerId} == ${property.customerIdProperty}</simple>
-										<!-- valida la oferta del cliente getofertacarrier valida las ofertas -->
-										<!-- la ultima validacion la cual arroja las ofertas, falta bd -->
-										<log message="exitooo"></log>
-			
-									</when>
-									<!-- <when> si es diferente sale del flujo </when> -->
-									<when>
-									<simple>${body.customerId} != ${property.customerIdProperty}</simple>
-									<to uri="velocity:velocity/getCustomerPagador.vm" /> 
+				
+										<to uri="jdbc:dataSourceBSCSDESA" />
+										<log loggingLevel="WARN" message="ejecuto la query getCustomerContractMoreOld"/>
+										<to uri="bean:clienteProcessor" />
+										<log loggingLevel="WARN" message="clienteProcessor getCustomerContractMoreOld"/>
 										
-									</when>
-			
-								</when>
-		
-								<when>
-									<simple>${body.dnNum} == ""</simple>
-									<!-- lanza no ok y sale del flujo -->
-								<to uri="velocity:velocity/getCustomerContractMoreOld.vm" /> 
-								
-								</when>
-						</when>
+										<setProperty propertyName="dnNumIdHighProperty">
+												<simple>${body.dnNum}</simple>
+										</setProperty>
+									
+										<when>
+											<simple>${property.dnNumIdHighProperty} != null</simple>
+											
+										<!-- 	valida la cuenta pagadora getCustomerPagador -->
 					
+											<setBody>
+												<simple>{{sql.getCustomerPagador}}</simple>
+											</setBody>
+											<to uri="jdbc:dataSourceBSCSDESA" />
+											<log loggingLevel="WARN" message="ejecuto la query getCustomerPagador"/>
+											<to uri="bean:clienteProcessor" />
+											<log message="clienteProcessor getCustomerPagador"/>
+											<log message="body: ${body.customerId} property : ${property.customerIdProperty}"/>
+											<when>
+											<!-- 	si es igual continua el flujo -->
+												<simple>${body.customerId} == ${property.customerIdProperty}</simple>
+												
+													<setBody> 
+														<simple>{{sql.getofertacarrier}}</simple> 
+													</setBody> 
+											
+													<to uri="jdbc:dataSourceWAPPLDESA" />	
+										
+											</when>
+											
+											<when>
+											<simple>${body.customerId} != ${property.customerIdProperty}</simple>
+											<to uri="velocity:velocity/getCustomerPagador.vm" /> 
+												
+											</when> 
+					
+										</when> 
+										<when>
+											<simple>${property.dnNumIdHighProperty} == null</simple>
+									
+										<to uri="velocity:velocity/getCustomerContractMoreOld.vm" /> 
+								
+										</when>
+							   </when>
+						
+						</when>
+				
 						<when>
-							<simple>${property.customerIdProperty} == null</simple>
+							<simple>${property.customerIdProperty} == null </simple>
 							
 							<to uri="velocity:velocity/getInfoSuscriptorCarrierBilling.vm" />
 		
 						</when>
-				</when>
+				
 			</choice>
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>

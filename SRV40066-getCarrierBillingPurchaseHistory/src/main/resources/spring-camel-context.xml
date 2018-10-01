@@ -6,19 +6,28 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<bean id="dataSource"
+	<bean id="dataSourceBSCSDESA"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName"
 			value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url"
-			value="jdbc:oracle:thin:@10.120.241.44:1540:BSCSUAT" />
-		<property name="username" value="VMD" />
-		<property name="password" value="VMD" />
-	</bean>
+			value="jdbc:oracle:thin:@cluxds03:1550:BSCSDESA" />
+		<property name="username" value="OPSH_BSCSREP_SYSADM_CBI" />
+		<property name="password" value="knh#5tgl20k0lpm.l" />
+			
+	</bean>  
+	
+ 	<bean id="dataSourceWAPPLDESA"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url"
+			value="jdbc:oracle:thin:@10.120.148.136:1521:WAPPLDESA" />
+		<property name="username" value="CARRIERBILLING" />
+		<property name="password" value="carrierdes09"  />
 
-	<!-- configure the Camel SQL component to use the JDBC data source -->
-	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
-		<property name="dataSource" ref="dataSource" />
+	</bean>
+<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
 	</bean>
 
 	<camelContext
@@ -61,32 +70,34 @@
 				<constant>application/json</constant>
 			</setHeader>
 			<setHeader headerName="msisdn">
-				<jsonpath>$.msisdn</jsonpath>
-			</setHeader>
-			<setHeader headerName="fecha_desde">
-				<jsonpath>$.fecha_desde</jsonpath>
-			</setHeader>
-			<setHeader headerName="fecha_hasta">
-				<jsonpath>$.fecha_hasta</jsonpath>
+				<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>
 			</setHeader>
 
 			<choice>
 				<when>
-					<simple>
-						${headers.msisdn} == "" ||
-						${headers.fecha_desde} == "" ||
-						${headers.fecha_hasta} == ""
-					</simple>
+					<simple>${headers.msisdn} == ""</simple>
 					<throwException
 						exceptionType="cl.wom.exception.services.ServiceError"
 						message="400" />
 				</when>
-				<otherwise>
-					<to
-						uri="velocity:velocity/200GetCarrierBillingPurchaseHistory.vm" />
-				</otherwise>
-			</choice>
-		</route>
+				
+				<when>
+				<simple>${headers.msisdn} != ""</simple>
+				
+					<setBody>
+						<simple>{{sql.getlistofferscarrierbilling}}</simple>
+					</setBody>
+					
+		
+					<to uri="jdbc:dataSourceWAPPLDESA" />	
+				
+					<to uri="bean:clienteProcessor" />
 
+				</when>
+			</choice>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+		</route>
 	</camelContext>
 </beans>
