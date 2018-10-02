@@ -41,6 +41,16 @@ public class ClienteProcessor implements Processor {
 			cliente.setMercado((String) row.get("MERCADO"));
 			cliente.setCargoBasico((BigDecimal) row.get("CARGO_BASICO"));
 			cliente.setDnNum((String) row.get("DN_NUM"));
+			cliente.setContador((BigDecimal)row.get("CONTADOR"));
+			cliente.setIdOferta((String) row.get("ID_OFERTA"));
+			cliente.setDesOferta((String) row.get("DES_OFERTA"));
+			cliente.setIdOccBscs((String)row.get("ID_OCC_BSCS"));
+			cliente.setMesesAntiguedad((BigDecimal)row.get("MESES_ANTIGUEDAD"));
+			cliente.setValorMinimo((BigDecimal)row.get("VALOR_MINIMO_PLAN"));
+			cliente.setFecDesde((Timestamp) row.get("FEC_DESDE"));
+			cliente.setFecHasta((Timestamp) row.get("FEC_HASTA"));
+			
+			
 		}
 		
 

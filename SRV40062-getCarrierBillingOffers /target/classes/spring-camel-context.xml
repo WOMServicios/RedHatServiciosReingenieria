@@ -27,7 +27,17 @@
 		<property name="password" value="carrierdes09"  />
 
 	</bean>  
+	
 
+	<!-- configure the Camel SQL component to use the JDBC data source -->
+	<!--  	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource" ref="dataSource2" />
+			
+	</bean> --> 
+	<!--  <bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource"  ref="data" />
+	</bean>  -->
+  
 	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
 	</bean>
 
@@ -107,24 +117,14 @@
 							<setProperty propertyName="customerIdHighProperty">
 								<simple>${body.customerIdHigh}</simple>
 							</setProperty>
-							<setProperty propertyName="numCelularProperty">
-								<simple>${body.numCelular}</simple>
-							</setProperty>
-							
-							<setProperty propertyName="antiguedadProperty">
-								<simple>${body.antiguedad}</simple>
-							</setProperty>
-							
-							<setProperty propertyName="cargoBasicoProperty">
-								<simple>${body.cargoBasico}</simple>
-							</setProperty>
 		
 							<!-- query devolvera 0 / 1 si es cero se saldra getSuscripcionesCarrierExist -->
-
+							
+							
+		<!-- 
 							<setBody> 
 								<simple>{{sql.getSuscripcionesCarrierExist}}</simple> 
 							</setBody> 
-					
 							
 							<to uri="jdbc:dataSourceWAPPLDESA" />	
 							<log loggingLevel="WARN" message="ejecuto la query getSuscripcionesCarrierExist"/>
@@ -132,13 +132,13 @@
 							<log loggingLevel="WARN" message="clienteProcessor getSuscripcionesCarrierExist"/>
 							
 								<when> 
-									<simple>${body.contador} != 0</simple>
+									<simple>${body.rut} != 0</simple>
 									<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />
 							    </when> 
 							    <when>
-							    	<simple>${body.contador} == 0</simple> 
+							    	<simple>${body.rut} == 0</simple> -->
 							    		<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion 
-										activa -busca el msisdn mas antiguo de la cuenta -->
+								activa -busca el msisdn mas antiguo de la cuenta -->
 									<setBody>
 										<simple>{{sql.getCustomerContractMoreOld}}</simple>
 									</setBody>
@@ -167,22 +167,20 @@
 											<log message="body: ${body.customerId} property : ${property.customerIdProperty}"/>
 											<when>
 											<!-- 	si es igual continua el flujo -->
-												<simple>${body.customerId} == null</simple>
+												<simple>${body.customerId} == ${property.customerIdProperty}</simple>
 												
-													<to uri="velocity:velocity/getCustomerPagador.vm" /> 
-							
-											</when>
-											
-											<when>
-											<simple>${body.customerId} != null</simple>
-											
 													<setBody> 
 														<simple>{{sql.getofertacarrier}}</simple> 
 													</setBody> 
 											
-														<to uri="jdbc:dataSourceWAPPLDESA" />		 
-													<to uri="bean:clienteProcessor" />
-													 <to uri="velocity:velocity/Success.vm" />  
+													<to uri="jdbc:dataSourceWAPPLDESA" />	
+										
+											</when>
+											
+											<when>
+											<simple>${body.customerId} != ${property.customerIdProperty}</simple>
+											<to uri="velocity:velocity/getCustomerPagador.vm" /> 
+												
 											</when> 
 					
 										</when> 
@@ -201,7 +199,6 @@
 							
 							<to uri="velocity:velocity/getInfoSuscriptorCarrierBilling.vm" />
 		
-						</when>
 						</when>
 				
 			</choice>

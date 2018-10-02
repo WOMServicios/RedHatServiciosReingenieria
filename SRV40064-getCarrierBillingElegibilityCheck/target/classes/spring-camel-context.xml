@@ -6,30 +6,19 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<bean id="dataSourceBSCSDESA"
+	<bean id="dataSource"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName"
 			value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url"
-			value="jdbc:oracle:thin:@cluxds03:1550:BSCSDESA" />
-		<property name="username" value="OPSH_BSCSREP_SYSADM_CBI" />
-		<property name="password" value="knh#5tgl20k0lpm.l" />
-			
-	</bean>  
-	
- 	<bean id="dataSourceWAPPLDESA"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@10.120.148.136:1521:WAPPLDESA" />
-		<property name="username" value="CARRIERBILLING" />
-		<property name="password" value="carrierdes09"  />
+			value="jdbc:oracle:thin:@10.120.241.44:1540:BSCSUAT" />
+		<property name="username" value="VMD" />
+		<property name="password" value="VMD" />
+	</bean>
 
-	</bean>  
-
-
-	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
+	<!-- configure the Camel SQL component to use the JDBC data source -->
+	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource" ref="dataSource" />
 	</bean>
 
 	<camelContext
@@ -43,6 +32,7 @@
 
 		<propertyPlaceholder id="placeholder"
 			location="classpath:application.properties,classpath:sql.properties" />
+
 
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
@@ -59,68 +49,51 @@
 			<to uri="velocity:velocity/400.vm" />
 		</onException>
 
-		<!-- getcarrierbillingoffers -->
+		<!-- getcarrierbillingelegibilitycheck -->
 		<route streamCache="true">
 			<from
-				uri="restlet:http://localhost:8882/subscribecarrierbillingoffer/rest/v1.0/?restletMethod=post" />
+				uri="restlet:http://10.120.145.160:9080/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/elegibility/?restletMethod=post" />
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
-
-			<setHeader headerName="credential">
-				<jsonpath>$.credential</jsonpath>
+			<setHeader headerName="requestId">
+				<jsonpath>$.requestId</jsonpath>
 			</setHeader>
-			<setHeader headerName="credentialType">
-				<jsonpath>$.credentialType</jsonpath>
+			<setHeader headerName="userId">
+				<jsonpath>$.userId</jsonpath>
 			</setHeader>
-			<setHeader headerName="channel">
-				<jsonpath>$.channel</jsonpath>
+			<setHeader headerName="userIdType">
+				<jsonpath>$.userIdType</jsonpath>
 			</setHeader>
-			<setHeader headerName="networkKey">
-				<jsonpath>$.networkKey</jsonpath>
+			<setHeader headerName="key1">
+				<jsonpath>$.extensionData.key1</jsonpath>
+			</setHeader>
+			<setHeader headerName="key2">
+				<jsonpath>$.extensionData.key2</jsonpath>
 			</setHeader>
 
 			<choice>
 				<when>
 					<simple>
-						${headers.credential} == "" ||
-						${headers.credentialType} == "" ||
-						${headers.channel} == "" ||
-						${headers.networkKey} == ""
+						${headers.requestId} == "" || 
+						${headers.userId} == "" || 
+						${headers.userIdType} == "" ||
+						${headers.key1} == "" || 
+						${headers.key2} == ""
 					</simple>
 					<throwException
 						exceptionType="cl.wom.exception.services.ServiceError"
 						message="400" />
 				</when>
 				<otherwise>
-
-					<setBody>
-						<simple>{{sql.getsubcriberBymsisdn}}</simple>
-					</setBody>
-
-					<to uri="jdbc:dataSource" />
-					<to uri="bean:clienteProcessor" />
-
-					<setHeader headerName="codIdProperty">
-						<simple>${body.codId}</simple>
-					</setHeader>
-
-					<to uri="velocity:velocity/netflixStart.vm" />
-					<log message="exitooodd \n\n\n\n\n\n\n\n\n\n\n"></log>
-
-
+					<to
+						uri="velocity:velocity/200GetCarrierBillingElegibilityCheck.vm" />
 				</otherwise>
 			</choice>
-			<setHeader headerName="Accept">
-				<constant>application/json</constant>
-			</setHeader>
-			<setHeader headerName="Content-Type">
-				<constant>application/json</constant>
-			</setHeader>
-		</route>
 
+		</route>
 	</camelContext>
 </beans>
