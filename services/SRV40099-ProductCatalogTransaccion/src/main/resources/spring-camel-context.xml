@@ -23,7 +23,8 @@
 
 			<to uri="velocity:velocity/template-test.vm"></to>			
 			<bean ref="testRamdomGenerator" />
-            <to uri="kafka:localhost:9092?topic={{camel.kafka.topic}}"/>
+<!--             <to uri="kafka:localhost:9092?topic={{camel.kafka.topic}}"/> -->
+            <to uri="kafka:my-cluster-kafka-brokers-amq-streams.wom.desa:80?topic={{camel.kafka.topic}}"/>
             <transform><constant>OK!</constant></transform>
             <log message="mensaje enviado"></log>
         </route>

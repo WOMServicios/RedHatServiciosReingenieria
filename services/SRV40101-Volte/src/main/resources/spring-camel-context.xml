@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+    http://camel.apache.org/schema/spring 
+    http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<import resource="bean-definitions.xml" />
+
+	<camelContext
+		xmlns="http://camel.apache.org/schema/spring"
+		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+		xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1">
+
+		<propertyPlaceholder id="placeholder"
+			location="classpath:application.properties" />
+
+		<onException>
+			<exception>cl.wom.middleware.proxy.ServiceError</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<log loggingLevel="ERROR" message="error" />
+			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+				<simple>${exception.codigoError}</simple>
+			</setHeader>
+			<setHeader headerName="messageError">
+				<simple>Bad Request - ${exception.message}</simple>
+			</setHeader>
+			<to uri="velocity:velocity/400activateVoLTE.vm" />
+		</onException>
+
+		<route streamCache="true">
+			<from
+				uri="cxf:http://0.0.0.0:8087/producer/VoLTE/Services/ProvisioningWS/ActivateVoLTE/?		
+			wsdlURL=classpath:wsdl/activateVoLTE.wsdl&amp;
+			serviceName={http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1}activateVoLTE&amp;
+			portName={http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1}activateVoLTESOAP&amp;
+			dataFormat=MESSAGE" />
+
+
+			<setHeader headerName="msisdn">
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:activateVoLTE/param/msisdn/text()
+				</xpath>
+			</setHeader>
+			<setHeader headerName="imsi">
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:activateVoLTE/param/imsi/text()
+				</xpath>
+			</setHeader>
+
+			<log message="headers.msisdn: ${headers.msisdn}"></log>
+			<log message="headers.imsi: ${headers.imsi}"></log>
+
+			<choice>
+				<when>
+					<simple>${headers.msisdn} == "" || ${headers.imsi} == ""</simple>
+					<log message=" test error  \n\${headers.imsi}"></log>
+					<throwException
+						exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" />
+				</when>
+			</choice>
+			
+			<!-- TODO: definir parametros de entrada --> 
+			<!-- Invocación al procedimiento de auditorio INICIO -->
+			<to uri="direct:spg_new_request_pr"></to>
+			<log message="spg_new_request_pr - headers.new_request_psg_request_id: ${headers.new_request_psg_request_id}"></log>
+
+
+			<!-- Invocación telnet-->
+			<setBody><simple>SPGCMD:AUTOPROV:MSISDN=569${headers.msisdn};</simple></setBody>
+			<to uri="netty4:tcp://0.0.0.0:9999" />
+			
+			<log message="retorno telnet RESP_CODE: ${body.split('=')[1]}"></log>
+			<log message="retorno telnet RESP_MSG ${body.split('=')[2]}"></log>
+
+			<setHeader headerName="new_request_psg_request_id"><constant>200</constant></setHeader>
+			<to uri="velocity:velocity/200activateVoLTE.vm" />
+
+			<log message="Finalizando proceso"></log>
+		</route>
+
+		<route>
+			<from uri="direct:spg_new_request_pr" />
+			
+			<log message="spg_new_request_pr - headers.msisdn: ${headers.msisdn}"></log>
+			<log message="spg_new_request_pr - headers.imsi: ${headers.imsi}"></log>
+			
+			<!-- TODO: cambiar al property -->
+			<setHeader headerName="new_request_psg_request_id"><constant>100023023237</constant></setHeader>
+		</route>
+		
+		
+		<route>
+			<from uri="netty4:tcp://0.0.0.0:9999" />
+			<log message="mensaje recibido desde socket: ${body}"></log>
+			<setBody><constant>SPGCMD:AUTOPROV:RESP_CODE=121212,RESP_MSG=pokoasidpoias dop iasopdi aopsdi;</constant></setBody>
+		</route>
+
+	</camelContext>
+</beans>

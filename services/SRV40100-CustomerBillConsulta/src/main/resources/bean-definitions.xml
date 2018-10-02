@@ -11,8 +11,13 @@
 	</bean>
     
     <bean id="mongoBean" class="com.mongodb.MongoClient">
-        <constructor-arg name="host" value="${camel.mongodb.host}" />
-        <constructor-arg name="port" value="${camel.mongodb.port}" />
+        <constructor-arg>
+            <ref bean="mongoClientURI" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="mongoClientURI" class="com.mongodb.MongoClientURI">
+        <constructor-arg name="uri" value="mongodb://${camel.mongodb.user}:${camel.mongodb.pass}@${camel.mongodb.host}:${camel.mongodb.port}/${camel.mongodb.db}" />
     </bean>
 	
 </beans>
