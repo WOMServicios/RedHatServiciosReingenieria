@@ -6,20 +6,28 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<bean id="dataSource"
+	<bean id="dataSourceBSCSDESA"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName"
 			value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url"
-			value="jdbc:oracle:thin:@10.120.241.44:1540:BSCSUAT" />
-		<property name="username" value="VMD" />
-		<property name="password" value="VMD" />
-	</bean>
+			value="jdbc:oracle:thin:@cluxds03:1550:BSCSDESA" />
+		<property name="username" value="OPSH_BSCSREP_SYSADM_CBI" />
+		<property name="password" value="knh#5tgl20k0lpm.l" />
+			
+	</bean>  
+	
+ 	<bean id="dataSourceWAPPLDESA"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url"
+			value="jdbc:oracle:thin:@10.120.148.136:1521:WAPPLDESA" />
+		<property name="username" value="CARRIERBILLING" />
+		<property name="password" value="carrierdes09"  />
 
-	<!-- configure the Camel SQL component to use the JDBC data source -->
-	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+	</bean>  
+
 
 	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
 	</bean>

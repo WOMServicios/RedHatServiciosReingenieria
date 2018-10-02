@@ -22,6 +22,15 @@ public class Cliente implements Serializable {
 	private Timestamp fechaActivacion;
 	private String mercado;
 	private BigDecimal cargoBasico;
+	private String dnNum;
+	private BigDecimal contador;
+	private String idOferta;
+	private String desOferta;
+	private String idOccBscs; 
+	private BigDecimal mesesAntiguedad;
+	private BigDecimal valorMinimo;
+	private Timestamp fecDesde;
+	private Timestamp fecHasta;
 
 	public Cliente() {
 
@@ -131,14 +140,80 @@ public class Cliente implements Serializable {
 		this.cargoBasico = cargoBasico;
 	}
 
-	@Override
-	public String toString() {
-		return "Cliente [rut=" + rut + ", customerId=" + customerId + ", customerIdHigh=" + customerIdHigh
-				+ ", contractId=" + contractId + ", numCelular=" + numCelular + ", tipoContrato=" + tipoContrato
-				+ ", rateplan=" + rateplan + ", antiguedad=" + antiguedad + ", ciclo=" + ciclo + ", estadoContrato="
-				+ estadoContrato + ", fechaActivacion=" + fechaActivacion + ", mercado=" + mercado + ", cargoBasico="
-				+ cargoBasico + "]";
+	public String getDnNum() {
+		return dnNum;
 	}
+
+	public void setDnNum(String dnNum) {
+		this.dnNum = dnNum;
+	}
+
+	public BigDecimal getContador() {
+		return contador;
+	}
+
+	public void setContador(BigDecimal contador) {
+		this.contador = contador;
+	}
+
+	public String getIdOferta() {
+		return idOferta;
+	}
+
+	public void setIdOferta(String idOferta) {
+		this.idOferta = idOferta;
+	}
+
+	public String getDesOferta() {
+		return desOferta;
+	}
+
+	public void setDesOferta(String desOferta) {
+		this.desOferta = desOferta;
+	}
+
+	public String getIdOccBscs() {
+		return idOccBscs;
+	}
+
+	public void setIdOccBscs(String idOccBscs) {
+		this.idOccBscs = idOccBscs;
+	}
+
+	public BigDecimal getMesesAntiguedad() {
+		return mesesAntiguedad;
+	}
+
+	public void setMesesAntiguedad(BigDecimal mesesAntiguedad) {
+		this.mesesAntiguedad = mesesAntiguedad;
+	}
+
+	public BigDecimal getValorMinimo() {
+		return valorMinimo;
+	}
+
+	public void setValorMinimo(BigDecimal valorMinimo) {
+		this.valorMinimo = valorMinimo;
+	}
+
+	public Timestamp getFecDesde() {
+		return fecDesde;
+	}
+
+	public void setFecDesde(Timestamp fecDesde) {
+		this.fecDesde = fecDesde;
+	}
+
+	public Timestamp getFecHasta() {
+		return fecHasta;
+	}
+
+	public void setFecHasta(Timestamp fecHasta) {
+		this.fecHasta = fecHasta;
+	}
+	
+
+
 
 	
 }

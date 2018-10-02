@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://camel.apache.org/schema/spring 
+	http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<bean id="dataSourceBSCSDESA"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url"
+			value="jdbc:oracle:thin:@cluxds03:1550:BSCSDESA" />
+		<property name="username" value="OPSH_BSCSREP_SYSADM_CBI" />
+		<property name="password" value="knh#5tgl20k0lpm.l" />
+			
+	</bean>  
+	
+ 	<bean id="dataSourceWAPPLDESA"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url"
+			value="jdbc:oracle:thin:@10.120.148.136:1521:WAPPLDESA" />
+		<property name="username" value="CARRIERBILLING" />
+		<property name="password" value="carrierdes09"  />
+
+	</bean>  
+	
+
+	<!-- configure the Camel SQL component to use the JDBC data source -->
+	<!--  	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource" ref="dataSource2" />
+			
+	</bean> --> 
+	<!--  <bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource"  ref="data" />
+	</bean>  -->
+  
+	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
+	</bean>
+
+	<camelContext
+		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
+		xmlns="http://camel.apache.org/schema/spring">
+		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
+			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
+			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
+			archivo properties. Por defecto en opensfhit es develop -->
+		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
+
+		<propertyPlaceholder id="placeholder"
+			location="classpath:application.properties,classpath:sql.properties" />
+
+		<onException>
+			<exception>cl.wom.exception.services.ServiceError</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<log loggingLevel="ERROR" message="errorr" />
+			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+				<simple>${exception.codigoError}</simple>
+			</setHeader>
+			<setHeader headerName="messageError">
+				<simple>Bad Request - ${exception.message}</simple>
+			</setHeader>
+			<to uri="velocity:velocity/400.vm" />
+		</onException>
+
+		<!-- getcarrierbillingoffers -->
+		<route streamCache="true">
+			<from
+				uri="restlet:http://0.0.0.0:8881/srv40062/getcarrierbillingoffers/rest/v1.0/?restletMethod=post" />
+			<setHeader headerName="Accept">
+				<constant>application/json</constant>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+
+			<setHeader headerName="msisdn">
+				<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>
+			</setHeader>
+
+			<choice>
+				<when>
+					<simple>${headers.msisdn} == ""</simple>
+					<throwException
+						exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				
+				<when>
+				<simple>${headers.msisdn} != ""</simple>
+				
+					<setBody>
+						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>
+					</setBody>
+					
+
+					<to uri="jdbc:dataSourceBSCSDESA" />
+					<log loggingLevel="WARN" message="ejecuto la query getInfoSuscriptorCarrierBilling"/>
+					<to uri="bean:clienteProcessor" />
+					<log loggingLevel="WARN" message="clienteProcessor getInfoSuscriptorCarrierBillin"/>
+						
+					
+						<when>
+							<simple>${body.rut} != null</simple>
+										<!-- seteo de properties, en donde se almacenaran variables globales 
+								para reutilizacion -->
+	
+							<setProperty propertyName="customerIdProperty">
+								<simple>${body.customerId}</simple>
+							</setProperty>
+		
+							<setProperty propertyName="customerIdHighProperty">
+								<simple>${body.customerIdHigh}</simple>
+							</setProperty>
+		
+							<!-- query devolvera 0 / 1 si es cero se saldra getSuscripcionesCarrierExist -->
+							
+							
+		<!-- 
+							<setBody> 
+								<simple>{{sql.getSuscripcionesCarrierExist}}</simple> 
+							</setBody> 
+							
+							<to uri="jdbc:dataSourceWAPPLDESA" />	
+							<log loggingLevel="WARN" message="ejecuto la query getSuscripcionesCarrierExist"/>
+							<to uri="bean:clienteProcessor" />
+							<log loggingLevel="WARN" message="clienteProcessor getSuscripcionesCarrierExist"/>
+							
+								<when> 
+									<simple>${body.rut} != 0</simple>
+									<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />
+							    </when> 
+							    <when>
+							    	<simple>${body.rut} == 0</simple> -->
+							    		<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion 
+								activa -busca el msisdn mas antiguo de la cuenta -->
+									<setBody>
+										<simple>{{sql.getCustomerContractMoreOld}}</simple>
+									</setBody>
+				
+										<to uri="jdbc:dataSourceBSCSDESA" />
+										<log loggingLevel="WARN" message="ejecuto la query getCustomerContractMoreOld"/>
+										<to uri="bean:clienteProcessor" />
+										<log loggingLevel="WARN" message="clienteProcessor getCustomerContractMoreOld"/>
+										
+										<setProperty propertyName="dnNumIdHighProperty">
+												<simple>${body.dnNum}</simple>
+										</setProperty>
+									
+										<when>
+											<simple>${property.dnNumIdHighProperty} != null</simple>
+											
+										<!-- 	valida la cuenta pagadora getCustomerPagador -->
+					
+											<setBody>
+												<simple>{{sql.getCustomerPagador}}</simple>
+											</setBody>
+											<to uri="jdbc:dataSourceBSCSDESA" />
+											<log loggingLevel="WARN" message="ejecuto la query getCustomerPagador"/>
+											<to uri="bean:clienteProcessor" />
+											<log message="clienteProcessor getCustomerPagador"/>
+											<log message="body: ${body.customerId} property : ${property.customerIdProperty}"/>
+											<when>
+											<!-- 	si es igual continua el flujo -->
+												<simple>${body.customerId} == ${property.customerIdProperty}</simple>
+												
+													<setBody> 
+														<simple>{{sql.getofertacarrier}}</simple> 
+													</setBody> 
+											
+													<to uri="jdbc:dataSourceWAPPLDESA" />	
+										
+											</when>
+											
+											<when>
+											<simple>${body.customerId} != ${property.customerIdProperty}</simple>
+											<to uri="velocity:velocity/getCustomerPagador.vm" /> 
+												
+											</when> 
+					
+										</when> 
+										<when>
+											<simple>${property.dnNumIdHighProperty} == null</simple>
+									
+										<to uri="velocity:velocity/getCustomerContractMoreOld.vm" /> 
+								
+										</when>
+							   </when>
+						
+						</when>
+				
+						<when>
+							<simple>${property.customerIdProperty} == null </simple>
+							
+							<to uri="velocity:velocity/getInfoSuscriptorCarrierBilling.vm" />
+		
+						</when>
+				
+			</choice>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+		</route>
+	</camelContext>
+</beans>
