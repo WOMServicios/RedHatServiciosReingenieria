@@ -101,16 +101,18 @@
 						<simple>{{sql.getsubcriberBymsisdn}}</simple>
 					</setBody>
 
-					<to uri="jdbc:dataSource" />
+					<to uri="jdbc:dataSourceBSCSDESA" />
+			
 					<to uri="bean:clienteProcessor" />
-
-					<setHeader headerName="codIdProperty">
-						<simple>${body.codId}</simple>
-					</setHeader>
-
+					
+					<when>
+					<simple>${body.msisdn} != null</simple>
+			
+			
 					<to uri="velocity:velocity/netflixStart.vm" />
-					<log message="exitooodd \n\n\n\n\n\n\n\n\n\n\n"></log>
-
+					<to uri="restlet:http://localhost:8889/bango.net/HTTP/Netflix/Start/?restletMethod=post" /> 
+			
+					</when>
 
 				</otherwise>
 			</choice>
@@ -121,6 +123,14 @@
 				<constant>application/json</constant>
 			</setHeader>
 		</route>
+				
+
+
+		<route>
+			<from uri="restlet:http://localhost:8889/bango.net/HTTP/Netflix/Start/?restletMethod=post"/>
+			<to uri="velocity:velocity/netflixResponse.vm" />
+		</route>
+
 
 	</camelContext>
 </beans>

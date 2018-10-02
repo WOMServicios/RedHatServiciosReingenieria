@@ -9,123 +9,35 @@ public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String rut;
-	private BigDecimal customerId;
-	private BigDecimal customerIdHigh;
-	private BigDecimal contractId;
-	private String numCelular;
-	private String tipoContrato;
-	private String rateplan;
-	private BigDecimal antiguedad;
-	private String ciclo;
-	private char estadoContrato;
-	private Timestamp fechaActivacion;
+	
 	private String mercado;
-	private BigDecimal cargoBasico;
-	private String dnNum;
+	private String idOferta;
+	private String desOferta;
+	private String idOccBscs;
+	private String idOccCancel; 
+	private String idOccRefund; 
+	private BigDecimal mesesAntiguedad;
+	private BigDecimal valorMinimoPlan;
+	private Timestamp fecDesde;
+	private Timestamp fecHasta;
 
 	public Cliente() {
 
 	}
 	
+	
 
-	public String getDnNum() {
-		return dnNum;
+	public String getIdOccBscs() {
+		return idOccBscs;
 	}
 
 
-	public void setDnNum(String dnNum) {
-		this.dnNum = dnNum;
+
+	public void setIdOccBscs(String idOccBscs) {
+		this.idOccBscs = idOccBscs;
 	}
 
 
-	public String getRut() {
-		return rut;
-	}
-
-	public void setRut(String rut) {
-		this.rut = rut;
-	}
-
-	public BigDecimal getCustomerId() {
-		return customerId;
-	}
-
-	public void setCustomerId(BigDecimal customerId) {
-		this.customerId = customerId;
-	}
-
-	public BigDecimal getCustomerIdHigh() {
-		return customerIdHigh;
-	}
-
-	public void setCustomerIdHigh(BigDecimal customerIdHigh) {
-		this.customerIdHigh = customerIdHigh;
-	}
-
-	public BigDecimal getContractId() {
-		return contractId;
-	}
-
-	public void setContractId(BigDecimal contractId) {
-		this.contractId = contractId;
-	}
-
-	public String getNumCelular() {
-		return numCelular;
-	}
-
-	public void setNumCelular(String numCelular) {
-		this.numCelular = numCelular;
-	}
-
-	public String getTipoContrato() {
-		return tipoContrato;
-	}
-
-	public void setTipoContrato(String tipoContrato) {
-		this.tipoContrato = tipoContrato;
-	}
-
-	public String getRateplan() {
-		return rateplan;
-	}
-
-	public void setRateplan(String rateplan) {
-		this.rateplan = rateplan;
-	}
-
-	public BigDecimal getAntiguedad() {
-		return antiguedad;
-	}
-
-	public void setAntiguedad(BigDecimal antiguedad) {
-		this.antiguedad = antiguedad;
-	}
-
-	public String getCiclo() {
-		return ciclo;
-	}
-
-	public void setCiclo(String ciclo) {
-		this.ciclo = ciclo;
-	}
-
-	public char getEstadoContrato() {
-		return estadoContrato;
-	}
-
-	public void setEstadoContrato(char estadoContrato) {
-		this.estadoContrato = estadoContrato;
-	}
-
-	public Timestamp getFechaActivacion() {
-		return fechaActivacion;
-	}
-
-	public void setFechaActivacion(Timestamp fechaActivacion) {
-		this.fechaActivacion = fechaActivacion;
-	}
 
 	public String getMercado() {
 		return mercado;
@@ -135,22 +47,81 @@ public class Cliente implements Serializable {
 		this.mercado = mercado;
 	}
 
-	public BigDecimal getCargoBasico() {
-		return cargoBasico;
+	public String getIdOferta() {
+		return idOferta;
 	}
 
-	public void setCargoBasico(BigDecimal cargoBasico) {
-		this.cargoBasico = cargoBasico;
+	public void setIdOferta(String idOferta) {
+		this.idOferta = idOferta;
 	}
+
+	public String getDesOferta() {
+		return desOferta;
+	}
+
+	public void setDesOferta(String desOferta) {
+		this.desOferta = desOferta;
+	}
+
+	public String getIdOccCancel() {
+		return idOccCancel;
+	}
+
+	public void setIdOccCancel(String idOccCancel) {
+		this.idOccCancel = idOccCancel;
+	}
+
+	public String getIdOccRefund() {
+		return idOccRefund;
+	}
+
+	public void setIdOccRefund(String idOccRefund) {
+		this.idOccRefund = idOccRefund;
+	}
+
+	public BigDecimal getMesesAntiguedad() {
+		return mesesAntiguedad;
+	}
+
+	public void setMesesAntiguedad(BigDecimal mesesAntiguedad) {
+		this.mesesAntiguedad = mesesAntiguedad;
+	}
+
+	public BigDecimal getValorMinimoPlan() {
+		return valorMinimoPlan;
+	}
+
+	public void setValorMinimoPlan(BigDecimal valorMinimoPlan) {
+		this.valorMinimoPlan = valorMinimoPlan;
+	}
+
+	public Timestamp getFecDesde() {
+		return fecDesde;
+	}
+
+	public void setFecDesde(Timestamp fecDesde) {
+		this.fecDesde = fecDesde;
+	}
+
+	public Timestamp getFecHasta() {
+		return fecHasta;
+	}
+
+	public void setFecHasta(Timestamp fecHasta) {
+		this.fecHasta = fecHasta;
+	}
+
+
 
 	@Override
 	public String toString() {
-		return "Cliente [rut=" + rut + ", customerId=" + customerId + ", customerIdHigh=" + customerIdHigh
-				+ ", contractId=" + contractId + ", numCelular=" + numCelular + ", tipoContrato=" + tipoContrato
-				+ ", rateplan=" + rateplan + ", antiguedad=" + antiguedad + ", ciclo=" + ciclo + ", estadoContrato="
-				+ estadoContrato + ", fechaActivacion=" + fechaActivacion + ", mercado=" + mercado + ", cargoBasico="
-				+ cargoBasico + "]";
+		return "Cliente [mercado=" + mercado + ", idOferta=" + idOferta + ", desOferta=" + desOferta + ", idOccBscs="
+				+ idOccBscs + ", idOccCancel=" + idOccCancel + ", idOccRefund=" + idOccRefund + ", mesesAntiguedad="
+				+ mesesAntiguedad + ", valorMinimoPlan=" + valorMinimoPlan + ", fecDesde=" + fecDesde + ", fecHasta="
+				+ fecHasta + "]";
 	}
+	
+
 
 	
 }

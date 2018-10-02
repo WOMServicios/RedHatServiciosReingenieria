@@ -92,6 +92,8 @@
 					<to uri="jdbc:dataSourceWAPPLDESA" />	
 				
 					<to uri="bean:clienteProcessor" />
+					<to uri="velocity:velocity/200getCarrierBillingPurchaseHistory.vm" />
+					
 
 				</when>
 			</choice>

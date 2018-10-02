@@ -1,6 +1,6 @@
 {
-	"credential": "${headers.codIdProperty}",
-	"credentialType": "SUBNO",
+	"credential": "${body.codId}",
+	"credentialType": "MSISDN",
 	"channel": "mobile",
 	"networkKey": "CHL_WOM"
 }

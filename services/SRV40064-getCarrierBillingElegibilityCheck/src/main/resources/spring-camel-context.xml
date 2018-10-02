@@ -6,21 +6,28 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<bean id="dataSource"
+	<bean id="dataSourceBSCSDESA"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName"
 			value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url"
-			value="jdbc:oracle:thin:@10.120.241.44:1540:BSCSUAT" />
-		<property name="username" value="VMD" />
-		<property name="password" value="VMD" />
+			value="jdbc:oracle:thin:@cluxds03:1550:BSCSDESA" />
+		<property name="username" value="OPSH_BSCSREP_SYSADM_CBI" />
+		<property name="password" value="knh#5tgl20k0lpm.l" />
+
 	</bean>
 
-	<!-- configure the Camel SQL component to use the JDBC data source -->
-	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+	<bean id="dataSourceWAPPLDESA"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url"
+			value="jdbc:oracle:thin:@10.120.148.136:1521:WAPPLDESA" />
+		<property name="username" value="CARRIERBILLING" />
+		<property name="password" value="carrierdes09" />
 
+	</bean>
+	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"></bean>
 	<camelContext
 		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
 		xmlns="http://camel.apache.org/schema/spring">
@@ -52,13 +59,15 @@
 		<!-- getcarrierbillingelegibilitycheck -->
 		<route streamCache="true">
 			<from
-				uri="restlet:http://10.120.145.160:9080/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/elegibility/?restletMethod=post" />
+				uri="restlet:http://localhost:9080/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/elegibility/?restletMethod=post" />
+			
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
+
 			<setHeader headerName="requestId">
 				<jsonpath>$.requestId</jsonpath>
 			</setHeader>
@@ -74,6 +83,7 @@
 			<setHeader headerName="key2">
 				<jsonpath>$.extensionData.key2</jsonpath>
 			</setHeader>
+			
 
 			<choice>
 				<when>
@@ -89,11 +99,140 @@
 						message="400" />
 				</when>
 				<otherwise>
-					<to
-						uri="velocity:velocity/200GetCarrierBillingElegibilityCheck.vm" />
+
+					<!-- seteo variable global a ocupar para validaciones -->
+					<setProperty propertyName="userIdProperty">
+						<simple>${headers.userId}</simple>
+					</setProperty>
+
+					<setBody>
+						<simple>{{sql.getrespuestaeligibilidad}}</simple>
+					</setBody>
+
+					<to uri="jdbc:dataSourceWAPPLDESA" />
+					<to uri="bean:clienteProcessor" />
+
+					<setProperty propertyName="countProperty">
+						<simple>${body.count}</simple>
+					</setProperty>
+
+					<!-- devuelve cero -->
+					<when>
+						<simple>${property.countProperty} == 0</simple>
+						
+						
+					<to uri="velocity:velocity/200GetCarrierBillingElegibilityCheck.vm" /> 
+								
+								
+
+					</when>
+					<!-- devuelve nulo  empiezan las validaciones-->
+					<when>
+						<simple>${property.countProperty} == null</simple>
+
+						<setBody>
+							<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>
+						</setBody>
+				
+
+						<to uri="jdbc:dataSourceBSCSDESA" />
+
+						<to uri="bean:clienteProcessor" />
+						<when>
+							<simple>${body.rut} != null</simple>
+							<!-- seteo de properties, en donde se almacenaran variables globales 
+								para reutilizacion -->
+
+							<setProperty propertyName="customerIdProperty">
+								<simple>${body.customerId}</simple>
+							</setProperty>
+
+							<setProperty propertyName="customerIdHighProperty">
+								<simple>${body.customerIdHigh}</simple>
+							</setProperty>
+							<setProperty propertyName="numCelularProperty">
+								<simple>${body.numCelular}</simple>
+							</setProperty>
+
+							<setProperty propertyName="antiguedadProperty">
+								<simple>${body.antiguedad}</simple>
+							</setProperty>
+
+							<setProperty propertyName="cargoBasicoProperty">
+								<simple>${body.cargoBasico}</simple>
+							</setProperty>
+
+							<!-- query devolvera 0 / 1 si es cero se saldra getSuscripcionesCarrierExist -->
+
+							<setBody>
+								<simple>{{sql.getSuscripcionesCarrierExist}}</simple>
+							</setBody>
+
+
+							<to uri="jdbc:dataSourceWAPPLDESA" />
+							<log loggingLevel="WARN"
+								message="ejecuto la query getSuscripcionesCarrierExist" />
+							<to uri="bean:clienteProcessor" />
+							<log loggingLevel="WARN"
+								message="clienteProcessor getSuscripcionesCarrierExist" />
+
+							<when>
+								<simple>${body.contador} != 0</simple>
+								<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />
+							</when>
+							<when>
+								<simple>${body.contador} == 0</simple>
+								<!-- getCustomerContractMoreOld para ver si el cliente posee una 
+									subcripion activa -busca el msisdn mas antiguo de la cuenta -->
+								<setBody>
+									<simple>{{sql.getCustomerContractMoreOld}}</simple>
+								</setBody>
+
+								<to uri="jdbc:dataSourceBSCSDESA" />
+								<log loggingLevel="WARN"
+									message="ejecuto la query getCustomerContractMoreOld" />
+								<to uri="bean:clienteProcessor" />
+								<log loggingLevel="WARN"
+									message="clienteProcessor getCustomerContractMoreOld" />
+
+								<setProperty propertyName="dnNumIdHighProperty">
+									<simple>${body.dnNum}</simple>
+								</setProperty>
+
+								<when>
+									<simple>${property.dnNumIdHighProperty} != null</simple>
+
+									<!-- valida la cuenta pagadora getCustomerPagador -->
+
+									<setBody>
+										<simple>{{sql.getCustomerPagador}}</simple>
+									</setBody>
+									<to uri="jdbc:dataSourceBSCSDESA" />
+									<log loggingLevel="WARN"
+										message="ejecuto la query getCustomerPagador" />
+									<to uri="bean:clienteProcessor" />
+									<when>
+										<!-- si es igual continua el flujo -->
+										<simple>${body.customerId} == null</simple>
+
+										<to uri="velocity:velocity/getCustomerPagador.vm" />
+
+									</when>
+
+								</when>
+							</when>
+
+
+						</when>
+
+					</when>
+
+
 				</otherwise>
 			</choice>
-
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
 		</route>
 	</camelContext>
 </beans>

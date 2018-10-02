@@ -17,13 +17,15 @@ public class ClienteProcessor implements Processor {
 	public void process(Exchange exchange) throws Exception {
 		Map<String, Object> row = exchange.getIn().getBody(Map.class);
 
-		for (Entry<String, Object> entry : row.entrySet()) {
-			System.out.println(entry.getKey() + "::" + entry.getValue());
-		}
+		
 
 		Cliente cliente = new Cliente();
 		if (row != null) {
 
+			for (Entry<String, Object> entry : row.entrySet()) {
+				System.out.println(entry.getKey() + "::" + entry.getValue());
+			}
+			
 			cliente.setMsisdn((String) row.get("MSISDN"));
 			cliente.setCustomerId((BigDecimal) row.get("CUSTOMER_ID"));
 			cliente.setCodId((BigDecimal) row.get("CO_ID"));

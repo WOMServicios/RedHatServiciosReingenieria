@@ -123,14 +123,5 @@ public class Cliente implements Serializable {
 	}
 
 
-
-
-	@Override
-	public String toString() {
-		return "Cliente [msisdn=" + msisdn + ", customerId=" + customerId + ", codId=" + codId + ", rateplan="
-				+ rateplan + ", tipoContrato=" + tipoContrato + ", estado=" + estado + ", fechaActivacion="
-				+ fechaActivacion + "]";
-	}
-
 	
 }

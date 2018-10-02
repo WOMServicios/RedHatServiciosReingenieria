@@ -1,6 +1,0 @@
-{
-	"credential": "${headers.codIdProperty}",
-	"credentialType": "SUBNO",
-	"channel": "mobile",
-	"networkKey": "CHL_WOM"
-}
