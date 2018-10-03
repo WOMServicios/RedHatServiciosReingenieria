@@ -52,7 +52,7 @@
 <!-- applycarrierbillingcharge -->
 		<route streamCache="true">
 			<from
-				uri="restlet:http://10.120.145.160:9080/arquitectura.it.wom/CarrierBilling/1.0.0/Bango/transaction/?restletMethod=post" />
+				uri="restlet:http://0.0.0.0:8888/CarrierBilling/1.0.0/Bango/transaction/?restletMethod=post" />
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>
