@@ -68,9 +68,9 @@
 				<constant>application/json</constant>
 			</setHeader>
 
-			<setHeader headerName="requestId">
+			<setProperty propertyName="requestIdProperty">
 				<jsonpath>$.requestId</jsonpath>
-			</setHeader>
+			</setProperty >
 			<setHeader headerName="userId">
 				<jsonpath>$.userId</jsonpath>
 			</setHeader>
@@ -88,7 +88,7 @@
 			<choice>
 				<when>
 					<simple>
-						${headers.requestId} == "" || 
+						${property.requestIdProperty} == "" || 
 						${headers.userId} == "" || 
 						${headers.userIdType} == "" ||
 						${headers.key1} == "" || 
@@ -118,7 +118,7 @@
 
 					<!-- devuelve cero -->
 					<when>
-						<simple>${property.countProperty} == 0</simple>
+						<simple>${property.countProperty} != 0</simple>
 						
 						
 					<to uri="velocity:velocity/200GetCarrierBillingElegibilityCheck.vm" /> 
@@ -128,7 +128,7 @@
 					</when>
 					<!-- devuelve nulo  empiezan las validaciones-->
 					<when>
-						<simple>${property.countProperty} == null</simple>
+						<simple>${property.countProperty} == 0</simple>
 
 						<setBody>
 							<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>
@@ -146,18 +146,24 @@
 							<setProperty propertyName="customerIdProperty">
 								<simple>${body.customerId}</simple>
 							</setProperty>
-
+		
 							<setProperty propertyName="customerIdHighProperty">
 								<simple>${body.customerIdHigh}</simple>
 							</setProperty>
 							<setProperty propertyName="numCelularProperty">
 								<simple>${body.numCelular}</simple>
 							</setProperty>
-
+							
 							<setProperty propertyName="antiguedadProperty">
 								<simple>${body.antiguedad}</simple>
 							</setProperty>
-
+							<setProperty propertyName="contractIdProperty">
+								<simple>${body.contractId}</simple>
+							</setProperty>
+							<setProperty propertyName="ratePlanProperty">
+								<simple>${body.rateplan}</simple>
+							</setProperty>
+							
 							<setProperty propertyName="cargoBasicoProperty">
 								<simple>${body.cargoBasico}</simple>
 							</setProperty>
@@ -211,12 +217,37 @@
 									<log loggingLevel="WARN"
 										message="ejecuto la query getCustomerPagador" />
 									<to uri="bean:clienteProcessor" />
+										<setProperty propertyName="idOfertaProperty">
+											<simple>${body.idOferta}</simple>
+										</setProperty>
+										<setProperty propertyName="desOfertaProperty">
+											<simple>${body.desOferta}</simple>
+										</setProperty>
+											 		 
+										<setProperty propertyName="desOfertaProperty">
+											<simple>${body.desOferta}</simple>
+										 </setProperty>
+											 		 
+									 <!-- variable para hacer prueba y no duplicar pk -->
+										<setProperty propertyName="fechaPruebaProperty">
+											<simple>${date:now:HH:mm:ssZ}</simple>
+										</setProperty>
+									
 									<when>
 										<!-- si es igual continua el flujo -->
 										<simple>${body.customerId} == null</simple>
 
 										<to uri="velocity:velocity/getCustomerPagador.vm" />
 
+									</when>
+									<when>
+										<simple>${body.customerId} != null</simple>
+										 <setBody>
+											<simple>{{sql.insertaregelegcarrierbilling}}</simple>
+										</setBody> 
+<!-- 										<to uri="jdbc:dataSourceWAPPLDESA" />
+ -->									<log message="${property.requestIdProperty}"></log>
+										<to uri="velocity:velocity/200GetCarrierBillingElegibilityCheck.vm" /> 
 									</when>
 
 								</when>

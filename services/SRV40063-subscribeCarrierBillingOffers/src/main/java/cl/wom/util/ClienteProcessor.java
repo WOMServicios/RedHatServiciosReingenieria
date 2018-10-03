@@ -1,6 +1,7 @@
 package cl.wom.util;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import java.util.Map;
@@ -33,7 +34,7 @@ public class ClienteProcessor implements Processor {
 			cliente.setRateplan((BigDecimal) row.get("RATE_PLAN:"));
 
 			cliente.setTipoContrato((String) row.get("ESTADO_CONTRATO"));
-			cliente.setFechaActivacion((Timestamp) row.get("FECHA_ACTIVACION"));
+			cliente.setFechaActivacion((Date) row.get("FECHA_ACTIVACION"));
 
 		}
 

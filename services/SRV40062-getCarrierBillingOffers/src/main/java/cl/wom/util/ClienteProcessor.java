@@ -1,6 +1,7 @@
 package cl.wom.util;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import java.util.Map;
@@ -37,7 +38,7 @@ public class ClienteProcessor implements Processor {
 			cliente.setAntiguedad((BigDecimal) row.get("ANTIGUEDAD"));
 			cliente.setCiclo((String) row.get("CICLO"));
 			cliente.setTipoContrato((String) row.get("ESTADO_CONTRATO"));
-			cliente.setFechaActivacion((Timestamp) row.get("FECHA_ACTIVACION"));
+			cliente.setFechaActivacion((Date) row.get("FECHA_ACTIVACION"));
 			cliente.setMercado((String) row.get("MERCADO"));
 			cliente.setCargoBasico((BigDecimal) row.get("CARGO_BASICO"));
 			cliente.setDnNum((String) row.get("DN_NUM"));
@@ -47,8 +48,8 @@ public class ClienteProcessor implements Processor {
 			cliente.setIdOccBscs((String)row.get("ID_OCC_BSCS"));
 			cliente.setMesesAntiguedad((BigDecimal)row.get("MESES_ANTIGUEDAD"));
 			cliente.setValorMinimo((BigDecimal)row.get("VALOR_MINIMO_PLAN"));
-			cliente.setFecDesde((Timestamp) row.get("FEC_DESDE"));
-			cliente.setFecHasta((Timestamp) row.get("FEC_HASTA"));
+			cliente.setFecDesde((Date) row.get("FEC_DESDE"));
+			cliente.setFecHasta((Date) row.get("FEC_HASTA"));
 			
 			
 		}

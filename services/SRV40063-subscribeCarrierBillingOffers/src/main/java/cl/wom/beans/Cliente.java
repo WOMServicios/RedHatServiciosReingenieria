@@ -2,6 +2,7 @@ package cl.wom.beans;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -15,7 +16,7 @@ public class Cliente implements Serializable {
 	private BigDecimal rateplan;
 	private String tipoContrato;
 	private char estado;
-	private Timestamp fechaActivacion;
+	private Date fechaActivacion;
 
 
 	
@@ -111,16 +112,21 @@ public class Cliente implements Serializable {
 
 
 
-	public Timestamp getFechaActivacion() {
+	public Date getFechaActivacion() {
 		return fechaActivacion;
 	}
 
 
 
 
-	public void setFechaActivacion(Timestamp fechaActivacion) {
+	public void setFechaActivacion(Date fechaActivacion) {
 		this.fechaActivacion = fechaActivacion;
 	}
+
+
+
+
+
 
 
 	
