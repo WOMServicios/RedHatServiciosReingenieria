@@ -1,1 +1,0 @@
-{ accountId: "${headers.accountId}", billNro: "${headers.quantity}" }

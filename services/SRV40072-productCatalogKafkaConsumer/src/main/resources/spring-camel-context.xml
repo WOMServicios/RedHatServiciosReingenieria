@@ -11,20 +11,22 @@
     <camelContext  xmlns="http://camel.apache.org/schema/spring">
 		<propertyPlaceholder id="placeholder" location="classpath:application.properties"/> 	
 
-        <route streamCache="true">
-            <from uri="kafka:{{camel.kafka.host}}:{{camel.kafka.port}}?topic={{camel.kafka.topic}}&amp;groupId={{camel.kafka.group}}&amp;autoOffsetReset=earliest&amp;consumersCount=1" />
-            <to uri="mongodb:mongoBean?database={{camel.mongodb.db}}&amp;collection=productOffering&amp;operation=insert" />
-            <log message="Mensaje procesado a mongoDB desde el tópico"></log>
-        </route>
+<!--         <route streamCache="true"> -->
+<!--             <from uri="kafka:{{camel.kafka.host}}:{{camel.kafka.port}}?topic={{camel.kafka.topic}}&amp;groupId={{camel.kafka.group}}&amp;autoOffsetReset=earliest&amp;consumersCount=1" /> -->
+<!--             <to uri="mongodb:mongoBean?database={{camel.mongodb.db}}&amp;collection=productOffering&amp;operation=insert" /> -->
+<!--             <log message="Mensaje procesado a mongoDB desde el tópico"></log> -->
+<!--         </route> -->
 
 		<!-- TODO: ruta temporal para efecto de pruebas, deberá ser eliminada -->       
         <route>
-			<from uri="jetty:http://0.0.0.0:8889/productOffering/message/generator"/>
+			<from uri="jetty:http://0.0.0.0:8888/productOffering/message/generator"/>
 
 			<to uri="velocity:velocity/template-test.vm"></to>			
 			<bean ref="testRamdomGenerator" />
-            <to uri="kafka:localhost:9092?topic={{camel.kafka.topic}}"/>
-            <transform><constant>OK!</constant></transform>
+<!--             <to uri="kafka:localhost:9092?topic={{camel.kafka.topic}}"/> -->
+<!--             <transform><constant>OK!</constant></transform> -->
+
+			<to uri="mongodb:mongoBean?database={{camel.mongodb.db}}&amp;collection=productOffering&amp;operation=insert" />
             <log message="mensaje enviado"></log>
         </route>
         
