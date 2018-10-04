@@ -11,27 +11,21 @@ public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	
-	private String mercado;
-	private String idOferta;
-	private String desOferta;
-	private String idOccBscs;
-	private String idOccCancel; 
-	private String idOccRefund; 
-	private BigDecimal mesesAntiguedad;
-	private BigDecimal valorMinimoPlan;
-	private Date fecDesde;
-	private Date fecHasta;
 
+	private String idOferta;
+	private String numCelular;
+	private String contratoId;
+	private String paymentProviderTransaction;
+	private Date fechaIngreso;
+	private String bangoTransactionId;
+	private String  merchanTransactionId;
+	private BigDecimal amount;
+	private String userId;
+	private String responsePay;
+	private Date datePay;
+	
 	public Cliente() {
 
-	}
-
-	public String getMercado() {
-		return mercado;
-	}
-
-	public void setMercado(String mercado) {
-		this.mercado = mercado;
 	}
 
 	public String getIdOferta() {
@@ -42,72 +36,86 @@ public class Cliente implements Serializable {
 		this.idOferta = idOferta;
 	}
 
-	public String getDesOferta() {
-		return desOferta;
+	public String getNumCelular() {
+		return numCelular;
 	}
 
-	public void setDesOferta(String desOferta) {
-		this.desOferta = desOferta;
+	public void setNumCelular(String numCelular) {
+		this.numCelular = numCelular;
 	}
 
-	public String getIdOccBscs() {
-		return idOccBscs;
+
+	public String getContratoId() {
+		return contratoId;
 	}
 
-	public void setIdOccBscs(String idOccBscs) {
-		this.idOccBscs = idOccBscs;
+	public void setContratoId(String contratoId) {
+		this.contratoId = contratoId;
 	}
 
-	public String getIdOccCancel() {
-		return idOccCancel;
+	public String getPaymentProviderTransaction() {
+		return paymentProviderTransaction;
 	}
 
-	public void setIdOccCancel(String idOccCancel) {
-		this.idOccCancel = idOccCancel;
+	public void setPaymentProviderTransaction(String paymentProviderTransaction) {
+		this.paymentProviderTransaction = paymentProviderTransaction;
 	}
 
-	public String getIdOccRefund() {
-		return idOccRefund;
+	public Date getFechaIngreso() {
+		return fechaIngreso;
 	}
 
-	public void setIdOccRefund(String idOccRefund) {
-		this.idOccRefund = idOccRefund;
+	public void setFechaIngreso(Date fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
 	}
 
-	public BigDecimal getMesesAntiguedad() {
-		return mesesAntiguedad;
+	public String getBangoTransactionId() {
+		return bangoTransactionId;
 	}
 
-	public void setMesesAntiguedad(BigDecimal mesesAntiguedad) {
-		this.mesesAntiguedad = mesesAntiguedad;
+	public void setBangoTransactionId(String bangoTransactionId) {
+		this.bangoTransactionId = bangoTransactionId;
 	}
 
-	public BigDecimal getValorMinimoPlan() {
-		return valorMinimoPlan;
+	public String getMerchanTransactionId() {
+		return merchanTransactionId;
 	}
 
-	public void setValorMinimoPlan(BigDecimal valorMinimoPlan) {
-		this.valorMinimoPlan = valorMinimoPlan;
+	public void setMerchanTransactionId(String merchanTransactionId) {
+		this.merchanTransactionId = merchanTransactionId;
 	}
 
-	public Date getFecDesde() {
-		return fecDesde;
+	public BigDecimal getAmount() {
+		return amount;
 	}
 
-	public void setFecDesde(Date fecDesde) {
-		this.fecDesde = fecDesde;
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
 	}
 
-	public Date getFecHasta() {
-		return fecHasta;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setFecHasta(Date fecHasta) {
-		this.fecHasta = fecHasta;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
-	
-	
 
+	public String getResponsePay() {
+		return responsePay;
+	}
+
+	public void setResponsePay(String responsePay) {
+		this.responsePay = responsePay;
+	}
+
+	public Date getDatePay() {
+		return datePay;
+	}
+
+	public void setDatePay(Date datePay) {
+		this.datePay = datePay;
+	}
 
 	
 }

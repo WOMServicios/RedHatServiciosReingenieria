@@ -73,10 +73,10 @@
 				<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>
 			</setHeader>
 			<setHeader headerName="fecha_desde">
-				<jsonpath resultType="java.lang.String">$.fecha_desde</jsonpath>
+				<jsonpath >$.fecha_desde</jsonpath>
 			</setHeader>
 			<setHeader headerName="fecha_hasta">
-				<jsonpath resultType="java.lang.String">$.fecha_hasta</jsonpath>
+				<jsonpath >$.fecha_hasta</jsonpath>
 			</setHeader>
 
 			<choice>

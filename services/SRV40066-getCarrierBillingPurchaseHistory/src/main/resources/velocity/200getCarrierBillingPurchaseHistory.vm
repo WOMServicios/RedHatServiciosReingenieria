@@ -1,14 +1,17 @@
-{  
-   ”responseCode”:“OK”,
-   ”responseMessage”:“Success”,
-   “listacompras”:{  
-      {  
-         ” msisdn”:“ ”,
-         ” Id_oferta”:“ ”,
-         ” des_oferta”:“ ”,
-         ” fecha_activacion”:“ ”,
-         ” mercado”:“ ”,
-         ” producto”:“ ”,
-         ” precio”:“ ”
-      }
-   }
+{
+  "responseCode": "OK",
+  "responseMessage": "Success",
+  "listacompras": {
+    "ID_OFERTA": "${body.idOferta}",
+    "NUM_CELULAR": "${body.numCelular}",
+    "CONTRACT_ID": "${body.contratoId}",
+    "PAYMENT_PROVIDER_TRANSACTION": "${body.paymentProviderTransaction}",
+    "FECHA_INGRESO": "${body.fechaIngreso}",
+    "BANGO_TRANSACTION_ID": "${body.bangoTransactionId}",
+    "MERCHAN_TRANSACTION_ID": "${body.merchanTransactionId}",
+    "AMOUNT": "${body.amount}",
+    "USER_ID": "${body.userId}",
+    "RESPONSE_PAY": "${body.responsePay}",
+    "DATE_PAY": "${body-datePay}"
+  }
+}

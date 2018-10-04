@@ -245,8 +245,8 @@
 										 <setBody>
 											<simple>{{sql.insertaregelegcarrierbilling}}</simple>
 										</setBody> 
-<!-- 										<to uri="jdbc:dataSourceWAPPLDESA" />
- -->									<log message="${property.requestIdProperty}"></log>
+ 										<to uri="jdbc:dataSourceWAPPLDESA" />
+									<log message="${property.requestIdProperty}"></log>
 										<to uri="velocity:velocity/200GetCarrierBillingElegibilityCheck.vm" /> 
 									</when>
 
