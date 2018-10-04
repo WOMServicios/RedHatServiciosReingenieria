@@ -72,10 +72,20 @@
 			<setHeader headerName="msisdn">
 				<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>
 			</setHeader>
+			<setHeader headerName="fecha_desde">
+				<jsonpath resultType="java.lang.String">$.fecha_desde</jsonpath>
+			</setHeader>
+			<setHeader headerName="fecha_hasta">
+				<jsonpath resultType="java.lang.String">$.fecha_hasta</jsonpath>
+			</setHeader>
 
 			<choice>
 				<when>
-					<simple>${headers.msisdn} == ""</simple>
+					<simple>${headers.msisdn} == "" ||
+					${headers.fecha_desde} == "" ||
+					${headers.fecha_hasta} == ""
+					
+					</simple>
 					<throwException
 						exceptionType="cl.wom.exception.services.ServiceError"
 						message="400" />

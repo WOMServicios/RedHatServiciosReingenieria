@@ -1,6 +1,6 @@
 {
 ”responseCode”: “OK”,
 ”responseMessage”: “Success”,
-”idoferta”: “${body.idOferta}”,
-“desoferta”: “${body.desOferta}”
+”idoferta”: “${headers.idOferta}”,
+“desoferta”: “${headers.desOferta}”
 }

@@ -2,6 +2,7 @@ package cl.wom.beans;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -19,7 +20,7 @@ public class Cliente implements Serializable {
 	private BigDecimal antiguedad;
 	private String ciclo;
 	private char estadoContrato;
-	private Timestamp fechaActivacion;
+	private Date fechaActivacion;
 	private String mercado;
 	private BigDecimal cargoBasico;
 	private String dnNum;
@@ -29,8 +30,8 @@ public class Cliente implements Serializable {
 	private String idOccBscs; 
 	private BigDecimal mesesAntiguedad;
 	private BigDecimal valorMinimo;
-	private Timestamp fecDesde;
-	private Timestamp fecHasta;
+	private Date fecDesde;
+	private Date fecHasta;
 
 	public Cliente() {
 
@@ -116,11 +117,11 @@ public class Cliente implements Serializable {
 		this.estadoContrato = estadoContrato;
 	}
 
-	public Timestamp getFechaActivacion() {
+	public Date getFechaActivacion() {
 		return fechaActivacion;
 	}
 
-	public void setFechaActivacion(Timestamp fechaActivacion) {
+	public void setFechaActivacion(Date fechaActivacion) {
 		this.fechaActivacion = fechaActivacion;
 	}
 
@@ -196,22 +197,21 @@ public class Cliente implements Serializable {
 		this.valorMinimo = valorMinimo;
 	}
 
-	public Timestamp getFecDesde() {
+	public Date getFecDesde() {
 		return fecDesde;
 	}
 
-	public void setFecDesde(Timestamp fecDesde) {
+	public void setFecDesde(Date fecDesde) {
 		this.fecDesde = fecDesde;
 	}
 
-	public Timestamp getFecHasta() {
+	public Date getFecHasta() {
 		return fecHasta;
 	}
 
-	public void setFecHasta(Timestamp fecHasta) {
+	public void setFecHasta(Date fecHasta) {
 		this.fecHasta = fecHasta;
 	}
-	
 
 
 

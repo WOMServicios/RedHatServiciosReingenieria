@@ -114,6 +114,12 @@
 							<setProperty propertyName="antiguedadProperty">
 								<simple>${body.antiguedad}</simple>
 							</setProperty>
+							<setProperty propertyName="contractIdProperty">
+								<simple>${body.contractId}</simple>
+							</setProperty>
+							<setProperty propertyName="ratePlanProperty">
+								<simple>${body.rateplan}</simple>
+							</setProperty>
 							
 							<setProperty propertyName="cargoBasicoProperty">
 								<simple>${body.cargoBasico}</simple>
@@ -176,12 +182,43 @@
 											<when>
 											<simple>${body.customerId} != null</simple>
 											
+											  <setProperty propertyName="customerIdProperty">
+													<simple>${body.customerId}</simple>
+											  </setProperty>
+											
 													<setBody> 
 														<simple>{{sql.getofertacarrier}}</simple> 
 													</setBody> 
 											
-														<to uri="jdbc:dataSourceWAPPLDESA" />		 
+													<to uri="jdbc:dataSourceWAPPLDESA" />		 
 													<to uri="bean:clienteProcessor" />
+													
+													<setProperty propertyName="idOfertaProperty">
+														<simple>${body.idOferta}</simple>
+											 		 </setProperty>
+											 		 <setProperty propertyName="desOfertaProperty">
+														<simple>${body.desOferta}</simple>
+											 		 </setProperty>
+											 		 
+											 		 <setProperty propertyName="desOfertaProperty">
+														<simple>${body.desOferta}</simple>
+											 		 </setProperty>
+											 		 
+											 		 <!-- variable para hacer prueba y no duplicar pk -->
+											 		 <setProperty propertyName="fechaPruebaProperty">
+														<simple>${date:now:HH:mm:ssZ}</simple>
+											 		 </setProperty>
+							
+													<setBody> 
+														<simple>{{sql.insertaregelegcarrierbilling}}</simple> 
+													</setBody>
+													<to uri="jdbc:dataSourceWAPPLDESA" />
+														<setHeader headerName="idOferta">
+															<simple>${property.idOfertaProperty}</simple>
+														</setHeader>
+														<setHeader headerName="desOferta">
+															<simple>${property.desOfertaProperty}</simple>
+														</setHeader>
 													 <to uri="velocity:velocity/Success.vm" />  
 											</when> 
 					
