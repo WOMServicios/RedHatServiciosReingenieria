@@ -10,13 +10,17 @@
     
     <camelContext  xmlns="http://camel.apache.org/schema/spring">
 		<propertyPlaceholder id="placeholder" location="classpath:application.properties"/> 	
-       
+
+        <!-- Control de errores -->
+		<onException>
+			    <exception>java.lang.Exception</exception>
+			    <handled><simple>true</simple></handled>
+			    <to uri="velocity:velocity/response-mongo-error.vm"/>
+			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+		</onException>
+		       
         <route streamCache="true">
             <from uri="jetty:{{camel.from.endpoint}}"/>
-            
-            <log message="offerId:  ${headers.productOffering.offerId}"></log>
-            <log message="shortDescription:  ${headers.productOffering.shortDescription}"></log>
-            <log message="marketSegment:  ${headers.productOffering.marketSegment}"></log>
             
             <choice>
             	<when>
@@ -43,6 +47,14 @@
             
             <convertBodyTo type="java.lang.String"></convertBodyTo>
 			<to uri="mongodb:mongoBean?database={{camel.mongodb.db}}&amp;collection=productOffering&amp;operation=findOneByQuery" />
+			
+			<!-- En caso de no encontrar datos en la respuesta -->
+            <choice>
+                <when>
+	                <simple>${body} == null</simple>
+	                <to uri="velocity:velocity/response-mongo-nodata.vm" ></to>
+                </when>
+            </choice>			
 			
 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
         </route>

@@ -1,1 +1,1 @@
-{ accountId: "${headers.accountId}", billNro: "${headers.quantity}" }
+{ accountId: "${headers.accountId}", billNro: "${headers.quantity}"}, {projection:{ _id: 0 }}
