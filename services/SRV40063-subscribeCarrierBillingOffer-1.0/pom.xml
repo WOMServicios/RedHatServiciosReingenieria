@@ -6,10 +6,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cl.wom.middleware.proxy</groupId>
-	<artifactId>SRV40063-subscribeCarrierBillingOffers</artifactId>
+	<artifactId>SRV40063-subscribeCarrierBillingOffer-1.0</artifactId>
 	<version>1.0.0</version>
 
-	<properties>
+	<name>SRV40064-getCarrierBillingElegibilityCheck-1.0</name>
+	<description>Camel implementation for the elegibility checkss</description>
+	
+		<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring.boot-version>1.4.1.RELEASE</spring.boot-version>
@@ -22,7 +25,6 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.4.1.RELEASE</version>
 	</parent>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -35,6 +37,7 @@
 
 		</dependencies>
 	</dependencyManagement>
+
 
 
 	<dependencies>
@@ -93,46 +96,23 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-camel</artifactId>
-			<scope>provided</scope>
-		</dependency>
-	
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-pool</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jms</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-http</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jsonpath</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+			
 		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-sql</artifactId>
-			<scope>provided</scope>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-stream</artifactId>
+            <scope>provided</scope>
+        </dependency>
+<dependency>
+			<groupId>ojdbc</groupId>
+			<artifactId>ojdbc</artifactId>
+			<version>14</version>
 		</dependency>
-
-		<dependency>
+		
+				<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<scope>provided</scope>
@@ -142,26 +122,23 @@
 			<artifactId>camel-jdbc</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-stream</artifactId>
-            <scope>provided</scope>
-        </dependency>
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc7</artifactId>
-			<version>12.1.0</version>
-		</dependency>
-	</dependencies>
-	<build>
+</dependencies>
+
+<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
 
 </project>
-
 

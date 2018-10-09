@@ -62,7 +62,7 @@
 		<!-- getcarrierbillingoffers -->
 		<route streamCache="true">
 			<from
-				uri="restlet:http://localhost:8882/subscribecarrierbillingoffer/rest/v1.0/?restletMethod=post" />
+				uri="restlet:http://0.0.0.0:8888/ocp/srv40063/subscribecarrierbillingoffer/rest/v1.0?restletMethod=post" />
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>
@@ -110,7 +110,7 @@
 			
 			
 					<to uri="velocity:velocity/netflixStart.vm" />
-					<to uri="restlet:http://localhost:8889/bango.net/HTTP/Netflix/Start/?restletMethod=post" /> 
+					<to uri="restlet:http://0.0.0.0:8888/bango.net/HTTP/Netflix/Start/?restletMethod=post" /> 
 			
 					</when>
 

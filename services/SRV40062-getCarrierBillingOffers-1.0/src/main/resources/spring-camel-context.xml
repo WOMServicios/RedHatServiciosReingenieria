@@ -11,7 +11,7 @@
 		<property name="driverClassName"
 			value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url"
-			value="jdbc:oracle:thin:@cluxds03:1550:BSCSDESA" />
+			value="jdbc:oracle:thin:@10.120.241.44:1550:BSCSDESA" />
 		<property name="username" value="OPSH_BSCSREP_SYSADM_CBI" />
 		<property name="password" value="knh#5tgl20k0lpm.l" />
 			
@@ -61,7 +61,8 @@
 		<!-- getcarrierbillingoffers -->
 		<route streamCache="true">
 			<from
-				uri="restlet:http://0.0.0.0:8881/srv40062/getcarrierbillingoffers/rest/v1.0/?restletMethod=post" />
+			uri="restlet:http://0.0.0.0:8888/ocp/srv40062/getcarrierbillingoffers/rest/v1.0?restletMethod=post" />
+			
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>

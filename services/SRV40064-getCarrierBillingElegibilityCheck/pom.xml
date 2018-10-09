@@ -11,30 +11,23 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<spring.boot-version>1.4.1.RELEASE</spring.boot-version>
-		<fabric8.version>2.2.170</fabric8.version>
-		<java.version>1.8</java.version>
+		<!-- configure the version of Fuse want to use here -->
+		<fuse.version>7.0.1.fuse-000008-redhat-4</fuse.version>
 	</properties>
-
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.4.1.RELEASE</version>
-	</parent>
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- import the Fuse Spring Boot BOM first -->
 			<dependency>
-				<groupId>io.fabric8</groupId>
-				<artifactId>fabric8-project-bom-camel-spring-boot</artifactId>
-				<version>${fabric8.version}</version>
+				<groupId>org.jboss.redhat-fuse</groupId>
+				<artifactId>fuse-springboot-bom</artifactId>
+				<version>${fuse.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
+	
 
 
 	<dependencies>
