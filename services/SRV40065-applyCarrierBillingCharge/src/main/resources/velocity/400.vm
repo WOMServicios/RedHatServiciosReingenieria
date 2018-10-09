@@ -1,4 +1,4 @@
 {
-    "responseCode": “ERROR",
-    "responseMessage": “request failed"
+    "responseCode": "${headers.codigoError}",
+    "responseMessage": "${headers.messageError}"
 }
