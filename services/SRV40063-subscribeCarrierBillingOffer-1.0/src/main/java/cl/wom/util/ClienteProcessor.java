@@ -13,6 +13,7 @@ import org.apache.camel.Processor;
 import cl.wom.beans.Cliente;
 
 public class ClienteProcessor implements Processor {
+	
 
 	@Override
 	public void process(Exchange exchange) throws Exception {
@@ -37,7 +38,7 @@ public class ClienteProcessor implements Processor {
 			cliente.setFechaActivacion((Date) row.get("FECHA_ACTIVACION"));
 
 		}
-
+  
 		exchange.getOut().setBody(cliente);
 
 	}

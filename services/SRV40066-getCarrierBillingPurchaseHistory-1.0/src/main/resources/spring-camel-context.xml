@@ -29,10 +29,6 @@
 		<property name="password" value="${database.wappl.password}" />
 
 	</bean>
-
-
-
-
 	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
 	</bean>
 
@@ -48,31 +44,45 @@
 		<propertyPlaceholder id="placeholder"
 			location="classpath:application.properties,classpath:sql.properties" />
 
+
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
 			<handled>
 				<constant>true</constant>
 			</handled>
+			<log loggingLevel="ERROR" message="errorr" />
 			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
 				<simple>${exception.codigoError}</simple>
 			</setHeader>
-			<setHeader headerName="codigoError">
+			<setHeader headerName="messageError">
+				<simple>Bad Request - ${exception.message}</simple>
+			</setHeader>
+			<to uri="velocity:velocity/400.vm" />
+		</onException>
+
+		<onException>
+			<exception>cl.wom.exception.services.ServiceError</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<log loggingLevel="ERROR" message="errorr" />
+			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
 				<simple>${exception.codigoError}</simple>
 			</setHeader>
 			<setHeader headerName="messageError">
-				<simple>${exception.message}</simple>
+				<simple>Bad Request - ${exception.message}</simple>
 			</setHeader>
+			<to uri="velocity:velocity/400.vm" />
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
-			<to uri="velocity:velocity/ErrorHttp.vm" />
-
 		</onException>
 
-		<!-- getcarrierbillingoffers -->
+
+		<!-- Servicio getCarrierBillingPurchaseHistory -->
 		<route streamCache="true">
-					<from
-				uri="restlet:http://{{rest.service.host}}:{{rest.service.port}}{{rest.service.resource}}?restletMethod=post" / />
+				<from
+				uri="restlet:http://{{rest.service.host}}:{{rest.service.port}}{{rest.service.resource}}?restletMethod=post" /
 			<setHeader headerName="Accept">
 				<constant>application/json</constant>
 			</setHeader>
@@ -80,17 +90,14 @@
 				<constant>application/json</constant>
 			</setHeader>
 			<doTry>
-				<setHeader headerName="credential">
-					<jsonpath>$.credential</jsonpath>
+				<setHeader headerName="msisdn">
+					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>
 				</setHeader>
-				<setHeader headerName="credentialType">
-					<jsonpath>$.credentialType</jsonpath>
+				<setHeader headerName="fecha_desde">
+					<jsonpath>$.fecha_desde</jsonpath>
 				</setHeader>
-				<setHeader headerName="channel">
-					<jsonpath>$.channel</jsonpath>
-				</setHeader>
-				<setHeader headerName="networkKey">
-					<jsonpath>$.networkKey</jsonpath>
+				<setHeader headerName="fecha_hasta">
+					<jsonpath>$.fecha_hasta</jsonpath>
 				</setHeader>
 				<doCatch>
 					<exception>org.apache.camel.ExpressionEvaluationException
@@ -102,75 +109,49 @@
 					<setHeader headerName="Content-Type">
 						<constant>application/json</constant>
 					</setHeader>
-					<stop />
+					<stop/>
 				</doCatch>
 			</doTry>
 			<choice>
 				<when>
-					<simple>
-						${headers.credential} == "" ||
-						${headers.credentialType} ==
-						"" ||
-						${headers.channel} == "" ||
-						${headers.networkKey} == ""
+					<simple>${headers.msisdn} == "" ||
+						${headers.fecha_desde} == "" ||
+						${headers.fecha_hasta} == ""
+
 					</simple>
 					<throwException
 						exceptionType="cl.wom.exception.services.ServiceError"
 						message="400" />
 				</when>
 
-				<otherwise>
+				<when>
 
+					<simple>${headers.msisdn} != ""</simple>
 
 					<setBody>
-						<simple>{{sql.getsubcriberBymsisdn}}</simple>
+						<simple>{{sql.getlistofferscarrierbilling}}</simple>
 					</setBody>
 
-					<to uri="jdbc:dataSourceBSCSDESA" />
+
+					<to uri="jdbc:dataSourceWAPPLDESA" />
 
 					<to uri="bean:clienteProcessor" />
-
-
 					<when>
-						<simple>${body.msisdn} == null</simple>
-
-						<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-							<simple>200</simple>
-						</setHeader>
-						<setHeader headerName="Content-Type">
-							<constant>application/json</constant>
-						</setHeader>
-						<to uri="velocity:velocity/204.vm" />
-
-						<stop />
-
-
+						<simple>${body.numCelular} == null</simple>
+						<throwException
+							exceptionType="cl.wom.exception.services.ServiceError"
+							message="400" />
 					</when>
-
 					<when>
-						<simple>${body.msisdn} != null</simple>
-
-
-						<to uri="velocity:velocity/netflixStart.vm" />
+						<simple>${body.numCelular} != null</simple>
 						<to
-							uri="restlet:http://0.0.0.0:8888/bango.net/HTTP/Netflix/Start/?restletMethod=post" />
-
+							uri="velocity:velocity/200getCarrierBillingPurchaseHistory.vm" />
 					</when>
-
-				</otherwise>
+				</when>
 			</choice>
-
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
 		</route>
-
-		<route>
-			<from
-				uri="restlet:http://0.0.0.0:8888/bango.net/HTTP/Netflix/Start/?restletMethod=post" />
-			<to uri="velocity:velocity/netflixResponse.vm" />
-		</route>
-
-
 	</camelContext>
 </beans>

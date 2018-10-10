@@ -11,6 +11,7 @@ public class ServiceError extends Exception{
 
    private static final long serialVersionUID = 1L;
    private int codigoError;
+   private int cambioCodigo;
 
    /**
     * Constructor de la clase que invoca al metodo getMessage()
@@ -29,20 +30,17 @@ public class ServiceError extends Exception{
    @Override
    public String getMessage(){
 	   String mensaje="";
-	   
+	  
 	   switch(codigoError){
 	   case 400:
-		   mensaje="Error, 400";
+		   mensaje="bad request";
 		   break;
-	   case 500:
-		   mensaje="Error, 500";
+	  
+	   case 404:
+		   mensaje="No Found";
 		   break;
-	   case 503:
-		   mensaje="Error, 503";
-		   break;
-	   default:
-		   mensaje="Error, sin codigo de error reconocido";
-		   break;
+		   
+	  
 	   }
 	   return mensaje;
    }
@@ -52,6 +50,7 @@ public class ServiceError extends Exception{
     * @return un entero que especifica el codigo de error
     */
    public int getCodigoError() {
+	  
 		 return codigoError;
    }
 }

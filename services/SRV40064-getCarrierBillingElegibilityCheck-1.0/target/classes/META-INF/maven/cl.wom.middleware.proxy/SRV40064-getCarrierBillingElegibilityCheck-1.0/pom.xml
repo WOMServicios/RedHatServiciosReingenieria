@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cl.wom.middleware.proxy</groupId>
-	<artifactId>SRV40063-subscribeCarrierBillingOffer-1.0</artifactId>
+	<artifactId>SRV40064-getCarrierBillingElegibilityCheck-1.0</artifactId>
 	<version>1.0.0</version>
-
+	
+	
 	<name>SRV40064-getCarrierBillingElegibilityCheck-1.0</name>
 	<description>Camel implementation for the elegibility checkss</description>
 	
@@ -37,6 +37,7 @@
 
 		</dependencies>
 	</dependencyManagement>
+
 
 
 	<dependencies>
@@ -95,46 +96,23 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-camel</artifactId>
-			<scope>provided</scope>
-		</dependency>
-	
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-pool</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jms</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-http</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jsonpath</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+			
 		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-sql</artifactId>
-			<scope>provided</scope>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-stream</artifactId>
+            <scope>provided</scope>
+        </dependency>
+<dependency>
+			<groupId>ojdbc</groupId>
+			<artifactId>ojdbc</artifactId>
+			<version>14</version>
 		</dependency>
-
-		<dependency>
+		
+				<dependency>
 			<groupId>commons-dbcp</groupId>
 			<artifactId>commons-dbcp</artifactId>
 			<scope>provided</scope>
@@ -144,17 +122,8 @@
 			<artifactId>camel-jdbc</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-stream</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-			<groupId>ojdbc</groupId>
-			<artifactId>ojdbc</artifactId>
-			<version>14</version>
-		</dependency>
-	</dependencies>
+</dependencies>
+
 <build>
 		<plugins>
 			<plugin>
@@ -172,4 +141,3 @@
 	</build>
 
 </project>
-

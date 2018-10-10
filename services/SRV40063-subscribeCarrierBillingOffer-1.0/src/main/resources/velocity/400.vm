@@ -1,4 +1,4 @@
 {
-    "responseCode": "ERROR",
-    "responseMessage": "request failed"
+    "responseCode": "400",
+    "responseMessage": "Request Failed"
 }
