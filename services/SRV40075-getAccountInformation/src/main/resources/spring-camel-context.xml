@@ -9,9 +9,9 @@
 	<import resource="bean-definitions.xml" />
 
 	<camelContext
-		xmlns="http://camel.apache.org/schema/spring">
+		xmlns="http://camel.apache.org/schema/spring">	
 		<propertyPlaceholder id="placeholder"
-			location="classpath:application.properties" />
+			location="classpath:application.properties,classpath:sql.properties" />
 
 		<!-- Control de errores -->
 		<onException>
@@ -32,13 +32,8 @@
 			<setBody>
 				<simple>{{sql.1.1}}</simple>
 			</setBody>
-<!-- 			<to uri="jdbc:dataSourceBSCSUAT" /> -->
+			<to uri="jdbc:dataSourceBSCSUAT" />
 			<log message="respuesta desde sql.1.1: ${body}"></log>
-
-
-			<setHeader headerName="Content-Type">
-				<constant>application/json</constant>
-			</setHeader>
 		</route>
 
 	</camelContext>
