@@ -22,6 +22,8 @@
         <route streamCache="true">
             <from uri="jetty:{{camel.from.endpoint}}"/>
             
+            <log message="lkjasdlkjas dlkj "></log>
+            
             <choice>
             	<when>
             		<simple>${headers.productOffering.offerId} != null</simple>
