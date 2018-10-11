@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+    http://camel.apache.org/schema/spring 
+    http://camel.apache.org/schema/spring/camel-spring.xsd">
+    
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="${camel.sql.url}" />
+		<property name="username" value="${camel.sql.user}" />
+		<property name="password" value="${camel.sql.pass}" />
+	</bean>
+	
+	<!-- configure the Camel SQL component to use the JDBC data source -->
+	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+    
+    <import resource="bean-definitions.xml"/>
+    
+    <camelContext  xmlns="http://camel.apache.org/schema/spring">
+		<propertyPlaceholder id="placeholder" location="classpath:application.properties,classpath:sql.properties"/> 	
+
+        <!-- Control de errores -->
+		<onException>
+			    <exception>java.lang.Exception</exception>
+			    <handled><simple>true</simple></handled>
+			    <to uri="velocity:velocity/response-sql-error.vm"/>
+			    <log message="error: ${exception.message}"></log>
+			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+		</onException>
+		       
+<!--         <route> -->
+<!--         	TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
+<!--             <from uri="jetty:{{camel.from.endpoint}}"/>    -->
+<!-- 			<setBody><simple>{{sql.1.1}}</simple></setBody> -->
+<!-- 			<to uri="jdbc:dataSourceWAPPLDESA" /> -->
+<!-- 			<log message="respuesta desde sql.1.1: ${body}"></log> -->
+<!-- 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader> -->
+<!--         </route> -->
+
+			<route>
+			<from uri="jetty:{{camel.from.endpoint.a}}"/>
+			<log message="*** pasando a la query ***"></log> 
+				<setBody><simple>{{sql.1.1}}</simple></setBody>
+				<to uri="jdbc:dataSource" />
+				<log message="1Q ${body.STATUS}"></log>
+<!-- 				<setBody><simple>{{sql.1.2}}</simple></setBody> -->
+<!-- 				<to uri="jdbc:dataSource" /> -->
+<!-- 				<log message="2Q ${body}"></log> -->
+<!-- 				<setBody><simple>{{sql.2.1.1}}</simple></setBody> -->
+<!-- 				<to uri="jdbc:dataSource" /> -->
+<!-- 				<log message="3Q ${body}"></log> -->
+<!-- 				<setBody><simple>{{sql.2.1.2}}</simple></setBody> -->
+<!-- 				<to uri="jdbc:dataSource" /> -->
+<!-- 				<log message="4Q ${body}"></log> -->
+<!-- 				<setBody><simple>{{sql.2.2.1}}</simple></setBody> -->
+<!-- 				<to uri="jdbc:dataSource" /> -->
+<!-- 				<log message="5Q ${body}"></log> -->
+<!-- 				<setBody><simple>{{sql.2.2.1.isOfferProduct}}</simple></setBody> -->
+<!-- 				<to uri="jdbc:dataSource" /> -->
+<!-- 				<log message="6Q ${body}"></log> -->
+
+			</route>
+
+        
+    </camelContext>
+</beans>
