@@ -29,11 +29,23 @@
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint}}" />
 
-			<setBody>
-				<simple>{{sql.1.1}}</simple>
-			</setBody>
+			
+			<bean ref="sqlAccountProcessor" method="parserSQLAccountInformation"></bean>
+			
+			
+						
+			<!-- SQL lista de cuentas -->			
+			<setBody><simple>{{sql.1.1}}</simple></setBody>
 			<to uri="jdbc:dataSourceBSCSUAT" />
 			<log message="respuesta desde sql.1.1: ${body}"></log>
+			
+			
+			<bean ref="sqlAccountProcessor" method="parserSQLAccounts"></bean>
+			
+			
+			
+			
+			
 		</route>
 
 	</camelContext>

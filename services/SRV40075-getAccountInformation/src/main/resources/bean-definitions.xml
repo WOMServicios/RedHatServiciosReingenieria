@@ -20,6 +20,8 @@
 		<property name="username" value="VMD" />
 		<property name="password" value="VMD" />
 	</bean>    
+	
+	<bean id="sqlAccountProcessor" class="cl.wom.middleware.bean.SQLAccountProcessor"></bean>
 
 	
 </beans>
