@@ -6,18 +6,6 @@
     http://camel.apache.org/schema/spring 
     http://camel.apache.org/schema/spring/camel-spring.xsd">
     
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="${camel.sql.url}" />
-		<property name="username" value="${camel.sql.user}" />
-		<property name="password" value="${camel.sql.pass}" />
-	</bean>
-	
-	<!-- configure the Camel SQL component to use the JDBC data source -->
-	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-    
     <import resource="bean-definitions.xml"/>
     
     <camelContext  xmlns="http://camel.apache.org/schema/spring">
@@ -44,8 +32,14 @@
 			<route>
 			<from uri="jetty:{{camel.from.endpoint.a}}"/>
 			<log message="*** pasando a la query ***"></log> 
+				
 				<setBody><simple>{{sql.1.1}}</simple></setBody>
 				<to uri="jdbc:dataSource" />
+				
+				<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean>
+				
+				
+				
 				<log message="1Q ${body.STATUS}"></log>
 <!-- 				<setBody><simple>{{sql.1.2}}</simple></setBody> -->
 <!-- 				<to uri="jdbc:dataSource" /> -->
