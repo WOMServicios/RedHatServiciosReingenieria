@@ -22,7 +22,7 @@
 		<property name="dataSource" ref="dataSource" />
 	</bean>
 	
-	<bean id="sqlFormatterProcessor" class="cl.wom.middleware.beanSqlFormatterProcessor"></bean>
+	<bean id="sqlFormatterProcessor" class="cl.wom.middleware.bean.SqlFormatterProcessor"></bean>
 
 	
 </beans>

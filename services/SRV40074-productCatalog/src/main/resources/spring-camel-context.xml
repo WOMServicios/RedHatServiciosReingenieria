@@ -20,15 +20,7 @@
 			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 		</onException>
 		       
-<!--         <route> -->
 <!--         	TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
-<!--             <from uri="jetty:{{camel.from.endpoint}}"/>    -->
-<!-- 			<setBody><simple>{{sql.1.1}}</simple></setBody> -->
-<!-- 			<to uri="jdbc:dataSourceWAPPLDESA" /> -->
-<!-- 			<log message="respuesta desde sql.1.1: ${body}"></log> -->
-<!-- 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader> -->
-<!--         </route> -->
-
 			<route>
 			<from uri="jetty:{{camel.from.endpoint.a}}"/>
 			<log message="*** pasando a la query ***"></log> 
@@ -40,7 +32,7 @@
 				
 				
 				
-				<log message="1Q ${body.STATUS}"></log>
+				<log message="1Q ${body}"></log>
 <!-- 				<setBody><simple>{{sql.1.2}}</simple></setBody> -->
 <!-- 				<to uri="jdbc:dataSource" /> -->
 <!-- 				<log message="2Q ${body}"></log> -->
