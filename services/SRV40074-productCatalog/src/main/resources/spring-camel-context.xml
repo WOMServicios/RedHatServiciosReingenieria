@@ -9,13 +9,18 @@
     <import resource="bean-definitions.xml"/>
     
     <camelContext  xmlns="http://camel.apache.org/schema/spring">
+<<<<<<< HEAD
 		<propertyPlaceholder id="placeholder" location="classpath:application.properties,classpath:sql.properties"/> 	
+=======
+		<propertyPlaceholder id="placeholder" location="classpath:application.properties"/> 	
+>>>>>>> d1c828133b418e7b0c2290a33636327960980ef6
 
         <!-- Control de errores -->
 		<onException>
 			    <exception>java.lang.Exception</exception>
 			    <handled><simple>true</simple></handled>
 			    <to uri="velocity:velocity/response-sql-error.vm"/>
+<<<<<<< HEAD
 			    <log message="error: ${exception.message}"></log>
 			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 		</onException>
@@ -51,6 +56,22 @@
 
 			</route>
 
+=======
+			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+		</onException>
+		       
+        <route>
+        	<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
+            <from uri="jetty:{{camel.from.endpoint}}"/>
+            
+			<setBody><simple>{{sql.1.1}}</simple></setBody>
+<!-- 			<to uri="jdbc:dataSourceWAPPLDESA" /> -->
+			<log message="respuesta desde sql.1.1: ${body}"></log>
+
+            
+			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+        </route>
+>>>>>>> d1c828133b418e7b0c2290a33636327960980ef6
         
     </camelContext>
 </beans>

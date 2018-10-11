@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Implementation-Title: SRV400111-CarrierBilling
+Implementation-Version: 1.0.0
+Built-By: cquezada
+Implementation-Vendor-Id: cl.wom.middleware.proxy
+Build-Jdk: 1.8.0_181
+Implementation-URL: http://projects.spring.io/spring-boot/SRV400111-Ca
+ rrierBilling/
+Created-By: Maven Integration for Eclipse
+Implementation-Vendor: Pivotal Software, Inc.
+

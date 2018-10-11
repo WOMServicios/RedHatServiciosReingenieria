@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cl.wom.middleware.proxy</groupId>
-	<artifactId>SRV400111-CarrierBilling</artifactId>
+	<artifactId>SRV40065-applyCarrierBillingCharge</artifactId>
 	<version>1.0.0</version>
 
 	<properties>
@@ -38,6 +38,11 @@
 
 
 	<dependencies>
+         <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-cxf</artifactId>
+                <scope>provided</scope>
+        </dependency>
 
 		<!-- Camel -->
 		<dependency>
@@ -45,6 +50,7 @@
 			<artifactId>spring-boot-starter-undertow</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-stream-starter</artifactId>
@@ -56,6 +62,7 @@
 			<artifactId>camel-core-starter</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-velocity</artifactId>
@@ -103,6 +110,7 @@
 			<artifactId>activemq-pool</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jms</artifactId>
@@ -120,6 +128,7 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jsonpath</artifactId>
@@ -137,18 +146,20 @@
 			<artifactId>commons-dbcp</artifactId>
 			<scope>provided</scope>
 		</dependency>
-			<dependency>
+		
+		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jdbc</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stream</artifactId>
             <scope>provided</scope>
         </dependency>
 
-<dependency>
+		<dependency>
 			<groupId>ojdbc</groupId>
 			<artifactId>ojdbc</artifactId>
 			<version>14</version>

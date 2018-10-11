@@ -1,0 +1,4 @@
+{
+    "responseCode": "USER_NOT_FOUND",
+    "responseMessage": "the user credential cannot be found"
+}
