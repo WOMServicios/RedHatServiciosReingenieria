@@ -9,13 +9,54 @@
     <import resource="bean-definitions.xml"/>
     
     <camelContext  xmlns="http://camel.apache.org/schema/spring">
+<<<<<<< HEAD
+		<propertyPlaceholder id="placeholder" location="classpath:application.properties,classpath:sql.properties"/> 	
+=======
 		<propertyPlaceholder id="placeholder" location="classpath:application.properties"/> 	
+>>>>>>> d1c828133b418e7b0c2290a33636327960980ef6
 
         <!-- Control de errores -->
 		<onException>
 			    <exception>java.lang.Exception</exception>
 			    <handled><simple>true</simple></handled>
 			    <to uri="velocity:velocity/response-sql-error.vm"/>
+<<<<<<< HEAD
+			    <log message="error: ${exception.message}"></log>
+			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+		</onException>
+		       
+<!--         	TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
+			<route>
+			<from uri="jetty:{{camel.from.endpoint.a}}"/>
+			<log message="*** pasando a la query ***"></log> 
+				
+				<setBody><simple>{{sql.1.1}}</simple></setBody>
+				<to uri="jdbc:dataSource" />
+				
+				<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean>
+				
+				
+				
+				<log message="1Q ${body}"></log>
+<!-- 				<setBody><simple>{{sql.1.2}}</simple></setBody> -->
+<!-- 				<to uri="jdbc:dataSource" /> -->
+<!-- 				<log message="2Q ${body}"></log> -->
+<!-- 				<setBody><simple>{{sql.2.1.1}}</simple></setBody> -->
+<!-- 				<to uri="jdbc:dataSource" /> -->
+<!-- 				<log message="3Q ${body}"></log> -->
+<!-- 				<setBody><simple>{{sql.2.1.2}}</simple></setBody> -->
+<!-- 				<to uri="jdbc:dataSource" /> -->
+<!-- 				<log message="4Q ${body}"></log> -->
+<!-- 				<setBody><simple>{{sql.2.2.1}}</simple></setBody> -->
+<!-- 				<to uri="jdbc:dataSource" /> -->
+<!-- 				<log message="5Q ${body}"></log> -->
+<!-- 				<setBody><simple>{{sql.2.2.1.isOfferProduct}}</simple></setBody> -->
+<!-- 				<to uri="jdbc:dataSource" /> -->
+<!-- 				<log message="6Q ${body}"></log> -->
+
+			</route>
+
+=======
 			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 		</onException>
 		       
@@ -30,6 +71,7 @@
             
 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
         </route>
+>>>>>>> d1c828133b418e7b0c2290a33636327960980ef6
         
     </camelContext>
 </beans>
