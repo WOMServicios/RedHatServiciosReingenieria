@@ -1,7 +1,6 @@
 package cl.wom.beans;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -11,25 +10,25 @@ public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String rut;
-	private BigDecimal customerId;
-	private BigDecimal customerIdHigh;
-	private BigDecimal contractId;
+	private String customerId;
+	private String customerIdHigh;
+	private String contractId;
 	private String numCelular;
 	private String tipoContrato;
 	private String rateplan;
-	private BigDecimal antiguedad;
+	private String antiguedad;
 	private String ciclo;
 	private char estadoContrato;
 	private Date fechaActivacion;
 	private String mercado;
-	private BigDecimal cargoBasico;
+	private String cargoBasico;
 	private String dnNum;
-	private BigDecimal contador;
+	private String contador;
 	private String idOferta;
 	private String desOferta;
-	private String idOccBscs; 
-	private BigDecimal mesesAntiguedad;
-	private BigDecimal valorMinimo;
+	private String idOccBscs;
+	private String mesesAntiguedad;
+	private String valorMinimo;
 	private Date fecDesde;
 	private Date fecHasta;
 
@@ -45,27 +44,27 @@ public class Cliente implements Serializable {
 		this.rut = rut;
 	}
 
-	public BigDecimal getCustomerId() {
+	public String getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(BigDecimal customerId) {
+	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
 
-	public BigDecimal getCustomerIdHigh() {
+	public String getCustomerIdHigh() {
 		return customerIdHigh;
 	}
 
-	public void setCustomerIdHigh(BigDecimal customerIdHigh) {
+	public void setCustomerIdHigh(String customerIdHigh) {
 		this.customerIdHigh = customerIdHigh;
 	}
 
-	public BigDecimal getContractId() {
+	public String getContractId() {
 		return contractId;
 	}
 
-	public void setContractId(BigDecimal contractId) {
+	public void setContractId(String contractId) {
 		this.contractId = contractId;
 	}
 
@@ -93,11 +92,11 @@ public class Cliente implements Serializable {
 		this.rateplan = rateplan;
 	}
 
-	public BigDecimal getAntiguedad() {
+	public String getAntiguedad() {
 		return antiguedad;
 	}
 
-	public void setAntiguedad(BigDecimal antiguedad) {
+	public void setAntiguedad(String antiguedad) {
 		this.antiguedad = antiguedad;
 	}
 
@@ -133,11 +132,11 @@ public class Cliente implements Serializable {
 		this.mercado = mercado;
 	}
 
-	public BigDecimal getCargoBasico() {
+	public String getCargoBasico() {
 		return cargoBasico;
 	}
 
-	public void setCargoBasico(BigDecimal cargoBasico) {
+	public void setCargoBasico(String cargoBasico) {
 		this.cargoBasico = cargoBasico;
 	}
 
@@ -149,11 +148,11 @@ public class Cliente implements Serializable {
 		this.dnNum = dnNum;
 	}
 
-	public BigDecimal getContador() {
+	public String getContador() {
 		return contador;
 	}
 
-	public void setContador(BigDecimal contador) {
+	public void setContador(String contador) {
 		this.contador = contador;
 	}
 
@@ -181,19 +180,19 @@ public class Cliente implements Serializable {
 		this.idOccBscs = idOccBscs;
 	}
 
-	public BigDecimal getMesesAntiguedad() {
+	public String getMesesAntiguedad() {
 		return mesesAntiguedad;
 	}
 
-	public void setMesesAntiguedad(BigDecimal mesesAntiguedad) {
+	public void setMesesAntiguedad(String mesesAntiguedad) {
 		this.mesesAntiguedad = mesesAntiguedad;
 	}
 
-	public BigDecimal getValorMinimo() {
+	public String getValorMinimo() {
 		return valorMinimo;
 	}
 
-	public void setValorMinimo(BigDecimal valorMinimo) {
+	public void setValorMinimo(String valorMinimo) {
 		this.valorMinimo = valorMinimo;
 	}
 
@@ -213,7 +212,15 @@ public class Cliente implements Serializable {
 		this.fecHasta = fecHasta;
 	}
 
+	@Override
+	public String toString() {
+		return "Cliente [rut=" + rut + ", customerId=" + customerId + ", customerIdHigh=" + customerIdHigh
+				+ ", contractId=" + contractId + ", numCelular=" + numCelular + ", tipoContrato=" + tipoContrato
+				+ ", rateplan=" + rateplan + ", antiguedad=" + antiguedad + ", ciclo=" + ciclo + ", estadoContrato="
+				+ estadoContrato + ", fechaActivacion=" + fechaActivacion + ", mercado=" + mercado + ", cargoBasico="
+				+ cargoBasico + ", dnNum=" + dnNum + ", contador=" + contador + ", idOferta=" + idOferta
+				+ ", desOferta=" + desOferta + ", idOccBscs=" + idOccBscs + ", mesesAntiguedad=" + mesesAntiguedad
+				+ ", valorMinimo=" + valorMinimo + ", fecDesde=" + fecDesde + ", fecHasta=" + fecHasta + "]";
+	}
 
-
-	
 }

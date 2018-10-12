@@ -6,7 +6,7 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<bean id="dataSourceBSCSDESA"
+ 	<bean id="dataSourceBSCSDESA"
 		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName"
 			value="oracle.jdbc.driver.OracleDriver" />
@@ -28,7 +28,7 @@
 		<property name="username" value="${database.wappl.username}" />
 		<property name="password" value="${database.wappl.password}" />
 
-	</bean>
+	</bean> 
 
 	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
 	</bean>
@@ -63,7 +63,7 @@
 		<!-- getcarrierbillingoffers -->
 		<route streamCache="true">
 				<from
-				uri="restlet:http://{{rest.service.host}}:{{rest.service.port}}{{rest.service.resource}}?restletMethod=post" /
+				uri="restlet:http://{{rest.service.host}}:{{rest.service.port}}{{rest.service.resource}}?restletMethod=post"/>
 
 
 			<setHeader headerName="Accept">
@@ -103,20 +103,15 @@
 					<setBody>
 						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>
 					</setBody>
-
-
-					<to uri="jdbc:dataSourceBSCSDESA" />
-					<log loggingLevel="WARN"
-						message="ejecuto la query getInfoSuscriptorCarrierBilling" />
-					<to uri="bean:clienteProcessor" />
-					<log loggingLevel="WARN"
-						message="clienteProcessor getInfoSuscriptorCarrierBillin" />
-
+					<setHeader headerName="database">
+						<constant>BSCSDESA</constant>
+					</setHeader>
 
 					<when>
-						<simple>${body.rut} != null</simple>
+						<simple>${body} != null</simple>
 						<!-- seteo de properties, en donde se almacenaran variables globales 
 							para reutilizacion -->
+							<log message="exittooo"></log>
 
 						<setProperty propertyName="customerIdProperty">
 							<simple>${body.customerId}</simple>
@@ -144,7 +139,7 @@
 						</setProperty>
 
 						<!-- query devolvera 0 / 1 si es cero se saldra getSuscripcionesCarrierExist -->
-
+						
 						<setBody>
 							<simple>{{sql.getSuscripcionesCarrierExist}}</simple>
 						</setBody>
@@ -232,7 +227,7 @@
 									<setProperty propertyName="fechaPruebaProperty">
 										<simple>${date:now:HH:mm:ssZ}</simple>
 									</setProperty>
-
+<!-- 
 									<setBody>
 										<simple>{{sql.insertaregelegcarrierbilling}}</simple>
 									</setBody>
@@ -242,7 +237,7 @@
 									</setHeader>
 									<setHeader headerName="desOferta">
 										<simple>${property.desOfertaProperty}</simple>
-									</setHeader>
+									</setHeader> -->
 									<to uri="velocity:velocity/Success.vm" />
 								</when>
 
@@ -267,7 +262,10 @@
 
 			</choice>
 			<setHeader headerName="Content-Type">
-				<constant>application/json</constant>
+				<constant>application/json; charset=UTF-8</constant>
+			</setHeader>
+			<setHeader headerName="Encoding">
+				<constant>UTF-8</constant>
 			</setHeader>
 		</route>
 	</camelContext>
