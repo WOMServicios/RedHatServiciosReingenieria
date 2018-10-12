@@ -236,5 +236,6 @@
 					</setHeader>
 					<log message="msg return procedure4: ${headers.bscs_msg_services}"></log>
 		</route>
+		
 	</camelContext>
 </beans>
