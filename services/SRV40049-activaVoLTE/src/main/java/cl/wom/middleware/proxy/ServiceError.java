@@ -13,27 +13,21 @@ public class ServiceError extends Exception{
 		getMessage();
 	}
 	
-	
-	 
-	
 	 @Override
 	    public String getMessage(){
 	         
 	        String mensaje="";
 	         
 	        switch(codigoError){
-	            case 400:
-	                mensaje="Error, 400 prueba";
-	                break;
-	            case 500:
-	                mensaje="Error, 500 prueba";
-	                break;
-	            case 503:
-	                mensaje="Error, prueba";
-	                break;
-	             default:
-	            	   mensaje="Error, sin codigo de error reconocido";
-	            	 break;
+	 	   case 400:
+			   mensaje="bad request";
+			   break;		  
+		   case 404:
+			   mensaje="No Found";
+			   break;
+	       default:
+	           mensaje="Error, sin codigo de error reconocido";
+	           break;
 	        }
 	         
 	        return mensaje;
