@@ -6,30 +6,6 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
- 	<bean id="dataSourceBSCSDESA"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@${database.replica.host}:${database.replica.port}:${database.replica.name}" />
-		<property name="username"
-			value="${database.replica.username}" />
-		<property name="password"
-			value="${database.replica.password}" />
-
-	</bean>
-
-	<bean id="dataSourceWAPPLDESA"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@${database.wappl.host}:${database.wappl.port}:${database.wappl.name}" />
-		<property name="username" value="${database.wappl.username}" />
-		<property name="password" value="${database.wappl.password}" />
-
-	</bean> 
-
 	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
 	</bean>
 
@@ -50,20 +26,27 @@
 			<handled>
 				<constant>true</constant>
 			</handled>
-			<log loggingLevel="ERROR" message="errorr" />
+			<log message="ERROR: ${exception.message}"></log>
 			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
 				<simple>${exception.codigoError}</simple>
 			</setHeader>
-			<setHeader headerName="messageError">
-				<simple>Bad Request - ${exception.message}</simple>
+			<setHeader headerName="codigoError">
+				<simple>${exception.codigoError}</simple>
 			</setHeader>
-			<to uri="velocity:velocity/400.vm" />
+			<setHeader headerName="messageError">
+				<simple>${exception.message}</simple>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<to uri="velocity:velocity/ErrorHttp.vm" />
+
 		</onException>
 
 		<!-- getcarrierbillingoffers -->
 		<route streamCache="true">
-				<from
-				uri="restlet:http://{{rest.service.host}}:{{rest.service.port}}{{rest.service.resource}}?restletMethod=post"/>
+			<from
+				uri="restlet:http://{{rest.service.host}}:{{rest.service.port}}{{rest.service.resource}}?restletMethod=post" />
 
 
 			<setHeader headerName="Accept">
@@ -106,12 +89,12 @@
 					<setHeader headerName="database">
 						<constant>BSCSDESA</constant>
 					</setHeader>
-
+					<to uri="bean:clienteProcessor" />
 					<when>
 						<simple>${body} != null</simple>
 						<!-- seteo de properties, en donde se almacenaran variables globales 
 							para reutilizacion -->
-							<log message="exittooo"></log>
+
 
 						<setProperty propertyName="customerIdProperty">
 							<simple>${body.customerId}</simple>
@@ -138,41 +121,38 @@
 							<simple>${body.cargoBasico}</simple>
 						</setProperty>
 
+						<log
+							message="cargo basigo ::${property.cargoBasicoProperty}  antiguedad::${property.antiguedadProperty}"></log>
 						<!-- query devolvera 0 / 1 si es cero se saldra getSuscripcionesCarrierExist -->
-						
+
 						<setBody>
 							<simple>{{sql.getSuscripcionesCarrierExist}}</simple>
 						</setBody>
 
-
-						<to uri="jdbc:dataSourceWAPPLDESA" />
-						<log loggingLevel="WARN"
-							message="ejecuto la query getSuscripcionesCarrierExist" />
-						<to uri="bean:clienteProcessor" />
-						<log loggingLevel="WARN"
-							message="clienteProcessor getSuscripcionesCarrierExist" />
-
+						<setHeader headerName="database">
+							<constant>WAPPLDESA</constant>
+						</setHeader>
 						<when>
-							<simple>${body.contador} != 0</simple>
+							<!-- <simple>${body} != 0</simple> cambiar -->
+							<simple>${body} == 0</simple>
 							<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />
 						</when>
 						<when>
-							<simple>${body.contador} == 0</simple>
+							<!-- <simple>${body} == 0</simple> cambiar -->
+							<simple>${body} != 0</simple>
 							<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion 
 								activa -busca el msisdn mas antiguo de la cuenta -->
+							<setHeader headerName="database">
+								<constant>getCustomerContractMoreOld</constant>
+							</setHeader>
 							<setBody>
 								<simple>{{sql.getCustomerContractMoreOld}}</simple>
 							</setBody>
-
-							<to uri="jdbc:dataSourceBSCSDESA" />
-							<log loggingLevel="WARN"
-								message="ejecuto la query getCustomerContractMoreOld" />
 							<to uri="bean:clienteProcessor" />
-							<log loggingLevel="WARN"
-								message="clienteProcessor getCustomerContractMoreOld" />
+
 
 							<setProperty propertyName="dnNumIdHighProperty">
-								<simple>${body.dnNum}</simple>
+								<simple>${body}</simple>
 							</setProperty>
 
 							<when>
@@ -183,33 +163,26 @@
 								<setBody>
 									<simple>{{sql.getCustomerPagador}}</simple>
 								</setBody>
-								<to uri="jdbc:dataSourceBSCSDESA" />
-								<log loggingLevel="WARN"
-									message="ejecuto la query getCustomerPagador" />
+								<setHeader headerName="database">
+									<constant>getCustomerPagador</constant>
+								</setHeader>
+
+
 								<to uri="bean:clienteProcessor" />
-								<log message="clienteProcessor getCustomerPagador" />
-								<log
-									message="body: ${body.customerId} property : ${property.customerIdProperty}" />
 								<when>
-									<!-- si es igual continua el flujo -->
-									<simple>${body.customerId} == null</simple>
-
-									<to uri="velocity:velocity/getCustomerPagador.vm" />
-
-								</when>
-
-								<when>
-									<simple>${body.customerId} != null</simple>
+									<simple>${body} != null</simple>
 
 									<setProperty propertyName="customerIdProperty">
-										<simple>${body.customerId}</simple>
+										<simple>${body}</simple>
 									</setProperty>
 
 									<setBody>
 										<simple>{{sql.getofertacarrier}}</simple>
 									</setBody>
+									<setHeader headerName="database">
+										<constant>getofertacarrier</constant>
+									</setHeader>
 
-									<to uri="jdbc:dataSourceWAPPLDESA" />
 									<to uri="bean:clienteProcessor" />
 
 									<setProperty propertyName="idOfertaProperty">
@@ -219,45 +192,34 @@
 										<simple>${body.desOferta}</simple>
 									</setProperty>
 
-									<setProperty propertyName="desOfertaProperty">
-										<simple>${body.desOferta}</simple>
-									</setProperty>
+									
 
-									<!-- variable para hacer prueba y no duplicar pk -->
+								<!-- 	variable para hacer prueba y no duplicar pk -->
 									<setProperty propertyName="fechaPruebaProperty">
 										<simple>${date:now:HH:mm:ssZ}</simple>
 									</setProperty>
-<!-- 
 									<setBody>
 										<simple>{{sql.insertaregelegcarrierbilling}}</simple>
 									</setBody>
-									<to uri="jdbc:dataSourceWAPPLDESA" />
+									<setHeader headerName="database">
+										<constant>insertaregelegcarrierbilling</constant>
+									</setHeader>
+									<to uri="bean:clienteProcessor" />
 									<setHeader headerName="idOferta">
 										<simple>${property.idOfertaProperty}</simple>
 									</setHeader>
 									<setHeader headerName="desOferta">
 										<simple>${property.desOfertaProperty}</simple>
-									</setHeader> -->
+									</setHeader>
 									<to uri="velocity:velocity/Success.vm" />
 								</when>
-
 							</when>
-							<when>
-								<simple>${property.dnNumIdHighProperty} == null</simple>
 
-								<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />
 
-							</when>
 						</when>
 
 					</when>
 
-					<when>
-						<simple>${property.customerIdProperty} == null </simple>
-
-						<to uri="velocity:velocity/getInfoSuscriptorCarrierBilling.vm" />
-
-					</when>
 				</when>
 
 			</choice>
