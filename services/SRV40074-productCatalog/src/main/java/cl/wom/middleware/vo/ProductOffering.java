@@ -1,8 +1,10 @@
 package cl.wom.middleware.vo;
-                 
+
+import java.util.List;
+
 public class ProductOffering
 {
-    private String[] bundleProductOffering;
+    private List <BundleProductOffering> bundleProductOffering;
 
     private OneTime oneTime;
 
@@ -28,20 +30,20 @@ public class ProductOffering
 
     private String layoutTypeAPP;
 
-    private DeviceOffering[] deviceOffering;
+    private List<DeviceOffering> deviceOffering;
 
-    private String[] channel;
+    private List<Channel> channel;
 
     private RecurringCharge recurringCharge;
 
     private String offerId;
 
-    public String[] getBundleProductOffering ()
+    public List<BundleProductOffering> getBundleProductOffering ()
     {
         return bundleProductOffering;
     }
 
-    public void setBundleProductOffering (String[] bundleProductOffering)
+    public void setBundleProductOffering (List<BundleProductOffering> bundleProductOffering)
     {
         this.bundleProductOffering = bundleProductOffering;
     }
@@ -166,22 +168,22 @@ public class ProductOffering
         this.layoutTypeAPP = layoutTypeAPP;
     }
 
-    public DeviceOffering[] getDeviceOffering ()
+    public List<DeviceOffering> getDeviceOffering ()
     {
         return deviceOffering;
     }
 
-    public void setDeviceOffering (DeviceOffering[] deviceOffering)
+    public void setDeviceOffering (List<DeviceOffering> deviceOffering)
     {
         this.deviceOffering = deviceOffering;
     }
 
-    public String[] getChannel ()
+    public List<Channel> getChannel ()
     {
         return channel;
     }
 
-    public void setChannel (String[] channel)
+    public void setChannel (List<Channel> channel)
     {
         this.channel = channel;
     }

@@ -9,34 +9,85 @@
     <import resource="bean-definitions.xml"/>
     
     <camelContext  xmlns="http://camel.apache.org/schema/spring">
-		<propertyPlaceholder id="placeholder" location="classpath:application.properties,classpath:sql.properties"/> 	
+		<propertyPlaceholder id="placeholder" location="classpath:application.properties,classpath:sql.properties"/> 		
+
 
         <!-- Control de errores -->
 		<onException>
 			    <exception>java.lang.Exception</exception>
 			    <handled><simple>true</simple></handled>
 			    <to uri="velocity:velocity/response-sql-error.vm"/>
+
 			    <log message="error: ${exception.message}"></log>
 			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 		</onException>
 		       
 <!--         	TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
-			<route>
+	<route>
 			<from uri="jetty:{{camel.from.endpoint.a}}"/>
-			<log message="*** pasando a la query ***"></log> 
-				
-				<setBody><simple>{{sql.1.1}}</simple></setBody>
-				<to uri="jdbc:dataSource" />
-				
-				<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean>
-				
-				
-				
-				<log message="1Q ${body}"></log>
-<!-- 				<setBody><simple>{{sql.1.2}}</simple></setBody> -->
-<!-- 				<to uri="jdbc:dataSource" /> -->
+			<log message="offerId: ${headers.productOffering.offerId}"></log> 
+     
+            <choice>
+            	<when>
+            		<simple>${headers.productOffering.offerId} != null</simple>
+					<setBody><simple>{{sql.1.1}}</simple></setBody>
+					<to uri="jdbc:dataSource" />
+					<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean>
+
+					
+<!-- 					<setBody><simple>{{sql.2.1.1}}</simple></setBody> -->
+<!-- 					<to uri="jdbc:dataSource" /> -->
+					
+<!-- 					<setBody><simple>{{sql.2.2.1.isOfferProduct}}</simple></setBody> -->
+<!-- 					<to uri="jdbc:dataSource" /> -->
+            	</when>  
+            </choice>
+            
+            <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+	</route>
+	<route>
+			<from uri="jetty:{{camel.from.endpoint.b}}"/>
+			<log message="offerId: ${headers.productOffering.shortDescription}"></log> 
+     
+            <choice>
+            	<when>
+            		<simple>${headers.productOffering.shortDescription} != null</simple>
+					<setBody><simple>{{sql.1.2}}</simple></setBody>
+					<to uri="jdbc:dataSource" />
+					<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean>
+					
+					<setBody><simple>{{sql.2.1.1}}</simple></setBody>
+					<to uri="jdbc:dataSource" />
+					
+					<setBody><simple>{{sql.2.2.1.isOfferProduct}}</simple></setBody>
+					<to uri="jdbc:dataSource" />
+            	</when>  
+            </choice>
+	</route>
+	<route>
+			<from uri="jetty:{{camel.from.endpoint.c}}"/>
+			<log message="offerId: ${headers.productOffering.marketSegment}"></log> 
+     
+            <choice>
+            	<when>
+            		<simple>${headers.productOffering.marketSegment} != null</simple>
+					<setBody><simple>{{sql.1.3}}</simple></setBody>
+					<to uri="jdbc:dataSource" />
+					<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean>
+					
+					<setBody><simple>{{sql.2.1.1}}</simple></setBody>
+					<to uri="jdbc:dataSource" />
+					
+					<setBody><simple>{{sql.2.2.1.isOfferProduct}}</simple></setBody>
+					<to uri="jdbc:dataSource" />
+            	</when>  
+            </choice>
+	</route>              
+
+<!--v 				<setBody><simple>{{sql.1.2}}</simple></setBody> -->
+<!--				<to uri="jdbc:dataSource" /> -->
 <!-- 				<log message="2Q ${body}"></log> -->
-<!-- 				<setBody><simple>{{sql.2.1.1}}</simple></setBody> -->
+<!--v 				<setBody><simple>{{sql.2.1.1}}</simple></setBody> -->
 <!-- 				<to uri="jdbc:dataSource" /> -->
 <!-- 				<log message="3Q ${body}"></log> -->
 <!-- 				<setBody><simple>{{sql.2.1.2}}</simple></setBody> -->
@@ -49,8 +100,5 @@
 <!-- 				<to uri="jdbc:dataSource" /> -->
 <!-- 				<log message="6Q ${body}"></log> -->
 
-			</route>
-
-        
     </camelContext>
 </beans>

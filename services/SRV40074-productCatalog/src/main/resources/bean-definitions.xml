@@ -10,7 +10,6 @@
 		<property name="location" value="classpath:application.properties" />
 	</bean>
     
-<<<<<<< HEAD
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="${camel.sql.url}" />
@@ -24,18 +23,7 @@
 	</bean>
 	
 	<bean id="sqlFormatterProcessor" class="cl.wom.middleware.bean.SqlFormatterProcessor"></bean>
-=======
-    
-	<bean id="dataSourceBSCSDESA"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@cluxds03:1550:BSCSDESA" />
-		<property name="username" value="OPSH_BSCSREP_SYSADM_CBI" />
-		<property name="password" value="knh#5tgl20k0lpm.l" />
-	</bean>    
->>>>>>> d1c828133b418e7b0c2290a33636327960980ef6
+
 
 	
 </beans>
