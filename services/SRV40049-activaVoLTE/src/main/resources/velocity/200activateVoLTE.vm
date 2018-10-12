@@ -1,15 +1,14 @@
 <?xml version="1.0"?>
-<soapenv:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
-    <soapenv:Body>
-       <ns2:ActivateVoLTEResponse>
-          <ns2:return>
-             <ns2:cod_error>0</ns2:cod_error>
-             <ns2:msg_error>SUCCESS</ns2:msg_error>
-          </ns2:return>
-       </ns2:ActivateVoLTEResponse >
-    </soapenv:Body>
- </soapenv:Envelope>
-
-
-
- 
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns:ns2="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
+  <SOAP-ENV:Body>
+    <ns2:activateVoLTEResponse>
+      <return>
+        <cod_error>200</cod_error>
+        <msg_error>SUCCESS</msg_error>
+      </return>
+    </ns2:activateVoLTEResponse>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
