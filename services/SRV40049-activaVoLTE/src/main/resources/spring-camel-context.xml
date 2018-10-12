@@ -30,7 +30,8 @@
 	<camelContext
 		xmlns="http://camel.apache.org/schema/spring"
 		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-		xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
+		xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1"
+		>
 
 		<propertyPlaceholder id="placeholder"
 			location="classpath:application.properties" />
@@ -163,7 +164,7 @@
 					<simple>${headers.spg_add_bscs_services_pr_msg}</simple>
 			</setHeader>
 			 <to uri= "direct:spg_set_bscs_status_pr"></to>			
-			<to uri="velocity:velocity/200activateVoLTE.vm" />
+			<to uri="velocity:velocity/activateVoLTE_SUCCESS.vm" />
 			<log message="Finalizando proceso con exito"></log>
 		</route>
 

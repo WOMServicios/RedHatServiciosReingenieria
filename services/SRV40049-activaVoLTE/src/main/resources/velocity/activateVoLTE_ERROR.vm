@@ -6,7 +6,7 @@ xmlns:ns2="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
     <SOAP-ENV:Body>
         <ns2:activateVoLTEResponse>
           <return>
-             <cod_error>400</cod_error>
+             <cod_error>${headers.codeError}</cod_error>
              <msg_error>${headers.messageError}</msg_error>
           </return>
         </ns2:activateVoLTEResponse>
