@@ -118,7 +118,7 @@
 						<log message="valor en telnet code ${headers.telnet_err_code}"></log>
 						<log message="valor en telnet msg ${headers.telnet_msg_code}"></log>
 						<log message="Finalizando proceso con ERROR 1003 EN LA RESPUESTA TELNET"></log>		 	
-						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" />	
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="404" />	
 					</when>	
 					<otherwise>
 						<setHeader headerName="new_request_cod_return">
@@ -129,7 +129,7 @@
 						</setHeader>
 						<to uri= "direct:spg_set_bscs_status_pr"></to>
 						<log message="CAE EN LA PENULTIMA EXCEPCION"></log>
-						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" />
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="404" />
 						<log message="Finalizando proceso con ERROR DE LA RESPUESTA TELNET"></log>		 			
 					</otherwise>		
 				</when>
