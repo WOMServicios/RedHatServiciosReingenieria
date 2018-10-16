@@ -141,28 +141,7 @@
 			 <log message="pasando antes del parse code: ${headers.bscs_cod_services}  msg: ${headers.bscs_msg_services}"></log>
 			 
 			<!-- CHOICE PARA CASO DE ERROR -->
-			 <choice>
-			 	<when>
-			 		<simple>${headers.bscs_cod_services} != 0 || ${headers.bscs_msg_services} != "SUCCESS"</simple>
-					<log message="CAE EN LA ULTIMA EXCEPCION"></log>
-						<setHeader headerName="new_request_cod_return">
-								<simple>${headers.spg_add_bscs_services_pr_code}</simple>
-						</setHeader>
-						<setHeader headerName="new_request_msg_return">
-								<simple>${headers.spg_add_bscs_services_pr_msg}</simple>
-						</setHeader>
-						<to uri= "direct:spg_set_bscs_status_pr"></to>
-<!-- 					TODO: DESCOMENTAR ; EL REGISTRO EN DB DE DESARROLLO NO TRAE UN CASO DE EXITO -->
-					<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="416" />
-			<log message="Finalizando proceso con ERROR EN REGISTRO EN BSCS"></log>		 	
-			 	</when>
-			 </choice>
- 			<setHeader headerName="new_request_cod_return">
-					<simple>${headers.spg_add_bscs_services_pr_code}</simple>
-			</setHeader>
-			<setHeader headerName="new_request_msg_return">
-					<simple>${headers.spg_add_bscs_services_pr_msg}</simple>
-			</setHeader>
+
 			 <to uri= "direct:spg_set_bscs_status_pr"></to>			
 			<to uri="velocity:velocity/activateVoLTE_SUCCESS.vm" />
 			<log message="Finalizando proceso con exito"></log>
