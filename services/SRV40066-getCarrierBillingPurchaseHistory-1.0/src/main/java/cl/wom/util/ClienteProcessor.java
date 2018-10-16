@@ -1,35 +1,28 @@
 package cl.wom.util;
-
-import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-
 import cl.wom.beans.Cliente;
 import cl.wom.database.ClienteDaoImpl;
-import cl.wom.database.Conexion;
+import cl.wom.database.ConnectionFactory;
+import cl.wom.database.ConnectionFactory.DataBaseSchema;
 import cl.wom.exception.services.ServiceError;
 
 public class ClienteProcessor implements Processor {
-	private ClienteDaoImpl iClienteDao=new ClienteDaoImpl();
-
-	public void process(Exchange exchange) throws Exception {
-
 	
-		String row = (String) exchange.getIn().getBody();
+	private ClienteDaoImpl clienteDaoImpl ;
+	private Connection con;
+	private  Cliente cliente;
+	public void process(Exchange exchange) throws Exception {
+		
+	
+		String sql = (String) exchange.getIn().getBody();
+		 clienteDaoImpl = new ClienteDaoImpl();	
+		con = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
+		cliente=clienteDaoImpl.getCliente(sql,con);
 
-		System.err.println(row);
-		Cliente cliente;
-		cliente=iClienteDao.getCliente(row);
-
-		if(cliente.getNumCelular()== null) {
+		if(cliente.getNumCelular() == null) {
+			System.out.println("numeroo "+exchange.getIn().getHeader("msisdn"));
 	
 			 throw new ServiceError("416");
 			

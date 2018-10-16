@@ -1,8 +1,6 @@
 package cl.wom.database;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,17 +13,15 @@ public class ClienteDaoImpl implements IClienteDao {
 
 
 	@Override
-	public Cliente getCliente(String sql) {
-
-		Connection co =null;
+	public Cliente getCliente(String sql,Connection con) {
 		Statement stm= null;
 		ResultSet rs=null;
 		
 		Cliente c=null;
 		
 		try {			
-			co= Conexion.conectar();
-			stm=co.createStatement();
+		
+			stm=con.createStatement();
 			rs=stm.executeQuery(sql);
 		
 			 c=new Cliente();
@@ -45,12 +41,12 @@ public class ClienteDaoImpl implements IClienteDao {
 			 }
 			stm.close();
 			rs.close();
-			co.close();
+			con.close();
 		} catch (SQLException e) {
 			System.out.println("Error: Clase cDaoImple, método obtener");
 			e.printStackTrace();
 		}
-		System.err.println(c.toString());
+		
 		return c;
 	}
 

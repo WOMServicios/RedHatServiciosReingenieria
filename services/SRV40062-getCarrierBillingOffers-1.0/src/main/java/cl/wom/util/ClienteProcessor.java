@@ -1,19 +1,15 @@
 package cl.wom.util;
 
-import java.math.BigDecimal;
+
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.Timestamp;
-
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
 import cl.wom.beans.Cliente;
 import cl.wom.database.ClienteDaoImpl;
-import cl.wom.database.Conexion;
+
+import cl.wom.database.ConnectionFactory;
+import cl.wom.database.ConnectionFactory.DataBaseSchema;
 import cl.wom.exception.services.ServiceError;
 
 public class ClienteProcessor implements Processor {
@@ -22,16 +18,16 @@ public class ClienteProcessor implements Processor {
 	@Override
 	public void process(Exchange exchange) throws Exception {
 
-		String headerBD = (String) exchange.getIn().getHeader("database");
+		String headerBD = (String) exchange.getIn().getHeader("interface");
 		System.err.println("base de datos " + headerBD);
 		String sql = (String) exchange.getIn().getBody();
 
 		Cliente cliente = null;
 		Connection co;
 
-		if (headerBD.contains("BSCSDESA")) {
+		if (headerBD.equals("getInfoSuscriptorCarrierBilling")) {
 
-			co = Conexion.conectar("knh#5tgl20k0lpm.l", "OPSH_BSCSREP_SYSADM_CBI", "10.120.241.44", "1550", "BSCSDESA");
+			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 
 			cliente = clienteDaoImpl.getInfoSuscriptorCarrierBilling(sql, co);
 			
@@ -39,6 +35,13 @@ public class ClienteProcessor implements Processor {
 			if (cliente.getRut() == null) {
 				throw new ServiceError("416");
 			} else {
+				exchange.setProperty("customerIdProperty",cliente.getCustomerId());
+				exchange.setProperty("customerIdHighProperty",cliente.getCustomerIdHigh());
+				exchange.setProperty("numCelularProperty",cliente.getNumCelular());
+				exchange.setProperty("antiguedadProperty",cliente.getAntiguedad());
+				exchange.setProperty("contractIdProperty",cliente.getContractId());
+				exchange.setProperty("ratePlanProperty",cliente.getRateplan());
+				exchange.setProperty("cargoBasicoProperty",cliente.getCargoBasico());
 				exchange.getIn().setBody(cliente);
 			}
 
@@ -47,61 +50,63 @@ public class ClienteProcessor implements Processor {
 		}
 		
 		
-		if (headerBD.contains("WAPPLDESA")) {
-			co = Conexion.conectar("carrierdes09", "CARRIERBILLING", "10.120.148.136", "1521", "WAPPLDESA");
+		if (headerBD.equals("getSuscripcionesCarrierExist")) {
+			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 
 			int contador = clienteDaoImpl.getSuscripcionesCarrierExist(sql, co);
-
-
+			System.err.println("getSuscripcionesCarrierExist "+contador);
+			
 			exchange.getIn().setBody(contador);
 
 		}
-		if(headerBD.contains("getCustomerContractMoreOld")) {
-			co = Conexion.conectar("knh#5tgl20k0lpm.l", "OPSH_BSCSREP_SYSADM_CBI", "10.120.241.44", "1550", "BSCSDESA");
+		if(headerBD.equals("getCustomerContractMoreOld")) {
+			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 			
 
-			String dnNum= clienteDaoImpl.getCustomerContractMoreOld(sql, co);
-			if (dnNum == null) {
-				throw new ServiceError("416");
-			} else {
-				System.err.println(dnNum+"prueba");
-				exchange.getIn().setBody(dnNum);
-			}
+			String dnNum = clienteDaoImpl.getCustomerContractMoreOld(sql, co);
+			exchange.getIn().setBody(dnNum);
 			
 		}
 		
-		if(headerBD.contains("getCustomerPagador")) {
-			co = Conexion.conectar("knh#5tgl20k0lpm.l", "OPSH_BSCSREP_SYSADM_CBI", "10.120.241.44", "1550", "BSCSDESA");
+		if(headerBD.equals("getCustomerPagador")) {
+			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 			
 
-			String customerId= clienteDaoImpl.getCustomerPagador(sql, co);
-			if (customerId== null) {
-				throw new ServiceError("416");
-			} else {
-				
-				exchange.getIn().setBody(customerId);
-			}
+			String customerId = clienteDaoImpl.getCustomerPagador(sql, co);
+			
+
+			exchange.getIn().setBody(customerId);
+		
 			
 		}
 		
-		if (headerBD.contains("getofertacarrier")) {
-			co = Conexion.conectar("carrierdes09", "CARRIERBILLING", "10.120.148.136", "1521", "WAPPLDESA");
+		if (headerBD.equals("getofertacarrier")) {
+			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 
 			cliente = clienteDaoImpl.getofertacarrier(sql, co);
+			
+			
 
-
-			if (cliente.getIdOferta() == null) {
-				throw new ServiceError("416");
+			if (cliente != null) {
+				exchange.setProperty("idOfertaProperty",cliente.getIdOferta());
+				exchange.setProperty("desOfertaProperty",cliente.getDesOferta());
+				//variable creada para realizar prueba y no duplicar pk
+				exchange.setProperty("fechaPruebaProperty",new java.util.Date().getSeconds());
+			
+				exchange.getIn().setBody(cliente);
 			} else {
 				exchange.getIn().setBody(cliente);
 			}
 
 		}
 		
-		if (headerBD.contains("insertaregelegcarrierbilling")) {
-			co = Conexion.conectar("carrierdes09", "CARRIERBILLING", "10.120.148.136", "1521", "WAPPLDESA");
+		if (headerBD.equals("insertaregelegcarrierbilling")) {
+			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 
 			clienteDaoImpl.insertaregelegcarrierbilling(sql, co);
+			exchange.getIn().setHeader("idOferta",exchange.getProperty("idOfertaProperty"));
+			exchange.getIn().setHeader("desOferta",exchange.getProperty("desOfertaProperty"));
+
 
 		}
 

@@ -1,4 +1,4 @@
 {
     "responseCode": "${headers.codigoError}",
-    "responseMessage": "${headers.messageError}"
+    "responseMessage": "msisdn: ${headers.msisdn} ${headers.messageError}"
 }

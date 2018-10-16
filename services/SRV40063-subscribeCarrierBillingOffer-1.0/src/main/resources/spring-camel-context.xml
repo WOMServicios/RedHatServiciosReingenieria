@@ -2,26 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  http://camel.apache.org/schema/spring   http://camel.apache.org/schema/spring/camel-spring.xsd">
-	<bean class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close" id="dataSourceBSCSDESA">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@${database.replica.host}:${database.replica.port}:${database.replica.name}" />
-		<property name="username"
-			value="${database.replica.username}" />
-		<property name="password"
-			value="${database.replica.password}" />
-	</bean>
-	<bean class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close" id="dataSourceWAPPLDESA">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@${database.wappl.host}:${database.wappl.port}:${database.wappl.name}" />
-		<property name="username" value="${database.wappl.username}" />
-		<property name="password" value="${database.wappl.password}" />
-	</bean>
+
 	<bean class="cl.wom.util.ClienteProcessor" id="clienteProcessor" />
 	<camelContext
 		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
@@ -53,11 +34,11 @@
 			<to uri="velocity:velocity/ErrorHttp.vm" />
 		</onException>
 		<!-- getcarrierbillingoffers -->
-		<route id="_route1" streamCache="true">
-			<from id="_from1"
+		<route  streamCache="true">
+			<from 
 				uri="restlet:http://{{rest.service.host}}:{{rest.service.port}}{{rest.service.resource}}?restletMethod=post" />
 		
-			<doTry id="_doTry1">
+			<doTry>
 				<setHeader headerName="credential" id="_setHeader3">
 					<jsonpath>$.credential</jsonpath>
 				</setHeader>
@@ -70,22 +51,21 @@
 				<setHeader headerName="networkKey" id="_setHeader6">
 					<jsonpath>$.networkKey</jsonpath>
 				</setHeader>
-				<doCatch id="_doCatch1">
-					<exception>org.apache.camel.ExpressionEvaluationException
+				<doCatch>
+				<exception>org.apache.camel.ExpressionEvaluationException
 					</exception>
-					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE"
-						id="_setHeader7">
-						<simple>400</simple>
+					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+						<simple>422</simple>
 					</setHeader>
-					<to id="_to1" uri="velocity:velocity/400.vm" />
-					<setHeader headerName="Content-Type" id="_setHeader8">
+					<to uri="velocity:velocity/422.vm" />
+					<setHeader headerName="Content-Type">
 						<constant>application/json</constant>
 					</setHeader>
-					<stop id="_stop1" />
+					<stop />
 				</doCatch>
 			</doTry>
-			<choice id="_choice1">
-				<when id="_when1">
+			<choice >
+				<when >
 					<simple>
 						${headers.credential} == "" ||
 						${headers.credentialType} ==
@@ -97,24 +77,17 @@
 						exceptionType="cl.wom.exception.services.ServiceError"
 						id="_throwException1" message="400" />
 				</when>
-				<otherwise id="_otherwise1">
-					<setBody id="_setBody1">
+				<otherwise>
+					<setBody>
 						<simple>{{sql.getsubcriberBymsisdn}}</simple>
 					</setBody>
-					<!-- <to id="_to2" uri="jdbc:dataSourceBSCSDESA" /> -->
-					<to id="_to3" uri="bean:clienteProcessor" />
+			
+					<to uri="bean:clienteProcessor" />
 					
-				<!-- 	<when id="_when2">
-						<simple>${body.msisdn} == null</simple>
-						<log message="nullooooooo"></log>
-						<to uri="bean:clienteProcessor" />
-
-					</when> -->
-					<when id="_when3">
-						<simple>${body.msisdn} != null</simple>
+			
 						<to uri="velocity:velocity/netflixStart.vm" />
 						<to uri="direct:bango" />
-					</when>
+					
 				</otherwise>
 			</choice>
 			<setHeader headerName="Content-Type">
