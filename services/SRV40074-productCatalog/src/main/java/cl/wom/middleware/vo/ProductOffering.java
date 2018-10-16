@@ -7,11 +7,8 @@ public class ProductOffering
     private List <BundleProductOffering> bundleProductOffering;
 
     private OneTime oneTime;
-
     private String status;
-
     private String lastUpdate;
-
     private String typeOffer;
 
     private String isSellable;
