@@ -10,10 +10,17 @@
 	<version>1.0</version>
 
 
+<<<<<<< HEAD
+	<name>SRV40064-getCarrierBillingElegibilityCheck-1.0</name>
+	<description>Camel implementation for the elegibility checkss</description>
+
+	<properties>
+=======
 	<name>SRV40066-getCarrierBillingPurchaseHistory-1.0</name>
 	<description>Camel implementation for purchase history</description>
 	
 		<properties>
+>>>>>>> 98a4ee9468bda290e170f0bb5ccd743aa6d0cb78
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring.boot-version>1.4.1.RELEASE</spring.boot-version>
@@ -38,8 +45,6 @@
 
 		</dependencies>
 	</dependencyManagement>
-
-
 	<dependencies>
 
 		<!-- Camel -->
@@ -96,17 +101,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-camel</artifactId>
-			<scope>provided</scope>
-		</dependency>
-	
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-pool</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-http</artifactId>
 			<scope>provided</scope>
@@ -117,47 +111,36 @@
 			<artifactId>camel-jsonpath</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-sql</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<scope>provided</scope>
-		</dependency>
-			<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jdbc</artifactId>
+			<artifactId>camel-stream</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-stream</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
 			<groupId>ojdbc</groupId>
 			<artifactId>ojdbc</artifactId>
 			<version>14</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
-<build>
+	<build>
 		<plugins>
-		
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-<!--         <version>3.8.0</version> -->
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-      
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<!-- <version>3.8.0</version> -->
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

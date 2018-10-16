@@ -14,17 +14,17 @@ public class ClienteDaoImpl implements IClienteDao {
 
 
 	@Override
-	public Cliente getCliente(String sql) {
+	public Cliente getCliente(String sql,Connection con) {
 
-		Connection co =null;
+	
 		Statement stm= null;
 		ResultSet rs=null;
 		
 		Cliente c=null;
 		
 		try {			
-			co= Conexion.conectar();
-			stm=co.createStatement();
+			
+			stm=con.createStatement();
 			rs=stm.executeQuery(sql);
 		
 			 c=new Cliente();
@@ -43,12 +43,12 @@ public class ClienteDaoImpl implements IClienteDao {
 			 }
 			stm.close();
 			rs.close();
-			co.close();
+			con.close();
 		} catch (SQLException e) {
 			System.out.println("Error: Clase ClienteDaoImple, método obtener");
 			e.printStackTrace();
 		}
-		System.err.println(c.toString());
+		
 		return c;
 	}
 

@@ -60,12 +60,12 @@
 					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>
 				</setHeader>
 				<doCatch>
-					<exception>org.apache.camel.ExpressionEvaluationException
+				<exception>org.apache.camel.ExpressionEvaluationException
 					</exception>
 					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-						<simple>400</simple>
+						<simple>422</simple>
 					</setHeader>
-					<to uri="velocity:velocity/400.vm" />
+					<to uri="velocity:velocity/422.vm" />
 					<setHeader headerName="Content-Type">
 						<constant>application/json</constant>
 					</setHeader>
@@ -86,139 +86,101 @@
 					<setBody>
 						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>
 					</setBody>
-					<setHeader headerName="database">
-						<constant>BSCSDESA</constant>
+					<setHeader headerName="interface">
+						<constant>getInfoSuscriptorCarrierBilling</constant>
+					</setHeader>
+					<to uri="bean:clienteProcessor" />
+
+					<setBody>
+						<simple>{{sql.getSuscripcionesCarrierExist}}</simple>
+					</setBody>
+
+					<setHeader headerName="interface">
+						<constant>getSuscripcionesCarrierExist</constant>
 					</setHeader>
 					<to uri="bean:clienteProcessor" />
 					<when>
-						<simple>${body} != null</simple>
-						<!-- seteo de properties, en donde se almacenaran variables globales 
-							para reutilizacion -->
+						<!-- <simple>${body} != 0</simple> cambiar -->
+						<simple>${body} != 0</simple>
 
-
-						<setProperty propertyName="customerIdProperty">
-							<simple>${body.customerId}</simple>
-						</setProperty>
-
-						<setProperty propertyName="customerIdHighProperty">
-							<simple>${body.customerIdHigh}</simple>
-						</setProperty>
-						<setProperty propertyName="numCelularProperty">
-							<simple>${body.numCelular}</simple>
-						</setProperty>
-
-						<setProperty propertyName="antiguedadProperty">
-							<simple>${body.antiguedad}</simple>
-						</setProperty>
-						<setProperty propertyName="contractIdProperty">
-							<simple>${body.contractId}</simple>
-						</setProperty>
-						<setProperty propertyName="ratePlanProperty">
-							<simple>${body.rateplan}</simple>
-						</setProperty>
-
-						<setProperty propertyName="cargoBasicoProperty">
-							<simple>${body.cargoBasico}</simple>
-						</setProperty>
-
-						<log
-							message="cargo basigo ::${property.cargoBasicoProperty}  antiguedad::${property.antiguedadProperty}"></log>
-						<!-- query devolvera 0 / 1 si es cero se saldra getSuscripcionesCarrierExist -->
-
-						<setBody>
-							<simple>{{sql.getSuscripcionesCarrierExist}}</simple>
-						</setBody>
-
-						<setHeader headerName="database">
-							<constant>WAPPLDESA</constant>
+						<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />
+						<stop />
+					</when>
+					<when>
+						<!-- <simple>${body} == 0</simple> cambiar -->
+						<simple>${body} == 0</simple>
+						<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion 
+							activa -busca el msisdn mas antiguo de la cuenta -->
+						<setHeader headerName="interface">
+							<constant>getCustomerContractMoreOld</constant>
 						</setHeader>
+						<setBody>
+							<simple>{{sql.getCustomerContractMoreOld}}</simple>
+						</setBody>
+						<to uri="bean:clienteProcessor" />
+
 						<when>
-							<!-- <simple>${body} != 0</simple> cambiar -->
-							<simple>${body} == 0</simple>
-							<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />
+							<simple>${body} == null</simple>
+							<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />
+							<stop />
 						</when>
+
 						<when>
-							<!-- <simple>${body} == 0</simple> cambiar -->
-							<simple>${body} != 0</simple>
-							<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion 
-								activa -busca el msisdn mas antiguo de la cuenta -->
-							<setHeader headerName="database">
-								<constant>getCustomerContractMoreOld</constant>
-							</setHeader>
+							<simple>${body} != null</simple>
+
+							<!-- valida la cuenta pagadora getCustomerPagador -->
+
 							<setBody>
-								<simple>{{sql.getCustomerContractMoreOld}}</simple>
+								<simple>{{sql.getCustomerPagador}}</simple>
 							</setBody>
+							<setHeader headerName="interface">
+								<constant>getCustomerPagador</constant>
+							</setHeader>
 							<to uri="bean:clienteProcessor" />
-
-
-							<setProperty propertyName="dnNumIdHighProperty">
-								<simple>${body}</simple>
-							</setProperty>
-
 							<when>
-								<simple>${property.dnNumIdHighProperty} != null</simple>
-
-								<!-- valida la cuenta pagadora getCustomerPagador -->
-
-								<setBody>
-									<simple>{{sql.getCustomerPagador}}</simple>
-								</setBody>
-								<setHeader headerName="database">
-									<constant>getCustomerPagador</constant>
-								</setHeader>
-
-
-								<to uri="bean:clienteProcessor" />
-								<when>
-									<simple>${body} != null</simple>
-
-									<setProperty propertyName="customerIdProperty">
-										<simple>${body}</simple>
-									</setProperty>
-
-									<setBody>
-										<simple>{{sql.getofertacarrier}}</simple>
-									</setBody>
-									<setHeader headerName="database">
-										<constant>getofertacarrier</constant>
-									</setHeader>
-
-									<to uri="bean:clienteProcessor" />
-
-									<setProperty propertyName="idOfertaProperty">
-										<simple>${body.idOferta}</simple>
-									</setProperty>
-									<setProperty propertyName="desOfertaProperty">
-										<simple>${body.desOferta}</simple>
-									</setProperty>
-
-									
-
-								<!-- 	variable para hacer prueba y no duplicar pk -->
-									<setProperty propertyName="fechaPruebaProperty">
-										<simple>${date:now:HH:mm:ssZ}</simple>
-									</setProperty>
-									<setBody>
-										<simple>{{sql.insertaregelegcarrierbilling}}</simple>
-									</setBody>
-									<setHeader headerName="database">
-										<constant>insertaregelegcarrierbilling</constant>
-									</setHeader>
-									<to uri="bean:clienteProcessor" />
-									<setHeader headerName="idOferta">
-										<simple>${property.idOfertaProperty}</simple>
-									</setHeader>
-									<setHeader headerName="desOferta">
-										<simple>${property.desOfertaProperty}</simple>
-									</setHeader>
-									<to uri="velocity:velocity/Success.vm" />
-								</when>
+								<simple>${body} == null</simple>
+								<to uri="velocity:velocity/getCustomerPagador.vm" />
+								<stop />
 							</when>
 
+							<when>
+								<simple>${body} != null</simple>
 
+								<setBody>
+									<simple>{{sql.getofertacarrier}}</simple>
+								</setBody>
+								<setHeader headerName="interface">
+									<constant>getofertacarrier</constant>
+								</setHeader>
+
+								<to uri="bean:clienteProcessor" />
+								
+								<when>
+								<simple>${body} == null</simple>
+								<to uri="velocity:velocity/getOfertaCarrier.vm" />
+								<stop/>
+								</when>
+								
+								<when>
+								<simple>${body} != null</simple>
+								
+
+								<setBody>
+									<simple>{{sql.insertaregelegcarrierbilling}}</simple>
+								</setBody>
+								<setHeader headerName="interface">
+									<constant>insertaregelegcarrierbilling</constant>
+								</setHeader>
+								<to uri="bean:clienteProcessor" />
+								
+								<to uri="velocity:velocity/Success.vm" />
+							</when>
+							</when>
 						</when>
 
+
 					</when>
+
 
 				</when>
 

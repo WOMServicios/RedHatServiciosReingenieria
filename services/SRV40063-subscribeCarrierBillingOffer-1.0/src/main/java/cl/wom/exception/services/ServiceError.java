@@ -11,7 +11,7 @@ public class ServiceError extends Exception{
 
    private static final long serialVersionUID = 1L;
    private int codigoError;
-   private int cambioCodigo;
+  
 
    /**
     * Constructor de la clase que invoca al metodo getMessage()

@@ -1,9 +1,12 @@
 package cl.wom.middleware.vo;
+
+import java.util.List;
+
 public class Subscribers
 {
     private String subscriberType;
 
-    private SubscriberResources[] subscriberResources;
+    private List<SubscriberResources> subscriberResources;
 
     private String accountId;
 
@@ -29,12 +32,12 @@ public class Subscribers
         this.subscriberType = subscriberType;
     }
 
-    public SubscriberResources[] getSubscriberResources ()
+    public List<SubscriberResources> getSubscriberResources ()
     {
         return subscriberResources;
     }
 
-    public void setSubscriberResources (SubscriberResources[] subscriberResources)
+    public void setSubscriberResources (List<SubscriberResources> subscriberResources)
     {
         this.subscriberResources = subscriberResources;
     }

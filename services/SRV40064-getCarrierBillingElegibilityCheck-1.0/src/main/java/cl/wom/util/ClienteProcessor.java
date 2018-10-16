@@ -1,12 +1,10 @@
 package cl.wom.util;
 
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.Timestamp;
 
-import java.util.Map;
-import java.util.Map.Entry;
+import java.sql.Connection;
+
+
+
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -30,18 +28,18 @@ public class ClienteProcessor implements Processor {
 		Cliente cliente = null;
 		Connection co;
 
-		if (headerBD.contains("getrespuestaeligibilidad")) {
+		if (headerBD.equals("getrespuestaeligibilidad")) {
 
-			ConnectionFactory coni = new ConnectionFactory();
-			coni.prueba();
-
+	
 			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 
 			int count = clienteDaoImpl.getrespuestaeligibilidad(sql, co);
-
+			
+			System.err.println("count de gestrespuestaeligibilidad es: "+count);
+			exchange.setProperty("countProperty", count);
 			exchange.getIn().setBody(count);
 		}
-		if (headerBD.contains("paymentTransactionId")) {
+		if (headerBD.equals("paymentTransactionId")) {
 
 			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 			String secuencia = clienteDaoImpl.paymentTransactionId(sql, co);
@@ -49,7 +47,7 @@ public class ClienteProcessor implements Processor {
 			exchange.getIn().setBody(secuencia);
 
 		}
-		if (headerBD.contains("getInfoSuscriptorCarrierBilling")) {
+		if (headerBD.equals("getInfoSuscriptorCarrierBilling")) {
 
 			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 
@@ -58,42 +56,46 @@ public class ClienteProcessor implements Processor {
 			if (cliente.getRut() == null) {
 				throw new ServiceError("416");
 			} else {
+				exchange.setProperty("customerIdProperty",cliente.getCustomerId());
+				exchange.setProperty("customerIdHighProperty",cliente.getCustomerIdHigh());
+				exchange.setProperty("numCelularProperty",cliente.getNumCelular());
+				exchange.setProperty("antiguedadProperty",cliente.getAntiguedad());
+				exchange.setProperty("contractIdProperty",cliente.getContractId());
+				exchange.setProperty("ratePlanProperty",cliente.getRateplan());
+				exchange.setProperty("cargoBasicoProperty",cliente.getCargoBasico());
+
+				
 				exchange.getIn().setBody(cliente);
 			}
 
 		}
 
-		if (headerBD.contains("getSuscripcionesCarrierExist")) {
+		if (headerBD.equals("getSuscripcionesCarrierExist")) {
 			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
+			
 
 			int contador = clienteDaoImpl.getSuscripcionesCarrierExist(sql, co);
-
+			System.err.println("getSuscripcionesCarrierExist "+contador);
+			
 			exchange.getIn().setBody(contador);
 
 		}
-		if (headerBD.contains("getCustomerContractMoreOld")) {
+		if (headerBD.equals("getCustomerContractMoreOld")) {
 			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 
 			String dnNum = clienteDaoImpl.getCustomerContractMoreOld(sql, co);
-			if (dnNum == null) {
-				throw new ServiceError("416");
-			} else {
-				System.err.println(dnNum + "prueba");
-				exchange.getIn().setBody(dnNum);
-			}
+			exchange.getIn().setBody(dnNum);
 
 		}
 
-		if (headerBD.contains("getCustomerPagador")) {
+		if (headerBD.equals("getCustomerPagador")) {
 			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 
 			String customerId = clienteDaoImpl.getCustomerPagador(sql, co);
-			if (customerId == null) {
-				throw new ServiceError("416");
-			} else {
+		
 
 				exchange.getIn().setBody(customerId);
-			}
+			
 
 		}
 

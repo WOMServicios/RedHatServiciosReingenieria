@@ -11,8 +11,8 @@
 
 	<name>SRV40064-getCarrierBillingElegibilityCheck-1.0</name>
 	<description>Camel implementation for the elegibility checkss</description>
-	
-		<properties>
+
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring.boot-version>1.4.1.RELEASE</spring.boot-version>
@@ -95,23 +95,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-camel</artifactId>
-			<scope>provided</scope>
-		</dependency>
-	
-		<dependency>
-			<groupId>org.apache.activemq</groupId>
-			<artifactId>activemq-pool</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jms</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-http</artifactId>
 			<scope>provided</scope>
@@ -125,32 +108,21 @@
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-sql</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<scope>provided</scope>
-		</dependency>
-			<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jdbc</artifactId>
+			<artifactId>camel-stream</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-stream</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
 			<groupId>ojdbc</groupId>
 			<artifactId>ojdbc</artifactId>
 			<version>14</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
-<build>
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

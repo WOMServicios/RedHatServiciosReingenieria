@@ -6,29 +6,6 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<bean id="dataSourceBSCSDESA"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@${database.replica.host}:${database.replica.port}:${database.replica.name}" />
-		<property name="username"
-			value="${database.replica.username}" />
-		<property name="password"
-			value="${database.replica.password}" />
-	</bean>
-
-
-	<bean id="dataSourceWAPPLDESA"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@${database.wappl.host}:${database.wappl.port}:${database.wappl.name}" />
-		<property name="username" value="${database.wappl.username}" />
-		<property name="password" value="${database.wappl.password}" />
-	</bean>
-
 
 	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
 	</bean>
@@ -118,13 +95,10 @@
 					</setBody>
 
 					<to uri="bean:clienteProcessor" />
-					<when>
-						<simple>${body.numCelular} != null</simple>
 
 						<to
 							uri="velocity:velocity/200getCarrierBillingPurchaseHistory.vm" />
-					</when>
-
+				
 				</when>
 			</choice>
 			<setHeader headerName="Content-Type">
