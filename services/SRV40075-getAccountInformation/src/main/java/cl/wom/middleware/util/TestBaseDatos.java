@@ -35,7 +35,7 @@ public class TestBaseDatos {
 		Connection conn = null;
 		Statement stmt;
 		try {
-			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
+			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS, null);
 			stmt = conn.createStatement();
 			
 			

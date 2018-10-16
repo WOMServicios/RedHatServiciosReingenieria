@@ -11,7 +11,7 @@
 	</bean>
        
 	
-	<bean id="sqlAccountProcessor" class="cl.wom.middleware.dao.AccountManagerSql"></bean>
+	<bean id="accountManagerSql" class="cl.wom.middleware.dao.AccountManagerSql"></bean>
 	
 
 </beans>

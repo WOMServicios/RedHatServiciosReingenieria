@@ -10,8 +10,10 @@
 
 	<camelContext
 		xmlns="http://camel.apache.org/schema/spring">	
-		<propertyPlaceholder id="placeholder"
-			location="classpath:application.properties,classpath:sql.properties" />
+<!-- 		<propertyPlaceholder id="placeholder" -->
+<!-- 			location="classpath:application.properties,classpath:sql.properties" /> -->
+			<propertyPlaceholder id="placeholder"
+                location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties"/>
 
 		<!-- Control de errores -->
 <!-- 		<onException> -->
@@ -30,9 +32,11 @@
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint}}" />
 			
-<!-- 			<setHeader headerName="rut"></setHeader> -->
+			<setHeader headerName="rut">
+				<simple>${headers.rut}</simple>
+			</setHeader> 
 			<log message="${headers.rut}"></log>
-			<bean ref="sqlAccountProcessor" method="getAccountInformation"></bean>
+			<bean ref="accountManagerSql" method="getAccountInformation"></bean>
 
 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 			
