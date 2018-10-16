@@ -20,12 +20,12 @@ import cl.wom.middleware.vo.Subscribers;
 public class TestBaseDatos {
 
 	public static void main(String[] args) {
-		new TestBaseDatos().getProductCatalog("","602372");
-//		new TestBaseDatos().getProductCatalog("010567335","");
+		new TestBaseDatos().getAccountInformation("","602372");
+//		new TestBaseDatos().getAccountInformation("010567335","");
 	}
 	
 	
-	public void getProductCatalog(String rut, String accountdID)  {
+	public void getAccountInformation(String rut, String accountdID)  {
 		
 		System.setProperty("database.bscs.host", "10.120.241.44");
 		System.setProperty("database.bscs.port", "1540");
@@ -61,7 +61,7 @@ public class TestBaseDatos {
 				//Incorporación de subscriptores al objeto account
 				List<Subscribers> listasubscribers = new ArrayList<Subscribers>();
 				//2.1
-				String querySubscribers = "SELECT a.cscompregno      as rut,b.customer_id      as accountId,b.co_id            as subscriberId,b.type             as subscriberType, b.co_code          as subscriberIdContract, b.CO_SIGNED        as subscriberActivate,b.CO_EXPIR_DATE    as subscriberExpired,b.CH_STATUS        as state FROM sysadm.customer_all           a, SYSADM.contract_all           b, SYSADM.CONTRACT_HISTORY       c WHERE  "+whereCondition+" and a.customer_id = b.customer_id and b.co_id       = c.co_id and c.ch_status   = 'a'";
+				String querySubscribers = "SELECT a.cscompregno as rut,b.customer_id as accountId,b.co_id as subscriberId,b.type as subscriberType, b.co_code as subscriberIdContract, b.CO_SIGNED as subscriberActivate,b.CO_EXPIR_DATE as subscriberExpired,b.CH_STATUS as state FROM sysadm.customer_all a, SYSADM.contract_all b, SYSADM.CONTRACT_HISTORY c WHERE  "+whereCondition+" and a.customer_id = b.customer_id and b.co_id = c.co_id and c.ch_status = 'a'";
 				ResultSet rsSubscribers = conn.createStatement().executeQuery(querySubscribers);
 				while(rsSubscribers.next()) {
 					
@@ -75,28 +75,32 @@ public class TestBaseDatos {
 					subscribers.setState(rsSubscribers.getString("state"));
 					subscribers.setSubscriberExpired(rsSubscribers.getString("subscriberExpired"));
 			
-//					List<SubscriberResources> listaSubscriberResources = new ArrayList<SubscriberResources>();
-//					while(true) {
-//						SubscriberResources subscriberResources = new SubscriberResources();
-//						subscriberResources.setResourceId(rsAccounts.getString("resourceId"));
-//						subscriberResources.setResourceDeactivate(rsAccounts.getString("resourceDeactivate"));
-//						subscriberResources.setResource(rsAccounts.getString("resource"));
-//						subscriberResources.setSubscriberId(rsAccounts.getString("subscriberId"));
-//						subscriberResources.setResourceDescription(rsAccounts.getString("resourceDescription"));
-//						subscriberResources.setResourceState(rsAccounts.getString("resourceState"));
-//						subscriberResources.setResourceActivate(rsAccounts.getString("resourceActivate"));
-//						subscriberResources.setResourceType(rsAccounts.getString("resourceType"));
-//						listaSubscriberResources.add(subscriberResources);
-//					}					
+					String subid = rsSubscribers.getString("subscriberId");
+					String acoid = rsSubscribers.getString("accountId");
+					
+					//Incorporación de SubscriberResouces
+					List<SubscriberResources> listaSubscriberResources = new ArrayList<SubscriberResources>();
+					//3.1
+					String whereCondition2 = subid.equals("")?"a.customer_id = "+acoid+"":"a.co_id = '"+subid+"'";
+					String querySubscriberResources = "SELECT a.co_id as subscriberId,b.dn_id as resourceId,c.dn_num as resourceValue, 'Número de celular del subscriptor' as resourceDescription, b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate,b.CS_STATUS as resourceState, 'MSISDN' as resourceType FROM sysadm.contract_all a, SYSADM.contr_services_cap  b, sysadm.directory_number c WHERE a"+whereCondition2+" and a.co_id = b.co_id and b.dn_id = c.dn_id and b.sncode = 3";
+					ResultSet rsSubscriberResoucers = conn.createStatement().executeQuery(querySubscriberResources);
+					while(true) {
+						SubscriberResources subscriberResources = new SubscriberResources();
+						subscriberResources.setResourceId(rsSubscriberResoucers.getString("resourceId"));
+						subscriberResources.setResourceDeactivate(rsSubscriberResoucers.getString("resourceDeactivate"));
+						subscriberResources.setResource(rsSubscriberResoucers.getString("resource"));
+						subscriberResources.setSubscriberId(rsSubscriberResoucers.getString("subscriberId"));
+						subscriberResources.setResourceDescription(rsSubscriberResoucers.getString("resourceDescription"));
+						subscriberResources.setResourceState(rsSubscriberResoucers.getString("resourceState"));
+						subscriberResources.setResourceActivate(rsSubscriberResoucers.getString("resourceActivate"));
+						subscriberResources.setResourceType(rsSubscriberResoucers.getString("resourceType"));
+						listaSubscriberResources.add(subscriberResources);
+					}
+					subscribers.setSubscriberResources(listaSubscriberResources);
+					
 					listasubscribers.add(subscribers);
 				}
 				account.setSubscribers(listasubscribers); 
-
-				
-				
-				
-					
-				//account.setSubscribers(subscribers);
 				account.setAccountType(rsAccounts.getString("accountType"));
 				account.setDocTypeDesc(rsAccounts.getString("docTypeDesc"));
 				account.setCustCode(rsAccounts.getString("custCode"));
@@ -121,8 +125,6 @@ public class TestBaseDatos {
 				billCycle.setBillCycle(rsAccounts.getString("billCycle_billcycle"));
 				listaBillCycle.add(billCycle);
 				account.setBillCycle(billCycle);
-				
-				
 				
 				
 				listAccount.add(account);
