@@ -6,14 +6,21 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cl.wom.middleware.proxy</groupId>
-	<artifactId>SRV400111-CarrierBilling</artifactId>
-	<version>1.0.0</version>
+	<artifactId>SRV40066-getCarrierBillingPurchaseHistory-1.0</artifactId>
+	<version>1.0</version>
 
 
+<<<<<<< HEAD
 	<name>SRV40064-getCarrierBillingElegibilityCheck-1.0</name>
 	<description>Camel implementation for the elegibility checkss</description>
 
 	<properties>
+=======
+	<name>SRV40066-getCarrierBillingPurchaseHistory-1.0</name>
+	<description>Camel implementation for purchase history</description>
+	
+		<properties>
+>>>>>>> 98a4ee9468bda290e170f0bb5ccd743aa6d0cb78
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring.boot-version>1.4.1.RELEASE</spring.boot-version>

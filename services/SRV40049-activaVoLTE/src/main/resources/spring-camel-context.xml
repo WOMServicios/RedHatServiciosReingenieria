@@ -30,8 +30,7 @@
 	<camelContext
 		xmlns="http://camel.apache.org/schema/spring"
 		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-		xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1"
-		>
+		xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
 
 		<propertyPlaceholder id="placeholder"
 			location="classpath:application.properties" />
@@ -53,14 +52,13 @@
 		</onException>
 
 		<route streamCache="true">
-<!-- 						RECEPCION DE PARAMETROS 		-->
 			<from
 				uri="cxf:http://0.0.0.0:8888/ocp/srv40049/activavolte/soap/v1.0/?		
 			wsdlURL=classpath:wsdl/activateVoLTE.wsdl&amp;
 			serviceName={http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1}activateVoLTE&amp;
 			portName={http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1}activateVoLTESOAP&amp;
 			dataFormat=MESSAGE" />
-
+			<log message="BODY******** : ${body}"></log>
 			<setHeader headerName="msisdn">
 				<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/ns:activateVoLTE/param/msisdn/text()
 				</xpath>
@@ -69,6 +67,8 @@
 				<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/ns:activateVoLTE/param/imsi/text()
 				</xpath>
 			</setHeader>
+			<log message="HEADERS******** : ${headers}"></log>
+			<log message="BODY******** : ${body}"></log>
 
 			<log message="headers.msisdn: ${headers.msisdn}"></log>
 			<log message="headers.imsi: ${headers.imsi}"></log>
@@ -85,7 +85,7 @@
 			<!-- Invocación al procedimiento de auditorio INICIO -->
 			<to uri="direct:spg_new_request_pr"></to>
 
-<!--    		            Invocación telnet					   -->	
+			<!--Invocación telnet					   -->	
 <!-- 			EL PARAMETRO MSISDN YA VIENE CON EL PREFIJO "569"  -->
 <!-- 			<setBody><simple>SPGCMD:AUTOPROV:MSISDN=569${headers.msisdn};</simple></setBody> -->
 				<setBody><simple>SPGCMD:AUTOPROV:MSISDN=${headers.msisdn};</simple></setBody>
@@ -134,35 +134,14 @@
 					</otherwise>		
 				</when>
 			 </choice>
-<!-- 			 REGISTRAR ESTADO DEL TELNET CON EXITO -->
+			 <!-- REGISTRAR ESTADO DEL TELNET CON EXITO -->
 			 <to uri="direct:spg_set_prov_status_pr"></to>
-<!-- 			 REGISTRAR EN LA DB BSCS 			   -->
+			 <!-- REGISTRAR EN LA DB BSCS -->
 			 <to uri="direct:spg_add_bscs_services_pr"></to>
 			 <log message="pasando antes del parse code: ${headers.bscs_cod_services}  msg: ${headers.bscs_msg_services}"></log>
 			 
-<!-- 			 CHOICE PARA CASO DE ERROR 			   -->
-			 <choice>
-			 	<when>
-			 		<simple>${headers.bscs_cod_services} != 0 || ${headers.bscs_msg_services} != "SUCCESS"</simple>
-					<log message="CAE EN LA ULTIMA EXCEPCION"></log>
-						<setHeader headerName="new_request_cod_return">
-								<simple>${headers.spg_add_bscs_services_pr_code}</simple>
-						</setHeader>
-						<setHeader headerName="new_request_msg_return">
-								<simple>${headers.spg_add_bscs_services_pr_msg}</simple>
-						</setHeader>
-						<to uri= "direct:spg_set_bscs_status_pr"></to>
-<!-- 					TODO: DESCOMENTAR ; EL REGISTRO EN DB DE DESARROLLO NO TRAE UN CASO DE EXITO -->
-<!-- 					<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" /> -->
-			<log message="Finalizando proceso con ERROR EN REGISTRO EN BSCS"></log>		 	
-			 	</when>
-			 </choice>
- 			<setHeader headerName="new_request_cod_return">
-					<simple>${headers.spg_add_bscs_services_pr_code}</simple>
-			</setHeader>
-			<setHeader headerName="new_request_msg_return">
-					<simple>${headers.spg_add_bscs_services_pr_msg}</simple>
-			</setHeader>
+			<!-- CHOICE PARA CASO DE ERROR -->
+
 			 <to uri= "direct:spg_set_bscs_status_pr"></to>			
 			<to uri="velocity:velocity/activateVoLTE_SUCCESS.vm" />
 			<log message="Finalizando proceso con exito"></log>
@@ -228,7 +207,7 @@
 				
 <!-- 				TODO: cambiar los headers ACA!!! -->
  					<setHeader headerName="bscs_cod_services">
-									<simple resultType="java.lang.Integer">${body.[bscs_cod_services]}</simple>
+						<simple resultType="java.lang.Integer">${body.[bscs_cod_services]}</simple>
 					</setHeader>
 					<log message="cod return procedure4: ${headers.bscs_cod_services}"></log>
  					<setHeader headerName="bscs_msg_services">
