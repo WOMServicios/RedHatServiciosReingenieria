@@ -23,11 +23,13 @@ public class TestBaseDatos {
 	
 	public void getProductCatalog(String rut, String accountdID)  {
 		
-		System.setProperty("database.bscs.host", "10.120.241.44");
+//		System.setProperty("database.bscs.host", "10.120.241.44");
 		System.setProperty("database.bscs.port", "1540");
 		System.setProperty("database.bscs.databasename", "BSCSUAT");
 		System.setProperty("database.bscs.username", "VMD");
 		System.setProperty("database.bscs.password", "VMD");
+		
+		System.out.println("conn: "+System.getenv("datoCQT"));
 		
 		Connection conn = null;
 		Statement stmt;
@@ -35,7 +37,8 @@ public class TestBaseDatos {
 			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 			stmt = conn.createStatement();
 			
-			System.out.println("conn: "+conn);
+			
+			
 			
 
 			String queryAccounts = "SELECT a.cscompregno      as rut,a.CUSTOMER_ID      as accountId,a.CUSTOMER_ID_HIGH as accountIdHigh,a.cslevel          as csLevel,a.CUSTCODE         as custCode,a.CSTYPE           as accountType,a.CSACTIVATED      as accountActivate,a.CSDEACTIVATED    as accountDeactivate,a.CUSTOMER_ID_EXT  as externalAccountId,a.CSST             as state,a.DOCTYPE_ID       as docTypeId,b.DOCTYPE_DESC     as docTypeDesc,b.DOCTYPE_OUTPUT_CODE as docTypeOutputCode,a.CUSTOMER_ID      as accountId_biilcycle,d.BILLCYCLE        as billCycle_billcycle,d.description      as billCycleDes_billcycle,d.interval_type    as intervalType,d.last_run_date    as lastRunDate,d.bch_run_date     as bchRunDate FROM sysadm.customer_all           a, sysadm.DOCUMENT_TYPE_SII_CODE b, SYSADM.BILLCYCLE_ACTUAL_VIEW  c, SYSADM.BILLCYCLES  d WHERE a.cscompregno = '010567335' and a.DOCTYPE_ID  = b.DOCTYPE_ID and a.CUSTOMER_ID = c.CUSTOMER_ID and c.billcycle   = d.billcycle";
