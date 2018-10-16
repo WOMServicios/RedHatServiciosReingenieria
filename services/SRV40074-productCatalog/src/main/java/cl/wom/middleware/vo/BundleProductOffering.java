@@ -1,13 +1,11 @@
 package cl.wom.middleware.vo;
 
-import java.util.List;
-
 public class BundleProductOffering {
     private String minimumRequired;
     private String quantity;
     private String unitOfMeasure;
     private String isPromotionProduct;
-    private List<Channel> channel;
+    private Channel channel;
     private String description;
     private String isOfferProduct;
     private String isOptionProduct;
@@ -51,10 +49,10 @@ public class BundleProductOffering {
 	public void setIsPromotionProduct(String isPromotionProduct) {
 		this.isPromotionProduct = isPromotionProduct;
 	}
-	public List<Channel> getChannel() {
+	public Channel getChannel() {
 		return channel;
 	}
-	public void setChannel(List<Channel> channel) {
+	public void setChannel(Channel channel) {
 		this.channel = channel;
 	}
 	public String getDescription() {

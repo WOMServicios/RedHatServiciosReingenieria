@@ -9,20 +9,9 @@
     <bean id="integratorProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:application.properties" />
 	</bean>
-    
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="${camel.sql.url}" />
-		<property name="username" value="${camel.sql.user}" />
-		<property name="password" value="${camel.sql.pass}" />
-	</bean>
-	
-	<!-- configure the Camel SQL component to use the JDBC data source -->
-	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-	
-	<bean id="sqlFormatterProcessor" class="cl.wom.middleware.bean.SqlFormatterProcessor"></bean>
+ 
+<!-- 	<bean id="sqlFormatterProcessor" class="cl.wom.middleware.bean.SqlFormatterProcessor"></bean> -->
+	<bean id="getProductCatalog" class="cl.wom.middleware.dao.ProductCatalogDAOImpl"></bean>
 
 
 	
