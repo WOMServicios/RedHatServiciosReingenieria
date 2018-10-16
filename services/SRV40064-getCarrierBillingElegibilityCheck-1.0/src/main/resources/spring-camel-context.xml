@@ -6,29 +6,6 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<bean id="dataSourceBSCSDESA"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@${database.replica.host}:${database.replica.port}:${database.replica.name}" />
-		<property name="username"
-			value="${database.replica.username}" />
-		<property name="password"
-			value="${database.replica.password}" />
-
-	</bean>
-
-	<bean id="dataSourceWAPPLDESA"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@${database.wappl.host}:${database.wappl.port}:${database.wappl.name}" />
-		<property name="username" value="${database.wappl.username}" />
-		<property name="password" value="${database.wappl.password}" />
-
-	</bean>
 
 	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"></bean>
 	<camelContext
@@ -129,33 +106,40 @@
 					<setBody>
 						<simple>{{sql.getrespuestaeligibilidad}}</simple>
 					</setBody>
+					<setHeader headerName="interface">
+						<constant>getrespuestaeligibilidad</constant>
+					</setHeader>
 
-					<to uri="jdbc:dataSourceWAPPLDESA" />
 					<to uri="bean:clienteProcessor" />
 
 					<setProperty propertyName="countProperty">
-						<simple>${body.count}</simple>
+						<simple>${body}</simple>
 					</setProperty>
 
-					<!-- devuelve cero -->
+					<!-- devuelve diferente de cero -->
 					<when>
-						<simple>${property.countProperty} != 0</simple>
-
+<!-- 					<simple>${property.countProperty} != 0</simple> cambiar
+ -->						<simple>${property.countProperty} == 0</simple>
+							
 						<setBody>
 							<simple>{{sql.paymentTransactionId}}</simple>
 						</setBody>
-						<to uri="jdbc:dataSourceWAPPLDESA" />
+						
+						<setHeader headerName="interface">
+							<constant>paymentTransactionId</constant>
+						</setHeader>
+						
 						<to uri="bean:clienteProcessor" />
 
 						<to
 							uri="velocity:velocity/200GetCarrierBillingElegibilityCheck.vm" />
 
-
-
 					</when>
-					<!-- devuelve nulo empiezan las validaciones -->
+					<!-- devuelve cero empiezan las validaciones -->
 					<when>
-						<simple>${property.countProperty} == 0</simple>
+<!-- 						<simple>${property.countProperty} == 0</simple> cambiar
+ -->					
+						<simple>${property.countProperty} != 0</simple>
 
 							<setHeader headerName="msisdn">
 								<simple>${property.userIdProperty}</simple>
@@ -164,18 +148,16 @@
 						<setBody>
 							<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>
 						</setBody>
-			
-
-						<to uri="jdbc:dataSourceBSCSDESA" />
-
+						
+						<setHeader headerName="interface">
+								<constant>getInfoSuscriptorCarrierBilling</constant>
+						</setHeader>
+		
 						<to uri="bean:clienteProcessor" />
-						<when>
-							<simple>${body.rut} == null</simple>
-								<to uri="velocity:velocity/400.vm" />
-							<stop/>
-							</when>
+					
 						<when>
 							<simple>${body.rut} != null</simple>
+				
 							<!-- seteo de properties, en donde se almacenaran variables globales 
 								para reutilizacion -->
 
@@ -209,84 +191,53 @@
 							<setBody>
 								<simple>{{sql.getSuscripcionesCarrierExist}}</simple>
 							</setBody>
-
-
-							<to uri="jdbc:dataSourceWAPPLDESA" />
-							<log loggingLevel="WARN"
-								message="ejecuto la query getSuscripcionesCarrierExist" />
-							<to uri="bean:clienteProcessor" />
-							<log loggingLevel="WARN"
-								message="clienteProcessor getSuscripcionesCarrierExist" />
-
+							<setHeader headerName="interface">
+								<constant>getSuscripcionesCarrierExist</constant>
+							</setHeader>
+	
 							<when>
-								<simple>${body.contador} != 0</simple>
-								<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />
+							<!-- <simple>${body} != 0</simple> cambiar -->
+							<simple>${body} == 0</simple>
+							<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />
 							</when>
 							<when>
-								<simple>${body.contador} == 0</simple>
+<!-- 							<simple>${body.contador} == 0</simple> cambiar
+ -->								<simple>${body} != 0</simple>
 								<!-- getCustomerContractMoreOld para ver si el cliente posee una 
 									subcripion activa -busca el msisdn mas antiguo de la cuenta -->
+								
 								<setBody>
 									<simple>{{sql.getCustomerContractMoreOld}}</simple>
 								</setBody>
+								<setHeader headerName="interface">
+									<constant>getCustomerContractMoreOld</constant>
+								</setHeader>
 
-								<to uri="jdbc:dataSourceBSCSDESA" />
-								<log loggingLevel="WARN"
-									message="ejecuto la query getCustomerContractMoreOld" />
 								<to uri="bean:clienteProcessor" />
-								<log loggingLevel="WARN"
-									message="clienteProcessor getCustomerContractMoreOld" />
-
+							
+								
 								<setProperty propertyName="dnNumIdHighProperty">
-									<simple>${body.dnNum}</simple>
+									<simple>${body}</simple>
 								</setProperty>
 
 								<when>
 									<simple>${property.dnNumIdHighProperty} != null</simple>
 
 									<!-- valida la cuenta pagadora getCustomerPagador -->
+								
 
 									<setBody>
 										<simple>{{sql.getCustomerPagador}}</simple>
 									</setBody>
-									<to uri="jdbc:dataSourceBSCSDESA" />
-									<log loggingLevel="WARN"
-										message="ejecuto la query getCustomerPagador" />
+									
+									<setHeader headerName="interface">
+											<constant>getCustomerPagador</constant>
+									</setHeader>
+									
 									<to uri="bean:clienteProcessor" />
-									<setProperty propertyName="idOfertaProperty">
-										<simple>${body.idOferta}</simple>
-									</setProperty>
-									<setProperty propertyName="desOfertaProperty">
-										<simple>${body.desOferta}</simple>
-									</setProperty>
-
-									<setProperty propertyName="desOfertaProperty">
-										<simple>${body.desOferta}</simple>
-									</setProperty>
-
-									<!-- variable para hacer prueba y no duplicar pk -->
-									<setProperty propertyName="fechaPruebaProperty">
-										<simple>${date:now:HH:mm:ssZ}</simple>
-									</setProperty>
-
-									<when>
-										<!-- si es igual continua el flujo -->
-										<simple>${body.customerId} == null</simple>
-
-										<to uri="velocity:velocity/getCustomerPagador.vm" />
-
-									</when>
-									<when>
-										<simple>${body.customerId} != null</simple>
-										<setBody>
-											<simple>{{sql.insertaregelegcarrierbilling}}</simple>
-										</setBody>
-										<to uri="jdbc:dataSourceWAPPLDESA" />
-										<log message="${property.requestIdProperty}"></log>
-										<to
+									
+									<to
 											uri="velocity:velocity/200GetCarrierBillingElegibilityCheck.vm" />
-									</when>
-
 								</when>
 							</when>
 						</when>

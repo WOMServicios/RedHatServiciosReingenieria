@@ -1,9 +1,12 @@
 package cl.wom.middleware.vo;
+
+import java.util.List;
+
 public class AccountInformation
 {
     private String rut;
 
-    private Account[] account;
+    private List<Account> account;
 
     public String getRut ()
     {
@@ -15,12 +18,12 @@ public class AccountInformation
         this.rut = rut;
     }
 
-    public Account[] getAccount ()
+    public List<Account> getAccount ()
     {
         return account;
     }
 
-    public void setAccount (Account[] account)
+    public void setAccount (List<Account> account)
     {
         this.account = account;
     }

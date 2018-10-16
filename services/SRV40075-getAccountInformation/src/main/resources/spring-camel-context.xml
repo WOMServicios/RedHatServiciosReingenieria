@@ -13,38 +13,53 @@
 		<propertyPlaceholder id="placeholder"
 			location="classpath:application.properties,classpath:sql.properties" />
 
+
+
+
 		<!-- Control de errores -->
-		<onException>
-			<exception>java.lang.Exception</exception>
-			<handled>
-				<simple>true</simple>
-			</handled>
-			<to uri="velocity:velocity/response-sql-error.vm" />
-			<setHeader headerName="Content-Type">
-				<constant>application/json</constant>
-			</setHeader>
-		</onException>
+<!-- 		<onException> -->
+<!-- 			<exception>java.lang.Exception</exception> -->
+<!-- 			<handled> -->
+<!-- 				<simple>true</simple> -->
+<!-- 			</handled> -->
+<!-- 			<to uri="velocity:velocity/response-sql-error.vm" /> -->
+<!-- 			<setHeader headerName="Content-Type"> -->
+<!-- 				<constant>application/json</constant> -->
+<!-- 			</setHeader> -->
+<!-- 		</onException> -->
 
 		<route>
+		
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint}}" />
 
-			
 			<bean ref="sqlAccountProcessor" method="parserSQLAccountInformation"></bean>
 			
-			
-						
+			<log message="${headers.rut}"></log>
 			<!-- SQL lista de cuentas -->			
 			<setBody><simple>{{sql.1.1}}</simple></setBody>
 			<to uri="jdbc:dataSourceBSCSUAT" />
-			<log message="respuesta desde sql.1.1: ${body}"></log>
-			
-			
 			<bean ref="sqlAccountProcessor" method="parserSQLAccounts"></bean>
 			
+			<split>
+				<simple>${property.accountInformation.account}</simple>
+				<log message="iterando la cuenta"></log>
+				
+				<setBody><simple>{{sql.2.1}}</simple></setBody>
+				<to uri="jdbc:dataSourceBSCSUAT" />
+				<bean ref="sqlAccountProcessor" method="parserSQLSubscrption"></bean>
+				
+				
+<!-- 				<split> -->
+<!-- 					<simple>${body.}</simple> -->
+					
+<!-- 				</split> -->
+				
+				
+			</split>
 			
-			
-			
+			<bean ref="sqlAccountProcessor" method="getAccountInformation"></bean>
+			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 			
 		</route>
 

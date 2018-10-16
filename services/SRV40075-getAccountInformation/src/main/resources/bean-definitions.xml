@@ -16,9 +16,9 @@
 		<property name="driverClassName"
 			value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url"
-			value="jdbc:oracle:thin:10.120.241.44:1540:BSCSUAT" />
-		<property name="username" value="VMD" />
-		<property name="password" value="VMD" />
+			value="${camel.sql.url}" />
+		<property name="username" value="${camel.sql.user}" />
+		<property name="password" value="${camel.sql.pass}" />
 	</bean>    
 	
 	<bean id="sqlAccountProcessor" class="cl.wom.middleware.bean.SQLAccountProcessor"></bean>
