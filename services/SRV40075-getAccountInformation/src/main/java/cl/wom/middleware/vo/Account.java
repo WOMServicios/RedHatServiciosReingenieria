@@ -1,4 +1,7 @@
 package cl.wom.middleware.vo;
+
+import java.util.List;
+
 public class Account
 {
     private String accountId;
@@ -21,7 +24,7 @@ public class Account
 
     private String accountType;
 
-    private Subscribers[] subscribers;
+    private List<Subscribers> subscribers;
 
     private String docTypeDesc;
 
@@ -131,12 +134,12 @@ public class Account
         this.accountType = accountType;
     }
 
-    public Subscribers[] getSubscribers ()
+    public List<Subscribers> getSubscribers ()
     {
         return subscribers;
     }
 
-    public void setSubscribers (Subscribers[] subscribers)
+    public void setSubscribers (List<Subscribers> subscribers)
     {
         this.subscribers = subscribers;
     }
