@@ -1,9 +1,11 @@
 package cl.wom.util;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.Date;
-
-
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -11,43 +13,46 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
 import cl.wom.beans.Cliente;
+import cl.wom.database.ClienteDaoImpl;
+import cl.wom.database.Conexion;
+import cl.wom.exception.services.ServiceError;
 
 public class ClienteProcessor implements Processor {
+	private ClienteDaoImpl iClienteDao=new ClienteDaoImpl();
 
 	public void process(Exchange exchange) throws Exception {
-		Map<String, Object> row = exchange.getIn().getBody(Map.class);
 
+	
+		String row = (String) exchange.getIn().getBody();
 
+		System.err.println(row);
+		Cliente cliente;
+		cliente=iClienteDao.getCliente(row);
 
-		Cliente cliente = new Cliente();
-
-		if(row != null) {
-			for (Entry<String, Object> entry : row.entrySet()) {
-				System.out.println(entry.getKey() + "::" + entry.getValue());
-			}
+		if(cliente.getNumCelular()== null) {
+	
+			 throw new ServiceError("416");
 			
-		cliente.setNumCelular((String) row.get("NUM_CELULAR"));
-		cliente.setContratoId((String) row.get("CONTRATO_ID"));
-		cliente.setPaymentProviderTransaction((String ) row.get("PAYMENT_PROVIDER_TRANSACTION"));
-		cliente.setFechaIngreso((Date)row.get("FECHA_INGRESO"));
-		cliente.setBangoTransactionId((String) row.get("BANGO_TRANSACTION_ID"));
-		cliente.setMerchanTransactionId((String)row.get("MERCHAN_TRANSACTION_ID"));
-		cliente.setAmount((BigDecimal) row.get("AMOUNT"));
-		cliente.setUserId((String) row.get("USER_ID"));
-		cliente.setResponsePay((String) row.get("RESPONSE_PAY"));
-		cliente.setDatePay((Date) row.get("DATE_PAY"));
-		cliente.setIdOferta((String) row.get("ID_OFERTA"));
-			
-			
-		}else {
-			System.err.println("vacio");
 		}
 		
-
-		exchange.getOut().setBody(cliente);
-		
-	}
-
-
+		exchange.getIn().setBody(cliente);
 
 }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	

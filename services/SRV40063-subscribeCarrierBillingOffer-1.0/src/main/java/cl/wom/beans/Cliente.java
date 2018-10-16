@@ -11,11 +11,11 @@ public class Cliente implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String msisdn;
-	private BigDecimal customerId;
-	private BigDecimal codId;
-	private BigDecimal rateplan;
+	private String customerId;
+	private String codId;
+	private String rateplan;
 	private String tipoContrato;
-	private char estado;
+	private String estado;
 	private Date fechaActivacion;
 
 
@@ -42,42 +42,42 @@ public class Cliente implements Serializable {
 
 
 
-	public BigDecimal getCustomerId() {
+	public String getCustomerId() {
 		return customerId;
 	}
 
 
 
 
-	public void setCustomerId(BigDecimal customerId) {
+	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
 
 
 
 
-	public BigDecimal getCodId() {
+	public String getCodId() {
 		return codId;
 	}
 
 
 
 
-	public void setCodId(BigDecimal codId) {
+	public void setCodId(String codId) {
 		this.codId = codId;
 	}
 
 
 
 
-	public BigDecimal getRateplan() {
+	public String getRateplan() {
 		return rateplan;
 	}
 
 
 
 
-	public void setRateplan(BigDecimal rateplan) {
+	public void setRateplan(String rateplan) {
 		this.rateplan = rateplan;
 	}
 
@@ -98,14 +98,17 @@ public class Cliente implements Serializable {
 
 
 
-	public char getEstado() {
+
+
+
+	public String getEstado() {
 		return estado;
 	}
 
 
 
 
-	public void setEstado(char estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 
@@ -126,7 +129,12 @@ public class Cliente implements Serializable {
 
 
 
-
+	@Override
+	public String toString() {
+		return "Cliente [msisdn=" + msisdn + ", customerId=" + customerId + ", codId=" + codId + ", rateplan="
+				+ rateplan + ", tipoContrato=" + tipoContrato + ", estado=" + estado + ", fechaActivacion="
+				+ fechaActivacion + "]";
+	}
 
 
 	

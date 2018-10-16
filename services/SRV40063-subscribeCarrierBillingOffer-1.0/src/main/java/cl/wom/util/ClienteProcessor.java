@@ -11,35 +11,29 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
 import cl.wom.beans.Cliente;
+import cl.wom.database.ClienteDaoImpl;
+import cl.wom.exception.services.ServiceError;
 
 public class ClienteProcessor implements Processor {
 	
+	private ClienteDaoImpl iClienteDao=new ClienteDaoImpl();
 
-	@Override
 	public void process(Exchange exchange) throws Exception {
-		Map<String, Object> row = exchange.getIn().getBody(Map.class);
 
-		
+	
+		String row = (String) exchange.getIn().getBody();
 
-		Cliente cliente = new Cliente();
-		if (row != null) {
+		System.err.println(row);
+		Cliente cliente;
+		cliente=iClienteDao.getCliente(row);
 
-			for (Entry<String, Object> entry : row.entrySet()) {
-				System.out.println(entry.getKey() + "::" + entry.getValue());
-			}
+		if(cliente.getCodId()== null) {
+	
+			 throw new ServiceError("416");
 			
-			cliente.setMsisdn((String) row.get("MSISDN"));
-			cliente.setCustomerId((BigDecimal) row.get("CUSTOMER_ID"));
-			cliente.setCodId((BigDecimal) row.get("CO_ID"));
-
-			cliente.setRateplan((BigDecimal) row.get("RATE_PLAN:"));
-
-			cliente.setTipoContrato((String) row.get("ESTADO_CONTRATO"));
-			cliente.setFechaActivacion((Date) row.get("FECHA_ACTIVACION"));
-
 		}
-  
-		exchange.getOut().setBody(cliente);
+		
+		exchange.getIn().setBody(cliente);
 
 	}
 

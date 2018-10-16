@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-	http://camel.apache.org/schema/spring 
-	http://camel.apache.org/schema/spring/camel-spring.xsd">
-
-	<bean id="dataSourceBSCSDESA"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  http://camel.apache.org/schema/spring   http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<bean class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" id="dataSourceBSCSDESA">
 		<property name="driverClassName"
 			value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url"
@@ -16,26 +12,17 @@
 			value="${database.replica.username}" />
 		<property name="password"
 			value="${database.replica.password}" />
-
 	</bean>
-
-	<bean id="dataSourceWAPPLDESA"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+	<bean class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" id="dataSourceWAPPLDESA">
 		<property name="driverClassName"
 			value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url"
 			value="jdbc:oracle:thin:@${database.wappl.host}:${database.wappl.port}:${database.wappl.name}" />
 		<property name="username" value="${database.wappl.username}" />
 		<property name="password" value="${database.wappl.password}" />
-
 	</bean>
-
-
-
-
-	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
-	</bean>
-
+	<bean class="cl.wom.util.ClienteProcessor" id="clienteProcessor" />
 	<camelContext
 		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
 		xmlns="http://camel.apache.org/schema/spring">
@@ -44,10 +31,8 @@
 			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
 			archivo properties. Por defecto en opensfhit es develop -->
 		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
-
 		<propertyPlaceholder id="placeholder"
 			location="classpath:application.properties,classpath:sql.properties" />
-
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
 			<handled>
@@ -66,47 +51,41 @@
 				<constant>application/json</constant>
 			</setHeader>
 			<to uri="velocity:velocity/ErrorHttp.vm" />
-
 		</onException>
-
 		<!-- getcarrierbillingoffers -->
-		<route streamCache="true">
-					<from
-				uri="restlet:http://{{rest.service.host}}:{{rest.service.port}}{{rest.service.resource}}?restletMethod=post" / />
-			<setHeader headerName="Accept">
-				<constant>application/json</constant>
-			</setHeader>
-			<setHeader headerName="Content-Type">
-				<constant>application/json</constant>
-			</setHeader>
-			<doTry>
-				<setHeader headerName="credential">
+		<route id="_route1" streamCache="true">
+			<from id="_from1"
+				uri="restlet:http://{{rest.service.host}}:{{rest.service.port}}{{rest.service.resource}}?restletMethod=post" />
+		
+			<doTry id="_doTry1">
+				<setHeader headerName="credential" id="_setHeader3">
 					<jsonpath>$.credential</jsonpath>
 				</setHeader>
-				<setHeader headerName="credentialType">
+				<setHeader headerName="credentialType" id="_setHeader4">
 					<jsonpath>$.credentialType</jsonpath>
 				</setHeader>
-				<setHeader headerName="channel">
+				<setHeader headerName="channel" id="_setHeader5">
 					<jsonpath>$.channel</jsonpath>
 				</setHeader>
-				<setHeader headerName="networkKey">
+				<setHeader headerName="networkKey" id="_setHeader6">
 					<jsonpath>$.networkKey</jsonpath>
 				</setHeader>
-				<doCatch>
+				<doCatch id="_doCatch1">
 					<exception>org.apache.camel.ExpressionEvaluationException
 					</exception>
-					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE"
+						id="_setHeader7">
 						<simple>400</simple>
 					</setHeader>
-					<to uri="velocity:velocity/400.vm" />
-					<setHeader headerName="Content-Type">
+					<to id="_to1" uri="velocity:velocity/400.vm" />
+					<setHeader headerName="Content-Type" id="_setHeader8">
 						<constant>application/json</constant>
 					</setHeader>
-					<stop />
+					<stop id="_stop1" />
 				</doCatch>
 			</doTry>
-			<choice>
-				<when>
+			<choice id="_choice1">
+				<when id="_when1">
 					<simple>
 						${headers.credential} == "" ||
 						${headers.credentialType} ==
@@ -116,61 +95,47 @@
 					</simple>
 					<throwException
 						exceptionType="cl.wom.exception.services.ServiceError"
-						message="400" />
+						id="_throwException1" message="400" />
 				</when>
-
-				<otherwise>
-
-
-					<setBody>
+				<otherwise id="_otherwise1">
+					<setBody id="_setBody1">
 						<simple>{{sql.getsubcriberBymsisdn}}</simple>
 					</setBody>
-
-					<to uri="jdbc:dataSourceBSCSDESA" />
-
-					<to uri="bean:clienteProcessor" />
-
-
-					<when>
+					<!-- <to id="_to2" uri="jdbc:dataSourceBSCSDESA" /> -->
+					<to id="_to3" uri="bean:clienteProcessor" />
+					
+				<!-- 	<when id="_when2">
 						<simple>${body.msisdn} == null</simple>
+						<log message="nullooooooo"></log>
+						<to uri="bean:clienteProcessor" />
 
-						<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-							<simple>200</simple>
-						</setHeader>
-						<setHeader headerName="Content-Type">
-							<constant>application/json</constant>
-						</setHeader>
-						<to uri="velocity:velocity/204.vm" />
-
-						<stop />
-
-
-					</when>
-
-					<when>
+					</when> -->
+					<when id="_when3">
 						<simple>${body.msisdn} != null</simple>
-
-
 						<to uri="velocity:velocity/netflixStart.vm" />
-						<to
-							uri="restlet:http://0.0.0.0:8888/bango.net/HTTP/Netflix/Start/?restletMethod=post" />
-
+						<to uri="direct:bango" />
 					</when>
-
 				</otherwise>
 			</choice>
-
 			<setHeader headerName="Content-Type">
-				<constant>application/json</constant>
+				<constant>application/json; charset=UTF-8</constant>
 			</setHeader>
+			<setHeader headerName="Encoding">
+				<constant>UTF-8</constant>
+			</setHeader>	
+		
 		</route>
-
+		<!-- virtualizado, cuando se entrege el original se tiene que cambiar -->
 		<route>
-			<from
-				uri="restlet:http://0.0.0.0:8888/bango.net/HTTP/Netflix/Start/?restletMethod=post" />
+			<from uri="direct:bango" />
+
 			<to uri="velocity:velocity/netflixResponse.vm" />
+			<setHeader headerName="Content-Type">
+				<constant>application/json; charset=UTF-8</constant>
+			</setHeader>
+			<setHeader headerName="Encoding">
+				<constant>UTF-8</constant>
+			</setHeader>	
 		</route>
-
-
 	</camelContext>
 </beans>
