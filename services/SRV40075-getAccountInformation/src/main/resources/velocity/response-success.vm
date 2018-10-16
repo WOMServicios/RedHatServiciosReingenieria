@@ -1,143 +1,183 @@
-   {
-      "offerId":"string",
-      "name":"string",
-      "shortDescription":"string",
-      "lastUpdate":"2018-09-17T18:09:18.075Z",
-      "status":"string",
-      "validFor":"2018-09-17T18:09:18.075Z",
-      "version":"string",
-      "isSellable":"string",
-      "price":{
-         "oneTime":{
-            "amount":{
-               "unit":"string",
-               "value":"string"
+{
+  "rut": "rut",
+  "account": [
+    {
+      "subscribers": [
+        {
+          "rut": "rut",
+          "accountId": "accountId",
+          "subscriberResources": [
+            {
+              "resourceId": "resourceId",
+              "resourceDeactivate": "2000-01-23T04:56:07.000+00:00",
+              "resource": "resource",
+              "subscriberId": "subscriberId",
+              "resourceDescription": "resourceDescription",
+              "resourceState": "resourceState",
+              "resourceActivate": "2000-01-23T04:56:07.000+00:00",
+              "resourceType": "resourceType"
             },
-            "currency":"string",
-            "duration":"string",
-            "unitOfMeasure":"string"
-         },
-         "recurringCharge":{
-            "amount":{
-               "unit":"string",
-               "value":"string"
+            {
+              "resourceId": "resourceId",
+              "resourceDeactivate": "2000-01-23T04:56:07.000+00:00",
+              "resource": "resource",
+              "subscriberId": "subscriberId",
+              "resourceDescription": "resourceDescription",
+              "resourceState": "resourceState",
+              "resourceActivate": "2000-01-23T04:56:07.000+00:00",
+              "resourceType": "resourceType"
+            }
+          ],
+          "subscriberIdContract": "subscriberIdContract",
+          "subscriberType": "subscriberType",
+          "subscriberActivate": "2000-01-23T04:56:07.000+00:00",
+          "subscriberId": "subscriberId",
+          "state": "state",
+          "subscriberExpired": "2000-01-23T04:56:07.000+00:00"
+        },
+        {
+          "rut": "rut",
+          "accountId": "accountId",
+          "subscriberResources": [
+            {
+              "resourceId": "resourceId",
+              "resourceDeactivate": "2000-01-23T04:56:07.000+00:00",
+              "resource": "resource",
+              "subscriberId": "subscriberId",
+              "resourceDescription": "resourceDescription",
+              "resourceState": "resourceState",
+              "resourceActivate": "2000-01-23T04:56:07.000+00:00",
+              "resourceType": "resourceType"
             },
-            "currency":"string",
-            "frecuency":"string",
-            "unitOfMeasure":"string"
-         }
-      },
-      "channel":[
-         {
-            "name":"string",
-            "legacySystem":"string"
-         }
+            {
+              "resourceId": "resourceId",
+              "resourceDeactivate": "2000-01-23T04:56:07.000+00:00",
+              "resource": "resource",
+              "subscriberId": "subscriberId",
+              "resourceDescription": "resourceDescription",
+              "resourceState": "resourceState",
+              "resourceActivate": "2000-01-23T04:56:07.000+00:00",
+              "resourceType": "resourceType"
+            }
+          ],
+          "subscriberIdContract": "subscriberIdContract",
+          "subscriberType": "subscriberType",
+          "subscriberActivate": "2000-01-23T04:56:07.000+00:00",
+          "subscriberId": "subscriberId",
+          "state": "state",
+          "subscriberExpired": "2000-01-23T04:56:07.000+00:00"
+        }
       ],
-      "marketSegment":"string",
-      "familyOffer":"string",
-      "typeOffer":"string",
-      "layoutTypeAPP":"string",
-      "bundleProductOffering":[
-         {
-            "id":"string",
-            "offerId":"string",
-            "shDes":"string",
-            "name":"string",
-            "description":"string",
-            "status":"string",
-            "priority":"string",
-            "minimumRequired":"string",
-            "maximunAllowed":"string",
-            "isOfferProduct":true,
-            "isOptionProduct":true,
-            "isPromotionProduct":true,
-            "occ":"string",
-            "sku":"string",
-            "price":{
-               "oneTime":{
-                  "amount":{
-                     "unit":"string",
-                     "value":"string"
-                  },
-                  "currency":"string",
-                  "duration":"string",
-                  "unitOfMeasure":"string"
-               },
-               "recurringCharge":{
-                  "amount":{
-                     "unit":"string",
-                     "value":"string"
-                  },
-                  "currency":"string",
-                  "frecuency":"string",
-                  "unitOfMeasure":"string"
-               }
+      "accountType": "accountType",
+      "docTypeDesc": "docTypeDesc",
+      "custCode": "custCode",
+      "rut": "rut",
+      "csLevel": "csLevel",
+      "accountId": "accountId",
+      "accountDeactivate": "2000-01-23T04:56:07.000+00:00",
+      "externalAccountId": "externalAccountId",
+      "docTypeId": "docTypeId",
+      "accountActivate": "2000-01-23T04:56:07.000+00:00",
+      "docTypeOutputCode": "docTypeOutputCode",
+      "accountIdHigh": "accountIdHigh",
+      "state": "state",
+      "billCycle": {
+        "bchRunDate": "2000-01-23T04:56:07.000+00:00",
+        "accountId": "accountId",
+        "intervalType": "intervalType",
+        "billCycleDes": "billCycleDes",
+        "lastRunDate": "2000-01-23T04:56:07.000+00:00",
+        "billCycle": "billCycle"
+      }
+    },
+    {
+      "subscribers": [
+        {
+          "rut": "rut",
+          "accountId": "accountId",
+          "subscriberResources": [
+            {
+              "resourceId": "resourceId",
+              "resourceDeactivate": "2000-01-23T04:56:07.000+00:00",
+              "resource": "resource",
+              "subscriberId": "subscriberId",
+              "resourceDescription": "resourceDescription",
+              "resourceState": "resourceState",
+              "resourceActivate": "2000-01-23T04:56:07.000+00:00",
+              "resourceType": "resourceType"
             },
-            "characteristics":[
-               {
-                  "id":"string",
-                  "unitType":"string",
-                  "unitOfMeasure":"string",
-                  "quantity":"string"
-               }
-            ],
-            "channel":[
-               {
-                  "name":"string",
-                  "legacySystem":"string"
-               }
-            ]
-         }
+            {
+              "resourceId": "resourceId",
+              "resourceDeactivate": "2000-01-23T04:56:07.000+00:00",
+              "resource": "resource",
+              "subscriberId": "subscriberId",
+              "resourceDescription": "resourceDescription",
+              "resourceState": "resourceState",
+              "resourceActivate": "2000-01-23T04:56:07.000+00:00",
+              "resourceType": "resourceType"
+            }
+          ],
+          "subscriberIdContract": "subscriberIdContract",
+          "subscriberType": "subscriberType",
+          "subscriberActivate": "2000-01-23T04:56:07.000+00:00",
+          "subscriberId": "subscriberId",
+          "state": "state",
+          "subscriberExpired": "2000-01-23T04:56:07.000+00:00"
+        },
+        {
+          "rut": "rut",
+          "accountId": "accountId",
+          "subscriberResources": [
+            {
+              "resourceId": "resourceId",
+              "resourceDeactivate": "2000-01-23T04:56:07.000+00:00",
+              "resource": "resource",
+              "subscriberId": "subscriberId",
+              "resourceDescription": "resourceDescription",
+              "resourceState": "resourceState",
+              "resourceActivate": "2000-01-23T04:56:07.000+00:00",
+              "resourceType": "resourceType"
+            },
+            {
+              "resourceId": "resourceId",
+              "resourceDeactivate": "2000-01-23T04:56:07.000+00:00",
+              "resource": "resource",
+              "subscriberId": "subscriberId",
+              "resourceDescription": "resourceDescription",
+              "resourceState": "resourceState",
+              "resourceActivate": "2000-01-23T04:56:07.000+00:00",
+              "resourceType": "resourceType"
+            }
+          ],
+          "subscriberIdContract": "subscriberIdContract",
+          "subscriberType": "subscriberType",
+          "subscriberActivate": "2000-01-23T04:56:07.000+00:00",
+          "subscriberId": "subscriberId",
+          "state": "state",
+          "subscriberExpired": "2000-01-23T04:56:07.000+00:00"
+        }
       ],
-      "packageService":[
-         {
-            "id":"string",
-            "name":"string",
-            "shortDescription":"string",
-            "service":[
-               {
-                  "id":"string",
-                  "name":"string",
-                  "shortDescription":"string",
-                  "accessFee":0,
-                  "subscript":0,
-                  "event":"string",
-                  "isCore":true,
-                  "status":"string",
-                  "channel":[
-                     {
-                        "name":"string",
-                        "legacySystem":"string"
-                     }
-                  ],
-                  "commandService":[
-                     {
-                        "id":"string",
-                        "market":"string",
-                        "command":[
-                           {
-                              "id":"string",
-                              "subsystemMarket":"string",
-                              "register":"string",
-                              "erase":"string",
-                              "activate":"string",
-                              "deactivate":"string"
-                           }
-                        ]
-                     }
-                  ]
-               }
-            ]
-         }
-      ],
-      "deviceOffering":[
-         {
-            "shDes":"string",
-            "deviceName":"string",
-            "modality":"string",
-            "cost":0,
-            "partNum":"string",
-            "sku":"string"
-         }
-      ]
-   }
+      "accountType": "accountType",
+      "docTypeDesc": "docTypeDesc",
+      "custCode": "custCode",
+      "rut": "rut",
+      "csLevel": "csLevel",
+      "accountId": "accountId",
+      "accountDeactivate": "2000-01-23T04:56:07.000+00:00",
+      "externalAccountId": "externalAccountId",
+      "docTypeId": "docTypeId",
+      "accountActivate": "2000-01-23T04:56:07.000+00:00",
+      "docTypeOutputCode": "docTypeOutputCode",
+      "accountIdHigh": "accountIdHigh",
+      "state": "state",
+      "billCycle": {
+        "bchRunDate": "2000-01-23T04:56:07.000+00:00",
+        "accountId": "accountId",
+        "intervalType": "intervalType",
+        "billCycleDes": "billCycleDes",
+        "lastRunDate": "2000-01-23T04:56:07.000+00:00",
+        "billCycle": "billCycle"
+      }
+    }
+  ]
+}
