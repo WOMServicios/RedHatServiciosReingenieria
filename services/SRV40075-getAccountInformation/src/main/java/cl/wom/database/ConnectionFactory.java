@@ -25,7 +25,7 @@ public class ConnectionFactory {
 			case WAPPL:
 				return DriverManager.getConnection("jdbc:oracle:thin:@" + rb.getString("database.wappl.host") + ":" + rb.getString("database.wappl.port") + ":" + rb.getString("database.wappl.name"), rb.getString("database.wappl.username"),	rb.getString("database.wappl.password"));				
 			case BSCSUAT:
-				return DriverManager.getConnection("jdbc:oracle:thin:@" + rb.getString("camel.sql.host") + ":" + rb.getString("camel.sql.port") + ":" + rb.getString("camel.sql.name"), rb.getString("camel.sql.user"),	rb.getString("camel.sql.pass"));
+				return DriverManager.getConnection("jdbc:oracle:thin:@" + rb.getString("10.120.241.44") + ":" + rb.getString("1540") + ":" + rb.getString("BSCSUAT"), rb.getString("VMD"),	rb.getString("VMD"));
 			default:
 			return null;
 		}
