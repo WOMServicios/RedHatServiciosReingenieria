@@ -13,11 +13,14 @@ import org.json.JSONObject;
 import cl.wom.middleware.util.ConnectionFactory.DataBaseSchema;
 import cl.wom.middleware.vo.Account;
 import cl.wom.middleware.vo.AccountInformation;
+import cl.wom.middleware.vo.BillCycle;
+import cl.wom.middleware.vo.SubscriberResources;
+import cl.wom.middleware.vo.Subscribers;
 
 public class TestBaseDatos {
 
 	public static void main(String[] args) {
-		new TestBaseDatos().getProductCatalog("139312818-9","");
+		new TestBaseDatos().getProductCatalog("010567335","");
 	}
 	
 	
@@ -45,13 +48,63 @@ public class TestBaseDatos {
 			AccountInformation accountInformation = new AccountInformation();
 			accountInformation.setRut(rut);
 			List<Account> listAccount = new ArrayList<Account>();
+			List<BillCycle> listaBillCycle = new ArrayList<BillCycle>();
+			List<Subscribers> listasubscribers = new ArrayList<Subscribers>();
+			List<SubscriberResources> listaSubscriberResources = new ArrayList<SubscriberResources>();
 			while (rsAccounts.next()) {
 				
 				Account account = new Account();
 				
+				Subscribers subscribers = new Subscribers();
+					subscribers.setRut(rsAccounts.getString("rut"));
+					subscribers.setAccountId(rsAccounts.getString("accountId"));
+					
+					SubscriberResources subscriberResources = new SubscriberResources();
+//					subscriberResources.setResourceId(rsAccounts.getString("resourceId"));
+//					subscriberResources.setResourceDeactivate(rsAccounts.getString("resourceDeactivate"));
+//					subscriberResources.setResource(rsAccounts.getString("resource"));
+//					subscriberResources.setSubscriberId(rsAccounts.getString("subscriberId"));
+//					subscriberResources.setResourceDescription(rsAccounts.getString("resourceDescription"));
+//					subscriberResources.setResourceState(rsAccounts.getString("resourceState"));
+//					subscriberResources.setResourceActivate(rsAccounts.getString("resourceActivate"));
+//					subscriberResources.setResourceType(rsAccounts.getString("resourceType"));
+					listaSubscriberResources.add(subscriberResources);
+					
+//					subscribers.setSubscriberIdContract(rsAccounts.getString("subscriberIdContract"));
+//					subscribers.setSubscriberType(rsAccounts.getString("subscriberType"));
+//					subscribers.setSubscriberActivate(rsAccounts.getString("subscriberActivate"));
+//					subscribers.setSubscriberId(rsAccounts.getString("subscriberId"));
+					subscribers.setState(rsAccounts.getString("state"));
+//					subscribers.setSubscriberExpired(rsAccounts.getString("subscriberExpired"));
+					System.out.println("subscriberRUT:" + rsAccounts.getString("rut"));
+					listasubscribers.add(subscribers);
+					
+				//account.setSubscribers(subscribers);
+				account.setAccountType(rsAccounts.getString("accountType"));
+				account.setDocTypeDesc(rsAccounts.getString("docTypeDesc"));
+				account.setCustCode(rsAccounts.getString("custCode"));
+				account.setRut(rsAccounts.getString("rut"));
 				account.setCsLevel(rsAccounts.getString("csLevel"));
+				account.setAccountId(rsAccounts.getString("accountId"));
+				account.setAccountDeactivate(rsAccounts.getString("accountDeactivate"));
+				account.setExternalAccountId(rsAccounts.getString("externalAccountId"));
+				account.setDocTypeId(rsAccounts.getString("docTypeId"));
+				account.setAccountActivate(rsAccounts.getString("accountActivate"));
+				account.setDocTypeOutputCode(rsAccounts.getString("docTypeOutputCode"));
+				account.setAccountIdHigh(rsAccounts.getString("accountIdHigh"));
+				account.setState(rsAccounts.getString("state"));
 				
-				System.out.println("resultado columna: "+rsAccounts.getString("csLevel"));
+				BillCycle billCycle = new BillCycle();
+					billCycle.setBchRunDate(rsAccounts.getString("bchRunDate"));
+					billCycle.setAccountId(rsAccounts.getString("accountId"));
+					billCycle.setIntervalType(rsAccounts.getString("intervalType"));
+					billCycle.setBillCycleDes(rsAccounts.getString("billCycleDes_billcycle"));
+					billCycle.setLastRunDate(rsAccounts.getString("lastRunDate"));
+					billCycle.setBillCycle(rsAccounts.getString("billCycle_billcycle"));
+					
+					listaBillCycle.add(billCycle);
+					
+				account.setBillCycle(billCycle);
 				
 //				ProductOffering productOffering = new ProductOffering();
 //				
