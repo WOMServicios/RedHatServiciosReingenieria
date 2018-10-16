@@ -9,19 +9,9 @@
     <bean id="integratorProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="location" value="classpath:application.properties" />
 	</bean>
-    
-    
-	<bean id="dataSourceBSCSUAT"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="${camel.sql.url}" />
-		<property name="username" value="${camel.sql.user}" />
-		<property name="password" value="${camel.sql.pass}" />
-	</bean>    
+       
 	
-	<bean id="sqlAccountProcessor" class="cl.wom.middleware.bean.SQLAccountProcessor"></bean>
+	<bean id="sqlAccountProcessor" class="cl.wom.middleware.dao.AccountManagerSql"></bean>
+	
 
-	
 </beans>
