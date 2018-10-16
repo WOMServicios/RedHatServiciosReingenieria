@@ -1,4 +1,4 @@
-package cl.wom.database;
+package cl.wom.middleware.dao;
 
 public class ProductCatalogDAOInt {
 
