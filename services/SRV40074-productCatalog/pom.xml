@@ -50,6 +50,14 @@
 			<artifactId>camel-stream-starter</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
+<!-- https://mvnrepository.com/artifact/org.json/json -->
+<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+<!--     <version>20160810</version> -->
+</dependency>
+
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
@@ -148,9 +156,14 @@
             <scope>provided</scope>
         </dependency>
 		<dependency>
-			<groupId>ojdbc7</groupId>
-			<artifactId>ojdbc7</artifactId>
-			<version>1.2</version>
+			<groupId>ojdbc</groupId>
+			<artifactId>ojdbc</artifactId>
+			<version>14</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jetty</artifactId>
+			 <scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>

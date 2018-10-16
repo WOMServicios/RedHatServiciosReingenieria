@@ -1,6 +1,7 @@
 package cl.wom.util;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -11,55 +12,91 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
 import cl.wom.beans.Cliente;
+import cl.wom.database.ClienteDaoImpl;
+import cl.wom.database.ConnectionFactory;
+import cl.wom.database.ConnectionFactory.DataBaseSchema;
+import cl.wom.exception.services.ServiceError;
 
 public class ClienteProcessor implements Processor {
+	private ClienteDaoImpl clienteDaoImpl = new ClienteDaoImpl();
 
 	public void process(Exchange exchange) throws Exception {
 
-		Map<String, Object> row = exchange.getIn().getBody(Map.class);
+		String headerBD = (String) exchange.getIn().getHeader("interface");
 
-		Cliente cliente = new Cliente();
+		System.err.println("base de datos " + headerBD);
+		String sql = (String) exchange.getIn().getBody();
 
-		if (row != null) {
+		Cliente cliente = null;
+		Connection co;
 
-			for (Entry<String, Object> entry : row.entrySet()) {
-				System.out.println(entry.getKey() + "::" + entry.getValue());
+		if (headerBD.contains("getrespuestaeligibilidad")) {
+
+			ConnectionFactory coni = new ConnectionFactory();
+			coni.prueba();
+
+			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
+
+			int count = clienteDaoImpl.getrespuestaeligibilidad(sql, co);
+
+			exchange.getIn().setBody(count);
+		}
+		if (headerBD.contains("paymentTransactionId")) {
+
+			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
+			String secuencia = clienteDaoImpl.paymentTransactionId(sql, co);
+
+			exchange.getIn().setBody(secuencia);
+
+		}
+		if (headerBD.contains("getInfoSuscriptorCarrierBilling")) {
+
+			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
+
+			cliente = clienteDaoImpl.getInfoSuscriptorCarrierBilling(sql, co);
+
+			if (cliente.getRut() == null) {
+				throw new ServiceError("416");
+			} else {
+				exchange.getIn().setBody(cliente);
 			}
-			cliente.setRut((String) row.get("RUT"));
-			cliente.setCustomerId((BigDecimal) row.get("CUSTOMER_ID"));
-			cliente.setCustomerIdHigh((BigDecimal) row.get("CUSTOMER_ID_HIGH"));
-			cliente.setContractId((BigDecimal) row.get("CONTRACT_ID"));
-			cliente.setNumCelular((String) row.get("NUM_CELULAR"));
-			cliente.setTipoContrato((String) row.get("TIPO_CONTRATO"));
-			cliente.setRateplan((String) row.get("RATEPLAN"));
-			cliente.setAntiguedad((BigDecimal) row.get("ANTIGUEDAD"));
-			cliente.setCiclo((String) row.get("CICLO"));
-			cliente.setTipoContrato((String) row.get("ESTADO_CONTRATO"));
-			cliente.setFechaActivacion((Timestamp) row.get("FECHA_ACTIVACION"));
-			cliente.setMercado((String) row.get("MERCADO"));
-			cliente.setCargoBasico((BigDecimal) row.get("CARGO_BASICO"));
-			cliente.setDnNum((String) row.get("DN_NUM"));
-			cliente.setContador((BigDecimal)row.get("CONTADOR"));
-			cliente.setIdOferta((String) row.get("ID_OFERTA"));
-			cliente.setDesOferta((String) row.get("DES_OFERTA"));
-			cliente.setIdOccBscs((String)row.get("ID_OCC_BSCS"));
-			cliente.setMesesAntiguedad((BigDecimal)row.get("MESES_ANTIGUEDAD"));
-			cliente.setValorMinimo((BigDecimal)row.get("VALOR_MINIMO_PLAN"));
-			cliente.setFecDesde((Date) row.get("FEC_DESDE"));
-			cliente.setFecHasta((Date) row.get("FEC_HASTA"));
 
-			cliente.setCount((BigDecimal) row.get("COUNT(1)"));
-
-		}else {
-			System.err.println("viene vacio");
 		}
 
-		exchange.getOut().setBody(cliente);
-	
-		
+		if (headerBD.contains("getSuscripcionesCarrierExist")) {
+			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
+
+			int contador = clienteDaoImpl.getSuscripcionesCarrierExist(sql, co);
+
+			exchange.getIn().setBody(contador);
+
+		}
+		if (headerBD.contains("getCustomerContractMoreOld")) {
+			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
+
+			String dnNum = clienteDaoImpl.getCustomerContractMoreOld(sql, co);
+			if (dnNum == null) {
+				throw new ServiceError("416");
+			} else {
+				System.err.println(dnNum + "prueba");
+				exchange.getIn().setBody(dnNum);
+			}
+
+		}
+
+		if (headerBD.contains("getCustomerPagador")) {
+			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
+
+			String customerId = clienteDaoImpl.getCustomerPagador(sql, co);
+			if (customerId == null) {
+				throw new ServiceError("416");
+			} else {
+
+				exchange.getIn().setBody(customerId);
+			}
+
+		}
+
 	}
-
-
-
 
 }

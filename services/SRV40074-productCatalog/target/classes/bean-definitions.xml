@@ -24,5 +24,6 @@
 	
 	<bean id="sqlFormatterProcessor" class="cl.wom.middleware.bean.SqlFormatterProcessor"></bean>
 
+
 	
 </beans>

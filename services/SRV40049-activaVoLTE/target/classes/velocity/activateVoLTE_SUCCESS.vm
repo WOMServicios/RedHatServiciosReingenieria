@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns:ns2="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
+  <SOAP-ENV:Body>
+    <ns2:activateVoLTEResponse>
+      <return>
+        <cod_error>${headers.bscs_cod_status}</cod_error>
+        <msg_error>${headers.bscs_msg_status}</msg_error>        
+      </return>
+    </ns2:activateVoLTEResponse>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

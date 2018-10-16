@@ -130,22 +130,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-sql</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<scope>provided</scope>
-		</dependency>
-			<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jdbc</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-stream</artifactId>
             <scope>provided</scope>

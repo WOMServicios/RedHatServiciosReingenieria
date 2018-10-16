@@ -1,42 +1,39 @@
 package cl.wom.beans;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.sql.Date;
+
+
 
 public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private BigDecimal count;
+	private String count;
 
 	private String rut;
-	private BigDecimal customerId;
-	private BigDecimal customerIdHigh;
-	private BigDecimal contractId;
+	private String customerId;
+	private String customerIdHigh;
+	private String contractId;
 	private String numCelular;
 	private String tipoContrato;
 	private String rateplan;
-	private BigDecimal antiguedad;
+	private String antiguedad;
 	private String ciclo;
 	private char estadoContrato;
-	private Timestamp fechaActivacion;
+	private Date fechaActivacion;
 	private String mercado;
-	private BigDecimal cargoBasico;
+	private String cargoBasico;
 	private String dnNum;
-	private BigDecimal contador;
+	private String contador;
 	private String idOferta;
 	private String desOferta;
 	private String idOccBscs; 
-	private BigDecimal mesesAntiguedad;
-	private BigDecimal valorMinimo;
+	private String mesesAntiguedad;
+	private String valorMinimo;
 	private Date  fecDesde;
 	private Date  fecHasta;
-	
-	
-	
-	
+	private String secuencia;
+
 	public Cliente() {
 	
 	}
@@ -44,14 +41,28 @@ public class Cliente implements Serializable {
 
 
 
-	public BigDecimal getCount() {
+	public String getSecuencia() {
+		return secuencia;
+	}
+
+
+
+
+	public void setSecuencia(String secuencia) {
+		this.secuencia = secuencia;
+	}
+
+
+
+
+	public String getCount() {
 		return count;
 	}
 
 
 
 
-	public void setCount(BigDecimal count) {
+	public void setCount(String count) {
 		this.count = count;
 	}
 
@@ -72,42 +83,42 @@ public class Cliente implements Serializable {
 
 
 
-	public BigDecimal getCustomerId() {
+	public String getCustomerId() {
 		return customerId;
 	}
 
 
 
 
-	public void setCustomerId(BigDecimal customerId) {
+	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
 
 
 
 
-	public BigDecimal getCustomerIdHigh() {
+	public String getCustomerIdHigh() {
 		return customerIdHigh;
 	}
 
 
 
 
-	public void setCustomerIdHigh(BigDecimal customerIdHigh) {
+	public void setCustomerIdHigh(String customerIdHigh) {
 		this.customerIdHigh = customerIdHigh;
 	}
 
 
 
 
-	public BigDecimal getContractId() {
+	public String getContractId() {
 		return contractId;
 	}
 
 
 
 
-	public void setContractId(BigDecimal contractId) {
+	public void setContractId(String contractId) {
 		this.contractId = contractId;
 	}
 
@@ -156,14 +167,14 @@ public class Cliente implements Serializable {
 
 
 
-	public BigDecimal getAntiguedad() {
+	public String getAntiguedad() {
 		return antiguedad;
 	}
 
 
 
 
-	public void setAntiguedad(BigDecimal antiguedad) {
+	public void setAntiguedad(String antiguedad) {
 		this.antiguedad = antiguedad;
 	}
 
@@ -198,14 +209,14 @@ public class Cliente implements Serializable {
 
 
 
-	public Timestamp getFechaActivacion() {
+	public Date getFechaActivacion() {
 		return fechaActivacion;
 	}
 
 
 
 
-	public void setFechaActivacion(Timestamp fechaActivacion) {
+	public void setFechaActivacion(Date fechaActivacion) {
 		this.fechaActivacion = fechaActivacion;
 	}
 
@@ -226,14 +237,14 @@ public class Cliente implements Serializable {
 
 
 
-	public BigDecimal getCargoBasico() {
+	public String getCargoBasico() {
 		return cargoBasico;
 	}
 
 
 
 
-	public void setCargoBasico(BigDecimal cargoBasico) {
+	public void setCargoBasico(String cargoBasico) {
 		this.cargoBasico = cargoBasico;
 	}
 
@@ -254,14 +265,14 @@ public class Cliente implements Serializable {
 
 
 
-	public BigDecimal getContador() {
+	public String getContador() {
 		return contador;
 	}
 
 
 
 
-	public void setContador(BigDecimal contador) {
+	public void setContador(String contador) {
 		this.contador = contador;
 	}
 
@@ -310,28 +321,28 @@ public class Cliente implements Serializable {
 
 
 
-	public BigDecimal getMesesAntiguedad() {
+	public String getMesesAntiguedad() {
 		return mesesAntiguedad;
 	}
 
 
 
 
-	public void setMesesAntiguedad(BigDecimal mesesAntiguedad) {
+	public void setMesesAntiguedad(String mesesAntiguedad) {
 		this.mesesAntiguedad = mesesAntiguedad;
 	}
 
 
 
 
-	public BigDecimal getValorMinimo() {
+	public String getValorMinimo() {
 		return valorMinimo;
 	}
 
 
 
 
-	public void setValorMinimo(BigDecimal valorMinimo) {
+	public void setValorMinimo(String valorMinimo) {
 		this.valorMinimo = valorMinimo;
 	}
 

@@ -32,17 +32,12 @@ public class ServiceError extends Exception{
 	   
 	   switch(codigoError){
 	   case 400:
-		   mensaje="Error, 400";
+		   mensaje="bad request";
 		   break;
-	   case 500:
-		   mensaje="Error, 500";
+	   case 416:
+		   mensaje="No Data Found";
 		   break;
-	   case 503:
-		   mensaje="Error, 503";
-		   break;
-	   default:
-		   mensaje="Error, sin codigo de error reconocido";
-		   break;
+	 
 	   }
 	   return mensaje;
    }

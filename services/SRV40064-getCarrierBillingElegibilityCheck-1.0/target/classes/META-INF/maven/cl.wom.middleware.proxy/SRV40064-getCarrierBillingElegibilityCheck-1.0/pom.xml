@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -7,12 +8,12 @@
 	<groupId>cl.wom.middleware.proxy</groupId>
 	<artifactId>SRV40064-getCarrierBillingElegibilityCheck-1.0</artifactId>
 	<version>1.0.0</version>
-	
-	
+
+
 	<name>SRV40064-getCarrierBillingElegibilityCheck-1.0</name>
 	<description>Camel implementation for the elegibility checkss</description>
-	
-		<properties>
+
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<spring.boot-version>1.4.1.RELEASE</spring.boot-version>
@@ -41,7 +42,11 @@
 
 
 	<dependencies>
-
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-spring-boot</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<!-- Camel -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -100,31 +105,22 @@
 			<artifactId>camel-jsonpath</artifactId>
 			<scope>provided</scope>
 		</dependency>
-			
+
 		<dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-stream</artifactId>
-            <scope>provided</scope>
-        </dependency>
-<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-stream</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>ojdbc</groupId>
 			<artifactId>ojdbc</artifactId>
 			<version>14</version>
 		</dependency>
-		
-				<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<scope>provided</scope>
-		</dependency>
-			<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jdbc</artifactId>
-			<scope>provided</scope>
-		</dependency>
-</dependencies>
 
-<build>
+
+	</dependencies>
+
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -29,18 +29,16 @@ public class ServiceError extends Exception{
     */
    @Override
    public String getMessage(){
-	   String mensaje="";
-	  
+   String mensaje="";
+	   
 	   switch(codigoError){
 	   case 400:
 		   mensaje="bad request";
 		   break;
-	  
-	   case 404:
-		   mensaje="No Found";
+	   case 416:
+		   mensaje="No Data Found";
 		   break;
-		   
-	  
+	 
 	   }
 	   return mensaje;
    }

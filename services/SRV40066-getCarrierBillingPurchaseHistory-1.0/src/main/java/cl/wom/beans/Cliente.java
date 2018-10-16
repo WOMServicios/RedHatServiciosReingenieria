@@ -19,7 +19,7 @@ public class Cliente implements Serializable {
 	private Date fechaIngreso;
 	private String bangoTransactionId;
 	private String  merchanTransactionId;
-	private BigDecimal amount;
+	private String amount;
 	private String userId;
 	private String responsePay;
 	private Date datePay;
@@ -85,11 +85,13 @@ public class Cliente implements Serializable {
 		this.merchanTransactionId = merchanTransactionId;
 	}
 
-	public BigDecimal getAmount() {
+
+
+	public String getAmount() {
 		return amount;
 	}
 
-	public void setAmount(BigDecimal amount) {
+	public void setAmount(String amount) {
 		this.amount = amount;
 	}
 
@@ -115,6 +117,15 @@ public class Cliente implements Serializable {
 
 	public void setDatePay(Date datePay) {
 		this.datePay = datePay;
+	}
+
+	@Override
+	public String toString() {
+		return "Cliente [idOferta=" + idOferta + ", numCelular=" + numCelular + ", contratoId=" + contratoId
+				+ ", paymentProviderTransaction=" + paymentProviderTransaction + ", fechaIngreso=" + fechaIngreso
+				+ ", bangoTransactionId=" + bangoTransactionId + ", merchanTransactionId=" + merchanTransactionId
+				+ ", amount=" + amount + ", userId=" + userId + ", responsePay=" + responsePay + ", datePay=" + datePay
+				+ "]";
 	}
 
 	
