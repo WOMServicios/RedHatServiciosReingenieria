@@ -9,77 +9,76 @@
 	<import resource="bean-definitions.xml" />
 
 	<camelContext
-		xmlns="http://camel.apache.org/schema/spring">	
-<!-- 		<propertyPlaceholder id="placeholder" -->
-<!-- 			location="classpath:application.properties,classpath:sql.properties" /> -->
-			<propertyPlaceholder id="placeholder"
-                location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties"/>
+		xmlns="http://camel.apache.org/schema/spring">
+		<!-- <propertyPlaceholder id="placeholder" -->
+		<!-- location="classpath:application.properties,classpath:sql.properties" 
+			/> -->
+		<propertyPlaceholder id="placeholder"
+			location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties" />
 
 		<!-- Control de errores -->
-<!-- 		<onException> -->
-<!-- 			<exception>java.lang.Exception</exception> -->
-<!-- 			<handled> -->
-<!-- 				<simple>true</simple> -->
-<!-- 			</handled> -->
-<!-- 			<to uri="velocity:velocity/response-sql-error.vm" /> -->
-<!-- 			<setHeader headerName="Content-Type"> -->
-<!-- 				<constant>application/json</constant> -->
-<!-- 			</setHeader> -->
-<!-- 		</onException> -->
+		<!-- <onException> -->
+		<!-- <exception>java.lang.Exception</exception> -->
+		<!-- <handled> -->
+		<!-- <simple>true</simple> -->
+		<!-- </handled> -->
+		<!-- <to uri="velocity:velocity/response-sql-error.vm" /> -->
+		<!-- <setHeader headerName="Content-Type"> -->
+		<!-- <constant>application/json</constant> -->
+		<!-- </setHeader> -->
+		<!-- </onException> -->
 
 		<route>
-		
+
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint}}" />
-			
+
 			<setHeader headerName="rut">
 				<simple>${headers.rut}</simple>
-			</setHeader> 
+			</setHeader>
 			<log message="rut: ${headers.rut}"></log>
-			
+
 			<setHeader headerName="accountId">
 				<simple>${headers.accountId}</simple>
 			</setHeader>
 			<log message="accountId: ${headers.accountId}"></log>
-			
-			<setHeader headerName="MSISDN">
-				<simple>${headers.MSISDN}</simple>
-			</setHeader>
-			<log message="MSISDN: ${headers.MSISDN}"></log>
-			
-			<setHeader headerName="IMSI">
-				<simple>${headers.IMSI}</simple>
-			</setHeader>
-			<log message="IMSI: ${headers.IMSI}"></log>
-			
-			<setHeader headerName="IMEI">
-				<simple>${headers.IMEI}</simple>
-			</setHeader>
-			<log message="IMEI: ${headers.IMEI}"></log>
-			
-			<setHeader headerName="ICCID">
-				<simple>${headers.ICCID}</simple>
-			</setHeader>
-			<log message="ICCID: ${headers.ICCID}"></log>
-			
-			
+
 			<choice>
 				<when>
-					<simple> ${headers.rut} != "" || ${headers.accountId} != "" </simple>
-					<bean ref="accountManagerSql" method="getAccountInformation"></bean>		
+					<simple> ${headers.rut} != "" || ${headers.accountId} != ""</simple>
+					<bean ref="accountManagerSql" method="getAccountInformation"></bean>
 				</when>
 				<otherwise>
-				<when>
-					<simple>${headers.MSISDN} != ""</simple>
+					<setHeader headerName="msisdn">
+						<simple>${headers.msisdn}</simple>
+					</setHeader>
+					<log message="MSISDN: ${headers.msisdn}"></log>
+
+					<setHeader headerName="imsi">
+						<simple>${headers.imsi}</simple>
+					</setHeader>
+					<log message="IMSI: ${headers.imsi}"></log>
+
+					<setHeader headerName="imei">
+						<simple>${headers.imei}</simple>
+					</setHeader>
+					<log message="IMEI: ${headers.imei}"></log>
+
+					<setHeader headerName="iccid">
+						<simple>${headers.iccid}</simple>
+					</setHeader>
+					<log message="ICCID: ${headers.iccid}"></log>
+					
 					<bean ref="accountManagerSql" method="getResourceInformation"></bean>
-				</when>
 				</otherwise>
 			</choice>
-		
-<!-- 			<bean ref="accountManagerSql" method="getAccountInformation"></bean> -->
 
-			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
-			
+			<!-- <bean ref="accountManagerSql" method="getAccountInformation"></bean> -->
+
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+
 		</route>
 
 	</camelContext>

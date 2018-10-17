@@ -164,7 +164,16 @@ public class AccountManagerSql {
 	}
 
 
-public void getResourceInformation() {
+public String getResourceInformation(Exchange ex) {
 	System.out.println("segundo ciclo");
+	
+//	SubscriberResources resource = new SubscriberResources();
+//	resource.setResourceType((String)ex.getIn().getHeader("msisdn"));
+//	
+//	String msisdn = (String)ex.getIn().getHeader("msisdn");
+//	
+//	System.out.println("MSISDB: " + msisdn);
+	
+	return null;
 }
 }
