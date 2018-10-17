@@ -51,7 +51,6 @@
 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
-			<log message="RUT: ${body}"></log>
 			<to uri="direct:fullRequest" />
 
 			<setHeader headerName="Content-Type">

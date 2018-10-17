@@ -13,9 +13,6 @@ public class SqlFormatterProcessor {
 		String rut = (String) ex.getIn().getHeader("rut");
 		String accountId = (String) ex.getIn().getHeader("accountId");
 
-		System.out.println("rut: " + rut);
-		System.out.println("accountId: " + accountId);
-
 		AccountManagerDAO accountManagerDAO = new AccountManagerDAO();
 		AccountInformation accountInformation = accountManagerDAO.getAccountInformation(rut, accountId);
 
@@ -31,9 +28,6 @@ public class SqlFormatterProcessor {
 
 		String resourceType = (String) ex.getIn().getHeader("resourceType");
 		String resourceValue = (String) ex.getIn().getHeader("resourceValue");
-//		String imei = (String) ex.getIn().getHeader("IMEI");
-//		String imsi = (String) ex.getIn().getHeader("IMSI");
-//		String iccid = (String) ex.getIn().getHeader("ICCID");
 
 		AccountManagerDAO accountManagerDAO = new AccountManagerDAO();
 		String rut = accountManagerDAO.sqlGetRutAccountManager(resourceType, resourceValue);
