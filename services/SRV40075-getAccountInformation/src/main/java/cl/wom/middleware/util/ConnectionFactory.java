@@ -6,9 +6,6 @@ import java.util.Properties;
 
 public class ConnectionFactory {
 	
-	
-	
-	
 	static Connection conn = null;
 
 	static public enum DataBaseSchema {

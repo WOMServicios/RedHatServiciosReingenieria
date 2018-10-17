@@ -22,8 +22,6 @@ import cl.wom.middleware.vo.Subscribers;
 
 public class AccountManagerSql {
 	
-	
-
 	public String getAccountInformation(Exchange ex) {
 		JSONObject jsonObj = new JSONObject();
 		Properties prop = Util.getProperties("APP_ENV");
@@ -51,7 +49,6 @@ public class AccountManagerSql {
 			// 1.1
 			String whereCondition = account.getRut().equals("") ? "a.customer_id = " + account.getAccountId() + "" : "a.cscompregno = '" + account.getRut() + "'";
 			String queryAccounts = "SELECT a.cscompregno      as rut,a.CUSTOMER_ID      as accountId,a.CUSTOMER_ID_HIGH as accountIdHigh,a.cslevel          as csLevel,a.CUSTCODE         as custCode,a.CSTYPE           as accountType,a.CSACTIVATED      as accountActivate,a.CSDEACTIVATED    as accountDeactivate,a.CUSTOMER_ID_EXT  as externalAccountId,a.CSST             as state,a.DOCTYPE_ID       as docTypeId,b.DOCTYPE_DESC     as docTypeDesc,b.DOCTYPE_OUTPUT_CODE as docTypeOutputCode,a.CUSTOMER_ID      as accountId_biilcycle,d.BILLCYCLE        as billCycle_billcycle,d.description      as billCycleDes_billcycle,d.interval_type    as intervalType,d.last_run_date    as lastRunDate,d.bch_run_date     as bchRunDate FROM sysadm.customer_all           a, sysadm.DOCUMENT_TYPE_SII_CODE b, SYSADM.BILLCYCLE_ACTUAL_VIEW  c, SYSADM.BILLCYCLES  d WHERE "
-					/*+ "a.cscompregno = '010567335' "*/
 					+ whereCondition
 					+ " and a.DOCTYPE_ID  = b.DOCTYPE_ID and a.CUSTOMER_ID = c.CUSTOMER_ID and c.billcycle   = d.billcycle";
 			ResultSet rsAccounts = conn.createStatement().executeQuery(queryAccounts);
@@ -64,13 +61,10 @@ public class AccountManagerSql {
 
 			while (rsAccounts.next()) {
 
-//				Account account = new Account();
-
 				// Incorporación de subscriptores al objeto account
 				List<Subscribers> listasubscribers = new ArrayList<Subscribers>();
 				// 2.1
 				String querySubscribers = "SELECT a.cscompregno as rut,b.customer_id as accountId,b.co_id as subscriberId,b.type as subscriberType, b.co_code as subscriberIdContract, b.CO_SIGNED as subscriberActivate,b.CO_EXPIR_DATE as subscriberExpired,b.CH_STATUS as state FROM sysadm.customer_all a, SYSADM.contract_all b, SYSADM.CONTRACT_HISTORY c WHERE  "
-						/*+ "a.cscompregno = '010567335' "*/
 						+ whereCondition
 						+ " and a.customer_id = b.customer_id and b.co_id = c.co_id and c.ch_status = 'a'";
 				ResultSet rsSubscribers = conn.createStatement().executeQuery(querySubscribers);
@@ -92,12 +86,11 @@ public class AccountManagerSql {
 
 					// Incorporación de SubscriberResouces
 					List<SubscriberResources> listaSubscriberResources = new ArrayList<SubscriberResources>();
-					// 3.1
+					// 3.1.1
 					String whereCondition2 = subid.equals("") ? "a.customer_id = '" + acoid + "'"
 							: "a.co_id = '" + subid + "'";
 					String querySubscriberResources = "SELECT a.co_id as subscriberId,b.dn_id as resourceId,c.dn_num as resourceValue, 'Número de celular del subscriptor' as resourceDescription, b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate,b.CS_STATUS as resourceState, 'MSISDN' as resourceType FROM sysadm.contract_all a, SYSADM.contr_services_cap  b, sysadm.directory_number c WHERE "
 							+ whereCondition2 + " and a.co_id = b.co_id and b.dn_id = c.dn_id and b.sncode = 3";
-					// System.out.println("querySubscriberResources: "+querySubscriberResources);
 					ResultSet rsSubscriberResoucers = conn.createStatement().executeQuery(querySubscriberResources);
 					while (rsSubscriberResoucers.next()) {
 						SubscriberResources subscriberResources = new SubscriberResources();
