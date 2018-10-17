@@ -92,7 +92,7 @@
 
 <!-- 		DESCOMENTAR Y REEMPLAZAR CUANDO SE VERIFIQUEN LA RUTA IP Y EL PUERTO -->
 <!-- 			<to uri="netty4:tcp://10.120.241.42:8887" /> -->
-			<to uri="netty4:tcp://0.0.0.0:9999" />
+			<toD uri="netty4:{{telnet.tcp}}" />
 		
 			<log message="retorno telnet RESP_CODE: ${body.split('=')[1]}"></log>
 			<log message="retorno telnet RESP_MSG: ${body.split('=')[2]}"></log>
@@ -166,11 +166,8 @@
 		</route>
 		<route>
 <!-- 			<from uri="netty4:tcp://10.120.241.42:8887"/> -->
-			<from uri="netty4:tcp://0.0.0.0:9999"/>
+			<from uri="netty4:{{telnet.tcp}}"/>
 
-<!-- 			TODO: CAMBIAR Y AÑADIR EXPRESION REGULAR PARA LA CADENA -->
-
-<!-- 			<setBody><constant>SPGCMD:AUTOPROV:RESP_CODE=0=SUCCESS</constant></setBody> -->
 			<setBody><constant>SPGCMD:AUTOPROV:RESP_CODE=0,RESP_MSG=SUCCESS</constant></setBody>
 		</route>	
 		<route>
