@@ -30,8 +30,8 @@ public class AccountManagerSql {
 		account.setRut((String)ex.getIn().getHeader("rut"));
 		account.setAccountId((String)ex.getIn().getHeader("accountId"));
 		
-		System.out.println("RUT" + account.getRut());
-		System.out.println("Id" + account.getAccountId());
+		System.out.println("RUT: " + account.getRut());
+		System.out.println("Id: " + account.getAccountId());
 		
 		/**System.setProperty("database.bscs.host", "10.120.241.44");
 		System.setProperty("database.bscs.port", "1540");

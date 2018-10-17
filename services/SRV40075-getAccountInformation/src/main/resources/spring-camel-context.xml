@@ -36,6 +36,11 @@
 				<simple>${headers.rut}</simple>
 			</setHeader> 
 			<log message="${headers.rut}"></log>
+			<setHeader headerName="accountId">
+				<simple>${headers.accountId}</simple>
+			</setHeader> 
+			<log message="${headers.accountId}"></log>
+			
 			<bean ref="accountManagerSql" method="getAccountInformation"></bean>
 
 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
