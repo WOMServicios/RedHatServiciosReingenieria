@@ -27,14 +27,15 @@
 			<from uri="jetty:{{camel.from.endpoint.a}}"/>
 			<log message="offerId: ${headers.productOffering.offerId}"></log> 
      
+			<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean>
+            
+            
             <choice>
             	<when>
-            		<simple>${headers.productOffering.offerId} != null</simple>
-<!-- 					<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean> -->
-					<bean ref="getProductCatalog" method="getProductCatalog"></bean>
-            	</when>  
+            		<simple>${body} == ""</simple>
+            		<to uri="velocity:velocity/response-sql-error.vm"></to>
+            	</when>
             </choice>
-            
             
             <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 	</route>
