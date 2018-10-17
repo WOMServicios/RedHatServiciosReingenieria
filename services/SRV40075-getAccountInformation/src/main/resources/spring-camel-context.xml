@@ -29,19 +29,8 @@
 		<!-- </onException> -->
 
 		<route>
-
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint.route1}}" />
-
-<!-- 			<setHeader headerName="rut"> -->
-<!-- 				<simple>${headers.rut}</simple> -->
-<!-- 			</setHeader> -->
-<!-- 			<log message="rut: ${headers.rut}"></log> -->
-
-<!-- 			<setHeader headerName="accountId"> -->
-<!-- 				<simple>${headers.accountId}</simple> -->
-<!-- 			</setHeader> -->
-			<log message="accountId: ${headers.accountId}"></log>
 
 			<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformation"></bean>
 			
@@ -54,60 +43,21 @@
 
 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 		</route>
-		
-		
+					
 		<route>
-
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint.route2}}" />
 
-		
-			<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformation"></bean>
+			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
-			<to uri="jetty:{{camel.from.endpoint.route1}}" />
-
-
-
-<!-- 			<choice> -->
-<!-- 				<when> -->
-<!-- 					<simple> ${headers.rut} != "" || ${headers.accountId} != ""</simple> -->
-<!-- 					<bean ref="accountManagerSql" method="getAccountInformation"></bean> -->
-<!-- 				</when> -->
-<!-- 				<otherwise> -->
-<!-- 					<setHeader headerName="msisdn"> -->
-<!-- 						<simple>${headers.msisdn}</simple> -->
-<!-- 					</setHeader> -->
-<!-- 					<log message="MSISDN: ${headers.msisdn}"></log> -->
-
-<!-- 					<setHeader headerName="imsi"> -->
-<!-- 						<simple>${headers.imsi}</simple> -->
-<!-- 					</setHeader> -->
-<!-- 					<log message="IMSI: ${headers.imsi}"></log> -->
-
-<!-- 					<setHeader headerName="imei"> -->
-<!-- 						<simple>${headers.imei}</simple> -->
-<!-- 					</setHeader> -->
-<!-- 					<log message="IMEI: ${headers.imei}"></log> -->
-
-<!-- 					<setHeader headerName="iccid"> -->
-<!-- 						<simple>${headers.iccid}</simple> -->
-<!-- 					</setHeader> -->
-<!-- 					<log message="ICCID: ${headers.iccid}"></log> -->
-					
-<!-- 					<bean ref="accountManagerSql" method="getResourceInformation"></bean> -->
-<!-- 				</otherwise> -->
-<!-- 			</choice> -->
-
+			<log message="RUT:${body}"></log>
+<!-- 			<to uri="jetty:{{camel.from.endpoint.route1}}" /> -->
 
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
-
 		</route>
 		
-		
-				
-
 	</camelContext>
 </beans>

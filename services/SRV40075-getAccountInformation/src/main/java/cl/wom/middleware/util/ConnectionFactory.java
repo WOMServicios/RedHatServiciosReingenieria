@@ -22,11 +22,11 @@ public class ConnectionFactory {
 		String port = "";
 		String databaseName = "";
 		
-		System.out.println(prop.getProperty("database.bscs.user"));
-		System.out.println(prop.getProperty("database.bscs.password"));
-		System.out.println(prop.getProperty("database.bscs.host"));
-		System.out.println(prop.getProperty("database.bscs.port"));
-		System.out.println(prop.getProperty("database.bscs.databaseName"));
+//		System.out.println(prop.getProperty("database.bscs.user"));
+//		System.out.println(prop.getProperty("database.bscs.password"));
+//		System.out.println(prop.getProperty("database.bscs.host"));
+//		System.out.println(prop.getProperty("database.bscs.port"));
+//		System.out.println(prop.getProperty("database.bscs.databaseName"));
 		
 		switch (shema) {
 			case BSCS:
