@@ -163,4 +163,8 @@ public class AccountManagerSql {
 
 	}
 
+
+public void getResourceInformation() {
+	System.out.println("segundo ciclo");
+}
 }

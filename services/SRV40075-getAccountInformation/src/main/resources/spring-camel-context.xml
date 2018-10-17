@@ -35,13 +35,48 @@
 			<setHeader headerName="rut">
 				<simple>${headers.rut}</simple>
 			</setHeader> 
-			<log message="${headers.rut}"></log>
+			<log message="rut: ${headers.rut}"></log>
+			
 			<setHeader headerName="accountId">
 				<simple>${headers.accountId}</simple>
-			</setHeader> 
-			<log message="${headers.accountId}"></log>
+			</setHeader>
+			<log message="accountId: ${headers.accountId}"></log>
 			
-			<bean ref="accountManagerSql" method="getAccountInformation"></bean>
+			<setHeader headerName="MSISDN">
+				<simple>${headers.MSISDN}</simple>
+			</setHeader>
+			<log message="MSISDN: ${headers.MSISDN}"></log>
+			
+			<setHeader headerName="IMSI">
+				<simple>${headers.IMSI}</simple>
+			</setHeader>
+			<log message="IMSI: ${headers.IMSI}"></log>
+			
+			<setHeader headerName="IMEI">
+				<simple>${headers.IMEI}</simple>
+			</setHeader>
+			<log message="IMEI: ${headers.IMEI}"></log>
+			
+			<setHeader headerName="ICCID">
+				<simple>${headers.ICCID}</simple>
+			</setHeader>
+			<log message="ICCID: ${headers.ICCID}"></log>
+			
+			
+			<choice>
+				<when>
+					<simple> ${headers.rut} != "" || ${headers.accountId} != "" </simple>
+					<bean ref="accountManagerSql" method="getAccountInformation"></bean>		
+				</when>
+				<otherwise>
+				<when>
+					<simple>${headers.MSISDN} != ""</simple>
+					<bean ref="accountManagerSql" method="getResourceInformation"></bean>
+				</when>
+				</otherwise>
+			</choice>
+		
+<!-- 			<bean ref="accountManagerSql" method="getAccountInformation"></bean> -->
 
 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 			
