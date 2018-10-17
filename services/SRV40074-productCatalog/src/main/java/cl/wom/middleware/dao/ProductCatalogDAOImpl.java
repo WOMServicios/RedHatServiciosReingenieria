@@ -6,11 +6,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONArray;
+import java.util.Properties;
 
 import cl.wom.middleware.util.ConnectionFactory;
 import cl.wom.middleware.util.ConnectionFactory.DataBaseSchema;
+import cl.wom.middleware.util.Util;
 import cl.wom.middleware.vo.BundleProductOffering;
 import cl.wom.middleware.vo.Channel;
 import cl.wom.middleware.vo.OneTime;
@@ -20,14 +20,24 @@ import cl.wom.middleware.vo.RecurringCharge;
 public class ProductCatalogDAOImpl {
 
 	
-	public List<ProductOffering> getProductCatalog(String OfferID, String shortDesc, String marketSeg)  {
+	public List<ProductOffering> getProductCatalog(String OfferID, String shortDesc, String marketSeg) throws SQLException  {
 
-		System.setProperty("database.bscs.host", "10.120.241.44");
-		System.setProperty("database.bscs.port", "1540");
-		System.setProperty("database.bscs.databasename", "BSCSUAT");
-		System.setProperty("database.bscs.username", "VMD");
-		System.setProperty("database.bscs.password", "VMD");
+		Properties prop = Util.getProperties("APP_ENV");
+		Properties sql = Util.getProperties("SQL_ENV");
+
+		//Donde APP_ENV es la variable de enbtorno
+
+		//System.setProperty("database.bscs.host", "10.120.241.44");
+		//System.setProperty("database.bscs.port", "1540");
+		//System.setProperty("database.bscs.databasename", "BSCSUAT");
+		//System.setProperty("database.bscs.username", "VMD");
+		//System.setProperty("database.bscs.password", "VMD");
 		
+		String user = prop.getProperty("database.bscs.username");
+		String password = prop.getProperty("database.bscs.password");
+		String host = prop.getProperty("database.bscs.host");
+		String port = prop.getProperty("database.bscs.port");
+		String databaseName = prop.getProperty("database.bscs.databasename");
 		
 		String whereCondition = "";
 		if (!"".equals(OfferID) && OfferID != null)
@@ -51,13 +61,22 @@ public class ProductCatalogDAOImpl {
 			String getOfferIdQuery ="select a.tmcode from sysadm.rateplan a, PROVI_BOLS.NEXTEL_CATALOGO_PLAN c where "+whereCondition +" and a.SHDES = c.SHDES_PLAN";
 			System.out.println("getOfferIdQuery: "+getOfferIdQuery);
 			String offerId = "";
+			String getShDescQuery ="select a.SHDES from sysadm.rateplan a, PROVI_BOLS.NEXTEL_CATALOGO_PLAN c where "+whereCondition +" and a.SHDES = c.SHDES_PLAN";
+			System.out.println("getShDescQuery: "+getShDescQuery);
+			String ShDesc= "";
 			ResultSet rsGetOfferID = conn.createStatement().executeQuery(getOfferIdQuery);
 			if (rsGetOfferID.next())
 				offerId = rsGetOfferID.getString(1);
 			else
 				return listProductOffering;
 			
-
+			ResultSet rsGetShDesc = conn.createStatement().executeQuery(getShDescQuery);
+			if (rsGetShDesc.next())
+				ShDesc = rsGetShDesc.getString(1);
+			else
+				return listProductOffering;
+			
+			System.out.println("OfferId:"+offerId+""+"ShDesc:"+ShDesc);
 			//GetProductOfferID 1.1
 			String queryGetProductOffering="select a.tmcode as offerId, "
 					+ "a.des as name,"
@@ -81,10 +100,8 @@ public class ProductCatalogDAOImpl {
 					+ "from sysadm.rateplan_version x "
 					+ " where x.tmcode = "+offerId+" and x.tmcode  = b.tmcode and x.STATUS='P') "
 					+ "and b.STATUS='P' and a.SHDES = c.SHDES_PLAN";
-
-			ResultSet rsGetProductOffering = conn.createStatement().executeQuery(queryGetProductOffering);
-			
-			
+			//String queryGetProductOffering=sql.getProperty("queryGetProductOffering");
+			ResultSet rsGetProductOffering = conn.createStatement().executeQuery(queryGetProductOffering);		
 			while (rsGetProductOffering.next()) {
 				ProductOffering productOffering = new ProductOffering();
 				
@@ -105,7 +122,7 @@ public class ProductCatalogDAOImpl {
 				RecurringCharge recurringCharge = new RecurringCharge();
 				recurringCharge.setAmount((rsGetProductOffering.getString("amount_recurringCharge")));
 				recurringCharge.setCurrency((rsGetProductOffering.getString("currency_recurringCharge")));
-//				recurringCharge.setFrecuency((rsGetProductOffering.getString("frecuency_recurringCharge"))); //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
+				//recurringCharge.setFrecuency((rsGetProductOffering.getString("frecuency_recurringCharge"))); //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
 				recurringCharge.setType((rsGetProductOffering.getString("type_recurringCharge")));
 				recurringCharge.setUnitOfMeasure((rsGetProductOffering.getString("unitOfMeasure_recurringCharge")));
 
@@ -150,22 +167,22 @@ public class ProductCatalogDAOImpl {
 		            bundleProductOffering.setMaximunAllowed(rsGetBundleOfferingA.getString("maximumAllowed")); 
 		            bundleProductOffering.setStatus(rsGetBundleOfferingA.getString("status"));
 		            
-//		            añade channel
+		            //añade channel
 		            Channel channelbundle= new Channel();
 		            channelbundle.setLegacySystem((rsGetBundleOfferingA.getString("legacySystem_channel")));
 		            channelbundle.setName((rsGetBundleOfferingA.getString("name_channel")));		            
 		            bundleProductOffering.setChannel(channelbundle);
 		            
-//		            añade objeto RecurringCharge
+		            //añade objeto RecurringCharge
 		            RecurringCharge recurringChargebundle = new RecurringCharge();
 					recurringChargebundle.setAmount((rsGetBundleOfferingA.getString("amount_recurringCharge")));
 					recurringChargebundle.setCurrency((rsGetBundleOfferingA.getString("currency_recurringCharge")));
-//					recurringChargebundle.setFrecuency((rsGetBundleOfferingA.getString("frecuency_recurringCharge")));  //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
+					//recurringChargebundle.setFrecuency((rsGetBundleOfferingA.getString("frecuency_recurringCharge")));  //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
 					recurringChargebundle.setType((rsGetBundleOfferingA.getString("type_recurringCharge")));
 					recurringChargebundle.setUnitOfMeasure((rsGetBundleOfferingA.getString("unitOfMesaure_recurringCharge")));
 					
 					bundleProductOffering.setRecurringCharge(recurringChargebundle);
-//		            añade OneTime
+					//añade OneTime
 		            OneTime onetime= new OneTime();
                     onetime.setAmount(rsGetBundleOfferingA.getString("amount_oneTime"));
                     onetime.setCurrency(rsGetBundleOfferingA.getString("currency_oneTime"));
@@ -219,7 +236,7 @@ public class ProductCatalogDAOImpl {
 					
 		            bundleProductOffering.setMinimumRequired(rsGetBundleOfferingB.getString("minimumRequired"));
 		            bundleProductOffering.setQuantity(rsGetBundleOfferingB.getString("quantity"));
-//		            bundleProductOffering.setUnitOfMeasure(rsGetBundleOfferingB.getString("unitOfMeasure"));  //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
+		            bundleProductOffering.setUnitOfMeasure(rsGetBundleOfferingB.getString("unitOfMesaure"));  //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
 		            bundleProductOffering.setIsPromotionProduct(rsGetBundleOfferingB.getString("isPromotionProduct"));
 		            bundleProductOffering.setDescription(rsGetBundleOfferingB.getString("description"));
 		            bundleProductOffering.setIsOfferProduct(rsGetBundleOfferingB.getString("isOfferProduct"));
@@ -232,20 +249,20 @@ public class ProductCatalogDAOImpl {
 		            bundleProductOffering.setShDes(rsGetBundleOfferingB.getString("shDes"));
 		            bundleProductOffering.setId(rsGetBundleOfferingB.getString("id"));
 		            bundleProductOffering.setSku(rsGetBundleOfferingB.getString("sku"));
-//		            bundleProductOffering.setMaximunAllowed(rsGetBundleOfferingB.getString("maximunAllowed"));  //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
+		            bundleProductOffering.setMaximunAllowed(rsGetBundleOfferingB.getString("maximumAllowed"));  //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
 		            bundleProductOffering.setStatus(rsGetBundleOfferingB.getString("status"));
 		            
-//		            añade channel
+		            //añade channel
 		            Channel channelbundle= new Channel();
 		            channelbundle.setLegacySystem((rsGetBundleOfferingB.getString("legacySystem_channel")));
 		            channelbundle.setName((rsGetBundleOfferingB.getString("name_channel")));		            
 		            bundleProductOffering.setChannel(channelbundle);
 		            
-//		            añade objeto RecurringCharge
+		            //añade objeto RecurringCharge
 		            RecurringCharge recurringChargebundle = new RecurringCharge();
 					recurringChargebundle.setAmount((rsGetBundleOfferingB.getString("amount_recurringCharge")));
 					recurringChargebundle.setCurrency((rsGetBundleOfferingB.getString("currency_recurringCharge")));
-//					recurringChargebundle.setFrecuency((rsGetBundleOfferingB.getString("frecuency_recurringCharge")));  //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
+					//recurringChargebundle.setFrecuency((rsGetBundleOfferingB.getString("frecuency_recurringCharge")));  //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
 					recurringChargebundle.setType((rsGetBundleOfferingB.getString("type_recurringCharge")));
 					recurringChargebundle.setUnitOfMeasure((rsGetBundleOfferingB.getString("unitOfMesaure_recurringCharge")));
 					
@@ -262,35 +279,197 @@ public class ProductCatalogDAOImpl {
 					listBundleProductOffering.add(bundleProductOffering);
 				}
 				rsGetBundleOfferingB.close();
-		
 				
+				
+				
+				//2.2.2
+				String queryGetBundleOfferingC=" select " + 
+						"  b.tmcode                              as id," + 
+						"  b.tmcode                               as offerId," + 
+						"  b.SHDES                                as shDes," + 
+						"  'Bolsa de Voz'                         as name," + 
+						"  'Bolsa de Voz'                         as description," + 
+						"  'null'                                 as priority," + 
+						"  'a'                                    as status," + 
+						"  '1'                                    as minimumRequired," + 
+						"  '1'                                    as maximumAllowed," + 
+						"  'true'                                 as isOfferProduct," + 
+						"  'false'                                as isOptionProduct," + 
+						"  'N'                                    as isPromotionProduct," + 
+						"  'null'                                 as occ," + 
+						"  'null'                                 as sku," + 
+						"  'null'                                 as name_channel," + 
+						"  'null'                                 as legacySystem_channel," + 
+						"  'N'                                    as amount_oneTime," + 
+						"  'N'                                    as currency_oneTime," + 
+						"  'N'                                    as duration_oneTime," + 
+						"  'N'                                    as unitOfMesaure_oneTime," + 
+						"  'N'                                    as type_oneTime," + 
+						"  '0'                                    as amount_recurringCharge," + 
+						"  'CLP'                                  as currency_recurringCharge," + 
+						"  '43200'                                as duration_recurringCharge," + 
+						"  'Minutos'                              as unitOfMesaure_recurringCharge," + 
+						"  'Bundle'                               as type_recurringCharge," + 
+						"  'VOZ'                                  as unitType," + 
+						"  'Minutos'                              as unitOfMesaure," + 
+						"  a.unit_all_dest                        as quantity from  " + 
+						"    PROVI_BOLS.NEXTEL_CATALOGO_PLAN a," + 
+						"    sysadm.rateplan                 b where" + 
+						"    a.shdes_plan = '"+ShDesc+"'" + 
+						"and a.shdes_plan = b.shdes and ROWNUM <=10";
+				
+				System.out.println("imprimiendo shdes_plan:: "+productOffering.getShortDescription());
+				System.out.println("imprimiendo ShDesc:: "+ShDesc);
+				
+				ResultSet rsGetBundleOfferingC = conn.createStatement().executeQuery(queryGetBundleOfferingC);
+				while (rsGetBundleOfferingC.next()) {
+					BundleProductOffering bundleProductOffering = new BundleProductOffering();
+					
+					 bundleProductOffering.setMinimumRequired(rsGetBundleOfferingC.getString("minimumRequired"));
+			            bundleProductOffering.setQuantity(rsGetBundleOfferingC.getString("quantity"));
+			            bundleProductOffering.setUnitOfMeasure(rsGetBundleOfferingC.getString("unitOfMesaure"));    
+			            bundleProductOffering.setIsPromotionProduct(rsGetBundleOfferingC.getString("isPromotionProduct"));
+			            bundleProductOffering.setDescription(rsGetBundleOfferingC.getString("description"));
+			            bundleProductOffering.setIsOfferProduct(rsGetBundleOfferingC.getString("isOfferProduct"));
+			            bundleProductOffering.setIsOptionProduct(rsGetBundleOfferingC.getString("isOptionProduct"));
+			            bundleProductOffering.setPriority(rsGetBundleOfferingC.getString("priority"));
+			            bundleProductOffering.setOcc(rsGetBundleOfferingC.getString("occ"));
+			            bundleProductOffering.setUnitType(rsGetBundleOfferingC.getString("unitType"));
+			            bundleProductOffering.setName(rsGetBundleOfferingC.getString("name"));
+			            bundleProductOffering.setOfferId(rsGetBundleOfferingC.getString("offerId"));
+			            bundleProductOffering.setShDes(rsGetBundleOfferingC.getString("shDes"));
+			            bundleProductOffering.setId(rsGetBundleOfferingC.getString("id"));
+			            bundleProductOffering.setSku(rsGetBundleOfferingC.getString("sku"));
+			            bundleProductOffering.setMaximunAllowed(rsGetBundleOfferingC.getString("maximumAllowed"));  
+			            bundleProductOffering.setStatus(rsGetBundleOfferingC.getString("status"));
+			            
+			            //añade channel
+			            Channel channelbundle= new Channel();
+			            channelbundle.setLegacySystem((rsGetBundleOfferingC.getString("legacySystem_channel")));
+			            channelbundle.setName((rsGetBundleOfferingC.getString("name_channel")));		            
+			            bundleProductOffering.setChannel(channelbundle);
+			            
+			            //añade objeto RecurringCharge
+			            RecurringCharge recurringChargebundle = new RecurringCharge();
+						recurringChargebundle.setAmount((rsGetBundleOfferingC.getString("amount_recurringCharge")));
+						recurringChargebundle.setCurrency((rsGetBundleOfferingC.getString("currency_recurringCharge")));
+						//recurringChargebundle.setFrecuency((rsGetBundleOfferingC.getString("frecuency_recurringCharge")));  //TODO JV: Error por conflicto de columna, SQL EXCEPTION 
+						recurringChargebundle.setType((rsGetBundleOfferingC.getString("type_recurringCharge")));
+						recurringChargebundle.setUnitOfMeasure((rsGetBundleOfferingC.getString("unitOfMesaure_recurringCharge")));
+						
+						bundleProductOffering.setRecurringCharge(recurringChargebundle);
+						// Aniade OneTime
+			            OneTime onetime= new OneTime();
+	                    onetime.setAmount(rsGetBundleOfferingC.getString("amount_oneTime"));
+	                    onetime.setCurrency(rsGetBundleOfferingC.getString("currency_oneTime"));
+	                    onetime.setDuration(rsGetBundleOfferingC.getString("duration_oneTime"));
+	                    onetime.setUnitOfMeasure(rsGetBundleOfferingC.getString("unitOfMesaure_oneTime"));
+	                    onetime.setType(rsGetBundleOfferingC.getString("type_oneTime"));                   
+	                    bundleProductOffering.setOneTime(onetime);
+			            
+						listBundleProductOffering.add(bundleProductOffering);
+					}
+					rsGetBundleOfferingC.close();
+					
+					
+					
+					//2.2.3
+					String queryGetBundleOfferingD="select " + 
+							"  b.tmcode                              as id," + 
+							"  b.tmcode                               as offerId," + 
+							"  b.SHDES                                as shDes," + 
+							"  'Bolsa de Voz'                         as name," + 
+							"  'Bolsa de Voz'                         as description," + 
+							"  'null'                                 as priority," + 
+							"  'a'                                    as status," + 
+							"  '1'                                    as minimumRequired," + 
+							"  '1'                                    as maximumAllowed," + 
+							"  'true'                                 as isOfferProduct," + 
+							"  'false'                                as isOptionProduct," + 
+							"  'N'                                    as isPromotionProduct," + 
+							"  'null'                                 as occ," + 
+							"  'null'                                 as sku," + 
+							"  'null'                                 as name_channel," + 
+							"  'null'                                 as legacySystem_channel," + 
+							"  'N'                                    as amount_oneTime," + 
+							"  'N'                                    as currency_oneTime," + 
+							"  'N'                                    as duration_oneTime," + 
+							"  'N'                                    as unitOfMesaure_oneTime," + 
+							"  'N'                                    as type_oneTime," + 
+							"  '0'                                    as amount_recurringCharge," + 
+							"  'CLP'                                  as currency_recurringCharge," + 
+							"  '43200'                                as duration_recurringCharge," + 
+							"  'Minutos'                              as unitOfMesaure_recurringCharge," + 
+							"  'Bundle'                               as type_recurringCharge," + 
+							"  'SMS'                                  as unitType," + 
+							"  'Unitario'                              as unitOfMesaure," + 
+							"  a.unit_sms                        as quantity from  " + 
+							"    PROVI_BOLS.NEXTEL_CATALOGO_PLAN a," + 
+							"    sysadm.rateplan                 b where" + 
+							"    a.shdes_plan = '"+ShDesc+"'" + 
+							"and a.shdes_plan = b.shdes and ROWNUM <=10";
+				          ResultSet rsGetBundleOfferingD = conn.createStatement().executeQuery(queryGetBundleOfferingD);
+				          while (rsGetBundleOfferingD.next()) {
+				            BundleProductOffering bundleProductOffering = new BundleProductOffering();
+				            
+		             		bundleProductOffering.setMinimumRequired(rsGetBundleOfferingD.getString("minimumRequired"));
+		                    bundleProductOffering.setQuantity(rsGetBundleOfferingD.getString("quantity"));
+		                    bundleProductOffering.setUnitOfMeasure(rsGetBundleOfferingD.getString("unitOfMesaure"));
+		                    bundleProductOffering.setIsPromotionProduct(rsGetBundleOfferingD.getString("isPromotionProduct"));
+		                    bundleProductOffering.setDescription(rsGetBundleOfferingD.getString("description"));
+		                    bundleProductOffering.setIsOfferProduct(rsGetBundleOfferingD.getString("isOfferProduct"));
+		                    bundleProductOffering.setIsOptionProduct(rsGetBundleOfferingD.getString("isOptionProduct"));
+		                    bundleProductOffering.setPriority(rsGetBundleOfferingD.getString("priority"));
+		                    bundleProductOffering.setOcc(rsGetBundleOfferingD.getString("occ"));
+		                    bundleProductOffering.setUnitType(rsGetBundleOfferingD.getString("unitType"));
+		                    bundleProductOffering.setName(rsGetBundleOfferingD.getString("name"));
+		                    bundleProductOffering.setOfferId(rsGetBundleOfferingD.getString("offerId"));
+		                    bundleProductOffering.setShDes(rsGetBundleOfferingD.getString("shDes"));
+		                    bundleProductOffering.setId(rsGetBundleOfferingD.getString("id"));
+		                    bundleProductOffering.setSku(rsGetBundleOfferingD.getString("sku"));
+		                    bundleProductOffering.setMaximunAllowed(rsGetBundleOfferingD.getString("maximumAllowed")); 
+		                    bundleProductOffering.setStatus(rsGetBundleOfferingD.getString("status"));
+		                    
+	                    	//añade channel
+		                    Channel channelbundle= new Channel();
+		                    channelbundle.setLegacySystem((rsGetBundleOfferingD.getString("legacySystem_channel")));
+		                    channelbundle.setName((rsGetBundleOfferingD.getString("name_channel")));                
+		                    bundleProductOffering.setChannel(channelbundle);
+				                    
+			                  //añade objeto RecurringCharge
+		                      RecurringCharge recurringChargebundle = new RecurringCharge();
+				              recurringChargebundle.setAmount((rsGetBundleOfferingD.getString("amount_recurringCharge")));
+				              recurringChargebundle.setCurrency((rsGetBundleOfferingD.getString("currency_recurringCharge")));
+		              		  //recurringChargebundle.setFrecuency((rsGetBundleOfferingD.getString("frecuency_recurringCharge")));  
+				              //TODO JV: Error por conflicto de columna,no esta considerado, SQL EXCEPTION 
+				              recurringChargebundle.setType((rsGetBundleOfferingD.getString("type_recurringCharge")));
+				              recurringChargebundle.setUnitOfMeasure((rsGetBundleOfferingD.getString("unitOfMesaure_recurringCharge")));
+				              bundleProductOffering.setRecurringCharge(recurringChargebundle);
+				              
+				              // Aniade OneTime
+				                    OneTime onetime= new OneTime();
+				                        onetime.setAmount(rsGetBundleOfferingD.getString("amount_oneTime"));
+				                        onetime.setCurrency(rsGetBundleOfferingD.getString("currency_oneTime"));
+				                        onetime.setDuration(rsGetBundleOfferingD.getString("duration_oneTime"));
+				                        onetime.setUnitOfMeasure(rsGetBundleOfferingD.getString("unitOfMesaure_oneTime"));
+				                        onetime.setType(rsGetBundleOfferingD.getString("type_oneTime"));                   
+				                        bundleProductOffering.setOneTime(onetime);
+				                        
+				              listBundleProductOffering.add(bundleProductOffering);
+				            }
+				            rsGetBundleOfferingD.close();
+			
 				productOffering.setBundleProductOffering(listBundleProductOffering);
-				
-				
-				
-				
-				
 				listProductOffering.add(productOffering);
 			}
 			
 			
-//			JSONObject jsonObj = new JSONObject( listProductOffering );
-			
-//			JSONArray jsonObj = new org.json.JSONArray(listProductOffering);
-//			jsonArray = new JSONArray(listProductOffering);
 			rsGetProductOffering.close();	
 			stmt.close();
-//			System.out.println("dentro del metodo: "+jsonArray.toString() );
 
-//			return listProductOffering;
-//			System.out.println("dentro del metodo: "+jsonArray.toString() );
-
-//			rsGetProductOffering.close();
-//			stmt.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw e;
 		}finally {
 			if (conn!=null)
 				try {

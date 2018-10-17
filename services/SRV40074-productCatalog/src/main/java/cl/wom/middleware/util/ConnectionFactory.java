@@ -2,31 +2,38 @@ package cl.wom.middleware.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class ConnectionFactory {
+	static Properties prop = Util.getProperties("APP_ENV");
+	static Properties sql = Util.getProperties("SQL_ENV");
+	static String user = prop.getProperty("database.bscs.username");
+	static String password = prop.getProperty("database.bscs.password");
+	static String host = prop.getProperty("database.bscs.host");
+	static String port = prop.getProperty("database.bscs.port");
+	static String databaseName = prop.getProperty("database.bscs.databasename");
 	
 	static Connection conn = null;
 
 	static public enum DataBaseSchema {
 	    BSCS,
-	    WAPPL;
 	}
 	
-	public static Connection getConnection(DataBaseSchema shema) throws ClassNotFoundException, SQLException {
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		
+	public static Connection getConnection(DataBaseSchema shema) throws SQLException {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		
 		System.out.println("system property: "+System.getProperty("database.bscs.host"));
 		
 		switch (shema) {
-			case BSCS:
-				return DriverManager.getConnection("jdbc:oracle:thin:@" + System.getProperty("database.bscs.host") + ":" + System.getProperty("database.bscs.port") + ":" + System.getProperty("database.bscs.databasename"), System.getProperty("database.bscs.username"),	System.getProperty("database.bscs.password"));
-			case WAPPL:
-				return DriverManager.getConnection("jdbc:oracle:thin:@" + System.getProperty("database.wappl.host") + ":" + System.getProperty("database.wappl.port") + ":" + System.getProperty("database.wappl.name"), System.getProperty("database.wappl.username"),	System.getProperty("database.wappl.password"));				
-			
-			default:
-			return null;
-		}
+		case BSCS:
+			return DriverManager.getConnection("jdbc:oracle:thin:@" + host + ":" + port + ":" + databaseName, user,password);
+		default:
+		return null;
 	}
+}
 }

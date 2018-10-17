@@ -1,1 +1,1 @@
-{ status: "ERR", description: "NOT DATA FOUND" }
+{ "status": "${headers.errorCode}", "description": "${headers.errorMessage}" }
