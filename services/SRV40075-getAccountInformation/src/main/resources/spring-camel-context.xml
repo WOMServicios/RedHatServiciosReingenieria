@@ -51,13 +51,28 @@
 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
-			<log message="RUT:${body}"></log>
-<!-- 			<to uri="jetty:{{camel.from.endpoint.route1}}" /> -->
+			<log message="RUT: ${body}"></log>
+			<to uri="direct:fullRequest" />
 
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
 		</route>
+		
+		<route>
+			<from uri="direct:fullRequest" />
+
+			<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformation"></bean>
+			<choice>
+				<when>
+					<simple>${body} == null</simple>
+					<to uri="velocity:velocity/response-sql-error.vm" ></to>
+				</when>
+			</choice>
+
+<!-- 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader> -->
+		</route>
+		
 		
 	</camelContext>
 </beans>

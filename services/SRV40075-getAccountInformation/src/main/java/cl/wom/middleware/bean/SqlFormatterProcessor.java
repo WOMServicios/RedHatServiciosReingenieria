@@ -29,13 +29,14 @@ public class SqlFormatterProcessor {
 
 	public String sqlGetRutAccountManager(Exchange ex) {
 
-		String msisdn = (String) ex.getIn().getHeader("MSISDN");
-		String imei = (String) ex.getIn().getHeader("IMEI");
-		String imsi = (String) ex.getIn().getHeader("IMSI");
-		String iccid = (String) ex.getIn().getHeader("ICCID");
+		String resourceType = (String) ex.getIn().getHeader("resourceType");
+		String resourceValue = (String) ex.getIn().getHeader("resourceValue");
+//		String imei = (String) ex.getIn().getHeader("IMEI");
+//		String imsi = (String) ex.getIn().getHeader("IMSI");
+//		String iccid = (String) ex.getIn().getHeader("ICCID");
 
 		AccountManagerDAO accountManagerDAO = new AccountManagerDAO();
-		String rut = accountManagerDAO.sqlGetRutAccountManager(msisdn, imei, imsi, iccid);
+		String rut = accountManagerDAO.sqlGetRutAccountManager(resourceType, resourceValue);
 
 		return rut;
 	}

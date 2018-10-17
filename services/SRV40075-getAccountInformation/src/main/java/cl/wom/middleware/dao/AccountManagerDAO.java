@@ -154,31 +154,31 @@ public class AccountManagerDAO {
 		return accountInformation;
 	}
 
-	public String sqlGetRutAccountManager(String msisdn, String imei, String imsi, String iccid) {
+	public String sqlGetRutAccountManager(String resourceType, String resourceValue) {
 
 		Properties prop = Util.getProperties("APP_ENV");
 
-		msisdn = msisdn == null ? "" : msisdn;
-		imei = imei == null ? "" : imei;
-		imsi = imsi == null ? "" : imsi;
-		iccid = iccid == null ? "" : iccid;
+//		msisdn = msisdn == null ? "" : msisdn;
+//		imei = imei == null ? "" : imei;
+//		imsi = imsi == null ? "" : imsi;
+//		iccid = iccid == null ? "" : iccid;
 
 		Connection conn = null;
 		Statement stmt;
-
+		String subrut = "";
 		try {
 			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS, prop);
 			stmt = conn.createStatement();
 
-			if (!(msisdn.equals(""))) {
-				System.out.println("MSISDN: " + msisdn);
+			if ((resourceType.equals("MSISDN"))) {
+//				System.out.println("MSISDN: " + msisdn);
 				// 3.1.2
 				String queryMSISDN = "SELECT a.co_id as subscriberId,b.dn_id as resourceId,c.dn_num as resourceValue, 'Número de celular del subscriptor' as resourceDescription, b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate,b.CS_STATUS as resourceState, 'MSISDN' as resourceType FROM sysadm.contract_all a, SYSADM.contr_services_cap  b, sysadm.directory_number    c WHERE C.DN_NUM = '"
-						+ msisdn + "' and a.co_id = b.co_id and b.dn_id = c.dn_id and b.sncode = 3";
+						+ resourceValue + "' and a.co_id = b.co_id and b.dn_id = c.dn_id and b.sncode = 3";
 
 				ResultSet rsSubId = stmt.executeQuery(queryMSISDN);
 
-				while (rsSubId.next()) {
+				if (rsSubId.next()) {
 					String subId = rsSubId.getString("SUBSCRIBERID");
 					System.out.println("SubID: " + subId);
 
@@ -188,22 +188,22 @@ public class AccountManagerDAO {
 
 					ResultSet rsRut = stmt.executeQuery(querySubId);
 
-					while (rsRut.next()) {
-						String subrut = rsRut.getString("RUT");
+					if (rsRut.next()) {
+						subrut = rsRut.getString("RUT");
 						System.out.println("RUT: " + subrut);
 					}
 				}
 
-			} else if (!(imei.equals(""))) {
-				System.out.println("IMEI: " + imei);
+			} else if ((resourceType.equals("IMEI"))) {
+				System.out.println("IMEI: " + resourceValue);
 
 				String queryIMEI = "SELECT a.co_id as subscriberId, b.dn_id as resourceId, d.eq_serial_num as resourceValue, (e.description||'-'||e.company)  as resourceDescription, b.CS_ACTIV_DATE as resourceActivate, b.CS_DEACTIV_DATE as resourceDeactivate, d.eq_status as resourceState, 'IMEI' as resourceType FROM sysadm.contract_all a, sysadm.contr_services_cap  b, sysadm.contr_devices c, sysadm.equipment d, sysadm.equipment_type e WHERE d.eq_serial_num = '"
-						+ imei
+						+ resourceValue
 						+ "' and b.co_id   = a.co_id and b.co_id   = c.co_id and c.eq_id   = d.equipment_id and d.equipment_type_id = e.equipment_type_id";
 
 				ResultSet rsSubId = stmt.executeQuery(queryIMEI);
 
-				while (rsSubId.next()) {
+				if (rsSubId.next()) {
 					String subId = rsSubId.getString("SUBSCRIBERID");
 					System.out.println("SubID: " + subId);
 
@@ -213,21 +213,21 @@ public class AccountManagerDAO {
 
 					ResultSet rsRut = stmt.executeQuery(querySubId);
 
-					while (rsRut.next()) {
-						String subrut = rsRut.getString("RUT");
+					if (rsRut.next()) {
+						subrut = rsRut.getString("RUT");
 						System.out.println("RUT: " + subrut);
 					}
 				}
 
-			} else if (!(imsi.equals(""))) {
-				System.out.println("IMSI: " + imsi);
+			} else if ((resourceType.equals("IMSI"))) {
+				System.out.println("IMSI: " + resourceValue);
 				// 3.2.2
 				String queryIMSI = "SELECT a.co_id as subscriberId, b.dn_id as resourceId,d.port_num as resourceValue,'Número de IMSI del subscriptor'     as resourceDescription, b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate, D.PORT_STATUS as resourceState, 'IMSI' as resourceType FROM sysadm.contract_all a, sysadm.contr_services_cap  b, sysadm.contr_devices c, sysadm.port d WHERE d.port_num = '"
-						+ imsi + "' and b.co_id   = a.co_id and b.co_id   = c.co_id and c.port_id = d.port_id";
+						+ resourceValue + "' and b.co_id   = a.co_id and b.co_id   = c.co_id and c.port_id = d.port_id";
 
 				ResultSet rsSubId = stmt.executeQuery(queryIMSI);
 
-				while (rsSubId.next()) {
+				if (rsSubId.next()) {
 					String subId = rsSubId.getString("SUBSCRIBERID");
 					System.out.println("SubID: " + subId);
 
@@ -237,23 +237,23 @@ public class AccountManagerDAO {
 
 					ResultSet rsRut = stmt.executeQuery(querySubId);
 
-					while (rsRut.next()) {
-						String subrut = rsRut.getString("RUT");
+					if (rsRut.next()) {
+						subrut = rsRut.getString("RUT");
 						System.out.println("RUT: " + subrut);
 					}
 				}
 
-			} else if (!(iccid.equals(""))) {
-				System.out.println("ICCID: " + iccid);
+			} else if ((resourceType.equals("ICCID"))) {
+				System.out.println("ICCID: " + resourceValue);
 
 				// 3.3.2
 				String queryICCID = "SELECT a.co_id as subscriberId, b.dn_id as resourceId,E.SM_SERIALNUM as resourceValue, 'Número de ICCID del subscriptor'    as resourceDescription,b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate,E.SM_STATUS as resourceState, 'ICCID' as resourceType FROM sysadm.contract_all a, sysadm.contr_services_cap  b,sysadm.contr_devices c, sysadm.port d, sysadm.storage_medium e WHERE E.SM_SERIALNUM = '"
-						+ iccid
+						+ resourceValue
 						+ "' and b.co_id   = a.co_id and b.co_id   = c.co_id and c.port_id = d.port_id AND D.sm_id   = E.sm_id";
 
 				ResultSet rsSubId = stmt.executeQuery(queryICCID);
 
-				while (rsSubId.next()) {
+				if (rsSubId.next()) {
 					String subId = rsSubId.getString("SUBSCRIBERID");
 					System.out.println("SubID: " + subId);
 
@@ -263,8 +263,8 @@ public class AccountManagerDAO {
 
 					ResultSet rsRut = stmt.executeQuery(querySubId);
 
-					while (rsRut.next()) {
-						String subrut = rsRut.getString("RUT");
+					if (rsRut.next()) {
+						subrut = rsRut.getString("RUT");
 						System.out.println("RUT: " + subrut);
 					}
 				}
@@ -272,7 +272,7 @@ public class AccountManagerDAO {
 			}
 
 			System.out.println("segundo ciclo");
-			return null;
+			return subrut;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
