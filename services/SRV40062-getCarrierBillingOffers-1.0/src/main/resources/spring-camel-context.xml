@@ -18,8 +18,10 @@
 			archivo properties. Por defecto en opensfhit es develop -->
 		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
 
-		<propertyPlaceholder id="placeholder"
-			location="classpath:application.properties,classpath:sql.properties" />
+		<!-- <propertyPlaceholder id="placeholder"
+			location="classpath:application.properties,classpath:sql.properties" /> -->
+			<propertyPlaceholder id="placeholder"
+                location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties"/>
 
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
@@ -46,7 +48,8 @@
 		<!-- getcarrierbillingoffers -->
 		<route streamCache="true">
 			<from
-				uri="restlet:http://{{rest.service.host}}:{{rest.service.port}}{{rest.service.resource}}?restletMethod=post" />
+		
+				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />
 
 
 			<setHeader headerName="Accept">
