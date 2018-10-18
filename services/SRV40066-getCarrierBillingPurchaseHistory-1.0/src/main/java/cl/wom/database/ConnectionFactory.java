@@ -5,8 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-import cl.wom.util.Util;
-
+import cl.wom.util.PropertiesUtil;
 
 public class ConnectionFactory {
 
@@ -16,7 +15,8 @@ public class ConnectionFactory {
 		BSCS, WAPPL;
 	}
 
-	static Properties prop = Util.getProperties("APP_ENV");
+	static PropertiesUtil util = new PropertiesUtil();
+	static Properties prop = util.getProperties("APP_ENV");
 
 	public static Connection getConnection(DataBaseSchema shema) throws ClassNotFoundException, SQLException {
 

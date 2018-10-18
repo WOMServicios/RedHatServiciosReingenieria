@@ -1,6 +1,7 @@
+
 {
 	"credential": "${body.codId}",
-	"credentialType": "MSISDN",
-	"channel": "mobile",
-	"networkKey": "CHL_WOM"
+	"credentialType": "SUBNO",
+	"channel": "CHL_WOM",
+	"networkKey": "mobile"
 }

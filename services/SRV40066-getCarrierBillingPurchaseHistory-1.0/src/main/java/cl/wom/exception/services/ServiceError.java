@@ -7,7 +7,7 @@ package cl.wom.exception.services;
  * @date 08/2018
  */
 
-public class ServiceError extends Exception{
+public class ServiceError extends Exception {
 
    private static final long serialVersionUID = 1L;
    private int codigoError;

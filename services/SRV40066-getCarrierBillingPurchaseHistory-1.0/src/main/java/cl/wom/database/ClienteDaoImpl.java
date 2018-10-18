@@ -47,6 +47,7 @@ public class ClienteDaoImpl implements IClienteDao {
 		} catch (SQLException e) {
 			System.out.println("Error: Clase ClienteDaoImple, método obtener");
 			e.printStackTrace();
+			
 		}
 		
 		return c;

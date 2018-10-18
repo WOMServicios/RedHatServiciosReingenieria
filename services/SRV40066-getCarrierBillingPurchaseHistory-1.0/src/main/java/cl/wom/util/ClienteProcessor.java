@@ -17,6 +17,7 @@ public class ClienteProcessor implements Processor {
 		
 	
 		String sql = (String) exchange.getIn().getBody();
+	
 		 clienteDaoImpl = new ClienteDaoImpl();	
 		con = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 		cliente=clienteDaoImpl.getCliente(sql,con);
