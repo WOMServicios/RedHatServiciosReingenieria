@@ -17,61 +17,53 @@
 			location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties" />
 
 		<!-- Control de errores -->
-		<!-- <onException> -->
-		<!-- <exception>java.lang.Exception</exception> -->
-		<!-- <handled> -->
-		<!-- <simple>true</simple> -->
-		<!-- </handled> -->
-		<!-- <to uri="velocity:velocity/response-sql-error.vm" /> -->
-		<!-- <setHeader headerName="Content-Type"> -->
-		<!-- <constant>application/json</constant> -->
-		<!-- </setHeader> -->
-		<!-- </onException> -->
+		<onException>
+			<exception>java.lang.Exception</exception>
+			<handled>
+				<simple>true</simple>
+			</handled>
+			<to uri="velocity:velocity/response-sql-error.vm" />
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+		</onException>
 
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint.route1}}" />
+			<from uri="direct:fullRequest" />
 
-			<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformation"></bean>
-			
+			<bean ref="sqlFormatterProcessor"
+				method="sqlParserAccountInformation"></bean>
+
 			<choice>
 				<when>
 					<simple>${body} == null</simple>
-					<to uri="velocity:velocity/response-sql-error.vm" ></to>
+					<to uri="velocity:velocity/response-sql-error.vm"></to>
 				</when>
 			</choice>
 
-			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
 		</route>
-					
+
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint.route2}}" />
 
-			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
+			<bean ref="sqlFormatterProcessor"
+				method="sqlGetRutAccountManager"></bean>
 
-			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
+			<setHeader headerName="rut">
+				<simple>${body}</simple>
+			</setHeader>
 			<to uri="direct:fullRequest" />
 
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
 		</route>
-		
-		<route>
-			<from uri="direct:fullRequest" />
 
-			<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformation"></bean>
-			<choice>
-				<when>
-					<simple>${body} == null</simple>
-					<to uri="velocity:velocity/response-sql-error.vm" ></to>
-				</when>
-			</choice>
-
-<!-- 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader> -->
-		</route>
-		
-		
 	</camelContext>
 </beans>
