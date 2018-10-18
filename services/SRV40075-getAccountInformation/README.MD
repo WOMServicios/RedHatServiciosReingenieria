@@ -6,6 +6,7 @@ SQL_ENV Que describe la ubicacion del archivo sql.properties
 
 Para setear estas variables se deben ejecutar las siguientes setencias.
 export APP_ENV="application"
-export SQL_ENV="sql"
+
+export APP_ENV="/opt/prop/services.properties"
 
 Esto se hace asi porque en el codigo del servicio se le concatena la extension ".properties"

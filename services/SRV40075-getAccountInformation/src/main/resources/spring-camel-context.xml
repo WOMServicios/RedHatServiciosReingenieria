@@ -9,12 +9,15 @@
 	<import resource="bean-definitions.xml" />
 
 	<camelContext
-		xmlns="http://camel.apache.org/schema/spring">
+		xmlns="http://camel.apache.org/schema/spring"
+		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+		xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
 		<!-- <propertyPlaceholder id="placeholder" -->
 		<!-- location="classpath:application.properties,classpath:sql.properties" 
 			/> -->
 		<propertyPlaceholder id="placeholder"
-			location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties" />
+			location="classpath:sql.properties ,file:${env:APP_ENV}" />
+
 
 		<!-- Control de errores -->
 		<onException>
@@ -59,6 +62,45 @@
 				<simple>${body}</simple>
 			</setHeader>
 			<to uri="direct:fullRequest" />
+		</route>
+		<route>
+			<from uri="jetty:{{camel.from.endpoint.route3}}" />
+
+			<setHeader headerName="rut">
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/rut/text()
+				</xpath>
+			</setHeader>
+			<setHeader headerName="accountid">
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/accountid/text()
+				</xpath>
+			</setHeader>
+
+			<choice>
+				<when>
+					<simple>${headers.rut} == "" and ${headers.accountid} == ""
+					</simple>
+					<to uri="velocity:velocity/response-badRequest.vm" />
+				</when>
+				<when>
+					<simple>${headers.rut} != "" and ${headers.accountid} != ""
+					</simple>
+					<to uri="velocity:velocity/400.vm" />
+				</when>
+				<otherwise>
+					<bean ref="sqlFormatterProcessorSOAP"
+						method="sqlParserAccountInformation"></bean>
+					<choice>
+						<when>
+							<simple>${body} == null</simple>
+							<to uri="velocity:velocity/response-nodata.vm" />
+						</when>
+					</choice>
+					<setHeader headerName="Content-Type">
+						<constant>application/xml</constant>
+					</setHeader>
+				</otherwise>
+			</choice>
+
 		</route>
 
 	</camelContext>
