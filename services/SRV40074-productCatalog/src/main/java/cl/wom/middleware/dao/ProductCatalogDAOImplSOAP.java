@@ -19,13 +19,14 @@ import cl.wom.middleware.vo.OneTime;
 import cl.wom.middleware.vo.ProductOffering;
 import cl.wom.middleware.vo.RecurringCharge;
 
-public class ProductCatalogDAOImpl {
+public class ProductCatalogDAOImplSOAP {
 
 	
-	public List<ProductOffering> getProductCatalog(String OfferID, String shortDesc, String marketSeg) throws SQLException  {
-		
-		PropertiesUtil util = new PropertiesUtil();
-		Properties prop = util.getProperties("APP_ENV");
+	public List<ProductOffering> getProductCatalog(Long OfferID, String shortDesc) throws SQLException  {
+ 		System.out.println("entrando a la clase");
+
+ 		 PropertiesUtil util = new PropertiesUtil();
+ 		 Properties prop = util.getProperties("APP_ENV");
 //		Properties prop = Util.getProperties("APP_ENV");
 //		Properties sql = Util.getProperties("SQL_ENV");
 
@@ -50,8 +51,6 @@ public class ProductCatalogDAOImpl {
 		if (!"".equals(shortDesc)  && shortDesc != null)
 			whereCondition = "a.SHDES='"+shortDesc+"'";
 		
-		if (!"".equals(marketSeg)  && marketSeg != null)
-			whereCondition = "c.SEGMENT_PLAN='"+marketSeg+"'";
 		
 		System.out.println("whereCondition: "+whereCondition);
 		
@@ -61,7 +60,7 @@ public class ProductCatalogDAOImpl {
 		try {
 			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 			stmt = conn.createStatement();
-			
+			System.out.println("vmos bien");
 			String getOfferIdQuery ="select a.tmcode from sysadm.rateplan a, PROVI_BOLS.NEXTEL_CATALOGO_PLAN c where "+whereCondition +" and a.SHDES = c.SHDES_PLAN";
 			System.out.println("getOfferIdQuery: "+getOfferIdQuery);
 			String offerId = "";
@@ -395,9 +394,7 @@ public class ProductCatalogDAOImpl {
 						listBundleProductOffering.add(bundleProductOffering);
 					}
 					rsGetBundleOfferingC.close();
-					
-					
-					
+									
 					//2.2.3
 					String queryGetBundleOfferingD="select " + 
 							"  b.tmcode                              as id," + 
@@ -491,7 +488,7 @@ public class ProductCatalogDAOImpl {
 			
 			rsGetProductOffering.close();	
 			stmt.close();
-
+	 		System.out.println("exito en la clase");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;

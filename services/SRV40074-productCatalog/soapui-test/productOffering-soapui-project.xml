@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="c2703cea-4a8e-495b-a1d0-20449da651b6" activeEnvironment="Default" name="productOffering" resourceRoot="" soapui-version="5.4.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="2b8a0684-562e-4164-9214-c42d2485f57d" wsaVersion="NONE" name="productOfferingSOAP" type="wsdl" bindingName="{http://0.0.0.0:8888/productOffering/}productOfferingSOAP" soapVersion="1_1" anonymous="optional" definition="file:/home/cquezada/git/WOM/RedHatServiciosReingenieria/services/SRV40074-productCatalog/src/main/resources/wsdl/productOffering.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/home/cquezada/git/WOM/RedHatServiciosReingenieria/services/SRV40074-productCatalog/src/main/resources/wsdl/productOffering.wsdl"><con:part><con:url>file:/home/cquezada/git/WOM/RedHatServiciosReingenieria/services/SRV40074-productCatalog/src/main/resources/wsdl/productOffering.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="productOffering" targetNamespace="http://0.0.0.0:8888/productOffering/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://0.0.0.0:8888/productOffering/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://0.0.0.0:8888/productOffering/">
+      <xsd:element name="productOffering">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="offerId" type="xsd:string"/>
+            <xsd:element name="shortDesc" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="productOfferingResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="productOffering" type="tns:ProductOffering"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="ProductOffering">
+        <xsd:sequence>
+          <xsd:element name="bundleProductOffering" type="tns:bundleProductOfferingType"></xsd:element>
+          <xsd:element name="layoutTypeAPP" type="xsd:string"/>
+          <xsd:element name="isSellable" type="xsd:string"/>
+          <xsd:element name="deviceOffering" type="tns:deviceOffering"/>
+          <xsd:element name="shortDescription" type="xsd:string"/>
+          <xsd:element name="version" type="xsd:string"/>
+          <xsd:element name="familyOffer" type="xsd:string"/>
+          <xsd:element name="typeOffer" type="xsd:string"/>
+          <xsd:element name="lastUpdate" type="xsd:string"/>
+          <xsd:element name="name" type="xsd:string"/>
+          <xsd:element name="offerId" type="xsd:string"/>
+          <xsd:element name="recurringCharge" type="tns:recurringChargeType"></xsd:element>
+          <xsd:element name="marketSegment" type="xsd:string"/>
+          <xsd:element name="status" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="bundleProductOfferingType">
+        <xsd:sequence>
+          <xsd:element name="minimumRequired" type="xsd:string"/>
+          <xsd:element name="quantity" type="xsd:string"/>
+          <xsd:element name="unitOfMeasure" type="xsd:string"/>
+          <xsd:element name="isPromotionProduct" type="xsd:string"></xsd:element>
+          <xsd:element name="channel" type="tns:channel"/>
+          <xsd:element name="isOfferProduct" type="xsd:string"/>
+          <xsd:element name="description" type="xsd:string"/>
+          <xsd:element name="isOptionProduct" type="xsd:string"/>
+          <xsd:element name="oneTime" type="tns:oneTime"/>
+          <xsd:element name="priority" type="xsd:string"/>
+          <xsd:element name="unitType" type="xsd:string"/>
+          <xsd:element name="name" type="xsd:string"/>
+          <xsd:element name="offerId" type="xsd:string"/>
+          <xsd:element name="shDes" type="xsd:string"/>
+          <xsd:element name="id" type="xsd:string"/>
+          <xsd:element name="maximunAllowed" type="xsd:string"/>
+          <xsd:element name="recurringCharge" type="tns:recurringCharge"></xsd:element>
+          <xsd:element name="status" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="recurringChargeType">
+        <xsd:sequence>
+          <xsd:element name="amount" type="xsd:string"/>
+          <xsd:element name="unitOfMeasure" type="xsd:string"/>
+          <xsd:element name="currency" type="xsd:string"/>
+          <xsd:element name="type" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="productOfferingType"/>
+      <xsd:complexType name="channel">
+        <xsd:sequence>
+          <xsd:element name="legacySystem" type="xsd:string"/>
+          <xsd:element name="name" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="oneTime">
+        <xsd:sequence>
+          <xsd:element name="duration" type="xsd:string"/>
+          <xsd:element name="amount" type="xsd:string"/>
+          <xsd:element name="unitOfMeasure" type="xsd:string"></xsd:element>
+          <xsd:element name="currency" type="xsd:string"/>
+          <xsd:element name="type" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="recurringCharge">
+        <xsd:sequence>
+          <xsd:element name="amount" type="xsd:string"/>
+          <xsd:element name="unitOfMeasure" type="xsd:string"></xsd:element>
+          <xsd:element name="currency" type="xsd:string"/>
+          <xsd:element name="type" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="deviceOffering">
+        <xsd:sequence>
+          <xsd:element name="modality" type="xsd:string"/>
+          <xsd:element name="cost" type="xsd:string"/>
+          <xsd:element name="shDes" type="xsd:string"/>
+          <xsd:element name="offerId" type="xsd:string"/>
+          <xsd:element name="sku" type="xsd:string"/>
+          <xsd:element name="deviceName" type="xsd:string"/>
+          <xsd:element name="partNum" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="NewOperation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="NewOperationResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="productOfferingFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="productOfferingFault" type="xsd:string"></xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="NewElement" type="xsd:string"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="productOfferingRequest">
+    <wsdl:part element="tns:productOffering" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="productOfferingResponse">
+    <wsdl:part element="tns:productOfferingResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="NewOperationRequest">
+    <wsdl:part name="parameters" element="tns:NewOperation"/>
+  </wsdl:message>
+  <wsdl:message name="NewOperationResponse">
+    <wsdl:part name="parameters" element="tns:NewOperationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="productOfferingFault">
+    <wsdl:part name="parameters" element="tns:productOfferingFault"/>
+  </wsdl:message>
+  <wsdl:portType name="productOffering">
+    <wsdl:operation name="productOffering">
+      <wsdl:input message="tns:productOfferingRequest"/>
+      <wsdl:output message="tns:productOfferingResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="productOfferingSOAP" type="tns:productOffering">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="productOffering">
+      <soap:operation soapAction="http://0.0.0.0:8888/productOffering/soap/v1.0"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="productOffering">
+    <wsdl:port binding="tns:productOfferingSOAP" name="productOfferingSOAP">
+      <soap:address location="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:endpoint>http://0.0.0.0:8888/productOffering/soap/v1.0</con:endpoint></con:endpoints><con:operation id="b90f3362-3344-4cff-b7ea-b32fc5f60678" isOneWay="false" action="http://0.0.0.0:8888/productOffering/soap/v1.0" name="productOffering" bindingOperationName="productOffering" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="0a1ec303-3416-46d6-ba39-885aea0e5f4b" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prod="http://0.0.0.0:8888/productOffering/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prod:productOffering>
+         <offerId></offerId>
+         <shortDesc>WRL14</shortDesc>
+      </prod:productOffering>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://0.0.0.0:8888/productOffering/soap/v1.0"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="b7158c91-601f-4025-88c8-b249c003361a" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="3caca4c5-d78b-4719-a9ad-ee387354fbfc" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 1" searchProperties="true"><con:settings/><con:testStep type="request" id="2856c66e-941f-4f16-88ea-5902a15ca481" name="productOffering - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>productOfferingSOAP</con:interface><con:operation>productOffering</con:operation><con:request name="productOffering - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="67c382ba-f776-4979-a2b3-393bf650dbda"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:prod="http://0.0.0.0:8888/productOffering/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <prod:productOffering>
+         <offerId>1</offerId>
+         <shortDesc></shortDesc>
+      </prod:productOffering>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="ae286758-5e6e-4c84-b096-d3f26a29729b" name="SOAP Response"/><con:assertion type="Schema Compliance" id="9427218d-e37d-43f0-8f58-56f98a33fe9f" name="Schema Compliance"><con:configuration/></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://0.0.0.0:8888/productOffering/soap/v1.0"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:mockService id="df314126-adf3-4d82-abbe-ff77eadcb91b" port="8080" path="/" host="redhat-hp-notebook" name="MockService 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="productOffering" id="1058b63a-ddcd-4f63-997e-5eea73b0b70e" interface="productOfferingSOAP" operation="productOffering"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="397d76a7-f82a-4707-97c1-90ae9c231cac" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<array>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>228000</quantity>
+      <unitOfMeasure>seconds</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>GESTOR</legacySystem>
+         <name>GESTOR</name>
+      </channel>
+      <isOfferProduct>false</isOfferProduct>
+      <description>Empresa Gestor 19</description>
+      <isOptionProduct>true</isOptionProduct>
+      <oneTime/>
+      <priority>1</priority>
+      <unitType>VOZ</unitType>
+      <name>Empresa Gestor 19</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>1382</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>D</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>240000</quantity>
+      <unitOfMeasure>seconds</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>GESTOR</legacySystem>
+         <name>GESTOR</name>
+      </channel>
+      <isOfferProduct>false</isOfferProduct>
+      <description>Empresa Gestor 20</description>
+      <isOptionProduct>true</isOptionProduct>
+      <oneTime/>
+      <priority>1</priority>
+      <unitType>VOZ</unitType>
+      <name>Empresa Gestor 20</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>1383</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>D</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>252000</quantity>
+      <unitOfMeasure>seconds</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>GESTOR</legacySystem>
+         <name>GESTOR</name>
+      </channel>
+      <isOfferProduct>false</isOfferProduct>
+      <description>Empresa Gestor 21</description>
+      <isOptionProduct>true</isOptionProduct>
+      <oneTime/>
+      <priority>1</priority>
+      <unitType>VOZ</unitType>
+      <name>Empresa Gestor 21</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>1384</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>D</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>264000</quantity>
+      <unitOfMeasure>seconds</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>GESTOR</legacySystem>
+         <name>GESTOR</name>
+      </channel>
+      <isOfferProduct>false</isOfferProduct>
+      <description>Empresa Gestor 22</description>
+      <isOptionProduct>true</isOptionProduct>
+      <oneTime/>
+      <priority>1</priority>
+      <unitType>VOZ</unitType>
+      <name>Empresa Gestor 22</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>1385</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>D</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>276000</quantity>
+      <unitOfMeasure>seconds</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>GESTOR</legacySystem>
+         <name>GESTOR</name>
+      </channel>
+      <isOfferProduct>false</isOfferProduct>
+      <description>Empresa Gestor 23</description>
+      <isOptionProduct>true</isOptionProduct>
+      <oneTime/>
+      <priority>1</priority>
+      <unitType>VOZ</unitType>
+      <name>Empresa Gestor 23</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>1386</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>D</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>288000</quantity>
+      <unitOfMeasure>seconds</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>GESTOR</legacySystem>
+         <name>GESTOR</name>
+      </channel>
+      <isOfferProduct>false</isOfferProduct>
+      <description>Empresa Gestor 24</description>
+      <isOptionProduct>true</isOptionProduct>
+      <oneTime/>
+      <priority>1</priority>
+      <unitType>VOZ</unitType>
+      <name>Empresa Gestor 24</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>1387</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>D</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>300000</quantity>
+      <unitOfMeasure>seconds</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>GESTOR</legacySystem>
+         <name>GESTOR</name>
+      </channel>
+      <isOfferProduct>false</isOfferProduct>
+      <description>Empresa Gestor 25</description>
+      <isOptionProduct>true</isOptionProduct>
+      <oneTime/>
+      <priority>1</priority>
+      <unitType>VOZ</unitType>
+      <name>Empresa Gestor 25</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>1388</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>D</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>312000</quantity>
+      <unitOfMeasure>seconds</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>GESTOR</legacySystem>
+         <name>GESTOR</name>
+      </channel>
+      <isOfferProduct>false</isOfferProduct>
+      <description>Empresa Gestor 26</description>
+      <isOptionProduct>true</isOptionProduct>
+      <oneTime/>
+      <priority>1</priority>
+      <unitType>VOZ</unitType>
+      <name>Empresa Gestor 26</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>1389</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>D</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>324000</quantity>
+      <unitOfMeasure>seconds</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>GESTOR</legacySystem>
+         <name>GESTOR</name>
+      </channel>
+      <isOfferProduct>false</isOfferProduct>
+      <description>Empresa Gestor 27</description>
+      <isOptionProduct>true</isOptionProduct>
+      <oneTime/>
+      <priority>1</priority>
+      <unitType>VOZ</unitType>
+      <name>Empresa Gestor 27</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>1390</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>D</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>336000</quantity>
+      <unitOfMeasure>seconds</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>GESTOR</legacySystem>
+         <name>GESTOR</name>
+      </channel>
+      <isOfferProduct>false</isOfferProduct>
+      <description>Empresa Gestor 28</description>
+      <isOptionProduct>true</isOptionProduct>
+      <oneTime/>
+      <priority>1</priority>
+      <unitType>VOZ</unitType>
+      <name>Empresa Gestor 28</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>1391</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>D</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>5242880</quantity>
+      <unitOfMeasure>kilo bytes</unitOfMeasure>
+      <isPromotionProduct>False</isPromotionProduct>
+      <channel>
+         <legacySystem>PORTAL</legacySystem>
+         <name>PORTAL</name>
+      </channel>
+      <isOfferProduct>True</isOfferProduct>
+      <description>Servicio Navegación 15GB</description>
+      <isOptionProduct>False</isOptionProduct>
+      <oneTime/>
+      <priority>0</priority>
+      <unitType>DATOS</unitType>
+      <name>Servicio Navegación 15GB</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>99968</id>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>S</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>400</quantity>
+      <unitOfMeasure>Minutos</unitOfMeasure>
+      <isPromotionProduct>N</isPromotionProduct>
+      <channel>
+         <legacySystem>null</legacySystem>
+         <name>null</name>
+      </channel>
+      <isOfferProduct>true</isOfferProduct>
+      <description>Bolsa de Voz</description>
+      <isOptionProduct>false</isOptionProduct>
+      <oneTime>
+         <duration>N</duration>
+         <amount>N</amount>
+         <unitOfMeasure>N</unitOfMeasure>
+         <currency>N</currency>
+         <type>N</type>
+      </oneTime>
+      <priority>null</priority>
+      <occ>null</occ>
+      <unitType>VOZ</unitType>
+      <name>Bolsa de Voz</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>739</id>
+      <sku>null</sku>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>a</status>
+   </bundleProductOffering>
+   <bundleProductOffering>
+      <minimumRequired>1</minimumRequired>
+      <quantity>50</quantity>
+      <unitOfMeasure>Unitario</unitOfMeasure>
+      <isPromotionProduct>N</isPromotionProduct>
+      <channel>
+         <legacySystem>null</legacySystem>
+         <name>null</name>
+      </channel>
+      <isOfferProduct>true</isOfferProduct>
+      <description>Bolsa de Voz</description>
+      <isOptionProduct>false</isOptionProduct>
+      <oneTime>
+         <duration>N</duration>
+         <amount>N</amount>
+         <unitOfMeasure>N</unitOfMeasure>
+         <currency>N</currency>
+         <type>N</type>
+      </oneTime>
+      <priority>null</priority>
+      <occ>null</occ>
+      <unitType>SMS</unitType>
+      <name>Bolsa de Voz</name>
+      <offerId>739</offerId>
+      <shDes>WOH28</shDes>
+      <id>739</id>
+      <sku>null</sku>
+      <maximunAllowed>1</maximunAllowed>
+      <recurringCharge>
+         <amount>0</amount>
+         <unitOfMeasure>Minutos</unitOfMeasure>
+         <currency>CLP</currency>
+         <type>Bundle</type>
+      </recurringCharge>
+      <status>a</status>
+   </bundleProductOffering>
+   <layoutTypeAPP>HYBRID_POSTPAID</layoutTypeAPP>
+   <isSellable>true</isSellable>
+   <deviceOffering>
+      <cost/>
+      <modality/>
+      <offerId/>
+      <shDes/>
+      <sku/>
+      <deviceName/>
+      <partNum/>
+   </deviceOffering>
+   <shortDescription>WOH28</shortDescription>
+   <version>0</version>
+   <familyOffer>Personas</familyOffer>
+   <typeOffer>Controlado</typeOffer>
+   <lastUpdate>2018-10-03 12:46:57.0</lastUpdate>
+   <name>Plan Wom 15 GB</name>
+   <offerId>739</offerId>
+   <marketSegment>Consumer</marketSegment>
+   <recurringCharge>
+      <amount>9990</amount>
+      <unitOfMeasure>minutos</unitOfMeasure>
+      <currency>CLP</currency>
+      <type>Offer</type>
+   </recurringCharge>
+   <status>P</status>
+</array>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://0.0.0.0:8888/productOffering/soap/v1.0"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

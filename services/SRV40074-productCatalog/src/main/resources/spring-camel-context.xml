@@ -8,12 +8,18 @@
     
     <import resource="bean-definitions.xml"/>
     
-    <camelContext  xmlns="http://camel.apache.org/schema/spring">
+    <camelContext
+      xmlns="http://camel.apache.org/schema/spring"
+      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+      xmlns:prod="http://0.0.0.0:8888/productOffering/">      
+      
+      
 <!-- 		<propertyPlaceholder id="placeholder" location="classpath:application.properties"/> 		 -->
-<propertyPlaceholder id="placeholder"
-                location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties"/>
+<!-- <propertyPlaceholder id="placeholder" -->
+<!--                 location="classpath:${env:APP_ENV}.properties" /> -->
+ <propertyPlaceholder id="placeholder" location="file:${env:APP_ENV}"/>
 
-    <!-- Control de errores -->
+<!--  Control de errores  -->
 	<onException>
 		    <exception>java.lang.Exception</exception>
 		    <handled><simple>true</simple></handled>
@@ -28,7 +34,7 @@
 		       
 <!--         	TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 	<route>
-			<from uri="jetty:{{camel.from.endpoint}}"/>
+			<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
 			<log message="offerId: ${headers.productOffering.offerId}"></log>
 			<choice>
 					<when>
@@ -55,6 +61,43 @@
 		            <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 		            </otherwise>
           </choice>
+	</route>
+	
+	<!-- 	SERVICIO SOAP -->
+	<route>
+		<from uri="jetty:http://{{camel.soap.endpointhost}}:{{camel.soap.endpointport}}{{camel.soap.endpointurl}}"></from>
+		<setHeader headerName="offerId">
+			<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/prod:productOffering/offerId/text()</xpath>
+		</setHeader>
+		<setHeader headerName="shortDesc">
+			<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/prod:productOffering/shortDesc/text()</xpath>
+		</setHeader>
+		<log message="offerId: ${headers.offerId}"></log>
+		<log message="shortDesc: ${headers.shortDesc}"></log>
+		<choice>
+			<when>
+				<simple>${headers.offerId} == null and ${headers.shortDesc} == "" </simple>
+				<to uri="velocity:velocity/response-SOAPnodata.vm"></to>
+				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+			</when>
+			<when>
+				<simple>${headers.offerId} != null and ${headers.shortDesc} != "" </simple>
+				<to uri="velocity:velocity/response-SOAPdataduplicate.vm"></to>
+				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+			</when>
+		     		<otherwise>
+					<bean ref="sqlFormatterProcessorSOAP" method="sqlParserProductOffering"></bean>          
+		            <choice>
+		            	<when>
+		            		<simple>${body} == ""</simple>
+		            		<to uri="velocity:velocity/response-sql-nodata.vm"></to>
+		            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            		
+		            	</when>
+		            </choice>           
+		            <setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+		            </otherwise>
+		</choice>
+
 	</route>
     </camelContext>
 </beans>
