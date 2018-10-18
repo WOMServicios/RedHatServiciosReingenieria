@@ -11,11 +11,9 @@
 			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
 			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
 			archivo properties. Por defecto en opensfhit es develop -->
-		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
-		<!-- <propertyPlaceholder id="placeholder"
-			location="classpath:application.properties,classpath:sql.properties" /> -->
-			<propertyPlaceholder id="placeholder"
-                location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties"/>
+			 <propertyPlaceholder id="placeholder"
+			location="classpath:application.properties,classpath:sql.properties" />
+			
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
 			<handled>
@@ -87,10 +85,9 @@
 			
 					<to uri="bean:clienteProcessor" />
 					
-			
 						<to uri="velocity:velocity/netflixStart.vm" />
-						<to uri="direct:bango" />
-					
+						<to 
+						uri="restlet:http://{{service.rest.bango.host}}:{{service.rest.bango.port}}{{service.rest.bango.resource}}?restletMethod=post" />
 				</otherwise>
 			</choice>
 			<setHeader headerName="Content-Type">
@@ -101,17 +98,6 @@
 			</setHeader>	
 		
 		</route>
-		<!-- virtualizado, cuando se entrege el original se tiene que cambiar -->
-		<route>
-			<from uri="direct:bango" />
-
-			<to uri="velocity:velocity/netflixResponse.vm" />
-			<setHeader headerName="Content-Type">
-				<constant>application/json; charset=UTF-8</constant>
-			</setHeader>
-			<setHeader headerName="Encoding">
-				<constant>UTF-8</constant>
-			</setHeader>	
-		</route>
+	
 	</camelContext>
 </beans>
