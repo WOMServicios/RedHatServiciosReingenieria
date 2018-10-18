@@ -59,10 +59,6 @@
 				<simple>${body}</simple>
 			</setHeader>
 			<to uri="direct:fullRequest" />
-
-			<setHeader headerName="Content-Type">
-				<constant>application/json</constant>
-			</setHeader>
 		</route>
 
 	</camelContext>
