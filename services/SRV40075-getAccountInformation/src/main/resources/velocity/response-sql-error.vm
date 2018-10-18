@@ -1,1 +1,1 @@
-{ status: "ERR", description: "Internal Error" }
+{ status: "ERROR", description: "NOT DATA FOUND" }

@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cl.wom.middleware.proxy</groupId>
-	<artifactId>SRV40075-getAccountInformation</artifactId>
+	<artifactId>SRV40074-productOffering</artifactId>
 	<version>1.0.0</version>
 	
 	

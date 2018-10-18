@@ -10,9 +10,6 @@
 		<property name="location" value="classpath:application.properties" />
 	</bean>
  
-<!-- 	<bean id="sqlFormatterProcessor" class="cl.wom.middleware.bean.SqlFormatterProcessor"></bean> -->
-	<bean id="getProductCatalog" class="cl.wom.middleware.dao.ProductCatalogDAOImpl"></bean>
-
-
+	<bean id="sqlFormatterProcessor" class="cl.wom.middleware.bean.SqlFormatterProcessor"></bean>
 	
 </beans>

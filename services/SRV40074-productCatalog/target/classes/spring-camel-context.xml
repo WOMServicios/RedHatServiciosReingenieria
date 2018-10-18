@@ -9,34 +9,52 @@
     <import resource="bean-definitions.xml"/>
     
     <camelContext  xmlns="http://camel.apache.org/schema/spring">
-		<propertyPlaceholder id="placeholder" location="classpath:application.properties"/> 		
+<!-- 		<propertyPlaceholder id="placeholder" location="classpath:application.properties"/> 		 -->
+<propertyPlaceholder id="placeholder"
+                location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties"/>
 
+    <!-- Control de errores -->
+	<onException>
+		    <exception>java.lang.Exception</exception>
+		    <handled><simple>true</simple></handled>
+		    
+		    <setHeader headerName="errorcode"><constant>500</constant></setHeader>
+		    <setHeader headerName="errorMessage"><simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
 
-        <!-- Control de errores -->
-<!-- 		<onException> -->
-<!-- 			    <exception>java.lang.Exception</exception> -->
-<!-- 			    <handled><simple>true</simple></handled> -->
-<!-- 			    <to uri="velocity:velocity/response-sql-error.vm"/> -->
-
-<!-- 			    <log message="error: ${exception.message}"></log> -->
-<!-- 			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader> -->
-<!-- 		</onException> -->
+		    <log message="error: ${exception.message}"></log>
+		    <to uri="velocity:velocity/response-sql-error.vm"/>
+		    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+	</onException>
 		       
 <!--         	TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 	<route>
-			<from uri="jetty:{{camel.from.endpoint.a}}"/>
-			<log message="offerId: ${headers.productOffering.offerId}"></log> 
-     
-            <choice>
-            	<when>
-            		<simple>${headers.productOffering.offerId} != null</simple>
-<!-- 					<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean> -->
-					<bean ref="getProductCatalog" method="getProductCatalog"></bean>
-            	</when>  
-            </choice>
-            
-            
-            <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+			<from uri="jetty:{{camel.from.endpoint}}"/>
+			<log message="offerId: ${headers.productOffering.offerId}"></log>
+			<choice>
+					<when>
+						<simple>${headers.productOffering.offerId} == null and ${headers.productOffering.shortDesc} == null and ${headers.productOffering.marketSeg} == null </simple>
+					<to uri="velocity:velocity/response-nodata.vm"></to>
+					<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>		
+					</when>
+					<when>
+						<simple>${headers.productOffering.offerId} == "" and ${headers.productOffering.shortDesc} == "" and ${headers.productOffering.marketSeg} == "" </simple>
+					<to uri="velocity:velocity/response-nodata.vm"></to>
+					<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+					</when>
+			 
+		     		<otherwise>
+					<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean>
+		            
+		            <choice>
+		            	<when>
+		            		<simple>${body} == ""</simple>
+		            		<to uri="velocity:velocity/response-sql-nodata.vm"></to>
+		            		<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>	            		
+		            	</when>
+		            </choice>           
+		            <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+		            </otherwise>
+          </choice>
 	</route>
     </camelContext>
 </beans>
