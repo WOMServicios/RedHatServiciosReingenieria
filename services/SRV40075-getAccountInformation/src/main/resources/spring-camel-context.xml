@@ -84,38 +84,45 @@
 				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/accountid/text()
 				</xpath>
 			</setHeader>
-
-			<choice>
-				<when>
-					<simple>${headers.rut} == "" and ${headers.accountid} == ""
-					</simple>
-					<throwException
-						exceptionType="cl.wom.exception.services.ServiceError"
-						message="400" />
-				</when>
-				<when>
-					<simple>${headers.rut} != "" and ${headers.accountid} != ""
-					</simple>
-					<throwException
-						exceptionType="cl.wom.exception.services.ServiceError"
-						message="400" />
-				</when>
-				<otherwise>
-					<bean ref="sqlFormatterProcessorSOAP"
-						method="sqlParserAccountInformation"></bean>
-					<choice>
-						<when>
-							<simple>${body} == null</simple>
-							<throwException
-								exceptionType="cl.wom.exception.services.ServiceError"
-								message="400" />
-						</when>
-					</choice>
-					<setHeader headerName="Content-Type">
-						<constant>application/xml</constant>
-					</setHeader>
-				</otherwise>
-			</choice>
+	
+				
+				<bean ref="sqlFormatterProcessorSOAP" method="sqlParserAccountInformationSOAP"></bean>
+				<to uri="velocity:velocity/response-AccountImformation.vm" />
+				
+				
+				
+				
+<!-- 			<choice> -->
+<!-- 				<when> -->
+<!-- 					<simple>${headers.rut} == "" and ${headers.accountid} == "" -->
+<!-- 					</simple> -->
+<!-- 					<throwException -->
+<!-- 						exceptionType="cl.wom.exception.services.ServiceError" -->
+<!-- 						message="400" /> -->
+<!-- 				</when> -->
+<!-- 				<when> -->
+<!-- 					<simple>${headers.rut} != "" and ${headers.accountid} != "" -->
+<!-- 					</simple> -->
+<!-- 					<throwException -->
+<!-- 						exceptionType="cl.wom.exception.services.ServiceError" -->
+<!-- 						message="400" /> -->
+<!-- 				</when> -->
+<!-- 				<otherwise> -->
+<!-- 					<bean ref="sqlFormatterProcessorSOAP" -->
+<!-- 						method="sqlParserAccountInformation"></bean> -->
+<!-- 					<choice> -->
+<!-- 						<when> -->
+<!-- 							<simple>${body} == null</simple> -->
+<!-- 							<throwException -->
+<!-- 								exceptionType="cl.wom.exception.services.ServiceError" -->
+<!-- 								message="400" /> -->
+<!-- 						</when> -->
+<!-- 					</choice> -->
+<!-- 					<setHeader headerName="Content-Type"> -->
+<!-- 						<constant>application/xml</constant> -->
+<!-- 					</setHeader> -->
+<!-- 				</otherwise> -->
+<!-- 			</choice> -->
 		</route>
 	</camelContext>
 </beans>
