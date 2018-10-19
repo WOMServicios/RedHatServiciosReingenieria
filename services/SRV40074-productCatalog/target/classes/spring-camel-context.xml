@@ -11,7 +11,7 @@
     <camelContext
       xmlns="http://camel.apache.org/schema/spring"
       xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-      xmlns:prod="http://0.0.0.0:8888/productOffering/">      
+      xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">      
       
       
 <!-- 		<propertyPlaceholder id="placeholder" location="classpath:application.properties"/> 		 -->
@@ -67,10 +67,10 @@
 	<route>
 		<from uri="jetty:http://{{camel.soap.endpointhost}}:{{camel.soap.endpointport}}{{camel.soap.endpointurl}}"></from>
 		<setHeader headerName="offerId">
-			<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/prod:productOffering/offerId/text()</xpath>
+			<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/ns:productOffering/offerId/text()</xpath>
 		</setHeader>
 		<setHeader headerName="shortDesc">
-			<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/prod:productOffering/shortDesc/text()</xpath>
+			<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:productOffering/shortDesc/text()</xpath>
 		</setHeader>
 		<log message="offerId: ${headers.offerId}"></log>
 		<log message="shortDesc: ${headers.shortDesc}"></log>
