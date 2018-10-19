@@ -305,6 +305,16 @@
 				<soap:body use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="subscriberResources">
+			<soap:operation
+				soapAction="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1/NewOperation" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="accountinformation">
 		<wsdl:port binding="tns:accountinformationSOAP" name="getaccountinformationSOAP">

@@ -1,33 +1,32 @@
 package cl.wom.middleware.bean;
 
+import java.util.List;
+
 import org.apache.camel.Exchange;
 import org.json.JSONObject;
 import org.json.XML;
 
 import cl.wom.middleware.dao.AccountManagerDAO;
+import cl.wom.middleware.vo.Account;
 import cl.wom.middleware.vo.AccountInformation;
 
 public class SqlFormatterProcessorSOAP {
 
-	public String sqlParserAccountInformation(Exchange ex) {
+	public AccountInformation sqlParserAccountInformationSOAP(Exchange ex) {
 
 		String rut = (String) ex.getIn().getHeader("rut");
 		String accountId = (String) ex.getIn().getHeader("accountId");
 
 		AccountManagerDAO accountManagerDAO = new AccountManagerDAO();
-		AccountInformation accountInformation = accountManagerDAO.getAccountInformation(rut, accountId);
+		 AccountInformation accountInformation = accountManagerDAO.getAccountInformation(rut, accountId);
+		 
+		 
+		 System.out.println(accountInformation);
+		 
+		 
+		 
+		 return accountInformation;
 
-		if (accountInformation != null) {
-			JSONObject jsonObj = new JSONObject(accountInformation);
-			String xml = XML.toString(jsonObj);
-			
-			System.out.println(xml);
-			
-			
-			return xml;
-		} else {
-			return null;
-		}
 	}
 
 	public String sqlGetRutAccountManager(Exchange ex) {
