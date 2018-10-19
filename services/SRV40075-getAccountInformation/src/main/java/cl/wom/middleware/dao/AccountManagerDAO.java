@@ -153,6 +153,10 @@ public class AccountManagerDAO {
 					e.printStackTrace();
 				}
 		}
+		
+		System.out.println("accountInformation.toString(): "+accountInformation.toString());
+		
+		
 		return accountInformation;
 	}
 

@@ -19,7 +19,7 @@
             <docTypeDesc>$account.docTypeDesc</docTypeDesc>
             <doctypeOutputCode>$account.docTypeOutputCode</doctypeOutputCode>
 			<billCycle>
-               <accountId>$account.accountId_biilcycle</accountId>
+               <accountId>$account.billCycle.accountId</accountId>
                <billCycleDes>$account.billCycleDes_billcycle</billCycleDes>
                <intervalType>$account.intervalType</intervalType>
                <lastrunDate>$account.lastRunDate</lastrunDate>
