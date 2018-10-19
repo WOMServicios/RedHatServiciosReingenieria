@@ -1,3 +1,4 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
 <soapenv:Header/>
    <soapenv:Body>
       <ns:accountResponse>

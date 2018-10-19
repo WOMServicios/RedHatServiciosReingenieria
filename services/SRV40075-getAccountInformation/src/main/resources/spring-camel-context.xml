@@ -42,11 +42,6 @@
 		</onException>
 
 
-
-
-
-
-
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint.route1}}" />
@@ -67,13 +62,6 @@
 			</setHeader>
 		</route>
 		
-		
-		
-		
-		
-		
-		
-		
 
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
@@ -82,19 +70,18 @@
 			<bean ref="sqlFormatterProcessor"
 				method="sqlGetRutAccountManager"></bean>
 
-			<setHeader headerName="rut">
-				<simple>${body}</simple>
-			</setHeader>
+			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
 			<to uri="direct:fullRequest" />
 		</route>
 		
-		
 
-
-
-		
 		<route>
-			<from uri="jetty:{{camel.from.endpoint.route3}}" />
+			<from uri="cxf:http://0.0.0.0:8888/ocp/srv40049/activavolte/soap/v1.0/?		
+			wsdlURL=classpath:wsdl/accountinformation.wsdl&amp;
+			serviceName={http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}accountinformation&amp;
+			portName={http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}getaccountinformationSOAP&amp;
+			dataFormat=MESSAGE" />
+			<convertBodyTo type="org.w3c.dom.Document"></convertBodyTo>
 
 			<setHeader headerName="rut">
 				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/rut/text()</xpath>
@@ -102,22 +89,43 @@
 			<setHeader headerName="accountid">
 				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/accountid/text()</xpath>
 			</setHeader>
-			<setHeader headerName="type">
-				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:subscriberResources/resourceType/text()</xpath>
+
+			<setHeader headerName="resourceType">
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:subscriberResources/resourceType/text()
+				</xpath>
 			</setHeader>
-			<setHeader headerName="value">
-				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:subscriberResources/resourceValue/text()</xpath>
+			<setHeader headerName="resourceValue">
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:subscriberResources/resourceValue/text()
+				</xpath>
 			</setHeader>
 			
-			<log message="${headers.type}"></log>
-			<log message="${headers.value}"></log>
 			
-			
-	
+			<choice>
+				<when>
+					<xpath>/soapenv:Envelope/soapenv:Body/ns:account</xpath>
+					<log message="dentro de account"></log>
+					<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
+					<to uri="velocity:velocity/response-AccountImformation.vm" />
+				</when>
 				
-<!-- 				<bean ref="sqlFormatterProcessorSOAP" method="sqlParserAccountInformationSOAP"></bean> -->
-				<bean ref="sqlFormatterProcessorSOAP" method="sqlGetRutAccountManagerSOAP"></bean>
-				<to uri="velocity:velocity/response-AccountImformation.vm" />
+				<when>
+					<xpath>/soapenv:Envelope/soapenv:Body/ns:subscriberResources</xpath>
+					
+					<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
+					<setHeader headerName="rut"><simple>${body}</simple></setHeader>
+					<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
+					<to uri="velocity:velocity/response-AccountImformation.vm" />
+					<log message="dentro de suscriber"></log>
+				</when>
+			</choice>
+			
+<!-- 			<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean> -->
+<!-- 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean> -->
+<!-- 			<to uri="velocity:velocity/response-AccountImformation.vm" /> -->
+
+			
+			
+			
 				
 <!-- 			<choice> -->
 <!-- 				<when> -->
@@ -150,6 +158,9 @@
 <!-- 					</setHeader> -->
 <!-- 				</otherwise> -->
 <!-- 			</choice> -->
+
+
+
 		</route>
 	</camelContext>
 </beans>
