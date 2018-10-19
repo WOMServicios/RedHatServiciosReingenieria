@@ -89,30 +89,24 @@
 		</route>
 		
 		
-		
-		
-		
-		
-		
+
+
+
 		
 		<route>
 			<from uri="jetty:{{camel.from.endpoint.route3}}" />
 
 			<setHeader headerName="rut">
-				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/rut/text()
-				</xpath>
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/rut/text()</xpath>
 			</setHeader>
 			<setHeader headerName="accountid">
-				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/accountid/text()
-				</xpath>
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/accountid/text()</xpath>
 			</setHeader>
 			<setHeader headerName="type">
-				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:subscriberResources/resourceType/text()
-				</xpath>
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:subscriberResources/resourceType/text()</xpath>
 			</setHeader>
 			<setHeader headerName="value">
-				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:subscriberResources/resourceValue/text()
-				</xpath>
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:subscriberResources/resourceValue/text()</xpath>
 			</setHeader>
 			
 			<log message="${headers.type}"></log>
