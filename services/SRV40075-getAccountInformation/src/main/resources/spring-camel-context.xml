@@ -110,7 +110,6 @@
 				
 				<when>
 					<xpath>/soapenv:Envelope/soapenv:Body/ns:subscriberResources</xpath>
-					
 					<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 					<setHeader headerName="rut"><simple>${body}</simple></setHeader>
 					<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
@@ -119,14 +118,6 @@
 				</when>
 			</choice>
 			
-<!-- 			<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean> -->
-<!-- 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean> -->
-<!-- 			<to uri="velocity:velocity/response-AccountImformation.vm" /> -->
-
-			
-			
-			
-				
 <!-- 			<choice> -->
 <!-- 				<when> -->
 <!-- 					<simple>${headers.rut} == "" and ${headers.accountid} == "" -->
@@ -158,8 +149,6 @@
 <!-- 					</setHeader> -->
 <!-- 				</otherwise> -->
 <!-- 			</choice> -->
-
-
 
 		</route>
 	</camelContext>

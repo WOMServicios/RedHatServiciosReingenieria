@@ -47,22 +47,6 @@ public class SqlFormatterProcessor {
 
 	}
 	
-//	public String sqlGetRutAccountManagerSOAP(Exchange ex) {
-//
-//		String resourceType = (String) ex.getIn().getHeader("resourceType");
-//		String resourceValue = (String) ex.getIn().getHeader("resourceValue");
-//		
-//		System.out.println(resourceType);
-//		System.out.println(resourceValue);
-//
-//		AccountManagerDAO accountManagerDAO = new AccountManagerDAO();
-//		String rut = accountManagerDAO.sqlGetRutAccountManager(resourceType, resourceValue);
-//	
-//		
-//		return rut;
-//	}
-	
-	
 	
 	
 	
