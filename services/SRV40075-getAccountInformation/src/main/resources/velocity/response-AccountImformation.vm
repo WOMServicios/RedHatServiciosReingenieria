@@ -2,7 +2,6 @@
    <soapenv:Body>
       <ns:accountResponse>
          <rut>${body.rut}</rut>
-         <!--1 or more repetitions:-->
          #foreach($account in ${body.account})
          <account>
             <rut>$account.rut</rut>
@@ -20,12 +19,11 @@
             <doctypeOutputCode>$account.docTypeOutputCode</doctypeOutputCode>
 			<billCycle>
                <accountId>$account.billCycle.accountId</accountId>
-               <billCycleDes>$account.billCycleDes_billcycle</billCycleDes>
-               <intervalType>$account.intervalType</intervalType>
-               <lastrunDate>$account.lastRunDate</lastrunDate>
-               <bchrunDate>$account.bchRunDate</bchrunDate>
+               <billCycleDes>$account.billCycle.billCycleDes</billCycleDes>
+               <intervalType>$account.billCycle.intervalType</intervalType>
+               <lastrunDate>$account.billCycle.lastRunDate</lastrunDate>
+               <bchrunDate>$account.billCycle.bchRunDate</bchrunDate>
             </billCycle>
-            <!--1 or more repetitions:-->
             #foreach($subscribers in ${account.subscribers})
             <subscriber>
                <rut>$subscribers.rut</rut>
@@ -34,7 +32,6 @@
                <subscriberIdContract>$subscribers.subscriberIdContract</subscriberIdContract>
                <subscriberActivate>$subscribers.subscriberActivate</subscriberActivate>
                <state>$subscribers.state</state>
-               <!--1 or more repetitions:-->
                #foreach($resoucers in $subscribers.subscriberResources)
                <subscriberResources>
                   <subscriberId>$resoucers.subscriberId</subscriberId>
