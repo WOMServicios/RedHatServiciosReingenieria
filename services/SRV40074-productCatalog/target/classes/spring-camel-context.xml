@@ -74,29 +74,34 @@
 		</setHeader>
 		<log message="offerId: ${headers.offerId}"></log>
 		<log message="shortDesc: ${headers.shortDesc}"></log>
-		<choice>
-			<when>
-				<simple>${headers.offerId} == null and ${headers.shortDesc} == "" </simple>
-				<to uri="velocity:velocity/response-SOAPnodata.vm"></to>
-				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
-			</when>
-			<when>
-				<simple>${headers.offerId} != null and ${headers.shortDesc} != "" </simple>
-				<to uri="velocity:velocity/response-SOAPdataduplicate.vm"></to>
-				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
-			</when>
-		     		<otherwise>
-					<bean ref="sqlFormatterProcessorSOAP" method="sqlParserProductOffering"></bean>          
-		            <choice>
-		            	<when>
-		            		<simple>${body} == ""</simple>
-		            		<to uri="velocity:velocity/response-sql-nodata.vm"></to>
-		            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            		
-		            	</when>
-		            </choice>           
-		            <setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
-		            </otherwise>
-		</choice>
+		
+		
+		<bean ref="sqlFormatterProcessorSOAP" method="sqlParserProductOfferingObject"></bean>   
+		<to uri="velocity:velocity/soap-response-success.vm"></to>
+		
+<!-- 		<choice> -->
+<!-- 			<when> -->
+<!-- 				<simple>${headers.offerId} == null and ${headers.shortDesc} == "" </simple> -->
+<!-- 				<to uri="velocity:velocity/response-SOAPnodata.vm"></to> -->
+<!-- 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader> -->
+<!-- 			</when> -->
+<!-- 			<when> -->
+<!-- 				<simple>${headers.offerId} != null and ${headers.shortDesc} != "" </simple> -->
+<!-- 				<to uri="velocity:velocity/response-SOAPdataduplicate.vm"></to> -->
+<!-- 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader> -->
+<!-- 			</when> -->
+<!-- 		     		<otherwise> -->
+<!-- 					<bean ref="sqlFormatterProcessorSOAP" method="sqlParserProductOffering"></bean>           -->
+<!-- 		            <choice> -->
+<!-- 		            	<when> -->
+<!-- 		            		<simple>${body} == ""</simple> -->
+<!-- 		            		<to uri="velocity:velocity/response-sql-nodata.vm"></to> -->
+<!-- 		            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            		 -->
+<!-- 		            	</when> -->
+<!-- 		            </choice>            -->
+<!-- 		            <setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader> -->
+<!-- 		            </otherwise> -->
+<!-- 		</choice> -->
 
 	</route>
     </camelContext>

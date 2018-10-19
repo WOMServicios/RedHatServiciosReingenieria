@@ -31,4 +31,17 @@ public class SqlFormatterProcessorSOAP {
  			return "";
 	}
 	
+	
+	public List<ProductOffering> sqlParserProductOfferingObject(Exchange ex) throws SQLException {
+		
+		Long offerId   = (Long)ex.getIn().getHeader("offerId");
+		String shortDes  = (String)ex.getIn().getHeader("shortDesc");
+ 		System.out.println("exito recibiendo datos");
+
+ 		ProductCatalogDAOImplSOAP productCatalogDAOImplSOAP = new ProductCatalogDAOImplSOAP();
+ 		return  productCatalogDAOImplSOAP.getProductCatalog(offerId, shortDes);
+
+	}
+	
+	
 }

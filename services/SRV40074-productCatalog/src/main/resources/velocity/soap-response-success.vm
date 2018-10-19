@@ -1,0 +1,76 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:productOfferingResponse>
+      
+      	#foreach($productOffer in ${body})
+         <productOffering>
+         
+         	#foreach($bundle in $productOffer.bundleProductOffering)
+            <bundleProductOffering>
+               <minimumRequired>?</minimumRequired>
+               <quantity>?</quantity>
+               <unitOfMeasure>?</unitOfMeasure>
+               <isPromotionProduct>?</isPromotionProduct>
+               <channel>
+                  <legacySystem>?</legacySystem>
+                  <name>?</name>
+               </channel>
+               <isOfferProduct>?</isOfferProduct>
+               <description>$bundle.description</description>
+               <isOptionProduct>?</isOptionProduct>
+               <oneTime>
+                  <duration>?</duration>
+                  <amount>?</amount>
+                  <unitOfMeasure>?</unitOfMeasure>
+                  <currency>?</currency>
+                  <type>?</type>
+               </oneTime>
+               <priority>?</priority>
+               <unitType>?</unitType>
+               <name>?</name>
+               <offerId>$bundle.offerId</offerId>
+               <shDes>?</shDes>
+               <id>?</id>
+               <maximunAllowed>?</maximunAllowed>
+               <recurringCharge>
+                  <amount>?</amount>
+                  <unitOfMeasure>?</unitOfMeasure>
+                  <currency>?</currency>
+                  <type>?</type>
+               </recurringCharge>
+               <status>?</status>
+            </bundleProductOffering>
+            #end
+            
+            <layoutTypeAPP>?</layoutTypeAPP>
+            <isSellable>?</isSellable>
+            <deviceOffering>
+               <modality>?</modality>
+               <cost>?</cost>
+               <shDes>?</shDes>
+               <offerId>?</offerId>
+               <sku>?</sku>
+               <deviceName>?</deviceName>
+               <partNum>?</partNum>
+            </deviceOffering>
+            <shortDescription>$productOffer.shortDescription</shortDescription>
+            <version>?</version>
+            <familyOffer>?</familyOffer>
+            <typeOffer>?</typeOffer>
+            <lastUpdate>?</lastUpdate>
+            <name>?</name>
+            <offerId>?</offerId>
+            <recurringCharge>
+               <amount>?</amount>
+               <unitOfMeasure>?</unitOfMeasure>
+               <currency>?</currency>
+               <type>?</type>
+            </recurringCharge>
+            <marketSegment>?</marketSegment>
+            <status>?</status>
+         </productOffering>
+         #end
+      </ns:productOfferingResponse>
+   </soapenv:Body>
+</soapenv:Envelope>
