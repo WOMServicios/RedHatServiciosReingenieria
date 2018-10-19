@@ -2,11 +2,12 @@ package cl.wom.middleware.bean;
 
 import org.apache.camel.Exchange;
 import org.json.JSONObject;
+import org.json.XML;
 
 import cl.wom.middleware.dao.AccountManagerDAO;
 import cl.wom.middleware.vo.AccountInformation;
 
-public class SqlFormatterProcessor {
+public class SqlFormatterProcessorSOAP {
 
 	public String sqlParserAccountInformation(Exchange ex) {
 
@@ -18,7 +19,9 @@ public class SqlFormatterProcessor {
 
 		if (accountInformation != null) {
 			JSONObject jsonObj = new JSONObject(accountInformation);
-			return jsonObj.toString();
+			String xml = XML.toString(jsonObj);
+			
+			return xml;
 		} else {
 			return null;
 		}
