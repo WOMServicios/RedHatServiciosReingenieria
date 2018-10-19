@@ -41,9 +41,13 @@ public class SqlFormatterProcessor {
 		String accountId = (String) ex.getIn().getHeader("accountId");
 
 		AccountManagerDAO accountManagerDAO = new AccountManagerDAO();
-		 AccountInformation accountInformation = accountManagerDAO.getAccountInformation(rut, accountId);
+		AccountInformation accountInformation = accountManagerDAO.getAccountInformation(rut, accountId);
 		 
-		 return accountInformation;
+		
+			System.out.println(accountInformation);
+		
+		
+		return accountInformation;
 
 	}
 	

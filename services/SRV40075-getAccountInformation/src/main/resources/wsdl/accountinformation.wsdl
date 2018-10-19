@@ -8,317 +8,229 @@
 	<wsdl:types>
 		<xsd:schema
 			targetNamespace="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
-			<xsd:element name="account">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="rut" type="xsd:string"></xsd:element>
-						<xsd:element name="accountid" type="xsd:string" />
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name="accountResponse">
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="rut" type="xsd:string"></xsd:element>
-						<xsd:element name="account" type="tns:AccountObj"
-							maxOccurs="unbounded" minOccurs="1"></xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name='subscriberResources'>
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="resourceType" type="xsd:string"></xsd:element>
-						<xsd:element name="resourceValue" type="xsd:string"></xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
-			<xsd:element name='subscriberResourcesResponse'>
-				<xsd:complexType>
-					<xsd:sequence>
-						<xsd:element name="rut" type="xsd:string"></xsd:element>
-						<xsd:element name="account" type="tns:AccountObjRe"
-							maxOccurs="unbounded" minOccurs="1"></xsd:element>
-					</xsd:sequence>
-				</xsd:complexType>
-			</xsd:element>
+      <xsd:element name="account">
+        <xsd:complexType>
+          <xsd:sequence>
+          	<xsd:element name="rut" type="xsd:string" />
+          	<xsd:element name="accountId" type="xsd:string"></xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="accountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+          	<xsd:element name="rut" type="xsd:string" />
+          	<xsd:element name="account" type="tns:AccountObj" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    
+      <xsd:complexType name="AccountObj">
+      	<xsd:sequence>
+      		<xsd:element name="rut" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountId" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountIdHigh" type="xsd:string"></xsd:element>
+      		<xsd:element name="csLevel" type="xsd:string"></xsd:element>
+      		<xsd:element name="custCode" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountType" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountActivate" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountDeactivate" type="xsd:string"></xsd:element>
+      		<xsd:element name="externalAccountId" type="xsd:string"></xsd:element>
+      		<xsd:element name="state" type="xsd:string"></xsd:element>
+      		<xsd:element name="docTypeId" type="xsd:string"></xsd:element>
+      		<xsd:element name="docTypeDesc" type="xsd:string"></xsd:element>
+      		<xsd:element name="docTypeOutputCode" type="xsd:string"></xsd:element>
+      		<xsd:element name="billCycle" type="tns:BillcycleObj" maxOccurs="1" minOccurs="1"></xsd:element>
+      		<xsd:element name="subscriber" type="tns:SubscriberObj" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+    
+      <xsd:complexType name="BillcycleObj">
+      	<xsd:sequence>
+      		<xsd:element name="accountId" type="xsd:string"></xsd:element>
+      		<xsd:element name="billCycle" type="xsd:string"></xsd:element>
+      		<xsd:element name="billCycleDes" type="xsd:string"></xsd:element>
+      		<xsd:element name="intervalType" type="xsd:string"></xsd:element>
+      		<xsd:element name="lastRunDate" type="xsd:string"></xsd:element>
+      		<xsd:element name="bchRunDate" type="xsd:string"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
 
-			<xsd:complexType name="outType">
-				<xsd:sequence>
-					<xsd:element name="rut" type="xsd:string"></xsd:element>
-					<xsd:element name="account" type="tns:accountType"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="accountType"></xsd:complexType>
-
-			<xsd:complexType name="client">
-				<xsd:sequence>
-					<xsd:element name="rut" type="xsd:string"></xsd:element>
-					<xsd:element name="account" type="tns:Account"
-						maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="Account">
-				<xsd:sequence>
-					<xsd:element name="rut" type="xsd:string"></xsd:element>
-					<xsd:element name="accountId" type="xsd:string"></xsd:element>
-					<xsd:element name="accountIdHigh" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="csLevel" type="xsd:string"></xsd:element>
-					<xsd:element name="custCode" type="xsd:string"></xsd:element>
-					<xsd:element name="accountype" type="xsd:string"></xsd:element>
-					<xsd:element name="accountActivate" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="accountDeactivate" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="externalAccountId" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="state" type="xsd:string"></xsd:element>
-					<xsd:element name="docTypeId" type="xsd:string"></xsd:element>
-					<xsd:element name="docTypeDesc" type="xsd:string"></xsd:element>
-					<xsd:element name="docTypeOutputCode" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="billCycle" type="tns:BillCycle"></xsd:element>
-					<xsd:element name="subscriber" type="tns:Subscriber"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="BillCycle">
-				<xsd:sequence>
-					<xsd:element name="accounId" type="xsd:string"></xsd:element>
-					<xsd:element name="billCycle" type="xsd:string"></xsd:element>
-					<xsd:element name="billCycleDes" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="intervalType" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="lastRunDate" type="xsd:string"></xsd:element>
-					<xsd:element name="bchRunDate" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="Subscriber"></xsd:complexType>
-
-			<xsd:complexType name="AccountObj">
-				<xsd:sequence>
-					<xsd:element name="rut" type="xsd:string"></xsd:element>
-					<xsd:element name="accountId" type="xsd:string"></xsd:element>
-					<xsd:element name="accountIdHigh" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="csLevel" type="xsd:string"></xsd:element>
-					<xsd:element name="custCode" type="xsd:string"></xsd:element>
-					<xsd:element name="accountType" type="xsd:string"></xsd:element>
-					<xsd:element name="accountActivate" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="accountActivate" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="accountDeactivate" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="externalAccountId" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="state" type="xsd:string"></xsd:element>
-					<xsd:element name="docTypeId" type="xsd:string"></xsd:element>
-					<xsd:element name="docTypeDesc" type="xsd:string"></xsd:element>
-					<xsd:element name="doctypeOutputCode" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="billCycle" type="tns:BillcycleObj"
-						maxOccurs="1" minOccurs="1"></xsd:element>
-					<xsd:element name="subscriber" type="tns:SubscriberObj"
-						maxOccurs="unbounded" minOccurs="1"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="BillcycleObj">
-				<xsd:sequence>
-					<xsd:element name="accountId" type="xsd:string"></xsd:element>
-					<xsd:element name="billCycleDes" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="intervalType" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="lastrunDate" type="xsd:string"></xsd:element>
-					<xsd:element name="bchrunDate" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="SubscriberObj">
-				<xsd:sequence>
-					<xsd:element name="rut" type="xsd:string"></xsd:element>
-					<xsd:element name="accountId" type="xsd:string"></xsd:element>
-					<xsd:element name="subscriberId" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="subscriberIdContract"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="subscriberActivate"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="subscriberExpired" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="subscriberExpired" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="state" type="xsd:string"></xsd:element>
-					<xsd:element name="subscriberResources"
-						type="tns:SubscriberResourcesObj" maxOccurs="unbounded"
-						minOccurs="1">
-					</xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="SubscriberResourcesObj">
-				<xsd:sequence>
-					<xsd:element name="subscriberId" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="resourceId" type="xsd:string"></xsd:element>
-					<xsd:element name="resource" type="xsd:string"></xsd:element>
-					<xsd:element name="resourceDescription"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="resourceActivate" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="resourceDeactivate"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="resourceState" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="resourcetype" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="AccountObjRe">
-				<xsd:sequence>
-					<xsd:element name="rut" type="xsd:string"></xsd:element>
-					<xsd:element name="accountId" type="xsd:string"></xsd:element>
-					<xsd:element name="accountIdHigh" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="csLevel" type="xsd:string"></xsd:element>
-					<xsd:element name="custCode" type="xsd:string"></xsd:element>
-					<xsd:element name="accountActivate" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="accountDeactivate" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="externalAccountId" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="state" type="xsd:string"></xsd:element>
-					<xsd:element name="docTypeId" type="xsd:string"></xsd:element>
-					<xsd:element name="docTypeDesc" type="xsd:string"></xsd:element>
-					<xsd:element name="docTypeOutputCode" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="billCycle" type="tns:BillCycleObjRe"
-						maxOccurs="unbounded" minOccurs="1"></xsd:element>
-					<xsd:element name="subscriber"
-						type="tns:SubscriberObjRe" maxOccurs="unbounded" minOccurs="1"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="BillCycleObjRe">
-				<xsd:sequence>
-					<xsd:element name="accountId" type="xsd:string"></xsd:element>
-					<xsd:element name="billCycle" type="xsd:string"></xsd:element>
-					<xsd:element name="billCycleDes" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="intervalType" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="lastRunDate" type="xsd:string"></xsd:element>
-					<xsd:element name="bchRunDate" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="SubscriberObjRe">
-				<xsd:sequence>
-					<xsd:element name="rut" type="xsd:string"></xsd:element>
-					<xsd:element name="accountId" type="xsd:string"></xsd:element>
-					<xsd:element name="subscriberId" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="subscriberIdContract"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="subscriberActivate"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="subscriberExpired" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="state" type="xsd:string"></xsd:element>
-					<xsd:element name="subscriberResources"
-						type="tns:SubscriberResourcesObjRe" maxOccurs="unbounded"
-						minOccurs="1">
-					</xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="SubscriberResourcesObjRe">
-				<xsd:sequence>
-					<xsd:element name="subscriberId" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="resourceId" type="xsd:string"></xsd:element>
-					<xsd:element name="resource" type="xsd:string"></xsd:element>
-					<xsd:element name="resourceDescription"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="resrourceActivate" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="resourceDeactivate"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="resourceState" type="xsd:string">
-					</xsd:element>
-					<xsd:element name="resourceType" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		</xsd:schema>
-	</wsdl:types>
-	<wsdl:message name="accountRequest">
-		<wsdl:part element="tns:account" name="parameters" />
-	</wsdl:message>
-	<wsdl:message name="accountResponse">
-		<wsdl:part element="tns:accountResponse" name="parameters" />
-	</wsdl:message>
-	<wsdl:message name='subscriberResourcesRequest'>
-		<wsdl:part name="parameters"
-			element='tns:subscriberResources'></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name='subscriberResourcesResponse'>
-		<wsdl:part name="parameters"
-			element='tns:subscriberResourcesResponse'></wsdl:part>
-	</wsdl:message>
-	<wsdl:portType name="accountinformation">
-		<wsdl:operation name="account">
-			<wsdl:input message="tns:accountRequest" />
-			<wsdl:output message="tns:accountResponse" />
-		</wsdl:operation>
-		<wsdl:operation name='subscriberResources'>
-			<wsdl:input message='tns:subscriberResourcesRequest'></wsdl:input>
-			<wsdl:output message='tns:subscriberResourcesResponse'></wsdl:output>
-		</wsdl:operation>
-	</wsdl:portType>
-	<wsdl:binding name="accountinformationSOAP"
-		type="tns:accountinformation">
-		<soap:binding style="document"
-			transport="http://schemas.xmlsoap.org/soap/http" />
-		<wsdl:operation name="account">
-			<soap:operation
-				soapAction="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1/NewOperation" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-		<wsdl:operation name="subscriberResources">
-			<soap:operation
-				soapAction="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1/NewOperation" />
-			<wsdl:input>
-				<soap:body use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
-	</wsdl:binding>
-	<wsdl:service name="accountinformation">
-		<wsdl:port binding="tns:accountinformationSOAP" name="getaccountinformationSOAP">
-			<soap:address location="http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0" />
-		</wsdl:port>
-	</wsdl:service>
+      <xsd:complexType name="SubscriberObj">
+      	<xsd:sequence>
+      		<xsd:element name="rut" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountId" type="xsd:string"></xsd:element>
+      		<xsd:element name="subscriberId" type="xsd:string"></xsd:element>
+      		<xsd:element name="subscriberIdContract"
+      			type="xsd:string">
+      		</xsd:element>
+      		<xsd:element name="subscriberActivate"
+      			type="xsd:string">
+      		</xsd:element>
+      		<xsd:element name="subscriberExpired" type="xsd:string"></xsd:element>
+      		<xsd:element name="state" type="xsd:string"></xsd:element>
+      		<xsd:element name="subscriberResources" type="tns:SubscriberResourcesObj" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+    
+      <xsd:complexType name="SubscriberResourcesObj">
+      	<xsd:sequence>
+      		<xsd:element name="subscriberId" type="xsd:string"></xsd:element>
+      		<xsd:element name="resourceId" type="xsd:string"></xsd:element>
+      		<xsd:element name="resource" type="xsd:string"></xsd:element>
+      		<xsd:element name="resourceDescription"
+      			type="xsd:string">
+      		</xsd:element>
+      		<xsd:element name="resourceActivate" type="xsd:string"></xsd:element>
+      		<xsd:element name="resourceDeactivate"
+      			type="xsd:string">
+      		</xsd:element>
+      		<xsd:element name="resourceState" type="xsd:string"></xsd:element>
+      		<xsd:element name="resourceType" type="xsd:string"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="subscriberResources">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="resourceType" type="xsd:string"></xsd:element>
+      			<xsd:element name="resourceValue" type="xsd:string"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+      <xsd:element name="subscriberResourcesResponse">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="rut" type="xsd:string"></xsd:element>
+      			<xsd:element name="account" type="tns:AccountObjRe" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+    
+      <xsd:complexType name="AccountObjRe">
+      	<xsd:sequence>
+      		<xsd:element name="rut" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountId" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountIdHigh" type="xsd:string"></xsd:element>
+      		<xsd:element name="csLevel" type="xsd:string"></xsd:element>
+      		<xsd:element name="custCode" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountType" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountActivate" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountDeactivate" type="xsd:string"></xsd:element>
+      		<xsd:element name="externalAccountId" type="xsd:string"></xsd:element>
+      		<xsd:element name="state" type="xsd:string"></xsd:element>
+      		<xsd:element name="docTypeId" type="xsd:string"></xsd:element>
+      		<xsd:element name="docTypeDesc" type="xsd:string"></xsd:element>
+      		<xsd:element name="docTypeOutputCode" type="xsd:string"></xsd:element>
+      		<xsd:element name="billCycle" type="tns:BillcycleObjRe" maxOccurs="1" minOccurs="1"></xsd:element>
+      		<xsd:element name="subscriber" type="tns:SubscriberObjRe" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+    
+      <xsd:complexType name="SubscriberObjRe">
+      	<xsd:sequence>
+      		<xsd:element name="rut" type="xsd:string"></xsd:element>
+      		<xsd:element name="accountId" type="xsd:string"></xsd:element>
+      		<xsd:element name="subscriberId" type="xsd:string"></xsd:element>
+      		<xsd:element name="subscriberType" type="xsd:string"></xsd:element>
+      		<xsd:element name="subscriberIdContract"
+      			type="xsd:string">
+      		</xsd:element>
+      		<xsd:element name="subscriberActivate"
+      			type="xsd:string">
+      		</xsd:element>
+      		<xsd:element name="subscriberExpired" type="xsd:string"></xsd:element>
+      		<xsd:element name="state" type="xsd:string"></xsd:element>
+      		<xsd:element name="subscriberResources"
+      			type="tns:SubscriberResourcesObjRe" maxOccurs="unbounded" minOccurs="1">
+      		</xsd:element>
+      	</xsd:sequence>
+      </xsd:complexType>
+      
+            <xsd:complexType name="BillCycleObjRe">
+            	<xsd:sequence>
+            		<xsd:element name="accountId" type="xsd:string"></xsd:element>
+            		<xsd:element name="billCycle" type="xsd:string"></xsd:element>
+            		<xsd:element name="billCycleDes"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="intervalType"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="lastRunDate" type="xsd:string"></xsd:element>
+            		<xsd:element name="bchRunDate" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+    
+            <xsd:complexType name="SubscriberResourcesObjRe">
+            	<xsd:sequence>
+            		<xsd:element name="subscriberId"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="resourceId" type="xsd:string"></xsd:element>
+            		<xsd:element name="resource" type="xsd:string"></xsd:element>
+            		<xsd:element name="resourceDescription"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="resourceActivate"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="resourceDeactivate"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="resourceState"
+            			type="xsd:string">
+            		</xsd:element>
+            		<xsd:element name="resourceType" type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="accountRequest">
+    <wsdl:part element="tns:account" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="accountResponse">
+    <wsdl:part element="tns:accountResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="subscriberResourcesRequest">
+  	<wsdl:part name="parameters" element="tns:subscriberResources"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="subscriberResourcesResponse">
+  	<wsdl:part name="parameters" element="tns:subscriberResourcesResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="accountinformation">
+    <wsdl:operation name="account">
+      <wsdl:input message="tns:accountRequest"/>
+      <wsdl:output message="tns:accountResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="subscriberResources">
+    	<wsdl:input message="tns:subscriberResourcesRequest"></wsdl:input>
+    	<wsdl:output message="tns:subscriberResourcesResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="accountinformationSOAP" type="tns:accountinformation">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="account">
+      <soap:operation soapAction="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="subscriberResources">
+      <soap:operation soapAction="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="accountinformation">
+    <wsdl:port binding="tns:accountinformationSOAP" name="getaccountinformationSOAP">
+      <soap:address location="http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0"/>
+    </wsdl:port>
+  </wsdl:service>
 </wsdl:definitions>
