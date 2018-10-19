@@ -110,9 +110,6 @@
 								exceptionType="cl.wom.exception.services.ServiceError"
 								message="400" />
 						</when>
-						<when>
-							<to uri="velocity:velocity/resquestAccountImformation.vm"
-						</when>
 					</choice>
 					<setHeader headerName="Content-Type">
 						<constant>application/xml</constant>
