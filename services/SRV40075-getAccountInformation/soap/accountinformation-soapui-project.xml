@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:account>
+         <rut>160821310</rut>
+         <accountid/>
+      </ns:account>
+   </soapenv:Body>
+</soapenv:Envelope>

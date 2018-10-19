@@ -21,14 +21,24 @@
 
 		<!-- Control de errores -->
 		<onException>
-			<exception>java.lang.Exception</exception>
+			<exception>cl.wom.exception.services.ServiceError</exception>
 			<handled>
-				<simple>true</simple>
+				<constant>true</constant>
 			</handled>
-			<to uri="velocity:velocity/response-sql-error.vm" />
+			<log message="ERROR: ${exception.message}"></log>
+			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+				<simple>${exception.codigoError}</simple>
+			</setHeader>
+			<setHeader headerName="codigoError">
+				<simple>${exception.codigoError}</simple>
+			</setHeader>
+			<setHeader headerName="messageError">
+				<simple>${exception.message}</simple>
+			</setHeader>
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
+			<to uri="velocity:velocity/ErrorHttp.vm" />
 		</onException>
 
 		<route>
@@ -79,12 +89,16 @@
 				<when>
 					<simple>${headers.rut} == "" and ${headers.accountid} == ""
 					</simple>
-					<to uri="velocity:velocity/response-badRequest.vm" />
+					<throwException
+						exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
 				</when>
 				<when>
 					<simple>${headers.rut} != "" and ${headers.accountid} != ""
 					</simple>
-					<to uri="velocity:velocity/400.vm" />
+					<throwException
+						exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
 				</when>
 				<otherwise>
 					<bean ref="sqlFormatterProcessorSOAP"
@@ -92,7 +106,12 @@
 					<choice>
 						<when>
 							<simple>${body} == null</simple>
-							<to uri="velocity:velocity/response-nodata.vm" />
+							<throwException
+								exceptionType="cl.wom.exception.services.ServiceError"
+								message="400" />
+						</when>
+						<when>
+							<to uri="velocity:velocity/resquestAccountImformation.vm"
 						</when>
 					</choice>
 					<setHeader headerName="Content-Type">
@@ -100,8 +119,6 @@
 					</setHeader>
 				</otherwise>
 			</choice>
-
 		</route>
-
 	</camelContext>
 </beans>
