@@ -20,12 +20,8 @@
     
       <xsd:complexType name="ProductOffering">
       	<xsd:sequence>
-      		<xsd:element name="bundleProductOffering"
-      			type="tns:bundleProductOfferingType">
-      		</xsd:element>
       		<xsd:element name="layoutTypeAPP" type="xsd:string"></xsd:element>
       		<xsd:element name="isSellable" type="xsd:string"></xsd:element>
-      		<xsd:element name="deviceOffering" type="tns:deviceOffering"></xsd:element>
       		<xsd:element name="shortDescription" type="xsd:string"></xsd:element>
       		<xsd:element name="version" type="xsd:string"></xsd:element>
       		<xsd:element name="familyOffer" type="xsd:string"></xsd:element>
@@ -33,16 +29,17 @@
       		<xsd:element name="lastUpdate" type="xsd:string"></xsd:element>
       		<xsd:element name="name" type="xsd:string"></xsd:element>
       		<xsd:element name="offerId" type="xsd:string"></xsd:element>
-      		<xsd:element name="recurringCharge"
-      			type="tns:recurringChargeType">
+      		<xsd:element name="recurringCharge" type="tns:recurringChargeType">
       		</xsd:element>
       		<xsd:element name="marketSegment" type="xsd:string"></xsd:element>
       		<xsd:element name="status" type="xsd:string"></xsd:element>
+      		<xsd:element name="bundleProductOffering"
+      			type="tns:bundleProductOffering">
+      		</xsd:element>      		
       	</xsd:sequence>
-
       </xsd:complexType>
 
-      <xsd:complexType name="bundleProductOfferingType">
+      <xsd:complexType name="bundleProductOffering">
       	<xsd:sequence>
       		<xsd:element name="minimumRequired" type="xsd:string"></xsd:element>
       		<xsd:element name="quantity" type="xsd:string"></xsd:element>
@@ -66,6 +63,8 @@
       			type="tns:recurringCharge">
       		</xsd:element>
       		<xsd:element name="status" type="xsd:string"></xsd:element>
+      		<xsd:element name="occ" type="xsd:string"></xsd:element>
+      		<xsd:element name="sku" type="xsd:string"></xsd:element>
       	</xsd:sequence>
       </xsd:complexType>
 
@@ -146,7 +145,6 @@
             		</xsd:sequence>
             	</xsd:complexType>
             </xsd:element>
-            <xsd:element name="NewElement" type="xsd:string"></xsd:element>
         </xsd:schema>
   </wsdl:types>
   <wsdl:message name="productOfferingRequest">
@@ -155,12 +153,7 @@
   <wsdl:message name="productOfferingResponse">
     <wsdl:part element="tns:productOfferingResponse" name="parameters"/>
   </wsdl:message>
-  <wsdl:message name="NewOperationRequest">
-  	<wsdl:part name="parameters" element="tns:NewOperation"></wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="NewOperationResponse">
-  	<wsdl:part name="parameters" element="tns:NewOperationResponse"></wsdl:part>
-  </wsdl:message>
+
   <wsdl:message name="productOfferingFault">
   	<wsdl:part name="parameters" element="tns:productOfferingFault"></wsdl:part>
   </wsdl:message>

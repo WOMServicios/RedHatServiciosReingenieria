@@ -22,7 +22,6 @@
           <xsd:element name="bundleProductOffering" type="tns:bundleProductOfferingType"></xsd:element>
           <xsd:element name="layoutTypeAPP" type="xsd:string"/>
           <xsd:element name="isSellable" type="xsd:string"/>
-          <xsd:element name="deviceOffering" type="tns:deviceOffering"/>
           <xsd:element name="shortDescription" type="xsd:string"/>
           <xsd:element name="version" type="xsd:string"/>
           <xsd:element name="familyOffer" type="xsd:string"/>
@@ -55,6 +54,8 @@
           <xsd:element name="maximunAllowed" type="xsd:string"/>
           <xsd:element name="recurringCharge" type="tns:recurringCharge"></xsd:element>
           <xsd:element name="status" type="xsd:string"/>
+          <xsd:element name="occ" type="xsd:string"/>
+          <xsd:element name="sku" type="xsd:string"/>
         </xsd:sequence>
       </xsd:complexType>
       <xsd:complexType name="recurringChargeType">
@@ -162,15 +163,23 @@
       <soap:address location="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/>
     </wsdl:port>
   </wsdl:service>
-</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint></con:endpoints><con:operation id="e4c41b69-ebab-4837-bc14-def90ab9c4ef" isOneWay="false" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0" name="productOffering" bindingOperationName="productOffering" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f38a768f-497a-4f62-9864-e695d8c9fb86" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint></con:endpoints><con:operation id="e4c41b69-ebab-4837-bc14-def90ab9c4ef" isOneWay="false" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0" name="productOffering" bindingOperationName="productOffering" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f38a768f-497a-4f62-9864-e695d8c9fb86" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
    <soapenv:Header/>
    <soapenv:Body>
       <ns:productOffering>
-         <offerId>?</offerId>
-         <shortDesc>?</shortDesc>
+         <offerId>123</offerId>
+         <shortDesc></shortDesc>
       </ns:productOffering>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:mockService id="4b50d876-5bda-4cdf-8305-1ffc2b36e342" port="8080" path="/" host="redhat-hp-notebook" name="MockService 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="productOffering" id="718755db-e982-4ca2-a6ff-c86dac8bd4b3" interface="productOfferingSOAP" operation="productOffering"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="aaeda6d1-1230-45aa-9046-a3f2686f4c23" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="01618734-b043-4472-a726-a53e436d37a5" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="894d7140-acff-4ed1-86f5-6f002e796e3f" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 1" searchProperties="true"><con:settings/><con:testStep type="request" id="204cfb80-49f8-47e2-b009-bf19e0950e65" name="productOffering - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>productOfferingSOAP</con:interface><con:operation>productOffering</con:operation><con:request name="productOffering - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="be91af15-a3d0-4ace-8e0f-bab1dc5d4b1a"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:productOffering>
+         <offerId>336</offerId>
+         <shortDesc></shortDesc>
+      </ns:productOffering>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="4a86d66c-5262-43d9-aa7b-e9b981fcff2d" name="SOAP Response"/><con:assertion type="Schema Compliance" id="7d2ee682-e067-45b3-9a6a-71fee79d78f8" name="Schema Compliance"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="c14b504e-a86e-406e-8e7c-ed55b5424314" name="Not SOAP Fault"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:mockService id="4b50d876-5bda-4cdf-8305-1ffc2b36e342" port="8080" path="/" host="redhat-hp-notebook" name="MockService 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="productOffering" id="718755db-e982-4ca2-a6ff-c86dac8bd4b3" interface="productOfferingSOAP" operation="productOffering"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="aaeda6d1-1230-45aa-9046-a3f2686f4c23" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
    <soapenv:Header/>
    <soapenv:Body>
       <ns:productOfferingResponse>
