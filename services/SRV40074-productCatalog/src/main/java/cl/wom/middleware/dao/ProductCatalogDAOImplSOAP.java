@@ -119,30 +119,7 @@ public class ProductCatalogDAOImplSOAP {
 				productOffering.setFamilyOffer(rsGetProductOffering.getString("familyOffer"));
 				productOffering.setTypeOffer(rsGetProductOffering.getString("typeOffer"));
 				productOffering.setLayoutTypeAPP(rsGetProductOffering.getString("layoutTypeAPP"));
-				//añade OneTime
-//	            OneTime onetimep= new OneTime();
-//                onetimep.setAmount("");
-//                onetimep.setCurrency("");
-//                onetimep.setDuration("");
-//                onetimep.setUnitOfMeasure("");
-//                onetimep.setType("");                   
-//                productOffering.setOneTime(onetimep);
-				
-				//se agrega una lista DeviceOffering
-//				DeviceOffering deviceOffering=new DeviceOffering();
-//				deviceOffering.setShDes("");
-//				deviceOffering.setDeviceName("");
-//				deviceOffering.setModality("");
-//				deviceOffering.setCost("");
-//				deviceOffering.setPartNum("");
-//				deviceOffering.setSku("");
-//				deviceOffering.setOfferId("");
-//				List<DeviceOffering> listdeviceOffering= new ArrayList<DeviceOffering>();
-//				listdeviceOffering.add(deviceOffering);
-//				productOffering.setDeviceOffering(listdeviceOffering);
-				//añade al objeto RecurringCharge 
-				
-				
+			
 				RecurringCharge recurringCharge = new RecurringCharge();
 				recurringCharge.setAmount((rsGetProductOffering.getString("amount_recurringCharge")));
 				recurringCharge.setCurrency((rsGetProductOffering.getString("currency_recurringCharge")));
@@ -194,9 +171,6 @@ public class ProductCatalogDAOImplSOAP {
 						+ "where  a.tmcode="+productOffering.getOfferId()+" and ROWNUM <= 10 "
 						+ " and REGEXP_LIKE(to_char(a.tmcode), '^(|'||REPLACE(REPLACE(UPPER(FAMILY_PLAN),'',UPPER"
 						+ "(to_char(a.tmcode))),';','|')||')$')";
-				
-				System.out.println("query: "+ queryGetBundleOfferingA.toString());
-
 				ResultSet rsGetBundleOfferingA = conn.createStatement().executeQuery(queryGetBundleOfferingA);
 				while (rsGetBundleOfferingA.next()) {
 					BundleProductOffering bundleProductOffering = new BundleProductOffering();
@@ -333,9 +307,7 @@ public class ProductCatalogDAOImplSOAP {
 					listBundleProductOffering.add(bundleProductOffering);
 				}
 				rsGetBundleOfferingB.close();
-				
-				
-				
+			
 				//2.2.2
 				String queryGetBundleOfferingC=" select " + 
 						"  b.tmcode                              as id," + 
@@ -370,16 +342,12 @@ public class ProductCatalogDAOImplSOAP {
 						"    PROVI_BOLS.NEXTEL_CATALOGO_PLAN a," + 
 						"    sysadm.rateplan                 b where" + 
 						"    a.shdes_plan = '"+ShDesc+"'" + 
-						"and a.shdes_plan = b.shdes and ROWNUM <=10";
-				
-				System.out.println("imprimiendo shdes_plan:: "+productOffering.getShortDescription());
-				System.out.println("imprimiendo ShDesc:: "+ShDesc);
-				
+						"and a.shdes_plan = b.shdes and ROWNUM <=10";				
 				ResultSet rsGetBundleOfferingC = conn.createStatement().executeQuery(queryGetBundleOfferingC);
 				while (rsGetBundleOfferingC.next()) {
 					BundleProductOffering bundleProductOffering = new BundleProductOffering();
 					
-					 bundleProductOffering.setMinimumRequired(rsGetBundleOfferingC.getString("minimumRequired"));
+						bundleProductOffering.setMinimumRequired(rsGetBundleOfferingC.getString("minimumRequired"));
 			            bundleProductOffering.setQuantity(rsGetBundleOfferingC.getString("quantity"));
 			            bundleProductOffering.setUnitOfMeasure(rsGetBundleOfferingC.getString("unitOfMesaure"));    
 			            bundleProductOffering.setIsPromotionProduct(rsGetBundleOfferingC.getString("isPromotionProduct"));

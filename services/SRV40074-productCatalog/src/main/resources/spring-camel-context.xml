@@ -65,7 +65,15 @@
 	
 	<!-- 	SERVICIO SOAP -->
 	<route>
-		<from uri="jetty:http://{{camel.soap.endpointhost}}:{{camel.soap.endpointport}}{{camel.soap.endpointurl}}"></from>
+		<from 
+				uri="cxf:http://{{camel.soap.endpointhost}}:{{camel.soap.endpointport}}{{camel.soap.endpointurl}}?
+		wsdlURL=classpath:wsdl/productOffering.wsdl&amp;
+		serviceName={http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1}productOffering&amp;
+		portName={http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1}productOfferingSOAP&amp;
+		dataFormat=MESSAGE" />
+		
+		<convertBodyTo type="org.w3c.dom.Document"></convertBodyTo>
+	
 		<setHeader headerName="offerId">
 			<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/ns:productOffering/offerId/text()</xpath>
 		</setHeader>
@@ -75,34 +83,31 @@
 		<log message="offerId: ${headers.offerId}"></log>
 		<log message="shortDesc: ${headers.shortDesc}"></log>
 		
-		
-		<bean ref="sqlFormatterProcessorSOAP" method="sqlParserProductOfferingObject"></bean>   
-		<to uri="velocity:velocity/soap-response-success.vm"></to>
-		
-<!-- 		<choice> -->
-<!-- 			<when> -->
-<!-- 				<simple>${headers.offerId} == null and ${headers.shortDesc} == "" </simple> -->
-<!-- 				<to uri="velocity:velocity/response-SOAPnodata.vm"></to> -->
-<!-- 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader> -->
-<!-- 			</when> -->
-<!-- 			<when> -->
-<!-- 				<simple>${headers.offerId} != null and ${headers.shortDesc} != "" </simple> -->
-<!-- 				<to uri="velocity:velocity/response-SOAPdataduplicate.vm"></to> -->
-<!-- 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader> -->
-<!-- 			</when> -->
-<!-- 		     		<otherwise> -->
-<!-- 					<bean ref="sqlFormatterProcessorSOAP" method="sqlParserProductOffering"></bean>           -->
-<!-- 		            <choice> -->
-<!-- 		            	<when> -->
-<!-- 		            		<simple>${body} == ""</simple> -->
-<!-- 		            		<to uri="velocity:velocity/response-sql-nodata.vm"></to> -->
-<!-- 		            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            		 -->
-<!-- 		            	</when> -->
-<!-- 		            </choice>            -->
-<!-- 		            <setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader> -->
-<!-- 		            </otherwise> -->
-<!-- 		</choice> -->
-
+		<choice>
+			<when>
+				<simple>${headers.offerId} == null and ${headers.shortDesc} == "" </simple>
+				<to uri="velocity:velocity/response-SOAPnodata.vm"></to>
+				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+			</when>
+			<when>
+				<simple>${headers.offerId} != null and ${headers.shortDesc} != "" </simple>
+				<to uri="velocity:velocity/response-SOAPdataduplicate.vm"></to>
+				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+			</when>
+		     		<otherwise>
+							<bean ref="sqlFormatterProcessorSOAP" method="sqlParserProductOfferingObject"></bean>           
+		            <choice>
+		            	<when>
+		            		<simple>${body} == ""</simple>
+		            		<log message="Log Body : ${body}"></log>
+		            		<to uri="velocity:velocity/soap-response-sqlnodata.vm"></to>
+		            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            		
+		            	</when>   
+		            </choice> 
+		            		<to uri="velocity:velocity/soap-response-success.vm"></to>           
+		            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            	 
+		            </otherwise>
+		</choice>
 	</route>
     </camelContext>
 </beans>

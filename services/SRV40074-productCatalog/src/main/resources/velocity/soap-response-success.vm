@@ -5,62 +5,61 @@
       
       	#foreach($productOffer in ${body})
          <productOffering>
-         
+         	<layoutTypeAPP>$!productOffer.layoutTypeAPP</layoutTypeAPP>
+            <isSellable>$!productOffer.isSellable</isSellable>
+            <shortDescription>$!productOffer.shortDescription</shortDescription>
+            <version>$!productOffer.version</version>
+            <familyOffer>$!productOffer.familyOffer</familyOffer>
+            <typeOffer>$!productOffer.typeOffer</typeOffer>
+            <lastUpdate>$!productOffer.lastUpdate</lastUpdate>
+            <name>$!productOffer.name</name>
+            <offerId>$!productOffer.offerId</offerId>
+            <recurringCharge>
+               <amount>$!productOffer.recurringCharge.amount</amount>
+               <unitOfMeasure>$!productOffer.recurringCharge.unitOfMeasure</unitOfMeasure>
+               <currency>$!productOffer.recurringCharge.currency</currency>
+               <type>$!productOffer.recurringCharge.type</type>
+            </recurringCharge>
+            <marketSegment>$!productOffer.marketSegment</marketSegment>
+            <status>$!productOffer.status</status>
          	#foreach($bundle in $productOffer.bundleProductOffering)
             <bundleProductOffering>
-               <minimumRequired>$bundle.minimumRequired</minimumRequired>
-               <quantity>$bundle.quantity</quantity>
-               <unitOfMeasure>$bundle.unitOfMeasure</unitOfMeasure>
-               <isPromotionProduct>$bundle.isPromotionProduct</isPromotionProduct>
+               <minimumRequired>$!bundle.minimumRequired</minimumRequired>
+               <quantity>$!bundle.quantity</quantity>
+               <unitOfMeasure>$!bundle.unitOfMeasure</unitOfMeasure>
+               <isPromotionProduct>$!bundle.isPromotionProduct</isPromotionProduct>
                <channel>
-                  <legacySystem>$bundle.channel.legacySystem</legacySystem>
-                  <name>$bundle.channel.name</name>
+                  <legacySystem>$!bundle.channel.legacySystem</legacySystem>
+                  <name>$!bundle.channel.name</name>
                </channel>
-               <isOfferProduct>$bundle.isOfferProduct</isOfferProduct>
-               <description>$bundle.description</description>
-               <isOptionProduct>$bundle.isOptionProduct</isOptionProduct>
+               <isOfferProduct>$!bundle.isOfferProduct</isOfferProduct>
+               <description>$!bundle.description</description>
+               <isOptionProduct>$!bundle.isOptionProduct</isOptionProduct>
                <oneTime>
-                  <duration>$bundle.oneTime.duration</duration>
-                  <amount>$bundle.oneTime.amount</amount>
-                  <unitOfMeasure>$bundle.oneTime.unitOfMeasure</unitOfMeasure>
-                  <currency>$bundle.oneTime.currency</currency>
-                  <type>$bundle.oneTime.type</type>
+                  <duration>$!bundle.oneTime.duration</duration>
+                  <amount>$!bundle.oneTime.amount</amount>
+                  <unitOfMeasure>$!bundle.oneTime.unitOfMeasure</unitOfMeasure>
+                  <currency>$!bundle.oneTime.currency</currency>
+                  <type>$!bundle.oneTime.type</type>
                </oneTime>
-               <priority>$bundle.priority</priority>
-               <unitType>$bundle.unitType</unitType>
-               <name>$bundle.name</name>
-               <offerId>$bundle.offerId</offerId>
-               <shDes>$bundle.shDes</shDes>
-               <id>$bundle.id</id>
-               <maximunAllowed>$bundle.maximunAllowed</maximunAllowed>
+               <priority>$!bundle.priority</priority>
+               <unitType>$!bundle.unitType</unitType>
+               <name>$!bundle.name</name>
+               <offerId>$!bundle.offerId</offerId>
+               <shDes>$!bundle.shDes</shDes>
+               <id>$!bundle.id</id>
+               <maximunAllowed>$!bundle.maximunAllowed</maximunAllowed>
                <recurringCharge>
-                  <amount>$bundle.recurringCharge.amount</amount>
-                  <unitOfMeasure>$bundle.recurringCharge.unitOfMeasure</unitOfMeasure>
-                  <currency>$bundle.recurringCharge.currency</currency>
-                  <type>$bundle.recurringCharge.type</type>
+                  <amount>$!bundle.recurringCharge.amount</amount>
+                  <unitOfMeasure>$!bundle.recurringCharge.unitOfMeasure</unitOfMeasure>
+                  <currency>$!bundle.recurringCharge.currency</currency>
+                  <type>$!bundle.recurringCharge.type</type>
                </recurringCharge>
-               <status>$bundle.status</status>
-               <occ>$bundle.occ</occ>
-               <sku>$bundle.sku</sku>
+               <status>$!bundle.status</status>
+               <occ>$!bundle.occ</occ>
+               <sku>$!bundle.sku</sku>
             </bundleProductOffering>
             #end
-            <layoutTypeAPP>$productOffer.layoutTypeAPP</layoutTypeAPP>
-            <isSellable>$productOffer.isSellable</isSellable>
-            <shortDescription>$productOffer.shortDescription</shortDescription>
-            <version>$productOffer.version</version>
-            <familyOffer>$productOffer.familyOffer</familyOffer>
-            <typeOffer>$productOffer.typeOffer</typeOffer>
-            <lastUpdate>$productOffer.lastUpdate</lastUpdate>
-            <name>$productOffer.name</name>
-            <offerId>$productOffer.offerId</offerId>
-            <recurringCharge>
-               <amount>$productOffer.recurringCharge.amount</amount>
-               <unitOfMeasure>$productOffer.recurringCharge.unitOfMeasure</unitOfMeasure>
-               <currency>$productOffer.recurringCharge.currency</currency>
-               <type>$productOffer.recurringCharge.type</type>
-            </recurringCharge>
-            <marketSegment>$productOffer.marketSegment</marketSegment>
-            <status>$productOffer.status</status>
          </productOffering>
          #end
       </ns:productOfferingResponse>

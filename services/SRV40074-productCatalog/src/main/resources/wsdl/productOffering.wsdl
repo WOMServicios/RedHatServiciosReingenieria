@@ -33,8 +33,7 @@
       		</xsd:element>
       		<xsd:element name="marketSegment" type="xsd:string"></xsd:element>
       		<xsd:element name="status" type="xsd:string"></xsd:element>
-      		<xsd:element name="bundleProductOffering"
-      			type="tns:bundleProductOffering">
+      		<xsd:element name="bundleProductOffering" minOccurs="0" maxOccurs="unbounded" type="tns:bundleProductOffering">
       		</xsd:element>      		
       	</xsd:sequence>
       </xsd:complexType>
@@ -108,7 +107,6 @@
             		<xsd:element name="type" type="xsd:string"></xsd:element>
             	</xsd:sequence>
             </xsd:complexType>
-    
             
         
             <xsd:complexType name="deviceOffering">
@@ -136,6 +134,8 @@
             		</xsd:sequence>
             	</xsd:complexType>
             </xsd:element>
+            
+            
             <xsd:element name="productOfferingFault">
             	<xsd:complexType>
             		<xsd:sequence>
@@ -145,7 +145,7 @@
             		</xsd:sequence>
             	</xsd:complexType>
             </xsd:element>
-        </xsd:schema>
+    </xsd:schema>
   </wsdl:types>
   <wsdl:message name="productOfferingRequest">
     <wsdl:part element="tns:productOffering" name="parameters"/>
@@ -154,6 +154,7 @@
     <wsdl:part element="tns:productOfferingResponse" name="parameters"/>
   </wsdl:message>
 
+
   <wsdl:message name="productOfferingFault">
   	<wsdl:part name="parameters" element="tns:productOfferingFault"></wsdl:part>
   </wsdl:message>
@@ -161,6 +162,8 @@
     <wsdl:operation name="productOffering">
       <wsdl:input message="tns:productOfferingRequest"/>
       <wsdl:output message="tns:productOfferingResponse"/>
+            
+            <wsdl:fault name="fault" message="tns:productOfferingFault"></wsdl:fault>
         </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="productOfferingSOAP" type="tns:productOffering">
