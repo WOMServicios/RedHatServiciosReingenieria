@@ -129,17 +129,17 @@ public class ProductCatalogDAOImplSOAP {
 //                productOffering.setOneTime(onetimep);
 				
 				//se agrega una lista DeviceOffering
-				DeviceOffering deviceOffering=new DeviceOffering();
-				deviceOffering.setShDes("");
-				deviceOffering.setDeviceName("");
-				deviceOffering.setModality("");
-				deviceOffering.setCost("");
-				deviceOffering.setPartNum("");
-				deviceOffering.setSku("");
-				deviceOffering.setOfferId("");
-				List<DeviceOffering> listdeviceOffering= new ArrayList<DeviceOffering>();
-				listdeviceOffering.add(deviceOffering);
-				productOffering.setDeviceOffering(listdeviceOffering);
+//				DeviceOffering deviceOffering=new DeviceOffering();
+//				deviceOffering.setShDes("");
+//				deviceOffering.setDeviceName("");
+//				deviceOffering.setModality("");
+//				deviceOffering.setCost("");
+//				deviceOffering.setPartNum("");
+//				deviceOffering.setSku("");
+//				deviceOffering.setOfferId("");
+//				List<DeviceOffering> listdeviceOffering= new ArrayList<DeviceOffering>();
+//				listdeviceOffering.add(deviceOffering);
+//				productOffering.setDeviceOffering(listdeviceOffering);
 				//añade al objeto RecurringCharge 
 				
 				
@@ -192,13 +192,15 @@ public class ProductCatalogDAOImplSOAP {
 						+ "from sysadm.rateplan a,"
 						+ "PROVI_BOLS.NEXTEL_CATALOGO_PRODUCTOS b "
 						+ "where  a.tmcode="+productOffering.getOfferId()+" and ROWNUM <= 10 "
-						+ "---variable =>tmcode=offerId and REGEXP_LIKE(to_char(a.tmcode), '^(|'||REPLACE(REPLACE(UPPER(FAMILY_PLAN),'',UPPER"
+						+ " and REGEXP_LIKE(to_char(a.tmcode), '^(|'||REPLACE(REPLACE(UPPER(FAMILY_PLAN),'',UPPER"
 						+ "(to_char(a.tmcode))),';','|')||')$')";
 				
+				System.out.println("query: "+ queryGetBundleOfferingA.toString());
+
 				ResultSet rsGetBundleOfferingA = conn.createStatement().executeQuery(queryGetBundleOfferingA);
 				while (rsGetBundleOfferingA.next()) {
 					BundleProductOffering bundleProductOffering = new BundleProductOffering();
-					
+					System.out.println("log : " + rsGetBundleOfferingA.getString("type_oneTime"));
 		            bundleProductOffering.setMinimumRequired(rsGetBundleOfferingA.getString("minimumRequired"));
 		            bundleProductOffering.setQuantity(rsGetBundleOfferingA.getString("quantity"));
 		            bundleProductOffering.setUnitOfMeasure(rsGetBundleOfferingA.getString("unitOfMesaure")); 
@@ -234,6 +236,7 @@ public class ProductCatalogDAOImplSOAP {
 					bundleProductOffering.setRecurringCharge(recurringChargebundle);
 					//añade OneTime
 		            OneTime onetime= new OneTime();
+                    System.out.println(" imprimiendo onetimeAmount " + rsGetBundleOfferingA.getString("amount_oneTime"));
                     onetime.setAmount(rsGetBundleOfferingA.getString("amount_oneTime"));
                     onetime.setCurrency(rsGetBundleOfferingA.getString("currency_oneTime"));
                     onetime.setDuration(rsGetBundleOfferingA.getString("duration_oneTime"));
@@ -280,6 +283,7 @@ public class ProductCatalogDAOImplSOAP {
 						+ " where      a.tmcode="+productOffering.getOfferId()+"  and a.tmcode = b.tmcode  and b.sncode = c.sncode "
 						+ " and c.sscode = d.SVCODE  and d.srvcode = e.bscs_code   and e.SERVICE_ID = f.SERVICE_ID  and f.SUBSYSTEM_MARKET = 'PC2' "
 						+ " and f.register_command = x.ID_PCRF_PROD and ROWNUM <=10";
+				
 				ResultSet rsGetBundleOfferingB = conn.createStatement().executeQuery(queryGetBundleOfferingB);
 				while (rsGetBundleOfferingB.next()) {
 					BundleProductOffering bundleProductOffering = new BundleProductOffering();

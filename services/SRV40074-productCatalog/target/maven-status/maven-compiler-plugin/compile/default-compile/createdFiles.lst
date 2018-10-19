@@ -1,5 +1,5 @@
-cl/wom/middleware/util/ConnectionFactory$DataBaseSchema.class
 cl/wom/middleware/dao/ProductCatalogDAOInt.class
+cl/wom/middleware/util/ConnectionFactory$DataBaseSchema.class
 cl/wom/middleware/util/ConnectionFactory.class
 cl/wom/middleware/vo/BundleProductOffering.class
 cl/wom/middleware/proxy/SpringBootRestProxyApplication.class
@@ -11,7 +11,7 @@ cl/wom/middleware/vo/DeviceOffering.class
 cl/wom/middleware/dao/ProductCatalogDAOImplSOAP.class
 cl/wom/middleware/util/PropertiesUtil.class
 cl/wom/middleware/bean/SqlFormatterProcessor.class
-cl/wom/middleware/vo/RecurringCharge.class
 cl/wom/middleware/vo/ProductOffering.class
+cl/wom/middleware/vo/RecurringCharge.class
 cl/wom/middleware/bean/SqlFormatterProcessorSOAP.class
 cl/wom/middleware/vo/OneTime.class
