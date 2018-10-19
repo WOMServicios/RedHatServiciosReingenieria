@@ -42,11 +42,6 @@
 		</onException>
 
 
-
-
-
-
-
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint.route1}}" />
@@ -67,13 +62,6 @@
 			</setHeader>
 		</route>
 		
-		
-		
-		
-		
-		
-		
-		
 
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
@@ -88,13 +76,6 @@
 			<to uri="direct:fullRequest" />
 		</route>
 		
-		
-		
-		
-		
-		
-		
-		
 		<route>
 			<from uri="jetty:{{camel.from.endpoint.route3}}" />
 
@@ -106,23 +87,18 @@
 				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/accountid/text()
 				</xpath>
 			</setHeader>
-			<setHeader headerName="type">
+			<setHeader headerName="resourceType">
 				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:subscriberResources/resourceType/text()
 				</xpath>
 			</setHeader>
-			<setHeader headerName="value">
+			<setHeader headerName="resourceValue">
 				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:subscriberResources/resourceValue/text()
 				</xpath>
 			</setHeader>
-			
-			<log message="${headers.type}"></log>
-			<log message="${headers.value}"></log>
-			
-			
+					
 	
-				
-<!-- 				<bean ref="sqlFormatterProcessorSOAP" method="sqlParserAccountInformationSOAP"></bean> -->
-				<bean ref="sqlFormatterProcessorSOAP" method="sqlGetRutAccountManagerSOAP"></bean>
+<!-- 				<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean> -->
+				<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManagerSOAP"></bean>
 				<to uri="velocity:velocity/response-AccountImformation.vm" />
 				
 <!-- 			<choice> -->
