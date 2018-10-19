@@ -21,6 +21,9 @@ public class SqlFormatterProcessorSOAP {
 			JSONObject jsonObj = new JSONObject(accountInformation);
 			String xml = XML.toString(jsonObj);
 			
+			System.out.println(xml);
+			
+			
 			return xml;
 		} else {
 			return null;
