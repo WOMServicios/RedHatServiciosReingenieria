@@ -85,12 +85,12 @@
 		
 		<choice>
 			<when>
-				<simple>${headers.offerId} == null and ${headers.shortDesc} == "" </simple>
+				<simple>${headers.offerId} == null and ${headers.shortDesc.trim()} == "" </simple>
 				<to uri="velocity:velocity/response-SOAPnodata.vm"></to>
 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
 			</when>
 			<when>
-				<simple>${headers.offerId} != null and ${headers.offerId} != "" and ${headers.shortDesc} != "" </simple>
+				<simple>${headers.offerId} != null and ${headers.shortDesc.trim()} != "" </simple>
 				<to uri="velocity:velocity/response-SOAPdataduplicate.vm"></to>
 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
 			</when>
