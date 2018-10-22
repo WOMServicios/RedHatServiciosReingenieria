@@ -4,7 +4,7 @@
    <soapenv:Body>
       <ns:account>
          <rut/>
-         <accountId/>
+         <accountId>123119    </accountId>
       </ns:account>
    </soapenv:Body>
 </soapenv:Envelope>

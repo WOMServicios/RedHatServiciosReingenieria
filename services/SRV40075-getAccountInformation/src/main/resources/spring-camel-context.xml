@@ -17,8 +17,7 @@
 			/> -->
 		<propertyPlaceholder id="placeholder"
 			location="classpath:sql.properties ,file:${env:APP_ENV}" />
-
-
+			
 		<!-- Control de errores -->
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
@@ -41,7 +40,6 @@
 			<to uri="velocity:velocity/ErrorHttp.vm" />
 		</onException>
 
-
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint.route1}}" />
@@ -62,19 +60,16 @@
 			</setHeader>
 		</route>
 		
-
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:{{camel.from.endpoint.route2}}" />
 
-			<bean ref="sqlFormatterProcessor"
-				method="sqlGetRutAccountManager"></bean>
+			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
 			<to uri="direct:fullRequest" />
 		</route>
 		
-
 		<route>
 			<from uri="cxf:http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0?		
 			wsdlURL=classpath:wsdl/accountinformation.wsdl&amp;
@@ -102,24 +97,21 @@
 			<choice>
 				<when>
 					<xpath>/soapenv:Envelope/soapenv:Body/ns:account</xpath>
-					<choice>
-						<when>
-							<simple>${headers.rut} == "" and ${headers.accountId} == "" </simple>
-							<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
-						</when>
-						<when>
-							<simple>${headers.rut} != "" and ${headers.accountId} != "" </simple>
-							<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
-						</when>
-						<otherwise>
-							<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
-							<to uri="velocity:velocity/response-AccountImformation.vm" />
-						</otherwise>
-
-					</choice>
-					
-				</when>
-				
+						<choice>
+							<when>
+								<simple>${headers.rut} == "" and ${headers.accountId} == "" </simple>
+								<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+							</when>
+							<when>
+								<simple>${headers.rut} != "" and ${headers.accountId} != "" </simple>
+								<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+							</when>
+							<otherwise>
+								<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
+								<to uri="velocity:velocity/response-AccountImformation.vm" />
+							</otherwise>
+						</choice>	
+					</when>
 				<when>
 					<xpath>/soapenv:Envelope/soapenv:Body/ns:subscriberResources</xpath>
 					<choice>
@@ -144,7 +136,6 @@
 					</choice>			
 				</when>
 			</choice>
-
 		</route>
 	</camelContext>
 </beans>
