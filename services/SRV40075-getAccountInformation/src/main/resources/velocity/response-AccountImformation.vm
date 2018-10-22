@@ -2,8 +2,7 @@
    <soapenv:Header/>
    <soapenv:Body>
       <ns:accountResponse>
-         <rut>?</rut>
-         <!--1 or more repetitions:-->
+         <rut>${body.rut}</rut>
          #foreach($!account in ${body.account})
          <account>
             <rut>$!account.rut</rut>
@@ -27,9 +26,8 @@
                <lastRunDate>$!account.billCycle.lastRunDate</lastRunDate>
                <bchRunDate>$!account.billCycle.bchRunDate</bchRunDate>
             </billCycle>
-            <!--1 or more repetitions:-->
             #foreach($!subscribers in ${account.subscribers})
-            <subcriber>
+            <subscriber>
                <rut>$!subscribers.rut</rut>
                <accountId>$!subscribers.accountId</accountId>
                <subscriberId>$!subscribers.subscriberId</subscriberId>
@@ -37,7 +35,6 @@
                <subscriberActivate>$!subscribers.subscriberActivate</subscriberActivate>
                <subscriberExpired>$!subscribers.subscriberExpired</subscriberExpired>
                <state>$!subscribers.state</state>
-               <!--1 or more repetitions:-->
                #foreach($!resoucers in $subscribers.subscriberResources)
                <subscriberResources>
                   <subscriberId>$!resoucers.subscriberId</subscriberId>
@@ -50,7 +47,7 @@
                   <resourceType>$!resoucers.resourceType</resourceType>
                </subscriberResources>
                #end
-            </subcriber>
+            </subscriber>
             #end
          </account>
          #end

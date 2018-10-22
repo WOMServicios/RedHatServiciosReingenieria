@@ -121,7 +121,7 @@
       		<xsd:element name="docTypeId" type="xsd:string"></xsd:element>
       		<xsd:element name="docTypeDesc" type="xsd:string"></xsd:element>
       		<xsd:element name="docTypeOutputCode" type="xsd:string"></xsd:element>
-      		<xsd:element name="billCycle" type="tns:BillcycleObjRe" maxOccurs="1" minOccurs="1"></xsd:element>
+      		<xsd:element name="billCycle" type="tns:BillCycleObjRe" maxOccurs="1" minOccurs="1"></xsd:element>
       		<xsd:element name="subscriber" type="tns:SubscriberObjRe" maxOccurs="unbounded" minOccurs="1"></xsd:element>
       	</xsd:sequence>
       </xsd:complexType>
@@ -145,21 +145,6 @@
       		</xsd:element>
       	</xsd:sequence>
       </xsd:complexType>
-      
-            <xsd:complexType name="BillCycleObjRe">
-            	<xsd:sequence>
-            		<xsd:element name="accountId" type="xsd:string"></xsd:element>
-            		<xsd:element name="billCycle" type="xsd:string"></xsd:element>
-            		<xsd:element name="billCycleDes"
-            			type="xsd:string">
-            		</xsd:element>
-            		<xsd:element name="intervalType"
-            			type="xsd:string">
-            		</xsd:element>
-            		<xsd:element name="lastRunDate" type="xsd:string"></xsd:element>
-            		<xsd:element name="bchRunDate" type="xsd:string"></xsd:element>
-            	</xsd:sequence>
-            </xsd:complexType>
     
             <xsd:complexType name="SubscriberResourcesObjRe">
             	<xsd:sequence>
@@ -183,7 +168,18 @@
             		<xsd:element name="resourceType" type="xsd:string"></xsd:element>
             	</xsd:sequence>
             </xsd:complexType>
-    </xsd:schema>
+    
+            <xsd:complexType name="BillCycleObjRe">
+            	<xsd:sequence>
+            		<xsd:element name="accountId" 	 type="xsd:string"></xsd:element>
+            		<xsd:element name="billCycle" 	 type="xsd:string"></xsd:element>
+            		<xsd:element name="billCycleDes" type="xsd:string"></xsd:element>
+            		<xsd:element name="intervalType" type="xsd:string"></xsd:element>
+            		<xsd:element name="lastRunDate"  type="xsd:string"></xsd:element>
+            		<xsd:element name="bchRunDate" 	 type="xsd:string"></xsd:element>
+            	</xsd:sequence>
+            </xsd:complexType>
+		</xsd:schema>
   </wsdl:types>
   <wsdl:message name="accountRequest">
     <wsdl:part element="tns:account" name="parameters"/>
