@@ -1,10 +1,226 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+<con:soapui-project id="a2fa078f-5e3b-4f2b-8be1-57da23e9a672" activeEnvironment="Default" name="accountinformationSOAP" resourceRoot="" soapui-version="5.4.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="e2ea8143-cce7-4bb6-8337-4497a8120937" wsaVersion="NONE" name="accountinformationSOAP" type="wsdl" bindingName="{http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}accountinformationSOAP" soapVersion="1_1" anonymous="optional" definition="file:/home/casp/Escritorio/Redhat-git/RedHatServiciosReingenieria/services/SRV40075-getAccountInformation/src/main/resources/wsdl/accountinformation.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/home/casp/Escritorio/Redhat-git/RedHatServiciosReingenieria/services/SRV40075-getAccountInformation/src/main/resources/wsdl/accountinformation.wsdl"><con:part><con:url>file:/home/casp/Escritorio/Redhat-git/RedHatServiciosReingenieria/services/SRV40075-getAccountInformation/src/main/resources/wsdl/accountinformation.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="accountinformation" targetNamespace="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+      <xsd:element name="account">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="rut" type="xsd:string"/>
+            <xsd:element name="accountId" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="accountResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="rut" type="xsd:string"/>
+            <xsd:element name="account" type="tns:AccountObj" maxOccurs="unbounded" minOccurs="1"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="AccountObj">
+        <xsd:sequence>
+          <xsd:element name="rut" type="xsd:string"/>
+          <xsd:element name="accountId" type="xsd:string"/>
+          <xsd:element name="accountIdHigh" type="xsd:string"/>
+          <xsd:element name="csLevel" type="xsd:string"/>
+          <xsd:element name="custCode" type="xsd:string"/>
+          <xsd:element name="accountType" type="xsd:string"/>
+          <xsd:element name="accountActivate" type="xsd:string"/>
+          <xsd:element name="accountDeactivate" type="xsd:string"/>
+          <xsd:element name="externalAccountId" type="xsd:string"/>
+          <xsd:element name="state" type="xsd:string"/>
+          <xsd:element name="docTypeId" type="xsd:string"/>
+          <xsd:element name="docTypeDesc" type="xsd:string"/>
+          <xsd:element name="docTypeOutputCode" type="xsd:string"/>
+          <xsd:element name="billCycle" type="tns:BillcycleObj" maxOccurs="1" minOccurs="1"/>
+          <xsd:element name="subscriber" type="tns:SubscriberObj" maxOccurs="unbounded" minOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BillcycleObj">
+        <xsd:sequence>
+          <xsd:element name="accountId" type="xsd:string"/>
+          <xsd:element name="billCycle" type="xsd:string"/>
+          <xsd:element name="billCycleDes" type="xsd:string"/>
+          <xsd:element name="intervalType" type="xsd:string"/>
+          <xsd:element name="lastRunDate" type="xsd:string"/>
+          <xsd:element name="bchRunDate" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SubscriberObj">
+        <xsd:sequence>
+          <xsd:element name="rut" type="xsd:string"/>
+          <xsd:element name="accountId" type="xsd:string"/>
+          <xsd:element name="subscriberId" type="xsd:string"/>
+          <xsd:element name="subscriberIdContract" type="xsd:string"></xsd:element>
+          <xsd:element name="subscriberActivate" type="xsd:string"></xsd:element>
+          <xsd:element name="subscriberExpired" type="xsd:string"/>
+          <xsd:element name="state" type="xsd:string"/>
+          <xsd:element name="subscriberResources" type="tns:SubscriberResourcesObj" maxOccurs="unbounded" minOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SubscriberResourcesObj">
+        <xsd:sequence>
+          <xsd:element name="subscriberId" type="xsd:string"/>
+          <xsd:element name="resourceId" type="xsd:string"/>
+          <xsd:element name="resource" type="xsd:string"/>
+          <xsd:element name="resourceDescription" type="xsd:string"></xsd:element>
+          <xsd:element name="resourceActivate" type="xsd:string"/>
+          <xsd:element name="resourceDeactivate" type="xsd:string"></xsd:element>
+          <xsd:element name="resourceState" type="xsd:string"/>
+          <xsd:element name="resourceType" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="subscriberResources">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="resourceType" type="xsd:string"/>
+            <xsd:element name="resourceValue" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="subscriberResourcesResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="rut" type="xsd:string"/>
+            <xsd:element name="account" type="tns:AccountObjRe" maxOccurs="unbounded" minOccurs="1"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="AccountObjRe">
+        <xsd:sequence>
+          <xsd:element name="rut" type="xsd:string"/>
+          <xsd:element name="accountId" type="xsd:string"/>
+          <xsd:element name="accountIdHigh" type="xsd:string"/>
+          <xsd:element name="csLevel" type="xsd:string"/>
+          <xsd:element name="custCode" type="xsd:string"/>
+          <xsd:element name="accountType" type="xsd:string"/>
+          <xsd:element name="accountActivate" type="xsd:string"/>
+          <xsd:element name="accountDeactivate" type="xsd:string"/>
+          <xsd:element name="externalAccountId" type="xsd:string"/>
+          <xsd:element name="state" type="xsd:string"/>
+          <xsd:element name="docTypeId" type="xsd:string"/>
+          <xsd:element name="docTypeDesc" type="xsd:string"/>
+          <xsd:element name="docTypeOutputCode" type="xsd:string"/>
+          <xsd:element name="billCycle" type="tns:BillCycleObjRe" maxOccurs="1" minOccurs="1"/>
+          <xsd:element name="subscriber" type="tns:SubscriberObjRe" maxOccurs="unbounded" minOccurs="1"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SubscriberObjRe">
+        <xsd:sequence>
+          <xsd:element name="rut" type="xsd:string"/>
+          <xsd:element name="accountId" type="xsd:string"/>
+          <xsd:element name="subscriberId" type="xsd:string"/>
+          <xsd:element name="subscriberType" type="xsd:string"/>
+          <xsd:element name="subscriberIdContract" type="xsd:string"></xsd:element>
+          <xsd:element name="subscriberActivate" type="xsd:string"></xsd:element>
+          <xsd:element name="subscriberExpired" type="xsd:string"/>
+          <xsd:element name="state" type="xsd:string"/>
+          <xsd:element name="subscriberResources" type="tns:SubscriberResourcesObjRe" maxOccurs="unbounded" minOccurs="1"></xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="SubscriberResourcesObjRe">
+        <xsd:sequence>
+          <xsd:element name="subscriberId" type="xsd:string"></xsd:element>
+          <xsd:element name="resourceId" type="xsd:string"/>
+          <xsd:element name="resource" type="xsd:string"/>
+          <xsd:element name="resourceDescription" type="xsd:string"></xsd:element>
+          <xsd:element name="resourceActivate" type="xsd:string"></xsd:element>
+          <xsd:element name="resourceDeactivate" type="xsd:string"></xsd:element>
+          <xsd:element name="resourceState" type="xsd:string"></xsd:element>
+          <xsd:element name="resourceType" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="BillCycleObjRe">
+        <xsd:sequence>
+          <xsd:element name="accountId" type="xsd:string"/>
+          <xsd:element name="billCycle" type="xsd:string"/>
+          <xsd:element name="billCycleDes" type="xsd:string"/>
+          <xsd:element name="intervalType" type="xsd:string"/>
+          <xsd:element name="lastRunDate" type="xsd:string"/>
+          <xsd:element name="bchRunDate" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="accountRequest">
+    <wsdl:part element="tns:account" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="accountResponse">
+    <wsdl:part element="tns:accountResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="subscriberResourcesRequest">
+    <wsdl:part name="parameters" element="tns:subscriberResources"/>
+  </wsdl:message>
+  <wsdl:message name="subscriberResourcesResponse">
+    <wsdl:part name="parameters" element="tns:subscriberResourcesResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="accountinformation">
+    <wsdl:operation name="account">
+      <wsdl:input message="tns:accountRequest"/>
+      <wsdl:output message="tns:accountResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="subscriberResources">
+      <wsdl:input message="tns:subscriberResourcesRequest"/>
+      <wsdl:output message="tns:subscriberResourcesResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="accountinformationSOAP" type="tns:accountinformation">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="account">
+      <soap:operation soapAction="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="subscriberResources">
+      <soap:operation soapAction="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="accountinformation">
+    <wsdl:port binding="tns:accountinformationSOAP" name="getaccountinformationSOAP">
+      <soap:address location="http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint></con:endpoints><con:operation id="3998bbd0-e1e5-4e4a-afc6-75ecedf76e59" isOneWay="false" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1" name="account" bindingOperationName="account" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="7a250520-e924-4739-88a0-fb839e142e0b" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
    <soapenv:Header/>
    <soapenv:Body>
       <ns:account>
-         <rut/>
+         <rut>?</rut>
+         <accountId>?</accountId>
+      </ns:account>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/></con:call></con:operation><con:operation id="a8309941-b1eb-42d7-8bdd-6e98419df7e3" isOneWay="false" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1" name="subscriberResources" bindingOperationName="subscriberResources" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="dce90201-89a4-4ee8-bfb5-83fc079a4fe8" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:subscriberResources>
+         <resourceType>?</resourceType>
+         <resourceValue>?</resourceValue>
+      </ns:subscriberResources>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/></con:call></con:operation></con:interface><con:testSuite id="8dfca61a-d1c7-4b39-9d3d-d3959360f95a" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="f952af52-2554-456c-b47e-b1912b2796f7" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 1" searchProperties="true"><con:settings/><con:testStep type="request" id="6b5df51a-550c-4037-b7f7-1c93bd201d1e" name="account - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>accountinformationSOAP</con:interface><con:operation>account</con:operation><con:request name="account - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="f0e0f07d-34d6-46d3-a962-88d51b97c55e"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:account>
+         <rut></rut>
          <accountId>123119    </accountId>
       </ns:account>
    </soapenv:Body>
-</soapenv:Envelope>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="575dfec4-e0d7-470a-992a-22de4aad2488" name="SOAP Response"/><con:assertion type="Schema Compliance" id="cdcb71da-f21a-4064-94f2-5a3c4b79eaf0" name="Schema Compliance"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="3171d81c-588a-452b-ba70-88996c25156d" name="Not SOAP Fault"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="6551cd69-7b9b-42c3-bf2a-e37acfe8f4a5" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 2" searchProperties="true"><con:settings/><con:testStep type="request" id="f9899109-87bd-4d2b-bc19-bd9dc1d95b1d" name="subscriberResources - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>accountinformationSOAP</con:interface><con:operation>subscriberResources</con:operation><con:request name="subscriberResources - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="1daffa6a-d74f-45c3-b1bb-2595735d65c1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:subscriberResources>
+         <resourceType>MSISDN</resourceType>
+         <resourceValue>56964246727</resourceValue>
+      </ns:subscriberResources>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="1de6e930-5cb9-4c52-8efa-0e7ff17efcec" name="SOAP Response"/><con:assertion type="Schema Compliance" id="23d3b767-f977-4b2e-a2c1-8647c0bd7ee3" name="Schema Compliance"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="61ab73db-b0e6-4fb0-9ae6-0fd9de5a0fc8" name="Not SOAP Fault"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
