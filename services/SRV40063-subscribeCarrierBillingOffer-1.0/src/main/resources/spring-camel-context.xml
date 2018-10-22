@@ -11,9 +11,10 @@
 			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
 			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
 			archivo properties. Por defecto en opensfhit es develop -->
+			 
 			 <propertyPlaceholder id="placeholder"
-			location="classpath:application.properties,classpath:sql.properties" />
-			
+                location="file:${env:APP_ENV}, classpath:sql.properties"/>
+			 			
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
 			<handled>
@@ -36,9 +37,7 @@
 		<!-- getcarrierbillingoffers -->
 		<route  streamCache="true">
 			<from 
-			
 				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />
-		
 			<doTry>
 				<setHeader headerName="credential" id="_setHeader3">
 					<jsonpath>$.credential</jsonpath>
@@ -82,9 +81,7 @@
 					<setBody>
 						<simple>{{sql.getsubcriberBymsisdn}}</simple>
 					</setBody>
-			
 					<to uri="bean:clienteProcessor" />
-					
 						<to uri="velocity:velocity/netflixStart.vm" />
 						<to 
 						uri="restlet:http://{{service.rest.bango.host}}:{{service.rest.bango.port}}{{service.rest.bango.resource}}?restletMethod=post" />
@@ -96,8 +93,6 @@
 			<setHeader headerName="Encoding">
 				<constant>UTF-8</constant>
 			</setHeader>	
-		
 		</route>
-	
 	</camelContext>
 </beans>

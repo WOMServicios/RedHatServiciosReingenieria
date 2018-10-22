@@ -1,12 +1,6 @@
 package cl.wom.util;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.Date;
-import java.sql.Timestamp;
-
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
@@ -23,6 +17,7 @@ public class ClienteProcessor implements Processor {
 	private Connection con;
 	private  Cliente cliente;
 
+	@Override
 	public void process(Exchange exchange) throws Exception {
 
 		String sql = (String) exchange.getIn().getBody();
