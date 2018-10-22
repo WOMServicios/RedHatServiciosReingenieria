@@ -6,8 +6,7 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor">
-	</bean>
+	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"/>
 
 	<camelContext
 		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
@@ -21,7 +20,7 @@
 		<!-- <propertyPlaceholder id="placeholder"
 			location="classpath:application.properties,classpath:sql.properties" /> -->
 			<propertyPlaceholder id="placeholder"
-                location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties"/>
+                location="file:${env:APP_ENV}, classpath:sql.properties"/>
 
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
@@ -166,8 +165,17 @@
 								
 								<when>
 								<simple>${body} != null</simple>
+						
+								<setBody>
+									<simple>{{sql.validacionpreinsert}}</simple>
+								</setBody>
+								<setHeader headerName="interface">
+									<constant>validacionpreinsert</constant>
+								</setHeader>
+									<to uri="bean:clienteProcessor" />
+								<when>
+								<simple>${body} == 0</simple>
 								
-
 								<setBody>
 									<simple>{{sql.insertaregelegcarrierbilling}}</simple>
 								</setBody>
@@ -175,7 +183,7 @@
 									<constant>insertaregelegcarrierbilling</constant>
 								</setHeader>
 								<to uri="bean:clienteProcessor" />
-								
+								</when>
 								<to uri="velocity:velocity/Success.vm" />
 							</when>
 							</when>
