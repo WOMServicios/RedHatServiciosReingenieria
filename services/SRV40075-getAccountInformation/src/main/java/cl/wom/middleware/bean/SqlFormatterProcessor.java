@@ -47,10 +47,5 @@ public class SqlFormatterProcessor {
 		return accountInformation;
 
 	}
-	
-	
-	
-	
-	
-	
+
 }
