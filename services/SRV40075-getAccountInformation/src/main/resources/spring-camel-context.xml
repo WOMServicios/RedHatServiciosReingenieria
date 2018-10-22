@@ -76,7 +76,7 @@
 		
 
 		<route>
-			<from uri="cxf:http://0.0.0.0:8888/ocp/srv40049/activavolte/soap/v1.0/?		
+			<from uri="cxf:http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0?		
 			wsdlURL=classpath:wsdl/accountinformation.wsdl&amp;
 			serviceName={http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}accountinformation&amp;
 			portName={http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}getaccountinformationSOAP&amp;
@@ -86,8 +86,8 @@
 			<setHeader headerName="rut">
 				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/rut/text()</xpath>
 			</setHeader>
-			<setHeader headerName="accountid">
-				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/accountid/text()</xpath>
+			<setHeader headerName="accountId">
+				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:account/accountId/text()</xpath>
 			</setHeader>
 
 			<setHeader headerName="resourceType">
@@ -99,56 +99,51 @@
 				</xpath>
 			</setHeader>
 			
-			
 			<choice>
 				<when>
 					<xpath>/soapenv:Envelope/soapenv:Body/ns:account</xpath>
-					<log message="dentro de account"></log>
-					<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
-					<to uri="velocity:velocity/response-AccountImformation.vm" />
+					<choice>
+						<when>
+							<simple>${headers.rut} == "" and ${headers.accountId} == "" </simple>
+							<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+						</when>
+						<when>
+							<simple>${headers.rut} != "" and ${headers.accountId} != "" </simple>
+							<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+						</when>
+						<otherwise>
+							<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
+							<to uri="velocity:velocity/response-AccountImformation.vm" />
+						</otherwise>
+
+					</choice>
+					
 				</when>
 				
 				<when>
 					<xpath>/soapenv:Envelope/soapenv:Body/ns:subscriberResources</xpath>
-					<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
-					<setHeader headerName="rut"><simple>${body}</simple></setHeader>
-					<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
-					<to uri="velocity:velocity/response-AccountImformation.vm" />
-					<log message="dentro de suscriber"></log>
+					<choice>
+						<when>
+							<simple>${headers.resourceType} == "" and ${headers.resourceValue} == "" </simple>
+							<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+						</when>
+						<when>
+							<simple>${headers.resourceType} != "" and ${headers.resourceValue} == ""</simple>
+							<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+						</when>
+						<when>
+							<simple>${headers.resourceType} == "" and ${headers.resourceValue} != ""</simple>
+							<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+						</when>
+						<otherwise>
+							<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
+							<setHeader headerName="rut"><simple>${body}</simple></setHeader>
+							<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
+							<to uri="velocity:velocity/response-AccountImformation.vm" />
+						</otherwise>
+					</choice>			
 				</when>
 			</choice>
-			
-<!-- 			<choice> -->
-<!-- 				<when> -->
-<!-- 					<simple>${headers.rut} == "" and ${headers.accountid} == "" -->
-<!-- 					</simple> -->
-<!-- 					<throwException -->
-<!-- 						exceptionType="cl.wom.exception.services.ServiceError" -->
-<!-- 						message="400" /> -->
-<!-- 				</when> -->
-<!-- 				<when> -->
-<!-- 					<simple>${headers.rut} != "" and ${headers.accountid} != "" -->
-<!-- 					</simple> -->
-<!-- 					<throwException -->
-<!-- 						exceptionType="cl.wom.exception.services.ServiceError" -->
-<!-- 						message="400" /> -->
-<!-- 				</when> -->
-<!-- 				<otherwise> -->
-<!-- 					<bean ref="sqlFormatterProcessorSOAP" -->
-<!-- 						method="sqlParserAccountInformation"></bean> -->
-<!-- 					<choice> -->
-<!-- 						<when> -->
-<!-- 							<simple>${body} == null</simple> -->
-<!-- 							<throwException -->
-<!-- 								exceptionType="cl.wom.exception.services.ServiceError" -->
-<!-- 								message="400" /> -->
-<!-- 						</when> -->
-<!-- 					</choice> -->
-<!-- 					<setHeader headerName="Content-Type"> -->
-<!-- 						<constant>application/xml</constant> -->
-<!-- 					</setHeader> -->
-<!-- 				</otherwise> -->
-<!-- 			</choice> -->
 
 		</route>
 	</camelContext>

@@ -86,15 +86,12 @@ public class AccountManagerDAO {
 						while (rsSubscriberResoucers.next()) {
 							SubscriberResources subscriberResources = new SubscriberResources();
 							subscriberResources.setResourceId(rsSubscriberResoucers.getString("resourceId"));
-							subscriberResources
-									.setResourceDeactivate(rsSubscriberResoucers.getString("resourceDeactivate"));
+							subscriberResources.setResourceDeactivate(rsSubscriberResoucers.getString("resourceDeactivate"));
 							subscriberResources.setResource(rsSubscriberResoucers.getString("resourceValue"));
 							subscriberResources.setSubscriberId(rsSubscriberResoucers.getString("subscriberId"));
-							subscriberResources
-									.setResourceDescription(rsSubscriberResoucers.getString("resourceDescription"));
+							subscriberResources.setResourceDescription(rsSubscriberResoucers.getString("resourceDescription"));
 							subscriberResources.setResourceState(rsSubscriberResoucers.getString("resourceState"));
-							subscriberResources
-									.setResourceActivate(rsSubscriberResoucers.getString("resourceActivate"));
+							subscriberResources.setResourceActivate(rsSubscriberResoucers.getString("resourceActivate"));
 							subscriberResources.setResourceType(rsSubscriberResoucers.getString("resourceType"));
 							listaSubscriberResources.add(subscriberResources);
 						}
