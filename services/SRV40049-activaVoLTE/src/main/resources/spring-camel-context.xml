@@ -1,39 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
     http://camel.apache.org/schema/spring 
     http://camel.apache.org/schema/spring/camel-spring.xsd">
 
+	<import resource="bean-definitions.xml" />
 
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="${sql.wappldesa.url}" />
+		<property name="url" value="${sql.wappldesa.url}${sql.wappldesa.host}:${sql.wappldesa.port}:${sql.wappldesa.databasename}" />
 		<property name="username" value="${sql.wappldesa.username}" />
 		<property name="password" value="${sql.wappldesa.password}" />
 	</bean>
 	<bean id="dSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="${sql.bscsdesa.url}" />
+		<property name="url" value="${sql.bscsdesa.url}${sql.bscsdesa.host}:${sql.bscsdesa.port}:${sql.bscsdesa.databasename}" />
 		<property name="username" value="${sql.bscsdesa.username}" />
 		<property name="password" value="${sql.bscsdesa.password}" />
 	</bean>
-
-	<!-- configure the Camel SQL component to use the JDBC data source -->
-	<bean class="org.apache.camel.component.sql.SqlComponent" id="sql">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-
-	<import resource="bean-definitions.xml" />
 	
 	<camelContext
 		xmlns="http://camel.apache.org/schema/spring"
 		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
 		xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
-
-		<propertyPlaceholder id="placeholder"
-			location="classpath:application.properties" />
+	
+	
+<!-- 	<propertyPlaceholder id="placeholder" location="file:${env:APP_ENV}"/> -->
+        
 		<onException>
 			<exception>cl.wom.middleware.proxy.ServiceError</exception>
 			<handled>
@@ -165,7 +161,7 @@
 					<log message="msg return procedure1: ${headers.new_request_msg_return}"></log>
 		</route>
 		<route>
-<!-- 			<from uri="netty4:tcp://10.120.241.42:8887"/> -->
+<!-- 	    <from uri="netty4:tcp://10.120.241.42:8887"/> -->
 			<from uri="netty4:{{telnet.tcp}}"/>
 
 			<setBody><constant>SPGCMD:AUTOPROV:RESP_CODE=0,RESP_MSG=SUCCESS</constant></setBody>

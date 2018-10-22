@@ -27,16 +27,10 @@ public class ProductCatalogDAOImplSOAP {
 
  		 PropertiesUtil util = new PropertiesUtil();
  		 Properties prop = util.getProperties("APP_ENV");
-//		Properties prop = Util.getProperties("APP_ENV");
-//		Properties sql = Util.getProperties("SQL_ENV");
 
 		//Donde APP_ENV es la variable de enbtorno
 
-		//System.setProperty("database.bscs.host", "10.120.241.44");
-		//System.setProperty("database.bscs.port", "1540");
-		//System.setProperty("database.bscs.databasename", "BSCSUAT");
-		//System.setProperty("database.bscs.username", "VMD");
-		//System.setProperty("database.bscs.password", "VMD");
+
 		
 		String user = prop.getProperty("database.bscs.username");
 		String password = prop.getProperty("database.bscs.password");
@@ -482,8 +476,7 @@ public class ProductCatalogDAOImplSOAP {
 				productOffering.setBundleProductOffering(listBundleProductOffering);
 				listProductOffering.add(productOffering);
 			}
-			
-			
+
 			rsGetProductOffering.close();	
 			stmt.close();
 	 		System.out.println("exito en la clase");

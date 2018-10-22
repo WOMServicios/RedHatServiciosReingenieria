@@ -15,10 +15,9 @@ public class SqlFormatterProcessor {
 		
 		String offerId   = (String)ex.getIn().getHeader("productOffering.offerId");
 		String shortDes  = (String)ex.getIn().getHeader("productOffering.shortDesc");
-		String marketSeg = (String)ex.getIn().getHeader("productOffering.marketSeg");
 		
  		ProductCatalogDAOImpl productCatalogDAOImpl = new ProductCatalogDAOImpl();
- 		List<ProductOffering>  listProductOffering =  productCatalogDAOImpl.getProductCatalog(offerId, shortDes, marketSeg);
+ 		List<ProductOffering>  listProductOffering =  productCatalogDAOImpl.getProductCatalog(offerId, shortDes);
 
  		
  		JSONArray jsonObj = new org.json.JSONArray(listProductOffering);

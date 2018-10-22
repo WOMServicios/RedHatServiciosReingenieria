@@ -1,4 +1,8 @@
-<response>
-   <status>Error</status>
-   <description>Solo uno de los campos debe traer información</description>
-</response>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+   <soapenv:Body>
+      <soapenv:Fault>
+         <faultcode>ERROR</faultcode>
+         <faultstring>Solo uno de los campos debe traer información</faultstring>
+      </soapenv:Fault>
+   </soapenv:Body>
+</soapenv:Envelope>
