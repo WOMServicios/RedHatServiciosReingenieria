@@ -2,12 +2,12 @@ package cl.wom.util;
 
 
 import java.sql.Connection;
+
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 
 import cl.wom.beans.Cliente;
 import cl.wom.database.ClienteDaoImpl;
-
 import cl.wom.database.ConnectionFactory;
 import cl.wom.database.ConnectionFactory.DataBaseSchema;
 import cl.wom.exception.services.ServiceError;
@@ -91,7 +91,7 @@ public class ClienteProcessor implements Processor {
 				exchange.setProperty("idOfertaProperty",cliente.getIdOferta());
 				exchange.setProperty("desOfertaProperty",cliente.getDesOferta());
 				//variable creada para realizar prueba y no duplicar pk
-				exchange.setProperty("fechaPruebaProperty",new java.util.Date().getSeconds());
+//				exchange.setProperty("fechaPruebaProperty",new java.util.Date().getSeconds());
 			
 				exchange.getIn().setBody(cliente);
 			} else {
@@ -99,11 +99,20 @@ public class ClienteProcessor implements Processor {
 			}
 
 		}
+		if (headerBD.equals("validacionpreinsert")) {
+			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
+			Integer count=clienteDaoImpl.validacionPreInsert(sql, co);
 		
+			exchange.getIn().setBody(count);
+			exchange.getIn().setHeader("idOferta",exchange.getProperty("idOfertaProperty"));
+			exchange.getIn().setHeader("desOferta",exchange.getProperty("desOfertaProperty"));
+
+
+		}
 		if (headerBD.equals("insertaregelegcarrierbilling")) {
 			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
-
 			clienteDaoImpl.insertaregelegcarrierbilling(sql, co);
+		
 			exchange.getIn().setHeader("idOferta",exchange.getProperty("idOfertaProperty"));
 			exchange.getIn().setHeader("desOferta",exchange.getProperty("desOfertaProperty"));
 

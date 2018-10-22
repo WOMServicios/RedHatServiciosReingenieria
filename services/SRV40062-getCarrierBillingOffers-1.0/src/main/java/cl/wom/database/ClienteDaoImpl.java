@@ -2,11 +2,9 @@ package cl.wom.database;
 
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 
 import cl.wom.beans.Cliente;
 
@@ -213,4 +211,33 @@ public class ClienteDaoImpl implements IClienteDao {
 	
 
 }
+
+	@Override
+	public int validacionPreInsert(String sql, Connection co) {
+		Statement stm= null;
+		ResultSet rs=null;
+		int cont = 0;
+	
+		try {			
+			
+			stm=co.createStatement();
+			rs=stm.executeQuery(sql);
+		
+			
+			 if(rs.next()) {
+				 
+				cont=rs.getInt(1);
+	
+
+			 }
+			stm.close();
+			rs.close();
+			co.close();
+		} catch (SQLException e) {
+			System.out.println("Error: Clase ClienteDaoImple, método obtener");
+			e.printStackTrace();
+		}
+
+		return cont;
+	}
 }
