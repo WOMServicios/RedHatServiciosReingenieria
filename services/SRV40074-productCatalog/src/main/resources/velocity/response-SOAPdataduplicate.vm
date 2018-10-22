@@ -1,0 +1,4 @@
+<response>
+   <status>Error</status>
+   <description>Solo uno de los campos debe traer información</description>
+</response>

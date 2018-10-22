@@ -1,0 +1,56 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:accountResponse>
+         <rut>${body.rut}</rut>
+         #foreach($!account in ${body.account})
+         <account>
+            <rut>$!account.rut</rut>
+            <accountId>$!account.accountId</accountId>
+            <accountIdHigh>$!account.accountIdHigh</accountIdHigh>
+            <csLevel>$!account.csLevel</csLevel>
+            <custCode>$!account.custCode</custCode>
+            <accountType>$!account.accountType</accountType>
+            <accountActivate>$!account.accountActivate</accountActivate>
+            <accountDeactivate>$!account.accountDeactivate</accountDeactivate>
+            <externalAccountId>$!account.externalAccountId</externalAccountId>
+            <state>$!account.state</state>
+            <docTypeId>$!account.docTypeId</docTypeId>
+            <docTypeDesc>$!account.docTypeDesc</docTypeDesc>
+            <docTypeOutputCode>$!account.docTypeOutputCode</docTypeOutputCode>
+            <billCycle>
+               <accountId>$!account.billCycle.accountId</accountId>
+               <billCycle>$account.billCycle.billCycle</billCycle>
+               <billCycleDes>$!account.billCycle.billCycleDes</billCycleDes>
+               <intervalType>$!account.billCycle.intervalType</intervalType>
+               <lastRunDate>$!account.billCycle.lastRunDate</lastRunDate>
+               <bchRunDate>$!account.billCycle.bchRunDate</bchRunDate>
+            </billCycle>
+            #foreach($!subscribers in ${account.subscribers})
+            <subscriber>
+               <rut>$!subscribers.rut</rut>
+               <accountId>$!subscribers.accountId</accountId>
+               <subscriberId>$!subscribers.subscriberId</subscriberId>
+               <subscriberIdContract>$!subscribers.subscriberIdContract</subscriberIdContract>
+               <subscriberActivate>$!subscribers.subscriberActivate</subscriberActivate>
+               <subscriberExpired>$!subscribers.subscriberExpired</subscriberExpired>
+               <state>$!subscribers.state</state>
+               #foreach($!resoucers in $subscribers.subscriberResources)
+               <subscriberResources>
+                  <subscriberId>$!resoucers.subscriberId</subscriberId>
+                  <resourceId>$!resoucers.resourceId</resourceId>
+                  <resource>$!resoucers.resource</resource>
+                  <resourceDescription>$!resoucers.resourceDescription</resourceDescription>
+                  <resourceActivate>$!resoucers.resourceActivate</resourceActivate>
+                  <resourceDeactivate>$!resoucers.resourceDeactivate</resourceDeactivate>
+                  <resourceState>$!resoucers.resourceState</resourceState>
+                  <resourceType>$!resoucers.resourceType</resourceType>
+               </subscriberResources>
+               #end
+            </subscriber>
+            #end
+         </account>
+         #end
+      </ns:accountResponse>
+   </soapenv:Body>
+</soapenv:Envelope>

@@ -19,13 +19,14 @@ import cl.wom.middleware.vo.OneTime;
 import cl.wom.middleware.vo.ProductOffering;
 import cl.wom.middleware.vo.RecurringCharge;
 
-public class ProductCatalogDAOImpl {
+public class ProductCatalogDAOImplSOAP {
 
 	
-	public List<ProductOffering> getProductCatalog(String OfferID, String shortDesc, String marketSeg) throws SQLException  {
-		
-		PropertiesUtil util = new PropertiesUtil();
-		Properties prop = util.getProperties("APP_ENV");
+	public List<ProductOffering> getProductCatalog(Long OfferID, String shortDesc) throws SQLException  {
+ 		System.out.println("entrando a la clase");
+
+ 		 PropertiesUtil util = new PropertiesUtil();
+ 		 Properties prop = util.getProperties("APP_ENV");
 //		Properties prop = Util.getProperties("APP_ENV");
 //		Properties sql = Util.getProperties("SQL_ENV");
 
@@ -50,8 +51,6 @@ public class ProductCatalogDAOImpl {
 		if (!"".equals(shortDesc)  && shortDesc != null)
 			whereCondition = "a.SHDES='"+shortDesc+"'";
 		
-		if (!"".equals(marketSeg)  && marketSeg != null)
-			whereCondition = "c.SEGMENT_PLAN='"+marketSeg+"'";
 		
 		System.out.println("whereCondition: "+whereCondition);
 		
@@ -61,7 +60,7 @@ public class ProductCatalogDAOImpl {
 		try {
 			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 			stmt = conn.createStatement();
-			
+			System.out.println("vmos bien");
 			String getOfferIdQuery ="select a.tmcode from sysadm.rateplan a, PROVI_BOLS.NEXTEL_CATALOGO_PLAN c where "+whereCondition +" and a.SHDES = c.SHDES_PLAN";
 			System.out.println("getOfferIdQuery: "+getOfferIdQuery);
 			String offerId = "";
@@ -120,30 +119,7 @@ public class ProductCatalogDAOImpl {
 				productOffering.setFamilyOffer(rsGetProductOffering.getString("familyOffer"));
 				productOffering.setTypeOffer(rsGetProductOffering.getString("typeOffer"));
 				productOffering.setLayoutTypeAPP(rsGetProductOffering.getString("layoutTypeAPP"));
-				//añade OneTime
-//	            OneTime onetimep= new OneTime();
-//                onetimep.setAmount("");
-//                onetimep.setCurrency("");
-//                onetimep.setDuration("");
-//                onetimep.setUnitOfMeasure("");
-//                onetimep.setType("");                   
-//                productOffering.setOneTime(onetimep);
-				
-				//se agrega una lista DeviceOffering
-				DeviceOffering deviceOffering=new DeviceOffering();
-				deviceOffering.setShDes("");
-				deviceOffering.setDeviceName("");
-				deviceOffering.setModality("");
-				deviceOffering.setCost("");
-				deviceOffering.setPartNum("");
-				deviceOffering.setSku("");
-				deviceOffering.setOfferId("");
-				List<DeviceOffering> listdeviceOffering= new ArrayList<DeviceOffering>();
-				listdeviceOffering.add(deviceOffering);
-				productOffering.setDeviceOffering(listdeviceOffering);
-				//añade al objeto RecurringCharge 
-				
-				
+			
 				RecurringCharge recurringCharge = new RecurringCharge();
 				recurringCharge.setAmount((rsGetProductOffering.getString("amount_recurringCharge")));
 				recurringCharge.setCurrency((rsGetProductOffering.getString("currency_recurringCharge")));
@@ -155,25 +131,50 @@ public class ProductCatalogDAOImpl {
 				//Aqui va el bundle 2.1.1
 				//TODO: quitar el ROWNUM
 				List<BundleProductOffering> listBundleProductOffering = new ArrayList<BundleProductOffering>();
-				String queryGetBundleOfferingA="select b.ID_PROD as id,a.tmcode as offerId,a.SHDES as shDes,b.NAME_PROD as name,"
-						+ "b.DESC_PROD  as description,b.LEVEL_PCRF_PROD as priority,b.status as status,'1' as minimumRequired,'1' "
-						+ "as maximumAllowed,'false' as isOfferProduct,'true' as isOptionProduct,decode(b.promo,'S','True','N','False') "
-						+ "as isPromotionProduct,b.file1 as occ,b.sku as sku,b.CHANNEL_ACT as name_channel,b.CHANNEL_ACT as legacySystem_channel"
-						+ ",decode(b.recurrence,'N',b.tariff_prod) as amount_oneTime,decode(b.recurrence,'N','CLP') "
-						+ "as currency_oneTime,decode(b.recurrence,'N',b.VIGENCIA) as duration_oneTime,decode(b.recurrence,'N','Minutos') "
-						+ "as unitOfMesaure_oneTime,decode(b.recurrence,'N','Bundle') as type_oneTime,decode(b.recurrence,'S',b.tariff_prod) "
-						+ "as amount_recurringCharge,decode(b.recurrence,'S','CLP') as currency_recurringCharge,decode(b.recurrence,'S',b.VIGENCIA) "
-						+ "as duration_recurringCharge,decode(b.recurrence,'S','Minutos') as unitOfMesaure_recurringCharge,decode(b.recurrence,'S','Bundle') "
-						+ "as type_recurringCharge,b.traffic_type as unitType,b.unit_type as unitOfMesaure,b.unit_free as quantity from sysadm.rateplan a,"
+				String queryGetBundleOfferingA="select b.ID_PROD as id,"
+						+ "a.tmcode as offerId,"
+						+ "a.SHDES as shDes,"
+						+ "b.NAME_PROD as name,"
+						+ "b.DESC_PROD  as description,"
+						+ "b.LEVEL_PCRF_PROD as priority,"
+						+ "b.status as status,"
+						+ "'1' as minimumRequired,'1' "
+						+ "as maximumAllowed,"
+						+ "'false' as isOfferProduct,"
+						+ "'true' as isOptionProduct,"
+						+ "decode(b.promo,'S','True','N','False') "
+						+ "as isPromotionProduct,"
+						+ "b.file1 as occ,"
+						+ "b.sku as sku,"
+						+ "b.CHANNEL_ACT as name_channel,"
+						+ "b.CHANNEL_ACT as legacySystem_channel"
+						+ ",decode(b.recurrence,'N',b.tariff_prod) as amount_oneTime,"
+						+ "decode(b.recurrence,'N','CLP') "
+						+ "as currency_oneTime,"
+						+ "decode(b.recurrence,'N',b.VIGENCIA) as duration_oneTime,"
+						+ "decode(b.recurrence,'N','Minutos') "
+						+ "as unitOfMesaure_oneTime,"
+						+ "decode(b.recurrence,'N','Bundle') as type_oneTime,"
+						+ "decode(b.recurrence,'S',b.tariff_prod) "
+						+ "as amount_recurringCharge,"
+						+ "decode(b.recurrence,'S','CLP') as currency_recurringCharge,"
+						+ "decode(b.recurrence,'S',b.VIGENCIA) "
+						+ "as duration_recurringCharge,"
+						+ "decode(b.recurrence,'S','Minutos') as unitOfMesaure_recurringCharge,"
+						+ "decode(b.recurrence,'S','Bundle') "
+						+ "as type_recurringCharge,"
+						+ "b.traffic_type as unitType,"
+						+ "b.unit_type as unitOfMesaure,"
+						+ "b.unit_free as quantity "
+						+ "from sysadm.rateplan a,"
 						+ "PROVI_BOLS.NEXTEL_CATALOGO_PRODUCTOS b "
 						+ "where  a.tmcode="+productOffering.getOfferId()+" and ROWNUM <= 10 "
-						+ "---variable =>tmcode=offerId and REGEXP_LIKE(to_char(a.tmcode), '^(|'||REPLACE(REPLACE(UPPER(FAMILY_PLAN),'',UPPER"
+						+ " and REGEXP_LIKE(to_char(a.tmcode), '^(|'||REPLACE(REPLACE(UPPER(FAMILY_PLAN),'',UPPER"
 						+ "(to_char(a.tmcode))),';','|')||')$')";
-				
 				ResultSet rsGetBundleOfferingA = conn.createStatement().executeQuery(queryGetBundleOfferingA);
 				while (rsGetBundleOfferingA.next()) {
 					BundleProductOffering bundleProductOffering = new BundleProductOffering();
-					
+					System.out.println("log : " + rsGetBundleOfferingA.getString("type_oneTime"));
 		            bundleProductOffering.setMinimumRequired(rsGetBundleOfferingA.getString("minimumRequired"));
 		            bundleProductOffering.setQuantity(rsGetBundleOfferingA.getString("quantity"));
 		            bundleProductOffering.setUnitOfMeasure(rsGetBundleOfferingA.getString("unitOfMesaure")); 
@@ -209,6 +210,7 @@ public class ProductCatalogDAOImpl {
 					bundleProductOffering.setRecurringCharge(recurringChargebundle);
 					//añade OneTime
 		            OneTime onetime= new OneTime();
+                    System.out.println(" imprimiendo onetimeAmount " + rsGetBundleOfferingA.getString("amount_oneTime"));
                     onetime.setAmount(rsGetBundleOfferingA.getString("amount_oneTime"));
                     onetime.setCurrency(rsGetBundleOfferingA.getString("currency_oneTime"));
                     onetime.setDuration(rsGetBundleOfferingA.getString("duration_oneTime"));
@@ -255,6 +257,7 @@ public class ProductCatalogDAOImpl {
 						+ " where      a.tmcode="+productOffering.getOfferId()+"  and a.tmcode = b.tmcode  and b.sncode = c.sncode "
 						+ " and c.sscode = d.SVCODE  and d.srvcode = e.bscs_code   and e.SERVICE_ID = f.SERVICE_ID  and f.SUBSYSTEM_MARKET = 'PC2' "
 						+ " and f.register_command = x.ID_PCRF_PROD and ROWNUM <=10";
+				
 				ResultSet rsGetBundleOfferingB = conn.createStatement().executeQuery(queryGetBundleOfferingB);
 				while (rsGetBundleOfferingB.next()) {
 					BundleProductOffering bundleProductOffering = new BundleProductOffering();
@@ -304,9 +307,7 @@ public class ProductCatalogDAOImpl {
 					listBundleProductOffering.add(bundleProductOffering);
 				}
 				rsGetBundleOfferingB.close();
-				
-				
-				
+			
 				//2.2.2
 				String queryGetBundleOfferingC=" select " + 
 						"  b.tmcode                              as id," + 
@@ -341,16 +342,12 @@ public class ProductCatalogDAOImpl {
 						"    PROVI_BOLS.NEXTEL_CATALOGO_PLAN a," + 
 						"    sysadm.rateplan                 b where" + 
 						"    a.shdes_plan = '"+ShDesc+"'" + 
-						"and a.shdes_plan = b.shdes and ROWNUM <=10";
-				
-				System.out.println("imprimiendo shdes_plan:: "+productOffering.getShortDescription());
-				System.out.println("imprimiendo ShDesc:: "+ShDesc);
-				
+						"and a.shdes_plan = b.shdes and ROWNUM <=10";				
 				ResultSet rsGetBundleOfferingC = conn.createStatement().executeQuery(queryGetBundleOfferingC);
 				while (rsGetBundleOfferingC.next()) {
 					BundleProductOffering bundleProductOffering = new BundleProductOffering();
 					
-					 bundleProductOffering.setMinimumRequired(rsGetBundleOfferingC.getString("minimumRequired"));
+						bundleProductOffering.setMinimumRequired(rsGetBundleOfferingC.getString("minimumRequired"));
 			            bundleProductOffering.setQuantity(rsGetBundleOfferingC.getString("quantity"));
 			            bundleProductOffering.setUnitOfMeasure(rsGetBundleOfferingC.getString("unitOfMesaure"));    
 			            bundleProductOffering.setIsPromotionProduct(rsGetBundleOfferingC.getString("isPromotionProduct"));
@@ -395,9 +392,7 @@ public class ProductCatalogDAOImpl {
 						listBundleProductOffering.add(bundleProductOffering);
 					}
 					rsGetBundleOfferingC.close();
-					
-					
-					
+									
 					//2.2.3
 					String queryGetBundleOfferingD="select " + 
 							"  b.tmcode                              as id," + 
@@ -491,7 +486,7 @@ public class ProductCatalogDAOImpl {
 			
 			rsGetProductOffering.close();	
 			stmt.close();
-
+	 		System.out.println("exito en la clase");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;

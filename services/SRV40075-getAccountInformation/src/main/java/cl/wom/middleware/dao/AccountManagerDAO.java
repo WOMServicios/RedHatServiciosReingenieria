@@ -12,7 +12,7 @@ import java.util.Properties;
 
 import cl.wom.middleware.util.ConnectionFactory;
 import cl.wom.middleware.util.ConnectionFactory.DataBaseSchema;
-import cl.wom.middleware.util.Util;
+import cl.wom.middleware.util.PropertiesUtil;
 import cl.wom.middleware.vo.Account;
 import cl.wom.middleware.vo.AccountInformation;
 import cl.wom.middleware.vo.BillCycle;
@@ -21,9 +21,10 @@ import cl.wom.middleware.vo.Subscribers;
 
 public class AccountManagerDAO {
 
-	public AccountInformation getAccountInformation(String rut, String accountId) {
+	static PropertiesUtil util = new PropertiesUtil();
+	static Properties prop = util.getProperties("APP_ENV");
 
-		Properties prop = Util.getProperties("APP_ENV");
+	public AccountInformation getAccountInformation(String rut, String accountId) {
 
 		rut = rut == null ? "" : rut;
 		accountId = accountId == null ? "" : accountId;
@@ -54,16 +55,16 @@ public class AccountManagerDAO {
 					// Incorporación de subscriptores al objeto account
 					List<Subscribers> listasubscribers = new ArrayList<Subscribers>();
 					// 2.1
-					String querySubscribers = "SELECT a.cscompregno as rut,b.customer_id as accountId,b.co_id as subscriberId,b.type as subscriberType, b.co_code as subscriberIdContract, b.CO_SIGNED as subscriberActivate,b.CO_EXPIR_DATE as subscriberExpired,b.CH_STATUS as state FROM sysadm.customer_all a, SYSADM.contract_all b, SYSADM.CONTRACT_HISTORY c WHERE  "
+					String querySubscribers = "SELECT a.cscompregno      as rut, b.customer_id      as accountId, b.co_id as subscriberId, b.type as subscriberType, b.co_code          as subscriberIdContract, b.CO_SIGNED        as subscriberActivate, b.CO_EXPIR_DATE    as subscriberExpired, b.CH_STATUS        as state FROM sysadm.customer_all           a, SYSADM.contract_all           b, SYSADM.CONTRACT_HISTORY       c WHERE "
 							+ whereCondition
-							+ " and a.customer_id = b.customer_id and b.co_id = c.co_id and c.ch_status = 'a'";
+							+ " and a.customer_id = b.customer_id and b.co_id       = c.co_id and c.ch_seqno = (select max(x.ch_seqno) FROM SYSADM.CONTRACT_HISTORY x WHERE x.co_id = c.co_id and x.ch_status   = 'a')";
 					ResultSet rsSubscribers = conn.createStatement().executeQuery(querySubscribers);
+
 					while (rsSubscribers.next()) {
 
 						Subscribers subscribers = new Subscribers();
 						subscribers.setRut(rsSubscribers.getString("rut"));
 						subscribers.setAccountId(rsSubscribers.getString("accountId"));
-
 						subscribers.setSubscriberIdContract(rsSubscribers.getString("subscriberIdContract"));
 						subscribers.setSubscriberType(rsSubscribers.getString("subscriberType"));
 						subscribers.setSubscriberActivate(rsSubscribers.getString("subscriberActivate"));
@@ -74,7 +75,7 @@ public class AccountManagerDAO {
 						String subid = rsSubscribers.getString("subscriberId");
 						String acoid = rsSubscribers.getString("accountId");
 
-						// Incorporación de SubscriberResouces
+						// Incorporación de SubscriberResouces al objeto subscriber
 						List<SubscriberResources> listaSubscriberResources = new ArrayList<SubscriberResources>();
 						// 3.1.1
 						String whereCondition2 = subid.equals("") ? "a.customer_id = '" + acoid + "'"
@@ -85,15 +86,12 @@ public class AccountManagerDAO {
 						while (rsSubscriberResoucers.next()) {
 							SubscriberResources subscriberResources = new SubscriberResources();
 							subscriberResources.setResourceId(rsSubscriberResoucers.getString("resourceId"));
-							subscriberResources
-									.setResourceDeactivate(rsSubscriberResoucers.getString("resourceDeactivate"));
+							subscriberResources.setResourceDeactivate(rsSubscriberResoucers.getString("resourceDeactivate"));
 							subscriberResources.setResource(rsSubscriberResoucers.getString("resourceValue"));
 							subscriberResources.setSubscriberId(rsSubscriberResoucers.getString("subscriberId"));
-							subscriberResources
-									.setResourceDescription(rsSubscriberResoucers.getString("resourceDescription"));
+							subscriberResources.setResourceDescription(rsSubscriberResoucers.getString("resourceDescription"));
 							subscriberResources.setResourceState(rsSubscriberResoucers.getString("resourceState"));
-							subscriberResources
-									.setResourceActivate(rsSubscriberResoucers.getString("resourceActivate"));
+							subscriberResources.setResourceActivate(rsSubscriberResoucers.getString("resourceActivate"));
 							subscriberResources.setResourceType(rsSubscriberResoucers.getString("resourceType"));
 							listaSubscriberResources.add(subscriberResources);
 						}
@@ -120,13 +118,14 @@ public class AccountManagerDAO {
 
 					// Incorporación de BillCycle
 					BillCycle billCycle = new BillCycle();
-					billCycle.setBchRunDate(rsAccounts.getString("bchRunDate"));
-					billCycle.setAccountId(rsAccounts.getString("accountId"));
-					billCycle.setIntervalType(rsAccounts.getString("intervalType"));
-					billCycle.setBillCycleDes(rsAccounts.getString("billCycleDes_billcycle"));
-					billCycle.setLastRunDate(rsAccounts.getString("lastRunDate"));
-					billCycle.setBillCycle(rsAccounts.getString("billCycle_billcycle"));
-					listaBillCycle.add(billCycle);
+						billCycle.setBchRunDate(rsAccounts.getString("bchRunDate"));
+						billCycle.setAccountId(rsAccounts.getString("accountId_biilcycle"));
+						billCycle.setIntervalType(rsAccounts.getString("intervalType"));
+						billCycle.setBillCycleDes(rsAccounts.getString("billCycleDes_billcycle"));
+						billCycle.setLastRunDate(rsAccounts.getString("lastRunDate"));
+						billCycle.setBillCycle(rsAccounts.getString("billCycle_billcycle"));
+						listaBillCycle.add(billCycle);
+						
 					account.setBillCycle(billCycle);
 
 					listAccount.add(account);
@@ -151,12 +150,14 @@ public class AccountManagerDAO {
 					e.printStackTrace();
 				}
 		}
+		
+		System.out.println("accountInformation.toString(): "+accountInformation.toString());
+		
+		
 		return accountInformation;
 	}
 
 	public String sqlGetRutAccountManager(String resourceType, String resourceValue) {
-
-		Properties prop = Util.getProperties("APP_ENV");
 
 		Connection conn = null;
 		Statement stmt;
@@ -241,9 +242,9 @@ public class AccountManagerDAO {
 				if (rsSubId.next()) {
 					String subId = rsSubId.getString("SUBSCRIBERID");
 
-					String querySubId = "SELECT a.cscompregno      as rut, b.customer_id      as accountId, b.co_id            as subscriberId, b.type             as subscriberType, b.co_code          as subscriberIdContract, b.CO_SIGNED        as subscriberActivate, b.CO_EXPIR_DATE    as subscriberExpired, b.CH_STATUS        as state FROM sysadm.customer_all           a, SYSADM.contract_all           b, SYSADM.CONTRACT_HISTORY       c WHERE b.co_id = "
+					String querySubId = "SELECT a.cscompregno as rut, b.customer_id as accountId, b.co_id as subscriberId, b.type as subscriberType, b.co_code as subscriberIdContract, b.CO_SIGNED as subscriberActivate, b.CO_EXPIR_DATE as subscriberExpired, b.CH_STATUS as state FROM sysadm.customer_all a, SYSADM.contract_all b, SYSADM.CONTRACT_HISTORY c WHERE b.co_id = "
 							+ subId
-							+ " and a.customer_id = b.customer_id and b.co_id       = c.co_id and c.ch_seqno = (SELECT max(x.ch_seqno) FROM SYSADM.CONTRACT_HISTORY x WHERE x.co_id = c.co_id and x.ch_status   = 'a')";
+							+ " and a.customer_id = b.customer_id and b.co_id = c.co_id and c.ch_seqno = (SELECT max(x.ch_seqno) FROM SYSADM.CONTRACT_HISTORY x WHERE x.co_id = c.co_id and x.ch_status   = 'a')";
 
 					ResultSet rsRut = stmt.executeQuery(querySubId);
 
@@ -251,9 +252,7 @@ public class AccountManagerDAO {
 						subrut = rsRut.getString("RUT");
 					}
 				}
-
 			}
-
 			return subrut;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

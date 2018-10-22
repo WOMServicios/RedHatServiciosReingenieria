@@ -6,7 +6,8 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 public class ConnectionFactory {
-	static Properties prop = Util.getProperties("APP_ENV");
+	static PropertiesUtil util = new PropertiesUtil();
+	static Properties prop = util.getProperties("APP_ENV");
 	static Properties sql = Util.getProperties("SQL_ENV");
 	static String user = prop.getProperty("database.bscs.username");
 	static String password = prop.getProperty("database.bscs.password");
