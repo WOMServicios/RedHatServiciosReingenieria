@@ -139,7 +139,9 @@
             <xsd:element name="productOfferingFault">
             	<xsd:complexType>
             		<xsd:sequence>
-            			<xsd:element name="productOfferingFault"
+            			<xsd:element name="faultcode" type="xsd:int">
+            			</xsd:element>
+            			<xsd:element name="faultstring"
             				type="xsd:string">
             			</xsd:element>
             		</xsd:sequence>

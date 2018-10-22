@@ -85,27 +85,30 @@
 		
 		<choice>
 			<when>
-				<simple>${headers.offerId} == null and ${headers.shortDesc} == "" </simple>
+				<simple>${headers.offerId} == null and ${headers.shortDesc.trim()} == "" </simple>
 				<to uri="velocity:velocity/response-SOAPnodata.vm"></to>
 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
 			</when>
 			<when>
-				<simple>${headers.offerId} != null and ${headers.shortDesc} != "" </simple>
+				<simple>${headers.offerId} != null and ${headers.shortDesc.trim()} != "" </simple>
 				<to uri="velocity:velocity/response-SOAPdataduplicate.vm"></to>
 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
 			</when>
 		     		<otherwise>
 							<bean ref="sqlFormatterProcessorSOAP" method="sqlParserProductOfferingObject"></bean>           
-		            <choice>
-		            	<when>
-		            		<simple>${body} == ""</simple>
-		            		<log message="Log Body : ${body}"></log>
-		            		<to uri="velocity:velocity/soap-response-sqlnodata.vm"></to>
-		            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            		
-		            	</when>   
-		            </choice> 
-		            		<to uri="velocity:velocity/soap-response-success.vm"></to>           
-		            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            	 
+				            <choice>
+				            	<when>
+				            		<simple>${body} == ""</simple>
+				            		<log message="Log Body : ${body}"></log>
+				            		<setHeader headerName="coderror"><constant>500</constant></setHeader>
+				            		<to uri="velocity:velocity/soap-response-sqlnodata.vm"></to>
+				            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            		
+				            	</when> 
+				            	<otherwise>
+				            		<to uri="velocity:velocity/soap-response-success.vm"></to>           
+		            				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+				            	</otherwise>  
+				            </choice> 	            	 
 		            </otherwise>
 		</choice>
 	</route>
