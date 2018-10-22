@@ -131,7 +131,7 @@
 							<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 							<setHeader headerName="rut"><simple>${body}</simple></setHeader>
 							<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
-							<to uri="velocity:velocity/response-AccountImformation.vm" />
+							<to uri="velocity:velocity/response-suscriberResource.vm" />
 						</otherwise>
 					</choice>			
 				</when>

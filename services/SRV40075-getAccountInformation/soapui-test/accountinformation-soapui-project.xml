@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<con:soapui-project id="a2fa078f-5e3b-4f2b-8be1-57da23e9a672" activeEnvironment="Default" name="accountinformationSOAP" resourceRoot="" soapui-version="5.4.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="e2ea8143-cce7-4bb6-8337-4497a8120937" wsaVersion="NONE" name="accountinformationSOAP" type="wsdl" bindingName="{http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}accountinformationSOAP" soapVersion="1_1" anonymous="optional" definition="file:/home/casp/Escritorio/Redhat-git/RedHatServiciosReingenieria/services/SRV40075-getAccountInformation/src/main/resources/wsdl/accountinformation.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/home/casp/Escritorio/Redhat-git/RedHatServiciosReingenieria/services/SRV40075-getAccountInformation/src/main/resources/wsdl/accountinformation.wsdl"><con:part><con:url>file:/home/casp/Escritorio/Redhat-git/RedHatServiciosReingenieria/services/SRV40075-getAccountInformation/src/main/resources/wsdl/accountinformation.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="accountinformation" targetNamespace="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<con:soapui-project id="a2fa078f-5e3b-4f2b-8be1-57da23e9a672" activeEnvironment="Default" name="accountinformationSOAP" resourceRoot="" soapui-version="5.4.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="e2ea8143-cce7-4bb6-8337-4497a8120937" wsaVersion="NONE" name="accountinformationSOAP" type="wsdl" bindingName="{http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}accountinformationSOAP" soapVersion="1_1" anonymous="optional" definition="file:/home/casp/Escritorio/Redhat-git/RedHatServiciosReingenieria/services/SRV40075-getAccountInformation/src/main/resources/wsdl/accountinformation.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/home/casp/Escritorio/Redhat-git/RedHatServiciosReingenieria/services/SRV40075-getAccountInformation/src/main/resources/wsdl/accountinformation.wsdl"><con:part><con:url>file:/home/casp/Escritorio/Redhat-git/RedHatServiciosReingenieria/services/SRV40075-getAccountInformation/src/main/resources/wsdl/accountinformation.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="accountinformation" targetNamespace="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <wsdl:types>
     <xsd:schema targetNamespace="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
       <xsd:element name="account">
@@ -199,7 +199,7 @@
          <accountId>?</accountId>
       </ns:account>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/></con:call></con:operation><con:operation id="a8309941-b1eb-42d7-8bdd-6e98419df7e3" isOneWay="false" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1" name="subscriberResources" bindingOperationName="subscriberResources" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="dce90201-89a4-4ee8-bfb5-83fc079a4fe8" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation id="a8309941-b1eb-42d7-8bdd-6e98419df7e3" isOneWay="false" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1" name="subscriberResources" bindingOperationName="subscriberResources" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="dce90201-89a4-4ee8-bfb5-83fc079a4fe8" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
    <soapenv:Header/>
    <soapenv:Body>
       <ns:subscriberResources>
@@ -207,7 +207,7 @@
          <resourceValue>?</resourceValue>
       </ns:subscriberResources>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/></con:call></con:operation></con:interface><con:testSuite id="8dfca61a-d1c7-4b39-9d3d-d3959360f95a" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="f952af52-2554-456c-b47e-b1912b2796f7" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 1" searchProperties="true"><con:settings/><con:testStep type="request" id="6b5df51a-550c-4037-b7f7-1c93bd201d1e" name="account - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>accountinformationSOAP</con:interface><con:operation>account</con:operation><con:request name="account - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="f0e0f07d-34d6-46d3-a962-88d51b97c55e"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="8dfca61a-d1c7-4b39-9d3d-d3959360f95a" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="f952af52-2554-456c-b47e-b1912b2796f7" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 1" searchProperties="true"><con:settings/><con:testStep type="request" id="6b5df51a-550c-4037-b7f7-1c93bd201d1e" name="account - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>accountinformationSOAP</con:interface><con:operation>account</con:operation><con:request name="account - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="f0e0f07d-34d6-46d3-a962-88d51b97c55e"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
    <soapenv:Header/>
    <soapenv:Body>
       <ns:account>
@@ -215,7 +215,7 @@
          <accountId>123119    </accountId>
       </ns:account>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="575dfec4-e0d7-470a-992a-22de4aad2488" name="SOAP Response"/><con:assertion type="Schema Compliance" id="cdcb71da-f21a-4064-94f2-5a3c4b79eaf0" name="Schema Compliance"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="3171d81c-588a-452b-ba70-88996c25156d" name="Not SOAP Fault"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="6551cd69-7b9b-42c3-bf2a-e37acfe8f4a5" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 2" searchProperties="true"><con:settings/><con:testStep type="request" id="f9899109-87bd-4d2b-bc19-bd9dc1d95b1d" name="subscriberResources - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>accountinformationSOAP</con:interface><con:operation>subscriberResources</con:operation><con:request name="subscriberResources - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="1daffa6a-d74f-45c3-b1bb-2595735d65c1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="575dfec4-e0d7-470a-992a-22de4aad2488" name="SOAP Response"/><con:assertion type="Schema Compliance" id="cdcb71da-f21a-4064-94f2-5a3c4b79eaf0" name="Schema Compliance"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="3171d81c-588a-452b-ba70-88996c25156d" name="Not SOAP Fault"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:testCase id="6551cd69-7b9b-42c3-bf2a-e37acfe8f4a5" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 2" searchProperties="true"><con:settings/><con:testStep type="request" id="f9899109-87bd-4d2b-bc19-bd9dc1d95b1d" name="subscriberResources - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>accountinformationSOAP</con:interface><con:operation>subscriberResources</con:operation><con:request name="subscriberResources - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="1daffa6a-d74f-45c3-b1bb-2595735d65c1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8888/ocp/srv40075/getaccountinformation/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
    <soapenv:Header/>
    <soapenv:Body>
       <ns:subscriberResources>
@@ -223,4 +223,57 @@
          <resourceValue>56964246727</resourceValue>
       </ns:subscriberResources>
    </soapenv:Body>
-</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="1de6e930-5cb9-4c52-8efa-0e7ff17efcec" name="SOAP Response"/><con:assertion type="Schema Compliance" id="23d3b767-f977-4b2e-a2c1-8647c0bd7ee3" name="Schema Compliance"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="61ab73db-b0e6-4fb0-9ae6-0fd9de5a0fc8" name="Not SOAP Fault"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="1de6e930-5cb9-4c52-8efa-0e7ff17efcec" name="SOAP Response"/><con:assertion type="Schema Compliance" id="23d3b767-f977-4b2e-a2c1-8647c0bd7ee3" name="Schema Compliance"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="61ab73db-b0e6-4fb0-9ae6-0fd9de5a0fc8" name="Not SOAP Fault"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:mockService id="9e6e7d90-47d6-4e7d-8fad-ef925d3f1a1a" port="8080" path="/" host="ncquezada" name="MockService 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="subscriberResources" id="66b7f33c-0fc7-485a-8446-e495b38685de" interface="accountinformationSOAP" operation="subscriberResources"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="daf6f9c2-5041-4e81-a62f-e3cdbe0f0eb1" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:subscriberResourcesResponse>
+         <rut>?</rut>
+         <!--1 or more repetitions:-->
+         <account>
+            <rut>?</rut>
+            <accountId>?</accountId>
+            <accountIdHigh>?</accountIdHigh>
+            <csLevel>?</csLevel>
+            <custCode>?</custCode>
+            <accountType>?</accountType>
+            <accountActivate>?</accountActivate>
+            <accountDeactivate>?</accountDeactivate>
+            <externalAccountId>?</externalAccountId>
+            <state>?</state>
+            <docTypeId>?</docTypeId>
+            <docTypeDesc>?</docTypeDesc>
+            <docTypeOutputCode>?</docTypeOutputCode>
+            <billCycle>
+               <accountId>?</accountId>
+               <billCycle>?</billCycle>
+               <billCycleDes>?</billCycleDes>
+               <intervalType>?</intervalType>
+               <lastRunDate>?</lastRunDate>
+               <bchRunDate>?</bchRunDate>
+            </billCycle>
+            <!--1 or more repetitions:-->
+            <subscriber>
+               <rut>?</rut>
+               <accountId>?</accountId>
+               <subscriberId>?</subscriberId>
+               <subscriberType>?</subscriberType>
+               <subscriberIdContract>?</subscriberIdContract>
+               <subscriberActivate>?</subscriberActivate>
+               <subscriberExpired>?</subscriberExpired>
+               <state>?</state>
+               <!--1 or more repetitions:-->
+               <subscriberResources>
+                  <subscriberId>?</subscriberId>
+                  <resourceId>?</resourceId>
+                  <resource>?</resource>
+                  <resourceDescription>?</resourceDescription>
+                  <resourceActivate>?</resourceActivate>
+                  <resourceDeactivate>?</resourceDeactivate>
+                  <resourceState>?</resourceState>
+                  <resourceType>?</resourceType>
+               </subscriberResources>
+            </subscriber>
+         </account>
+      </ns:subscriberResourcesResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

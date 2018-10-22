@@ -1,8 +1,9 @@
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1">
    <soapenv:Header/>
    <soapenv:Body>
-      <ns:accountResponse>
+      <ns:subscriberResourcesResponse>
          <rut>${body.rut}</rut>
+         <!--1 or more repetitions:-->
          #foreach($!account in ${body.account})
          <account>
             <rut>$!account.rut</rut>
@@ -26,6 +27,7 @@
                <lastRunDate>$!account.billCycle.lastRunDate</lastRunDate>
                <bchRunDate>$!account.billCycle.bchRunDate</bchRunDate>
             </billCycle>
+            <!--1 or more repetitions:-->
             #foreach($!subscribers in ${account.subscribers})
             <subscriber>
                <rut>$!subscribers.rut</rut>
@@ -35,7 +37,8 @@
                <subscriberIdContract>$!subscribers.subscriberIdContract</subscriberIdContract>
                <subscriberActivate>$!subscribers.subscriberActivate</subscriberActivate>
                <subscriberExpired>$!subscribers.subscriberExpired</subscriberExpired>
-               <state>$!subscribers.state</state>
+               <state>$!subscribers.state</state>               
+               <!--1 or more repetitions:-->
                #foreach($!resoucers in $subscribers.subscriberResources)
                <subscriberResources>
                   <subscriberId>$!resoucers.subscriberId</subscriberId>
@@ -52,6 +55,6 @@
             #end
          </account>
          #end
-      </ns:accountResponse>
+      </ns:subscriberResourcesResponse>
    </soapenv:Body>
 </soapenv:Envelope>
