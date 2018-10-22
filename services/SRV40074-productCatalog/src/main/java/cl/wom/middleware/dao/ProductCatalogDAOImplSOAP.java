@@ -482,8 +482,7 @@ public class ProductCatalogDAOImplSOAP {
 				productOffering.setBundleProductOffering(listBundleProductOffering);
 				listProductOffering.add(productOffering);
 			}
-			
-			
+
 			rsGetProductOffering.close();	
 			stmt.close();
 	 		System.out.println("exito en la clase");
