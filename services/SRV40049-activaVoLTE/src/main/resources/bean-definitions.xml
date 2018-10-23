@@ -6,8 +6,23 @@
     http://camel.apache.org/schema/spring 
     http://camel.apache.org/schema/spring/camel-spring.xsd">
     
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="${sql.wappldesa.url}${sql.wappldesa.host}:${sql.wappldesa.port}:${sql.wappldesa.databasename}" />
+		<property name="username" value="${sql.wappldesa.username}" />
+		<property name="password" value="${sql.wappldesa.password}" />
+	</bean>
+	<bean id="dSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="${sql.bscsdesa.url}${sql.bscsdesa.host}:${sql.bscsdesa.port}:${sql.bscsdesa.databasename}" />
+		<property name="username" value="${sql.bscsdesa.username}" />
+		<property name="password" value="${sql.bscsdesa.password}" />
+	</bean>
+	    
     <bean id="integratorProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:services.properties" />
+	    <property name="locations">
+	        <value>file:${APP_ENV}</value>
+	    </property>		
 	</bean>
 	
 </beans>
