@@ -41,7 +41,7 @@ public class ServiceError extends Exception{
 		   mensaje="Unprocessable Entity";
 		   break;
 	   case 452:
-		   mensaje="Excede Longitud";
+		   mensaje="Excceds the maximun length";
 		   break;
 	   }
 	   return mensaje;

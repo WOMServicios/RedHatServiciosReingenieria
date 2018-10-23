@@ -108,6 +108,10 @@
 							</when>
 							<otherwise>
 								<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
+								<when>
+									<simple>${body} == null </simple>
+									<throwException exceptionType="cl.wom.exception.services.ServiceError" message="453" />
+								</when>
 								<to uri="velocity:velocity/response-AccountImformation.vm" />
 							</otherwise>
 						</choice>	
