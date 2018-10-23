@@ -148,10 +148,7 @@ public class AccountManagerDAO {
 					e.printStackTrace();
 				}
 		}
-		
-		System.out.println("accountInformation.toString(): "+accountInformation.toString());
-		
-		
+				
 		return accountInformation;
 	}
 
@@ -165,6 +162,8 @@ public class AccountManagerDAO {
 			stmt = conn.createStatement();
 
 			if ((resourceType.equals("MSISDN"))) {
+				
+				System.out.println("MSISDN");
 				// 3.1.2
 				String queryMSISDN = "SELECT a.co_id as subscriberId,b.dn_id as resourceId,c.dn_num as resourceValue, 'Número de celular del subscriptor' as resourceDescription, b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate,b.CS_STATUS as resourceState, 'MSISDN' as resourceType FROM sysadm.contract_all a, SYSADM.contr_services_cap  b, sysadm.directory_number    c WHERE C.DN_NUM = TRIM('"
 						+ resourceValue + "') and a.co_id = b.co_id and b.dn_id = c.dn_id and b.sncode = 3";
@@ -186,6 +185,7 @@ public class AccountManagerDAO {
 				}
 
 			} else if ((resourceType.equals("IMEI"))) {
+				System.out.println("IMEI");
 
 				String queryIMEI = "SELECT a.co_id as subscriberId, b.dn_id as resourceId, d.eq_serial_num as resourceValue, (e.description||'-'||e.company)  as resourceDescription, b.CS_ACTIV_DATE as resourceActivate, b.CS_DEACTIV_DATE as resourceDeactivate, d.eq_status as resourceState, 'IMEI' as resourceType FROM sysadm.contract_all a, sysadm.contr_services_cap  b, sysadm.contr_devices c, sysadm.equipment d, sysadm.equipment_type e WHERE d.eq_serial_num = TRIM('"
 						+ resourceValue
@@ -208,6 +208,7 @@ public class AccountManagerDAO {
 				}
 
 			} else if ((resourceType.equals("IMSI"))) {
+				System.out.println("IMSI");
 				// 3.2.2
 				String queryIMSI = "SELECT a.co_id as subscriberId, b.dn_id as resourceId,d.port_num as resourceValue,'Número de IMSI del subscriptor'     as resourceDescription, b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate, D.PORT_STATUS as resourceState, 'IMSI' as resourceType FROM sysadm.contract_all a, sysadm.contr_services_cap  b, sysadm.contr_devices c, sysadm.port d WHERE d.port_num = TRIM('"
 						+ resourceValue + "') and b.co_id   = a.co_id and b.co_id   = c.co_id and c.port_id = d.port_id";
@@ -229,6 +230,7 @@ public class AccountManagerDAO {
 				}
 
 			} else if ((resourceType.equals("ICCID"))) {
+				System.out.println("ICCID");
 
 				// 3.3.2
 				String queryICCID = "SELECT a.co_id as subscriberId, b.dn_id as resourceId,E.SM_SERIALNUM as resourceValue, 'Número de ICCID del subscriptor'    as resourceDescription,b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate,E.SM_STATUS as resourceState, 'ICCID' as resourceType FROM sysadm.contract_all a, sysadm.contr_services_cap  b,sysadm.contr_devices c, sysadm.port d, sysadm.storage_medium e WHERE E.SM_SERIALNUM = TRIM('"

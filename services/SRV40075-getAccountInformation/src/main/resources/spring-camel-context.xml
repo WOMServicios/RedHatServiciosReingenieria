@@ -42,12 +42,12 @@
 
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
-			<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
+			<from uri="jetty:http://{{rest.account.host}}:{{rest.account.port}}{{rest.account.url}}"/>
 			<from uri="direct:fullRequest" />
 
 			<bean ref="sqlFormatterProcessor"
 				method="sqlParserAccountInformation"></bean>
-
+			
 			<choice>
 				<when>
 					<simple>${body} == null</simple>
@@ -62,7 +62,7 @@
 		
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
-			<from uri="jetty:http://{{camel.from.endpointhost2}}:{{camel.from.endpointport2}}{{camel.from.endpointurl2}}"/>
+			<from uri="jetty:http://{{rest.subscriber.host}}:{{rest.subscriber.port}}{{rest.subscriber.url}}"/>
 
 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 
@@ -71,7 +71,7 @@
 		</route>
 		
 		<route>
-			<from uri="cxf:http://{{camel.soap.endpointhost}}:{{camel.soap.endpointport}}{{camel.soap.endpointurl}}?		
+			<from uri="cxf:http://{{soap.account.host}}:{{soap.account.port}}{{soap.account.url}}?		
 			wsdlURL=classpath:wsdl/accountinformation.wsdl&amp;
 			serviceName={http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}accountinformation&amp;
 			portName={http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}getaccountinformationSOAP&amp;
