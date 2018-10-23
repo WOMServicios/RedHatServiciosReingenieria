@@ -21,8 +21,14 @@ public class ServiceError extends Exception{
 	        switch(codigoError){
 	 	   case 400:
 			   mensaje="bad request";
-			   break;		  
-		   case 416:
+			   break;
+		   case 452:
+			   mensaje="exceeds the maximum length";
+			   break;
+		   case 422:
+			   mensaje="XML format invalid";
+			   break;
+		   case 453:
 			   mensaje="No Data Found";
 			   break;
 	       default:
