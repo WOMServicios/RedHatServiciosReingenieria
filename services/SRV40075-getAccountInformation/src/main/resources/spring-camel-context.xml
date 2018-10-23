@@ -18,33 +18,12 @@
 		<propertyPlaceholder id="placeholder"
 			location="classpath:sql.properties ,file:${env:APP_ENV}" />
 			
-		<!-- Control de errores -->
-		<onException>
-			<exception>cl.wom.exception.services.ServiceError</exception>
-			<handled>
-				<constant>true</constant>
-			</handled>
-			<log message="ERROR: ${exception.message}"></log>
-			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-				<simple>${exception.codigoError}</simple>
-			</setHeader>
-			<setHeader headerName="codigoError">
-				<simple>${exception.codigoError}</simple>
-			</setHeader>
-			<setHeader headerName="messageError">
-				<simple>${exception.message}</simple>
-			</setHeader>
-			<setHeader headerName="Content-Type">
-				<constant>application/json</constant>
-			</setHeader>
-			<to uri="velocity:velocity/ErrorHttp.vm" />
-		</onException>
 
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:http://{{rest.account.host}}:{{rest.account.port}}{{rest.account.url}}"/>
 			<from uri="direct:fullRequest" />
-
+			
 			<bean ref="sqlFormatterProcessor"
 				method="sqlParserAccountInformation"></bean>
 			
@@ -63,7 +42,28 @@
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:http://{{rest.subscriber.host}}:{{rest.subscriber.port}}{{rest.subscriber.url}}"/>
-
+			
+			<onException>
+				<exception>cl.wom.exception.services.ServiceError</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<log message="ERROR: ${exception.message}"></log>
+				<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+					<simple>400</simple>
+				</setHeader>
+				<setHeader headerName="codigoError">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="messageError">
+					<simple>${exception.message}</simple>
+				</setHeader>
+				<setHeader headerName="Content-Type">
+					<constant>application/json</constant>
+				</setHeader>
+				<to uri="velocity:velocity/ErrorHttp.vm" />
+			</onException>				
+			
 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
@@ -76,6 +76,24 @@
 			serviceName={http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}accountinformation&amp;
 			portName={http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}getaccountinformationSOAP&amp;
 			dataFormat=MESSAGE" />
+			
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<log message="ERROR: ${exception.message}"></log>
+				<setHeader headerName="codigoError">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="messageError">
+					<simple>${exception.message}</simple>
+				</setHeader>
+
+				<to uri="velocity:velocity/soap-fault.vm" />
+			</onException>	
+			
+						
 			<convertBodyTo type="org.w3c.dom.Document"></convertBodyTo>
 
 			<setHeader headerName="rut">
