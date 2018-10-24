@@ -7,7 +7,9 @@
     http://camel.apache.org/schema/spring/camel-spring.xsd">
     
     <bean id="integratorProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:application.properties" />
+		<property name="locations">
+	        <value>file:${APP_ENV}</value>
+	    </property>	
 	</bean>
     
     <bean id="mongoBean" class="com.mongodb.MongoClient">

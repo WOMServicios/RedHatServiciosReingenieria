@@ -9,7 +9,8 @@
     <import resource="bean-definitions.xml"/>
 
     <camelContext  xmlns="http://camel.apache.org/schema/spring">
-        <propertyPlaceholder id="placeholder" location="classpath:application.properties"/>
+<!--         <propertyPlaceholder id="placeholder" location="classpath:application.properties"/> -->
+         <propertyPlaceholder id="placeholder" location="file:${env:APP_ENV}"/>
         
         <!-- Control de errores -->
 		<onException>
@@ -23,10 +24,10 @@
             <from uri="jetty:{{camel.from.endpoint}}"/>
             <choice>
                 <when>
-                        <simple>${headers.bill.accountId} != null</simple>
-                        <setHeader headerName="accountId"><simple>${headers.bill.accountId}</simple></setHeader>
-                        <setHeader headerName="quantity"><simple>${headers.bill.quantity}</simple></setHeader>
-                        <to uri="velocity:velocity/request-mongo-bill.vm" ></to>
+                     <simple>${headers.bill.accountId} != null</simple>
+                     <setHeader headerName="accountId"><simple>${headers.bill.accountId}</simple></setHeader>
+                     <setHeader headerName="quantity"><simple>${headers.bill.quantity}</simple></setHeader>
+                     <to uri="velocity:velocity/request-mongo-bill.vm" ></to>
                 </when>
             </choice>
             <convertBodyTo type="java.lang.String"></convertBodyTo>

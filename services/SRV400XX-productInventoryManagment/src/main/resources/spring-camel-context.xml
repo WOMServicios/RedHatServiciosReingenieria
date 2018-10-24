@@ -1,91 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://www.springframework.org/schema/beans 
-    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
-    http://camel.apache.org/schema/spring 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://camel.apache.org/schema/spring
     http://camel.apache.org/schema/spring/camel-spring.xsd">
-    
-    <import resource="bean-definitions.xml"/>
-    
-    <camelContext  xmlns="http://camel.apache.org/schema/spring">
-		<propertyPlaceholder id="placeholder" location="classpath:application.properties"/> 	
 
-        <!-- Control de errores -->
-		<onException>
-			    <exception>java.lang.Exception</exception>
-			    <handled><simple>true</simple></handled>
-			    <to uri="velocity:velocity/response-mongo-error.vm"/>
-			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
-		</onException>
-		       
-        <route streamCache="true">
+    <import resource="bean-definitions.xml"/>
+
+    <camelContext  xmlns="http://camel.apache.org/schema/spring">
+        <propertyPlaceholder id="placeholder" location="classpath:application.properties"/>
+
+        <route>
             <from uri="jetty:{{camel.from.endpoint}}"/>
-            
-<<<<<<< HEAD
-            <log message="offerId:  ${headers.productOffering.offerId}"></log>         
-=======
-            <log message="lkjasdlkjas dlkj "></log>
-            
->>>>>>> d1c828133b418e7b0c2290a33636327960980ef6
-            <choice>
-            	<when>
-            		<simple>${headers.productOffering.offerId} != null</simple>
-            		<setHeader headerName="offerId"><simple>${headers.productOffering.offerId}</simple></setHeader>
-            		<to uri="velocity:velocity/request-mongo-offerId.vm" ></to>		
-            	</when>
-            </choice>
-            
+
+			<to uri="velocity:velocity/request-mongo-productInventory.vm"></to>
             <convertBodyTo type="java.lang.String"></convertBodyTo>
-			<to uri="mongodb:mongoBean?database={{camel.mongodb.db}}&amp;collection=productOffering&amp;operation=findOneByQuery" />
-			
-			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
-        </route>
-        <route streamCache="true">
-            <from uri="jetty:{{camel.from.endpoint}}"/>
-            <log message="shortDescription:  ${headers.productOffering.shortDescription}"></log>         
-            <choice>
-            	<when>
-            		<simple>${headers.productOffering.shortDescription} != null</simple>
-            		<setHeader headerName="shortDescription"><simple>${headers.productOffering.shortDescription}</simple></setHeader>
-            		<to uri="velocity:velocity/request-mongo-shortDescription.vm" ></to>		
-            	</when>   
-            </choice>
-            
-            <convertBodyTo type="java.lang.String"></convertBodyTo>
-			<to uri="mongodb:mongoBean?database={{camel.mongodb.db}}&amp;collection=productOffering&amp;operation=findOneByQuery" />
-			
-			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
-        </route>
-        <route streamCache="true">
-            <from uri="jetty:{{camel.from.endpoint}}"/>
-            <log message="marketSegment:  ${headers.productOffering.marketSegment}"></log>     
-            <choice>
-            	<when>
-            		<simple>${headers.productOffering.marketSegment} != null</simple>
-            		<setHeader headerName="marketSegment"><simple>${headers.productOffering.marketSegment}</simple></setHeader>
-            		<to uri="velocity:velocity/request-mongo-marketSegment.vm" ></to>		
-            	</when>  
-            </choice>
-            
-            <convertBodyTo type="java.lang.String"></convertBodyTo>
-			<to uri="mongodb:mongoBean?database={{camel.mongodb.db}}&amp;collection=productOffering&amp;operation=findOneByQuery" />
-			
-			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
-        </route>
-        <route streamCache="true">
-            <from uri="jetty:{{camel.from.endpoint}}"/>
-            <log message="marketSegment:  ${headers.productOffering.channel}"></log>     
-            <choice>
-            	<when>
-            		<simple>${headers.productOffering.channel} != null</simple>
-            		<setHeader headerName="channel"><simple>${headers.productOffering.channel}</simple></setHeader>
-            		<to uri="velocity:velocity/request-mongo-channel.vm" ></to>		
-            	</when>   
-            </choice>
-            
-            <convertBodyTo type="java.lang.String"></convertBodyTo>
-			<to uri="mongodb:mongoBean?database={{camel.mongodb.db}}&amp;collection=productOffering&amp;operation=findOneByQuery" />
+            <log message="Request Mongo: ${body}" />    
+            <to uri="mongodb:mongoBean?database={{camel.mongodb.db}}&amp;collection=productInventory&amp;operation=findOneByQuery" />
+			<log message="Response Mongo: ${body}" />
 			
 			<!-- En caso de no encontrar datos en la respuesta -->
             <choice>
@@ -93,10 +26,10 @@
 	                <simple>${body} == null</simple>
 	                <to uri="velocity:velocity/response-mongo-nodata.vm" ></to>
                 </when>
-            </choice>			
-			
-			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+            </choice>
+
+            <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
         </route>
-        
+
     </camelContext>
 </beans>
