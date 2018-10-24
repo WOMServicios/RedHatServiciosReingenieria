@@ -38,7 +38,7 @@
 			serviceName={http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1}activateVoLTE&amp;
 			portName={http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1}activateVoLTESOAP&amp;
 			dataFormat=MESSAGE" />
-			<log message="BODY******** : ${body}"></log>
+		<doTry>
 			<setHeader headerName="msisdn">
 				<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/ns:activateVoLTE/param/msisdn/text()
 				</xpath>
@@ -47,11 +47,26 @@
 				<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/ns:activateVoLTE/param/imsi/text()
 				</xpath>
 			</setHeader>
-			<log message="HEADERS******** : ${headers}"></log>
-			<log message="BODY******** : ${body}"></log>
-
-			<log message="headers.msisdn: ${headers.msisdn}"></log>
-			<log message="headers.imsi: ${headers.imsi}"></log>
+			<doCatch>
+						<exception>cl.wom.middleware.proxy.ServiceError</exception>
+						<handled>
+							<constant>true</constant>
+						</handled>
+						<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+							<simple>422</simple>
+						</setHeader>
+						<setHeader headerName="codeError">
+							<simple>422</simple>
+						</setHeader>
+						<setHeader headerName="messageError">
+							<simple>XML format invalid</simple>
+						</setHeader>
+						<to uri="velocity:velocity/activateVoLTE_ERROR.vm" />
+						<setHeader headerName="Content-Type"><constant>application/xml</constant>
+						</setHeader>
+					<stop />
+			</doCatch>
+		</doTry>
 
 			<choice>
 				<when>
@@ -59,6 +74,12 @@
 					<log message=" CAE EN LA VALIDACION"></log>
 					<throwException
 						exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" />
+				</when>
+				<when>
+					<simple> ${headers.msisdn.toString().length()} > 11 || ${headers.imsi.toString().length()} > 15 </simple>
+					<log message=" CAE EN LA VALIDACION"></log>
+					<throwException
+						exceptionType="cl.wom.middleware.proxy.ServiceError" message="452" />
 				</when>
 			</choice>
 
@@ -96,7 +117,7 @@
 						<log message="valor en telnet code ${headers.telnet_err_code}"></log>
 						<log message="valor en telnet msg ${headers.telnet_msg_code}"></log>
 						<log message="Finalizando proceso con ERROR 1003 EN LA RESPUESTA TELNET"></log>		 	
-						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="404" />	
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="453" />	
 					</when>	
 					<otherwise>
 						<setHeader headerName="new_request_cod_return">
@@ -107,7 +128,7 @@
 						</setHeader>
 						<to uri= "direct:spg_set_bscs_status_pr"></to>
 						<log message="CAE EN LA PENULTIMA EXCEPCION"></log>
-						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="404" />
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="453" />
 						<log message="Finalizando proceso con ERROR DE LA RESPUESTA TELNET"></log>		 			
 					</otherwise>		
 				</when>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="488d2206-4aa0-4cc7-94c0-03f0f26104c3" activeEnvironment="Default" name="activateVoLTE" resourceRoot="" soapui-version="5.4.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="56d33d6c-12d3-4728-aa08-61a8d3818a23" wsaVersion="NONE" name="activateVoLTESOAP" type="wsdl" bindingName="{http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1}activateVoLTESOAP" soapVersion="1_1" anonymous="optional" definition="file:/home/cquezada/git/WOM/RedHatServiciosReingenieria/services/SRV40049-activaVoLTE/src/main/resources/wsdl/activateVoLTE.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/home/cquezada/git/WOM/RedHatServiciosReingenieria/services/SRV40049-activaVoLTE/src/main/resources/wsdl/activateVoLTE.wsdl"><con:part><con:url>file:/home/cquezada/git/WOM/RedHatServiciosReingenieria/services/SRV40049-activaVoLTE/src/main/resources/wsdl/activateVoLTE.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="activateVoLTE" targetNamespace="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
+      <xsd:element name="activateVoLTE">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="param" type="tns:param"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="activateVoLTEResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="return" type="tns:return"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="param">
+        <xsd:sequence>
+          <xsd:element name="msisdn" type="xsd:string"/>
+          <xsd:element name="imsi" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="return">
+        <xsd:sequence>
+          <xsd:element name="cod_error" type="xsd:int"/>
+          <xsd:element name="msg_error" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="activateVoLTERequest">
+    <wsdl:part element="tns:activateVoLTE" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="activateVoLTEResponse">
+    <wsdl:part element="tns:activateVoLTEResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="activateVoLTE">
+    <wsdl:operation name="activateVoLTE">
+      <wsdl:input message="tns:activateVoLTERequest"/>
+      <wsdl:output message="tns:activateVoLTEResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="activateVoLTESOAP" type="tns:activateVoLTE">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="activateVoLTE">
+      <soap:operation soapAction="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1/NewOperation"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="activateVoLTE">
+    <wsdl:port binding="tns:activateVoLTESOAP" name="activateVoLTESOAP">
+      <soap:address location="http://0.0.0.0:8888/ocp/srv40049/activavolte/soap/v1.0/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://0.0.0.0:8888/ocp/srv40049/activavolte/soap/v1.0/</con:endpoint><con:endpoint>http://serviceordermanagement.wom.desa/ocp/srv40049/activavolte/soap/v1.0/</con:endpoint></con:endpoints><con:operation id="7495279b-d3b5-4546-8229-6d05f8c4df78" isOneWay="false" action="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1/NewOperation" name="activateVoLTE" bindingOperationName="activateVoLTE" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="d62a6dbb-d2f5-47ff-90a2-4b0eca8a7d3c" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://serviceordermanagement.wom.desa/ocp/srv40049/activavolte/soap/v1.0/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns1:activateVoLTE xmlns:ns1="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
+         <param>
+		  <msisdn>56977777777</msisdn>
+            <imsi>2323232323232329</imsi>
+         </param>
+      </ns1:activateVoLTE>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1/NewOperation"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="543be322-ed3d-4fec-aeac-807e468c5d6f" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="66a0b193-de33-4190-ba5c-efb0fba8ba2b" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 1" searchProperties="true"><con:settings/><con:testStep type="request" id="e27f7c6c-7e12-428f-b25c-a3589e4ed131" name="activateVoLTE - Request 1 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>activateVoLTESOAP</con:interface><con:operation>activateVoLTE</con:operation><con:request name="activateVoLTE - Request 1 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="3084c2dc-8c1e-4eac-a495-72a8f1155e75"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40049/activavolte/soap/v1.0/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns1:activateVoLTE xmlns:ns1="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
+         <param>
+            <msisdn>56977777777</msisdn>
+            <imsi>232323232323232</imsi>
+         </param>
+      </ns1:activateVoLTE>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="b4126490-2aa3-4d71-b949-9bb43847b047" name="SOAP Response"/><con:assertion type="Schema Compliance" id="416765c3-4e2a-42d8-b436-682838e8e686" name="Schema Compliance"><con:configuration/></con:assertion><con:assertion type="SOAP Fault Assertion" id="21c59b8e-db72-48c3-9824-122ef85572f0" name="Not SOAP Fault"/><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1/NewOperation"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" id="8f0a127e-72d9-4fdb-b84a-714ea6f335a8" name="activateVoLTE - Long invalid"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>activateVoLTESOAP</con:interface><con:operation>activateVoLTE</con:operation><con:request name="activateVoLTE - Long invalid" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="00532c33-6fb3-4c55-9fd1-85c2ce5c10d3"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://serviceordermanagement.wom.desa/ocp/srv40049/activavolte/soap/v1.0/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns1:activateVoLTE xmlns:ns1="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
+         <param>
+		  <msisdn>56977777777n</msisdn>
+            <imsi>232323232323232</imsi>
+         </param>
+      </ns1:activateVoLTE>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="682b5559-b22f-40a2-80af-a088a19e6ede" name="SOAP Response"/><con:assertion type="Schema Compliance" id="5498b28a-5ed6-485b-9cf4-f38a2beefd5f" name="Schema Compliance"><con:configuration><definition/></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1/NewOperation"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" id="8fa839f9-3238-4bea-a19c-2d34915d1c7d" name="activateVoLTE - Field empty"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>activateVoLTESOAP</con:interface><con:operation>activateVoLTE</con:operation><con:request name="activateVoLTE - Field empty" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="67f60b42-f183-49b8-a9db-b3d8b8cff760"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://serviceordermanagement.wom.desa/ocp/srv40049/activavolte/soap/v1.0/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns1:activateVoLTE xmlns:ns1="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
+         <param>
+		  <msisdn>56977777777</msisdn>
+            <imsi></imsi>
+         </param>
+      </ns1:activateVoLTE>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="cb1cbb68-e86f-40d6-b8ec-b6fab1ad660a" name="SOAP Response"/><con:assertion type="Schema Compliance" id="2e6f7c43-a511-4490-8648-a1e49c7bda00" name="Schema Compliance"><con:configuration><definition/></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1/NewOperation"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:testStep type="request" id="d8fbd359-0153-416c-8821-713b32e548da" name="activateVoLTE - Length"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>activateVoLTESOAP</con:interface><con:operation>activateVoLTE</con:operation><con:request name="activateVoLTE - Length" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="60cc8e11-c79e-42b9-85ec-b1b30ad0be1b"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40049/activavolte/soap/v1.0/</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns1:activateVoLTE xmlns:ns1="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
+         <param>
+		  <msisdn>56977777777</msisdn>
+            <imsi>2323232323232329</imsi>
+         </param>
+      </ns1:activateVoLTE>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="cb51f15d-2f04-4b62-838c-e06fee11ec12" name="SOAP Response"/><con:assertion type="Schema Compliance" id="7bc878c7-87be-4194-a3c4-fc81605e2beb" name="Schema Compliance"><con:configuration><definition/></con:configuration></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://ws.wom.cl/wom/neg/serviceordermanagement/volteprovision/v/1/NewOperation"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>
