@@ -47,6 +47,16 @@
 					<to uri="velocity:velocity/response-nodata.vm"></to>
 					<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 					</when>
+					<when>
+						<simple>${headers.offerId.toString().length()} > 5 </simple>
+						<to uri="velocity:velocity/soap-responselengthofferId.vm"></to>
+						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+					</when>
+					<when>
+						<simple>${headers.shortDesc.length()} > 5 </simple>
+						<to uri="velocity:velocity/soap-responselengthshortDesc.vm"></to>
+						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+					</when>
 			 
 		     		<otherwise>
 					<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean>
@@ -94,13 +104,22 @@
 				<to uri="velocity:velocity/response-SOAPdataduplicate.vm"></to>
 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
 			</when>
+			<when>
+				<simple>${headers.offerId.toString().length()} > 3 </simple>
+				<to uri="velocity:velocity/soap-responselengthofferId.vm"></to>
+				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+			</when>
+			<when>
+				<simple>${headers.shortDesc.length()} > 5 </simple>
+				<to uri="velocity:velocity/soap-responselengthshortDesc.vm"></to>
+				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+			</when>
 		     		<otherwise>
 							<bean ref="sqlFormatterProcessorSOAP" method="sqlParserProductOfferingObject"></bean>           
 				            <choice>
 				            	<when>
 				            		<simple>${body} == ""</simple>
 				            		<log message="Log Body : ${body}"></log>
-				            		<setHeader headerName="coderror"><constant>500</constant></setHeader>
 				            		<to uri="velocity:velocity/soap-response-sqlnodata.vm"></to>
 				            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            		
 				            	</when> 
