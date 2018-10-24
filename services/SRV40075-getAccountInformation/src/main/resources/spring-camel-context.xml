@@ -56,10 +56,20 @@
 					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
 
 				<to uri="velocity:velocity/soap-fault.vm" />
-			</onException>		
+			</onException>	
 			
+			<log message="${headers.resourceType}"></log>
+			<log message="${headers.resourceValue}"></log>
+			
+			<choice>
+				<when>
+				<simple>${headers.resourceType} == "" || ${headers.resourceValue} == "" </simple>
+				
+				</when>
+				
+			</choice>
 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
-
+				<to uri="velocity:velocity/response-sql-error.vm"></to>
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
 			<to uri="direct:fullRequest" />
 		</route>
