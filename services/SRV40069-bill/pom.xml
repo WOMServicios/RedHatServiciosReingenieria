@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
@@ -8,112 +9,98 @@
 	<artifactId>SRV40069-bill</artifactId>
 	<version>1.1.1</version>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- configure the version of Fuse want to use here -->
+		<fuse.version>7.0.1.fuse-000008-redhat-4</fuse.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- import the Fuse Spring Boot BOM first -->
+			<dependency>
+				<groupId>org.jboss.redhat-fuse</groupId>
+				<artifactId>fuse-springboot-bom</artifactId>
+				<version>${fuse.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 
 		<!-- Camel -->
-		
+
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-jetty</artifactId>
-			<version>2.18.1</version>
 		</dependency>
-				
+
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
-			<version>2.18.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-stream-starter</artifactId>
-			<version>2.18.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core-starter</artifactId>
-			<version>2.18.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-velocity</artifactId>
-			<version>2.18.1</version>
 		</dependency>
-
 
 		<!-- test -->
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-test-spring</artifactId>
-			<version>2.18.1</version>
 			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
-			<version>2.18.1</version>
 		</dependency>
 
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring</artifactId>
-			<version>2.18.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
-			<version>2.18.1</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-boot</artifactId>
-			<version>2.18.1</version>
 		</dependency>
-
-
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-restlet</artifactId>
-			<version>2.18.1</version>
 		</dependency>
-		
-<dependency>
-  <groupId>org.apache.activemq</groupId>
-  <artifactId>activemq-camel</artifactId>
-  <version>5.11.0</version>
-</dependency>
-
-<dependency>
-   <groupId>org.apache.activemq</groupId>
-   <artifactId>activemq-pool</artifactId>
-   <version>5.11.0</version>
-</dependency>	
-<dependency>
-    <groupId>org.apache.camel</groupId>
-    <artifactId>camel-jms</artifactId>
-    <version>2.18.1</version>
-</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-http</artifactId>
 			<version>2.18.1</version>
 		</dependency>
-		
-		
-<dependency>
-    <groupId>org.apache.camel</groupId>
-    <artifactId>camel-mongodb</artifactId>
-    <version>2.18.1</version>
-    <!-- use the same version as your Camel core version -->
-</dependency>
 
-		
+
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-mongodb</artifactId>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -129,7 +116,13 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>1.5.4.RELEASE</version>
+				<executions>
+					<execution>
+						<goals> 
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
@@ -155,18 +148,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-		<repository>
-			<id>spring-releases</id>
-			<url>https://repo.spring.io/libs-release</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-releases</id>
-			<url>https://repo.spring.io/libs-release</url>
-		</pluginRepository>
-	</pluginRepositories>
 
 </project>

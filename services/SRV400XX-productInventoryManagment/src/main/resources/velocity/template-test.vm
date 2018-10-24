@@ -1,4 +1,4 @@
-db.products.insert( 
+db.bill.insert( 
 {
    "accountId":"string",
    "id":"string",
