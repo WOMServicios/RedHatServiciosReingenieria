@@ -87,8 +87,7 @@
 					<simple>${exception.codigoError}</simple>
 				</setHeader>
 				<setHeader headerName="messageError">
-					<simple>${exception.message}</simple>
-				</setHeader>
+					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
 
 				<to uri="velocity:velocity/soap-fault.vm" />
 			</onException>	
@@ -128,7 +127,7 @@
 								<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
 								<when>
 									<simple>${body} == null </simple>
-									<throwException exceptionType="cl.wom.exception.services.ServiceError" message="453" />
+									<throwException exceptionType="cl.wom.exception.services.ServiceError" message="454" />
 								</when>
 								<to uri="velocity:velocity/response-AccountImformation.vm" />
 							</otherwise>
