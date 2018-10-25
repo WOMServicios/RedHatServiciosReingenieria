@@ -30,14 +30,7 @@
 			</setHeader>
 			<to uri="velocity:velocity/activateVoLTE_ERROR.vm" />
 		</onException>
-		<onException>
-			<exception>java.io.IOException</exception>
-			<handled>
-				<constant>true</constant>
-			</handled>
-			<log message="funciona???"></log>
-		</onException>
-			
+		
 
 		<route streamCache="true">
 			<from
@@ -184,30 +177,36 @@
 					</setHeader>
 					<log message="msg return procedure3: ${headers.prov_msg_status}"></log>		
 		</route>	
+		
+		
 		<route>
-					<from uri="direct:spg_add_bscs_services_pr" />
-					<to uri="sql-stored:SPG_SERVICE_ACTIVATION_PG.SPG_ADD_BSCS_SERVICES_PR(INTEGER ${headers.msisdn},OUT INTEGER bscs_cod_services,OUT VARCHAR bscs_msg_services)?dataSource=dSource"/>
+			<from uri="direct:spg_add_bscs_services_pr" />
+
+
+			 <setHeader headerName="value"><simple resultType="java.lang.Integer">0</simple></setHeader>
+			 <loop doWhile="true">
+			 	<simple>${headers.value} &lt;= 2</simple>
+			 
+				<to uri="sql-stored:SPG_SERVICE_ACTIVATION_PG.SPG_ADD_BSCS_SERVICES_PR(VARCHAR ${headers.msisdn},OUT INTEGER bscs_cod_services,OUT VARCHAR bscs_msg_services)?dataSource=dSource"/>
+	
+				<setHeader headerName="bscs_cod_services"><simple resultType="java.lang.Integer">${body.[bscs_cod_services]}</simple></setHeader>
+				<log message="cod return procedure4AAAAAAAAAAAAAAAA: ${headers.bscs_cod_services}"></log>
+				<setHeader headerName="bscs_msg_services"><simple resultType="java.lang.String">${body.[bscs_msg_services]}</simple></setHeader>
 				
-<!-- 				TODO: cambiar los headers ACA!!! -->
- 					<setHeader headerName="bscs_cod_services">
-						<simple resultType="java.lang.Integer">${body.[bscs_cod_services]}</simple>
-					</setHeader>
-					<log message="cod return procedure4: ${headers.bscs_cod_services}"></log>
- 					<setHeader headerName="bscs_msg_services">
-									<simple resultType="java.lang.String">${body.[bscs_msg_services]}</simple>
-					</setHeader>
-					
-					<choice>
-						<when>
-							<simple>${headers.bscs_cod_services} != 0 || ${headers.bscs_msg_services} != "SUCCESS" </simple>
-								<<onException>
-									<exception>java.io.IOException</exception>
-									<redeliveryPolicy maximumRedeliveries="2"/>
-								</onException>
-						</when>
-					</choice>
-					
-					<log message="msg return procedure4: ${headers.bscs_msg_services}"></log>
+				<choice>
+					<when>
+						<simple>${headers.bscs_cod_services} != 0 || ${headers.bscs_msg_services} != "SUCCESS" </simple>
+						
+					    <delay><constant>2000</constant></delay>
+	        			<bean ref="redeliveryEventBean" method="nextValue"></bean>
+					</when>
+					<otherwise>
+						<setHeader headerName="value"><simple resultType="java.lang.Integer">2</simple></setHeader>
+					</otherwise>
+				</choice>
+			</loop>
+			
+			<log message="msg return procedure4: ${headers.bscs_msg_services}"></log>
 		</route> 
 		
 	</camelContext>

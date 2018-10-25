@@ -20,6 +20,8 @@
 		<property name="password" value="${sql.bscsdesa.password}" />
 		<property name="connectionProperties" value="oracle.net.CONNECT_TIMEOUT=1000" />
 	</bean>
+
+	<bean id="redeliveryEventBean" class="cl.wom.middleware.bean.RedeliveryEventBean" />
 	    
     <bean id="integratorProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 	    <property name="locations">
