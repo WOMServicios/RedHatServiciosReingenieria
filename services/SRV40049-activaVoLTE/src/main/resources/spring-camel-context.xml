@@ -9,27 +9,11 @@
 
 	<import resource="bean-definitions.xml" />
 
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="${sql.wappldesa.url}${sql.wappldesa.host}:${sql.wappldesa.port}:${sql.wappldesa.databasename}" />
-		<property name="username" value="${sql.wappldesa.username}" />
-		<property name="password" value="${sql.wappldesa.password}" />
-	</bean>
-	<bean id="dSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url" value="${sql.bscsdesa.url}${sql.bscsdesa.host}:${sql.bscsdesa.port}:${sql.bscsdesa.databasename}" />
-		<property name="username" value="${sql.bscsdesa.username}" />
-		<property name="password" value="${sql.bscsdesa.password}" />
-	</bean>
-	
 	<camelContext
 		xmlns="http://camel.apache.org/schema/spring"
 		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
 		xmlns:ns="http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1">
 	
-	
-<!-- 	<propertyPlaceholder id="placeholder" location="file:${env:APP_ENV}"/> -->
-        
 		<onException>
 			<exception>cl.wom.middleware.proxy.ServiceError</exception>
 			<handled>
@@ -46,15 +30,23 @@
 			</setHeader>
 			<to uri="velocity:velocity/activateVoLTE_ERROR.vm" />
 		</onException>
+		<onException>
+			<exception>java.io.IOException</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<log message="funciona???"></log>
+		</onException>
+			
 
 		<route streamCache="true">
 			<from
-				uri="cxf:http://0.0.0.0:8888/ocp/srv40049/activavolte/soap/v1.0/?		
+			uri="cxf:http://0.0.0.0:8888/ocp/srv40049/activavolte/soap/v1.0/?		
 			wsdlURL=classpath:wsdl/activateVoLTE.wsdl&amp;
 			serviceName={http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1}activateVoLTE&amp;
 			portName={http://ws.wom.cl/wom/neg/serviceordermanagement/activavolte/v/1}activateVoLTESOAP&amp;
 			dataFormat=MESSAGE" />
-			<log message="BODY******** : ${body}"></log>
+
 			<setHeader headerName="msisdn">
 				<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/ns:activateVoLTE/param/msisdn/text()
 				</xpath>
@@ -63,11 +55,6 @@
 				<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/ns:activateVoLTE/param/imsi/text()
 				</xpath>
 			</setHeader>
-			<log message="HEADERS******** : ${headers}"></log>
-			<log message="BODY******** : ${body}"></log>
-
-			<log message="headers.msisdn: ${headers.msisdn}"></log>
-			<log message="headers.imsi: ${headers.imsi}"></log>
 
 			<choice>
 				<when>
@@ -76,24 +63,28 @@
 					<throwException
 						exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" />
 				</when>
+				<when>
+					<simple> ${headers.msisdn.toString().length()} > 11 || ${headers.imsi.toString().length()} > 15 </simple>
+					<log message=" CAE EN LA VALIDACION"></log>
+					<throwException
+						exceptionType="cl.wom.middleware.proxy.ServiceError" message="452" />
+				</when>
 			</choice>
 
 			<!-- Invocación al procedimiento de auditorio INICIO -->
 			<to uri="direct:spg_new_request_pr"></to>
 
 			<!--Invocación telnet					   -->	
-<!-- 			EL PARAMETRO MSISDN YA VIENE CON EL PREFIJO "569"  -->
-<!-- 			<setBody><simple>SPGCMD:AUTOPROV:MSISDN=569${headers.msisdn};</simple></setBody> -->
-				<setBody><simple>SPGCMD:AUTOPROV:MSISDN=${headers.msisdn};</simple></setBody>
+			<setBody><simple>SPGCMD:AUTOPROV:MSISDN=${headers.msisdn};</simple></setBody>
 
 <!-- 		DESCOMENTAR Y REEMPLAZAR CUANDO SE VERIFIQUEN LA RUTA IP Y EL PUERTO -->
-<!-- 			<to uri="netty4:tcp://10.120.241.42:8887" /> -->
+<!-- 		<to uri="netty4:tcp://10.120.241.42:8887" /> -->
 			<toD uri="netty4:{{telnet.tcp}}" />
 		
 			<log message="retorno telnet RESP_CODE: ${body.split('=')[1]}"></log>
 			<log message="retorno telnet RESP_MSG: ${body.split('=')[2]}"></log>
 					
-<!-- 			GENERAR LOS PARAMETROS DENTRO DE LA CABECERA -->
+			<!-- GENERAR LOS PARAMETROS DENTRO DE LA CABECERA -->
 			<setHeader headerName="telnet_code">
 				<simple >${body.split('=')[1]}</simple>
 			</setHeader>
@@ -114,7 +105,7 @@
 						<log message="valor en telnet code ${headers.telnet_err_code}"></log>
 						<log message="valor en telnet msg ${headers.telnet_msg_code}"></log>
 						<log message="Finalizando proceso con ERROR 1003 EN LA RESPUESTA TELNET"></log>		 	
-						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="404" />	
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="453" />	
 					</when>	
 					<otherwise>
 						<setHeader headerName="new_request_cod_return">
@@ -125,7 +116,7 @@
 						</setHeader>
 						<to uri= "direct:spg_set_bscs_status_pr"></to>
 						<log message="CAE EN LA PENULTIMA EXCEPCION"></log>
-						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="404" />
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="453" />
 						<log message="Finalizando proceso con ERROR DE LA RESPUESTA TELNET"></log>		 			
 					</otherwise>		
 				</when>
@@ -161,7 +152,6 @@
 					<log message="msg return procedure1: ${headers.new_request_msg_return}"></log>
 		</route>
 		<route>
-<!-- 	    <from uri="netty4:tcp://10.120.241.42:8887"/> -->
 			<from uri="netty4:{{telnet.tcp}}"/>
 
 			<setBody><constant>SPGCMD:AUTOPROV:RESP_CODE=0,RESP_MSG=SUCCESS</constant></setBody>
@@ -195,7 +185,7 @@
 					<log message="msg return procedure3: ${headers.prov_msg_status}"></log>		
 		</route>	
 		<route>
-			<from uri="direct:spg_add_bscs_services_pr" />
+					<from uri="direct:spg_add_bscs_services_pr" />
 					<to uri="sql-stored:SPG_SERVICE_ACTIVATION_PG.SPG_ADD_BSCS_SERVICES_PR(INTEGER ${headers.msisdn},OUT INTEGER bscs_cod_services,OUT VARCHAR bscs_msg_services)?dataSource=dSource"/>
 				
 <!-- 				TODO: cambiar los headers ACA!!! -->
@@ -206,8 +196,19 @@
  					<setHeader headerName="bscs_msg_services">
 									<simple resultType="java.lang.String">${body.[bscs_msg_services]}</simple>
 					</setHeader>
+					
+					<choice>
+						<when>
+							<simple>${headers.bscs_cod_services} != 0 || ${headers.bscs_msg_services} != "SUCCESS" </simple>
+								<<onException>
+									<exception>java.io.IOException</exception>
+									<redeliveryPolicy maximumRedeliveries="2"/>
+								</onException>
+						</when>
+					</choice>
+					
 					<log message="msg return procedure4: ${headers.bscs_msg_services}"></log>
-		</route>
+		</route> 
 		
 	</camelContext>
 </beans>
