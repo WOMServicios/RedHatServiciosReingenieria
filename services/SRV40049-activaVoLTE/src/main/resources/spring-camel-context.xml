@@ -30,6 +30,14 @@
 			</setHeader>
 			<to uri="velocity:velocity/activateVoLTE_ERROR.vm" />
 		</onException>
+		<onException>
+			<exception>java.io.IOException</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<log message="funciona???"></log>
+		</onException>
+			
 
 		<route streamCache="true">
 			<from
@@ -177,7 +185,7 @@
 					<log message="msg return procedure3: ${headers.prov_msg_status}"></log>		
 		</route>	
 		<route>
-			<from uri="direct:spg_add_bscs_services_pr" />
+					<from uri="direct:spg_add_bscs_services_pr" />
 					<to uri="sql-stored:SPG_SERVICE_ACTIVATION_PG.SPG_ADD_BSCS_SERVICES_PR(INTEGER ${headers.msisdn},OUT INTEGER bscs_cod_services,OUT VARCHAR bscs_msg_services)?dataSource=dSource"/>
 				
 <!-- 				TODO: cambiar los headers ACA!!! -->
@@ -188,8 +196,19 @@
  					<setHeader headerName="bscs_msg_services">
 									<simple resultType="java.lang.String">${body.[bscs_msg_services]}</simple>
 					</setHeader>
+					
+					<choice>
+						<when>
+							<simple>${headers.bscs_cod_services} != 0 || ${headers.bscs_msg_services} != "SUCCESS" </simple>
+								<onException>
+									<exception>java.io.IOException</exception>
+									<redeliveryPolicy maximumRedeliveries="2"/>
+								</onException>
+						</when>
+					</choice>
+					
 					<log message="msg return procedure4: ${headers.bscs_msg_services}"></log>
-		</route>
+		</route> 
 		
 	</camelContext>
 </beans>

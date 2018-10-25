@@ -11,12 +11,14 @@
 		<property name="url" value="${sql.wappldesa.url}${sql.wappldesa.host}:${sql.wappldesa.port}:${sql.wappldesa.databasename}" />
 		<property name="username" value="${sql.wappldesa.username}" />
 		<property name="password" value="${sql.wappldesa.password}" />
+		<property name="connectionProperties" value="oracle.net.CONNECT_TIMEOUT=1000" />
 	</bean>
 	<bean id="dSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
 		<property name="url" value="${sql.bscsdesa.url}${sql.bscsdesa.host}:${sql.bscsdesa.port}:${sql.bscsdesa.databasename}" />
 		<property name="username" value="${sql.bscsdesa.username}" />
 		<property name="password" value="${sql.bscsdesa.password}" />
+		<property name="connectionProperties" value="oracle.net.CONNECT_TIMEOUT=1000" />
 	</bean>
 	    
     <bean id="integratorProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
