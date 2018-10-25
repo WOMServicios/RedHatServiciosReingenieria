@@ -43,6 +43,16 @@
 			<log message="entra"></log>
 			
 			<to uri="velocity:velocity/applycarrierbillingrefund.vm" />
+			<to uri="cxf:http://10.120.147.126:80/esb/3GBSCS/Services/PSBookingRequestWrite?dataFormat=MESSAGE"></to>
+			
+			
+<!-- 			<setHeader headerName="occId"> -->
+<!-- 				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/BookingRequestWriteReturn/occId/text()</xpath> -->
+<!-- 			</setHeader> -->
+			<log message="${body}"></log>
+
+
+<!-- 			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierRefund"></bean> -->
 		</route>
 	</camelContext>
 </beans>
