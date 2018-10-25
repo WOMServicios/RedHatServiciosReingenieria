@@ -18,36 +18,15 @@
 		<propertyPlaceholder id="placeholder"
 			location="classpath:sql.properties ,file:${env:APP_ENV}" />
 			
-		<!-- Control de errores -->
-		<onException>
-			<exception>cl.wom.exception.services.ServiceError</exception>
-			<handled>
-				<constant>true</constant>
-			</handled>
-			<log message="ERROR: ${exception.message}"></log>
-			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-				<simple>${exception.codigoError}</simple>
-			</setHeader>
-			<setHeader headerName="codigoError">
-				<simple>${exception.codigoError}</simple>
-			</setHeader>
-			<setHeader headerName="messageError">
-				<simple>${exception.message}</simple>
-			</setHeader>
-			<setHeader headerName="Content-Type">
-				<constant>application/json</constant>
-			</setHeader>
-			<to uri="velocity:velocity/ErrorHttp.vm" />
-		</onException>
 
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
-			<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
+			<from uri="jetty:http://{{rest.account.host}}:{{rest.account.port}}{{rest.account.url}}"/>
 			<from uri="direct:fullRequest" />
-
+			
 			<bean ref="sqlFormatterProcessor"
 				method="sqlParserAccountInformation"></bean>
-
+			
 			<choice>
 				<when>
 					<simple>${body} == null</simple>
@@ -62,8 +41,28 @@
 		
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
-			<from uri="jetty:http://{{camel.from.endpointhost2}}:{{camel.from.endpointport2}}{{camel.from.endpointurl2}}"/>
+			<from uri="jetty:http://{{rest.subscriber.host}}:{{rest.subscriber.port}}{{rest.subscriber.url}}"/>
+			
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<log message="ERROR: ${exception.message}"></log>
+				<setHeader headerName="codigoError">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="messageError">
+					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
 
+<<<<<<< HEAD
+				<to uri="velocity:velocity/response-sql-error.vm" />
+			</onException>		
+=======
+				<to uri="velocity:velocity/soap-fault.vm" />
+			</onException>			
+>>>>>>> 80b6074407b16a49e02f1baa9ccef62858787301
+			
 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
@@ -71,11 +70,28 @@
 		</route>
 		
 		<route>
-			<from uri="cxf:http://{{camel.soap.endpointhost}}:{{camel.soap.endpointport}}{{camel.soap.endpointurl}}?		
+			<from uri="cxf:http://{{soap.account.host}}:{{soap.account.port}}{{soap.account.url}}?		
 			wsdlURL=classpath:wsdl/accountinformation.wsdl&amp;
 			serviceName={http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}accountinformation&amp;
 			portName={http://ws.wom.cl/wom/neg/customerinformationmanagement/getaccountinformation/v/1}getaccountinformationSOAP&amp;
 			dataFormat=MESSAGE" />
+			
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<log message="ERROR: ${exception.message}"></log>
+				<setHeader headerName="codigoError">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="messageError">
+					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
+
+				<to uri="velocity:velocity/soap-fault.vm" />
+			</onException>	
+			
+						
 			<convertBodyTo type="org.w3c.dom.Document"></convertBodyTo>
 
 			<setHeader headerName="rut">
@@ -108,6 +124,10 @@
 							</when>
 							<otherwise>
 								<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
+								<when>
+									<simple>${body} == null </simple>
+									<throwException exceptionType="cl.wom.exception.services.ServiceError" message="453" />
+								</when>
 								<to uri="velocity:velocity/response-AccountImformation.vm" />
 							</otherwise>
 						</choice>	

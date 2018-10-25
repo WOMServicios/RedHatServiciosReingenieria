@@ -34,14 +34,22 @@ public class ServiceError extends Exception{
 	   case 400:
 		   mensaje="bad request";
 		   break;
-	   case 416:
+	   case 453:
 		   mensaje="No Data Found";
 		   break;
-	   case 422:
+	   case 454:
 		   mensaje="Unprocessable Entity";
 		   break;
-	 
+	   case 452:
+		   mensaje="Excceds the maximun length";
+		   break;
+	   case 455:
+		   mensaje="DataBase Error SQL Exception";
+		   break;		   
 	   }
+	   		   
+	   
+	   
 	   return mensaje;
    }
    
