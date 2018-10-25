@@ -200,7 +200,7 @@
 					<choice>
 						<when>
 							<simple>${headers.bscs_cod_services} != 0 || ${headers.bscs_msg_services} != "SUCCESS" </simple>
-								<onException>
+								<<onException>
 									<exception>java.io.IOException</exception>
 									<redeliveryPolicy maximumRedeliveries="2"/>
 								</onException>
