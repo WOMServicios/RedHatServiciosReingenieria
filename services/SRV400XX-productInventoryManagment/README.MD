@@ -1,1 +1,0 @@
-mongo mongodb://userEGL:6jDJkoiSyErkh651@mongodb-desa-mongodb.wom.desa:31713/sampledb

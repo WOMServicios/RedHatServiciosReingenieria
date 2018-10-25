@@ -1,1 +1,0 @@
-{ accountId: "${headers.accountId}", {projection:{ _id: 0 }}
