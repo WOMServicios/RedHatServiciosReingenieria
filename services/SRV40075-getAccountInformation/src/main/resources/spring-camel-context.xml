@@ -55,11 +55,20 @@
 				<setHeader headerName="messageError">
 					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
 
+
 				<to uri="velocity:velocity/response-sql-error.vm" />
 			</onException>		
-			
-			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 
+			
+			<choice>
+				<when>
+				<simple>${headers.resourceType} == "" || ${headers.resourceValue} == "" </simple>
+				
+				</when>
+				
+			</choice>
+			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
+				<to uri="velocity:velocity/response-sql-error.vm"></to>
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
 			<to uri="direct:fullRequest" />
 		</route>

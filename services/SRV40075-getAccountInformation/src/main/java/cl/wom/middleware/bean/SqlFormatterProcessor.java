@@ -32,7 +32,7 @@ public class SqlFormatterProcessor {
 
 		AccountManagerDAO accountManagerDAO = new AccountManagerDAO();
 		String rut = accountManagerDAO.sqlGetRutAccountManager(resourceType, resourceValue);
-
+		
 		return rut;
 	}
 	
