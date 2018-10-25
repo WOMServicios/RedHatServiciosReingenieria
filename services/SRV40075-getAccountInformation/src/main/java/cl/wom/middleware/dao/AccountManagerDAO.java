@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import cl.wom.exception.services.ServiceError;
 import cl.wom.middleware.util.ConnectionFactory;
 import cl.wom.middleware.util.ConnectionFactory.DataBaseSchema;
 import cl.wom.middleware.util.PropertiesUtil;
@@ -22,7 +23,7 @@ public class AccountManagerDAO {
 	static PropertiesUtil util = new PropertiesUtil();
 	static Properties prop = util.getProperties("APP_ENV");
 
-	public AccountInformation getAccountInformation(String rut, String accountId) {
+	public AccountInformation getAccountInformation(String rut, String accountId) throws ServiceError {
 
 		rut = rut == null ? "" : rut;
 		accountId = accountId == null ? "" : accountId;
@@ -138,21 +139,23 @@ public class AccountManagerDAO {
 			return accountInformation;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			throw new ServiceError("455");
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new ServiceError("455");
 		} finally {
 			if (conn != null)
 				try {
 					conn.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
+					throw new ServiceError("455");
 				}
 		}
 				
-		return accountInformation;
 	}
 
-	public String sqlGetRutAccountManager(String resourceType, String resourceValue) {
+	public String sqlGetRutAccountManager(String resourceType, String resourceValue) throws ServiceError {
 
 		Connection conn = null;
 		Statement stmt;
@@ -252,16 +255,18 @@ public class AccountManagerDAO {
 			return subrut;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			throw new ServiceError("455");
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new ServiceError("455");
 		} finally {
 			if (conn != null)
 				try {
 					conn.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
+					throw new ServiceError("455");
 				}
 		}
-		return null;
 	}
 }

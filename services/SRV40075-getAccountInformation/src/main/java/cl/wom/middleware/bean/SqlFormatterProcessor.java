@@ -3,12 +3,13 @@ package cl.wom.middleware.bean;
 import org.apache.camel.Exchange;
 import org.json.JSONObject;
 
+import cl.wom.exception.services.ServiceError;
 import cl.wom.middleware.dao.AccountManagerDAO;
 import cl.wom.middleware.vo.AccountInformation;
 
 public class SqlFormatterProcessor {
 
-	public String sqlParserAccountInformation(Exchange ex) {
+	public String sqlParserAccountInformation(Exchange ex) throws ServiceError {
 
 		String rut = (String) ex.getIn().getHeader("rut");
 		String accountId = (String) ex.getIn().getHeader("accountId");
@@ -24,7 +25,7 @@ public class SqlFormatterProcessor {
 		}
 	}
 
-	public String sqlGetRutAccountManager(Exchange ex) {
+	public String sqlGetRutAccountManager(Exchange ex) throws ServiceError {
 
 		String resourceType = (String) ex.getIn().getHeader("resourceType");
 		String resourceValue = (String) ex.getIn().getHeader("resourceValue");
@@ -35,7 +36,7 @@ public class SqlFormatterProcessor {
 		return rut;
 	}
 	
-	public AccountInformation sqlParserAccountInformationSOAP(Exchange ex) {
+	public AccountInformation sqlParserAccountInformationSOAP(Exchange ex) throws ServiceError {
 
 		String rut = (String) ex.getIn().getHeader("rut");
 		String accountId = (String) ex.getIn().getHeader("accountId");

@@ -55,11 +55,10 @@
 				<setHeader headerName="messageError">
 					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
 
-				<to uri="velocity:velocity/soap-fault.vm" />
-			</onException>	
-			
-			<log message="${headers.resourceType}"></log>
-			<log message="${headers.resourceValue}"></log>
+
+				<to uri="velocity:velocity/response-sql-error.vm" />
+			</onException>		
+
 			
 			<choice>
 				<when>
