@@ -44,28 +44,32 @@
 			<from uri="jetty:http://{{rest.subscriber.host}}:{{rest.subscriber.port}}{{rest.subscriber.url}}"/>
 			
 			<onException>
-				<exception>cl.wom.exception.services.ServiceError</exception>
+				<exception>java.lang.Exception</exception>
 				<handled>
 					<constant>true</constant>
 				</handled>
 				<log message="ERROR: ${exception.message}"></log>
-				<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-					<simple>400</simple>
-				</setHeader>
 				<setHeader headerName="codigoError">
 					<simple>${exception.codigoError}</simple>
 				</setHeader>
 				<setHeader headerName="messageError">
-					<simple>${exception.message}</simple>
-				</setHeader>
-				<setHeader headerName="Content-Type">
-					<constant>application/json</constant>
-				</setHeader>
-				<to uri="velocity:velocity/ErrorHttp.vm" />
-			</onException>				
-			
-			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
+					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
 
+				<to uri="velocity:velocity/soap-fault.vm" />
+			</onException>	
+			
+			<log message="${headers.resourceType}"></log>
+			<log message="${headers.resourceValue}"></log>
+			
+			<choice>
+				<when>
+				<simple>${headers.resourceType} == "" || ${headers.resourceValue} == "" </simple>
+				
+				</when>
+				
+			</choice>
+			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
+				<to uri="velocity:velocity/response-sql-error.vm"></to>
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
 			<to uri="direct:fullRequest" />
 		</route>
@@ -127,7 +131,7 @@
 								<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
 								<when>
 									<simple>${body} == null </simple>
-									<throwException exceptionType="cl.wom.exception.services.ServiceError" message="454" />
+									<throwException exceptionType="cl.wom.exception.services.ServiceError" message="453" />
 								</when>
 								<to uri="velocity:velocity/response-AccountImformation.vm" />
 							</otherwise>

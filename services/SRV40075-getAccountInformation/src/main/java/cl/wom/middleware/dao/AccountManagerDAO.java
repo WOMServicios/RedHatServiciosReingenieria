@@ -156,7 +156,7 @@ public class AccountManagerDAO {
 
 		Connection conn = null;
 		Statement stmt;
-		String subrut = "";
+		String subrut = null;
 		try {
 			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS, prop);
 			stmt = conn.createStatement();
