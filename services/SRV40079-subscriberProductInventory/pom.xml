@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cl.wom</groupId>
-	<artifactId>SRV400XX-productInventoryManagment</artifactId>
+	<artifactId>SRV40079-subscriberProductInventory</artifactId>
 	<version>1.1.1</version>
 
 	<dependencies>
