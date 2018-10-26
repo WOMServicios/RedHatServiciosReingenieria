@@ -3,38 +3,43 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 public class ConnectionFactory {
-	static PropertiesUtil util = new PropertiesUtil();
-	static Properties prop = util.getProperties("APP_ENV");
-	static Properties sql = Util.getProperties("SQL_ENV");
-	static String user = prop.getProperty("database.bscs.username");
-	static String password = prop.getProperty("database.bscs.password");
-	static String host = prop.getProperty("database.bscs.host");
-	static String port = prop.getProperty("database.bscs.port");
-	static String databaseName = prop.getProperty("database.bscs.databasename");
 	
 	static Connection conn = null;
+	static Properties prop = PropertiesUtil.getProperties("APP_ENV");
 
 	static public enum DataBaseSchema {
 	    BSCS,
+	    WAPPL;
 	}
 	
-	public static Connection getConnection(DataBaseSchema shema) throws SQLException {
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+	public static Connection getConnection(DataBaseSchema shema) throws ClassNotFoundException, SQLException {
+		Class.forName("oracle.jdbc.driver.OracleDriver");
 		
-		System.out.println("system property: "+System.getProperty("database.bscs.host"));
+		String user = "";
+		String password = "";
+		String host = "";
+		String port = "";
+		String databaseName = "";
 		
+		Properties props = new Properties();
+
 		switch (shema) {
-		case BSCS:
-			return DriverManager.getConnection("jdbc:oracle:thin:@" + host + ":" + port + ":" + databaseName, user,password);
-		default:
-		return null;
+			case BSCS:
+				 user = prop.getProperty("database.bscs.username");
+				 password = prop.getProperty("database.bscs.password");
+				 host = prop.getProperty("database.bscs.host");
+				 port = prop.getProperty("database.bscs.port");
+				 databaseName = prop.getProperty("database.bscs.databasename");
+				 
+				 props.setProperty("oracle.net.CONNECT_TIMEOUT","2000");
+				 props.setProperty("user", user);
+				 props.setProperty("password", password);
+				 
+				 return DriverManager.getConnection ("jdbc:oracle:thin:@" + host + ":" + port + ":" + databaseName, props);
+			default:
+			return null;
+		}
 	}
-}
 }

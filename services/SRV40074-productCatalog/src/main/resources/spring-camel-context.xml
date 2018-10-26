@@ -14,27 +14,26 @@
       xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">      
       
       
-<!-- 		<propertyPlaceholder id="placeholder" location="classpath:application.properties"/> 		 -->
-<!-- <propertyPlaceholder id="placeholder" -->
-<!--                 location="classpath:${env:APP_ENV}.properties" /> -->
  <propertyPlaceholder id="placeholder" location="file:${env:APP_ENV}"/>
 
-<!--  Control de errores  -->
-	<onException>
-		    <exception>java.lang.Exception</exception>
-		    <handled><simple>true</simple></handled>
-		    
-		    <setHeader headerName="errorcode"><constant>500</constant></setHeader>
-		    <setHeader headerName="errorMessage"><simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
-
-		    <log message="error: ${exception.message}"></log>
-		    <to uri="velocity:velocity/response-sql-error.vm"/>
-		    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
-	</onException>
-		       
-<!--         	TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
+		
+	<!-- TODO: IDENTAR CORRECTAMENTE EL CODIGO -->	
+	<!-- TODO: LIMPIAR VELOCITIES -->	       
 	<route>
-			<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
+		<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
+			
+		<onException>
+			    <exception>java.lang.Exception</exception>
+			    <handled><simple>true</simple></handled>
+			    
+			    <setHeader headerName="errorcode"><constant>500</constant></setHeader>
+			    <setHeader headerName="errorMessage"><simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
+	
+			    <log message="error: ${exception.message}"></log>
+			    <to uri="velocity:velocity/response-sql-error.vm"/>
+			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+		</onException>
+					
 			<log message="offerId: ${headers.productOffering.offerId}"></log>
 			<choice>
 					<when>
@@ -73,7 +72,7 @@
           </choice>
 	</route>
 	
-	<!-- 	SERVICIO SOAP -->
+	<!-- SERVICIO SOAP -->
 	<route>
 		<from 
 				uri="cxf:http://{{camel.soap.endpointhost}}:{{camel.soap.endpointport}}{{camel.soap.endpointurl}}?
@@ -81,6 +80,17 @@
 		serviceName={http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1}productOffering&amp;
 		portName={http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1}productOfferingSOAP&amp;
 		dataFormat=MESSAGE" />
+		
+		<onException>
+			    <exception>java.lang.Exception</exception>
+			    <handled><simple>true</simple></handled>
+			    
+			    <setHeader headerName="errorcode"><simple resultType="java.lang.String">500</simple></setHeader>
+			    <setHeader headerName="errorMessage"><simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
+	
+			    <log message="error: ${exception.message}"></log>
+			    <to uri="velocity:velocity/soap-response-error.vm"/>
+		</onException>		
 		
 		<convertBodyTo type="org.w3c.dom.Document"></convertBodyTo>
 	
@@ -115,7 +125,7 @@
 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
 			</when>
 		     		<otherwise>
-							<bean ref="sqlFormatterProcessorSOAP" method="sqlParserProductOfferingObject"></bean>           
+							<bean ref="sqlFormatterProcessor" method="sqlParserProductOfferingSOAP"></bean>           
 				            <choice>
 				            	<when>
 				            		<simple>${body} == ""</simple>

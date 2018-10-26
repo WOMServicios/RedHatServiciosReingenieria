@@ -10,10 +10,10 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 public class PropertiesUtil {
-	InputStream input = null;
+	private static InputStream input = null;
 
 
-	public Properties getProperties (String fileName) {
+	public static Properties getProperties (String fileName) {
 		String propertiesFile="";
 		Map<String, String> env = System.getenv();
 		for (Entry<String, String> envName : env.entrySet()) {

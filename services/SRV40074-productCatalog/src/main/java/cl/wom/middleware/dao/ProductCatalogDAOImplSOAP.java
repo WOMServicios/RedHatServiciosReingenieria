@@ -483,6 +483,8 @@ public class ProductCatalogDAOImplSOAP {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw e;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}finally {
 			if (conn!=null)
 				try {
