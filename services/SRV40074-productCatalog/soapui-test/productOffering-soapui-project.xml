@@ -156,11 +156,11 @@
       <soap:address location="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/>
     </wsdl:port>
   </wsdl:service>
-</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint></con:endpoints><con:operation id="e4c41b69-ebab-4837-bc14-def90ab9c4ef" isOneWay="false" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0" name="productOffering" bindingOperationName="productOffering" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f38a768f-497a-4f62-9864-e695d8c9fb86" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:endpoint>http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1</con:endpoint></con:endpoints><con:operation id="e4c41b69-ebab-4837-bc14-def90ab9c4ef" isOneWay="false" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0" name="productOffering" bindingOperationName="productOffering" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f38a768f-497a-4f62-9864-e695d8c9fb86" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
    <soapenv:Header/>
    <soapenv:Body>
       <ns:productOffering>
-         <offerId>7</offerId>
+         <offerId>123</offerId>
          <shortDesc></shortDesc>
       </ns:productOffering>
    </soapenv:Body>
