@@ -1,50 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans 
-	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-	http://camel.apache.org/schema/spring 
-	http://camel.apache.org/schema/spring/camel-spring.xsd">
-
-	<bean id="dataSource"
-		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@cluxds03:1550:BSCSDESA" />
-		<property name="username" value="OPSH_BSCSREP_SYSADM_CBI" />
-		<property name="password" value="knh#5tgl20k0lpm.l" />
-	</bean>
-
-	<bean id="dataS" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
-		<property name="driverClassName"
-			value="oracle.jdbc.driver.OracleDriver" />
-		<property name="url"
-			value="jdbc:oracle:thin:@10.120.148.136:1521:WAPPLDESA" />
-		<property name="username" value="CARRIERBILLING" />
-		<property name="password" value="carrierdes09" />
-
-	</bean>
-
-	<!-- configure the Camel SQL component to use the JDBC data source -->
-	<!-- <bean class="org.apache.camel.component.sql.SqlComponent" id="sql"> -->
-	<!-- <property name="dataSource" ref="dataSource" /> -->
-	<!-- </bean> -->
-
-	<camelContext
-		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
-		xmlns="http://camel.apache.org/schema/spring"
-		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
-		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
-			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
-			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
-			archivo properties. Por defecto en opensfhit es develop -->
-		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
-
-		<propertyPlaceholder id="placeholder"
-			location="classpath:application.properties,classpath:sql.properties" />
-
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+    http://camel.apache.org/schema/spring 
+    http://camel.apache.org/schema/spring/camel-spring.xsd">
+	<import resource="bean-definitions.xml" />
+	<camelContext xmlns="http://camel.apache.org/schema/spring" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/billingaccountmanagement/applycarrierbillingrefund/v/1">
+		<propertyPlaceholder id="placeholder" location="classpath:sql.properties ,file:${env:APP_ENV}" />
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
 			<handled>
@@ -62,151 +23,19 @@
 				<simple>Bad Request - ${exception.message}</simple>
 			</setHeader>
 			<log message="${exception.message}"></log>
-			<to uri="velocity:velocity/400.vm" />
+			<to uri="velocity:velocity/ErrorHttp.vm" />
 		</onException>
-		
-
 		<!-- applycarrierbillingcharge -->
-		<route streamCache="true">
-			<from
-				uri="restlet:http://0.0.0.0:8888/CarrierBilling/1.0.0/Bango/transaction/?restletMethod=post" />
-			<setHeader headerName="requestId">
-				<jsonpath>$.requestId</jsonpath>
-			</setHeader>
-			<setHeader headerName="bangoTransactionId">
-				<jsonpath>$.bangoTransactionId</jsonpath>
-			</setHeader>
-			<setHeader headerName="merchantTransactionId">
-				<jsonpath>$.merchantTransactionId</jsonpath>
-			</setHeader>
-			<setHeader headerName="paymentProviderTransactionId">
-				<jsonpath>$.paymentProviderTransactionId</jsonpath>
-			</setHeader>
-			<setHeader headerName="userId">
-				<jsonpath>$.userId</jsonpath>
-			</setHeader>
-			<setHeader headerName="amount">
-				<jsonpath resultType="java.lang.Integer">$.amount</jsonpath>
-			</setHeader>
-			<setHeader headerName="currency">
-				<jsonpath>$.currency</jsonpath>
-			</setHeader>
-			
-			<choice>
-				<when>
-					<simple>
-						${headers.requestId} == "" ||
-						${headers.bangoTransactionId}
-						== "" ||
-						${headers.merchantTransactionId} == "" ||
-						${headers.paymentProviderTransactionId} == "" ||
-						${headers.userId}
-						== "" ||
-						${headers.currency} == ""
-					</simple>
-					<throwException
-						exceptionType="cl.wom.exception.services.ServiceError"
-						message="400" />
-				</when>
-				
-			</choice>
-
-			<!-- Ejecucion de la query -->
-			<setBody>
-				<simple>{{sql.getdatosfacturacion}}</simple>
-			</setBody>
-			<to uri="jdbc:dataSource" />
-
-			<setHeader headerName="customer">
-				<simple>${body[CUSTOMER_ID]}</simple>
-			</setHeader>
-			<log message="imprime el customer ${headers.customer}"></log>
-
-			<setHeader headerName="coid">
-				<simple>${body[CO_ID]}</simple>
-			</setHeader>
-			<log message="imprime el coid ${headers.coid}"></log>
-
-			<setHeader headerName="tipocontrato">
-				<simple>${body[TIPO_CONTRATO]}</simple>
-			</setHeader>
-			<log message="imprime el tipocontrato ${headers.tipocontrato}"></log>
-
-			<setHeader headerName="estado">
-				<simple>${body[ESTADO]}</simple>
-			</setHeader>
-			<log message="imprime el estado ${headers.estado}"></log>
-
-			<setHeader headerName="shdes">
-				<simple>${body[SHDES_PLAN]}</simple>
-			</setHeader>
-			<log message="imprime el shdes ${headers.shdes}"></log>
-
-			<choice>
-				<when>
-					<simple>${body.size} != 0</simple>
-					<choice>
-						<when>
-							<simple>${headers.coid} == null</simple>
-							<to uri="velocity:velocity/getdatosfacturacionNotFound.vm" />
-						</when>
-						<when>
-							<simple>${headers.tipocontrato} != 'Postpaid'</simple>
-							<to uri="velocity:velocity/getdatosfacturacionNotEnabled.vm" />
-						</when>
-						<when>
-							<simple>${headers.estado} == 's'</simple>
-							<to uri="velocity:velocity/getdatosfacturacionUserSupended.vm" />
-						</when>
-						<when>
-							<simple>${headers.estado} == 'd' || ${headers.estado} == 'o'
-							</simple>
-							<to uri="velocity:velocity/getdatosfacturacionNotEnabled.vm" />
-						</when>
-
-						<otherwise>
-							<to uri="velocity:velocity/request.vm" />
-							<!-- <to -->
-							<!-- uri="cxf:http://10.120.156.241/esb/3GBSCS/Services/PSBookingRequestWrite?dataFormat=MESSAGE"></to> -->
-							<!-- <log message="imprime el body: ${body}"></log> -->
-							<!-- NO SE LOGRA LLEGAR AL SERVICIO SOAP -->
-							<setHeader headerName="occid">
-								<simple>12345690</simple>
-							</setHeader>
-							<!-- SE DEBERIAN TOMAR LOS VALORES DEL occId DESDE EL SOAP -->
-							<!-- <log message="valor: ${headers.occid}"></log> -->
-							<!-- <convertBodyTo type="org.w3c.dom.Document"></convertBodyTo> -->
-							<!-- <setHeader headerName="occid"> -->
-							<!-- <xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/BookingRequestWriteReturn/occId/text()</xpath> -->
-							<!-- </setHeader> -->
-							<!-- <log message="valor coID: ${body[occId]}"></log> -->
-
-							<choice>
-								<when>
-									<simple>${headers.occid} == 0 || ${headers.occid} == null ||
-										${headers.occid} == " "</simple>
-									<log message="se cae por el occid ${headers.occid}"></log>
-
-									<to uri="velocity:velocity/400.vm" />
-								</when>
-							</choice>
-<!-- 							<setHeader headerName="responseOk"> -->
-<!-- 								<jsonpath>$.responseCode</jsonpath> -->
-<!-- 							</setHeader> -->
-<!-- 							<log message="response 1 : ${headers.responseOk}"></log> -->
-<!-- 							<setHeader headerName="responseOkMsg"> -->
-<!-- 								<jsonpath>$.responseMessage</jsonpath> -->
-<!-- 							</setHeader> -->
-<!-- 							<log message="response 2 : ${headers.responseOkMsg}"></log> -->
-							<setBody>
-								<simple>{{sql.insertapagocarrierbilling}}</simple>
-							</setBody>
-							<to uri="jdbc:dataS" />
-							<to uri="velocity:velocity/200ApplyCarrierBillingCharge.vm" />
-						</otherwise>
-					</choice>
-				</when>
-			</choice>
+		<route>
+			<from uri="jetty:http://{{carrier.charge.host}}:{{carrier.charge.port}}{{carrier.charge.url}}" />
+			<log message="entra"></log>
+				<to uri="velocity:velocity/applycarrierbillingcharge.vm" />
+				<to uri="cxf:http://10.120.147.126:80/esb/3GBSCS/Services/PSBookingRequestWrite?dataFormat=MESSAGE"></to>
+			<!-- 			<setHeader headerName="occId"> -->
+			<!-- 				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/BookingRequestWriteReturn/occId/text()</xpath> -->
+			<!-- 			</setHeader> -->
+			<!-- 			<log message="${body}"></log> -->
+			<!-- <bean ref="sqlFormatterProcessor" method="sqlParserCarrierRefund"></bean>-->
 		</route>
 	</camelContext>
 </beans>
