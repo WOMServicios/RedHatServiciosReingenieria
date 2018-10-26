@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="76cf40c9-27ba-4a20-a083-b671e82b5bad" activeEnvironment="Default" name="productOffering" resourceRoot="" soapui-version="5.4.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="d8bd64f4-10bd-4283-b603-a46e0f1e3ba5" wsaVersion="NONE" name="productOfferingSOAP" type="wsdl" bindingName="{http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1}productOfferingSOAP" soapVersion="1_1" anonymous="optional" definition="file:/home/cquezada/git/WOM/RedHatServiciosReingenieria/services/SRV40074-productCatalog/src/main/resources/wsdl/productOffering.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/home/cquezada/git/WOM/RedHatServiciosReingenieria/services/SRV40074-productCatalog/src/main/resources/wsdl/productOffering.wsdl"><con:part><con:url>file:/home/cquezada/git/WOM/RedHatServiciosReingenieria/services/SRV40074-productCatalog/src/main/resources/wsdl/productOffering.wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="productOffering" targetNamespace="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
+      <xsd:element name="productOffering">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="offerId" type="xsd:string"/>
+            <xsd:element name="shortDesc" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="productOfferingResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="productOffering" type="tns:ProductOffering"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:complexType name="ProductOffering">
+        <xsd:sequence>
+          <xsd:element name="layoutTypeAPP" type="xsd:string"/>
+          <xsd:element name="isSellable" type="xsd:string"/>
+          <xsd:element name="shortDescription" type="xsd:string"/>
+          <xsd:element name="version" type="xsd:string"/>
+          <xsd:element name="familyOffer" type="xsd:string"/>
+          <xsd:element name="typeOffer" type="xsd:string"/>
+          <xsd:element name="lastUpdate" type="xsd:string"/>
+          <xsd:element name="name" type="xsd:string"/>
+          <xsd:element name="offerId" type="xsd:string"/>
+          <xsd:element name="recurringCharge" type="tns:recurringChargeType"></xsd:element>
+          <xsd:element name="marketSegment" type="xsd:string"/>
+          <xsd:element name="status" type="xsd:string"/>
+          <xsd:element name="bundleProductOffering" minOccurs="0" maxOccurs="unbounded" type="tns:bundleProductOffering"></xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="bundleProductOffering">
+        <xsd:sequence>
+          <xsd:element name="minimumRequired" type="xsd:string"/>
+          <xsd:element name="quantity" type="xsd:string"/>
+          <xsd:element name="unitOfMeasure" type="xsd:string"/>
+          <xsd:element name="isPromotionProduct" type="xsd:string"></xsd:element>
+          <xsd:element name="channel" type="tns:channel"/>
+          <xsd:element name="isOfferProduct" type="xsd:string"/>
+          <xsd:element name="description" type="xsd:string"/>
+          <xsd:element name="isOptionProduct" type="xsd:string"/>
+          <xsd:element name="oneTime" type="tns:oneTime"/>
+          <xsd:element name="priority" type="xsd:string"/>
+          <xsd:element name="unitType" type="xsd:string"/>
+          <xsd:element name="name" type="xsd:string"/>
+          <xsd:element name="offerId" type="xsd:string"/>
+          <xsd:element name="shDes" type="xsd:string"/>
+          <xsd:element name="id" type="xsd:string"/>
+          <xsd:element name="maximunAllowed" type="xsd:string"/>
+          <xsd:element name="recurringCharge" type="tns:recurringCharge"></xsd:element>
+          <xsd:element name="status" type="xsd:string"/>
+          <xsd:element name="occ" type="xsd:string"/>
+          <xsd:element name="sku" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="recurringChargeType">
+        <xsd:sequence>
+          <xsd:element name="amount" type="xsd:string"/>
+          <xsd:element name="unitOfMeasure" type="xsd:string"/>
+          <xsd:element name="currency" type="xsd:string"/>
+          <xsd:element name="type" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="productOfferingType"/>
+      <xsd:complexType name="channel">
+        <xsd:sequence>
+          <xsd:element name="legacySystem" type="xsd:string"/>
+          <xsd:element name="name" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="oneTime">
+        <xsd:sequence>
+          <xsd:element name="duration" type="xsd:string"/>
+          <xsd:element name="amount" type="xsd:string"/>
+          <xsd:element name="unitOfMeasure" type="xsd:string"></xsd:element>
+          <xsd:element name="currency" type="xsd:string"/>
+          <xsd:element name="type" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="recurringCharge">
+        <xsd:sequence>
+          <xsd:element name="amount" type="xsd:string"/>
+          <xsd:element name="unitOfMeasure" type="xsd:string"></xsd:element>
+          <xsd:element name="currency" type="xsd:string"/>
+          <xsd:element name="type" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="deviceOffering">
+        <xsd:sequence>
+          <xsd:element name="modality" type="xsd:string"/>
+          <xsd:element name="cost" type="xsd:string"/>
+          <xsd:element name="shDes" type="xsd:string"/>
+          <xsd:element name="offerId" type="xsd:string"/>
+          <xsd:element name="sku" type="xsd:string"/>
+          <xsd:element name="deviceName" type="xsd:string"/>
+          <xsd:element name="partNum" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:element name="NewOperation">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="NewOperationResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="productOfferingFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="productOfferingFault" type="xsd:string"></xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="productOfferingRequest">
+    <wsdl:part element="tns:productOffering" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="productOfferingResponse">
+    <wsdl:part element="tns:productOfferingResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="productOfferingFault">
+    <wsdl:part name="parameters" element="tns:productOfferingFault"/>
+  </wsdl:message>
+  <wsdl:portType name="productOffering">
+    <wsdl:operation name="productOffering">
+      <wsdl:input message="tns:productOfferingRequest"/>
+      <wsdl:output message="tns:productOfferingResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="productOfferingSOAP" type="tns:productOffering">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="productOffering">
+      <soap:operation soapAction="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="productOffering">
+    <wsdl:port binding="tns:productOfferingSOAP" name="productOfferingSOAP">
+      <soap:address location="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint></con:endpoints><con:operation id="e4c41b69-ebab-4837-bc14-def90ab9c4ef" isOneWay="false" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0" name="productOffering" bindingOperationName="productOffering" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f38a768f-497a-4f62-9864-e695d8c9fb86" name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:productOffering>
+         <offerId>7</offerId>
+         <shortDesc></shortDesc>
+      </ns:productOffering>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:testSuite id="e573ae28-ec30-4c77-855f-9714b87ca8d6" name="TestSuite 1"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase id="f108fdb5-ce7d-4187-b11a-a18face9040b" failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCase 1" searchProperties="true"><con:settings/><con:testStep type="request" id="98dc152f-0284-4581-9385-75d9662e140b" name="productOffering - Request 1"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>productOfferingSOAP</con:interface><con:operation>productOffering</con:operation><con:request name="productOffering - Request 1" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType="" id="58b57c32-68fa-4133-bd15-cdb94b957591"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:productOffering>
+         <offerId></offerId>
+         <shortDesc>WRL14 </shortDesc>
+      </ns:productOffering>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:assertion type="SOAP Response" id="310e94f0-a1da-434d-93de-fa74ededfa0d" name="SOAP Response"/><con:assertion type="Schema Compliance" id="4428fb1e-550b-4b8e-822a-344e6faf19ae" name="Schema Compliance"><con:configuration/></con:assertion><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:properties/></con:testCase><con:properties/></con:testSuite><con:mockService id="4b50d876-5bda-4cdf-8305-1ffc2b36e342" port="8080" path="/" host="redhat-hp-notebook" name="MockService 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="productOffering" id="718755db-e982-4ca2-a6ff-c86dac8bd4b3" interface="productOfferingSOAP" operation="productOffering"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="aaeda6d1-1230-45aa-9046-a3f2686f4c23" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:productOfferingResponse>
+         <productOffering>
+            <bundleProductOffering>
+               <minimumRequired>?</minimumRequired>
+               <quantity>?</quantity>
+               <unitOfMeasure>?</unitOfMeasure>
+               <isPromotionProduct>?</isPromotionProduct>
+               <channel>
+                  <legacySystem>?</legacySystem>
+                  <name>?</name>
+               </channel>
+               <isOfferProduct>?</isOfferProduct>
+               <description>?</description>
+               <isOptionProduct>?</isOptionProduct>
+               <oneTime>
+                  <duration>?</duration>
+                  <amount>?</amount>
+                  <unitOfMeasure>?</unitOfMeasure>
+                  <currency>?</currency>
+                  <type>?</type>
+               </oneTime>
+               <priority>?</priority>
+               <unitType>?</unitType>
+               <name>?</name>
+               <offerId>?</offerId>
+               <shDes>?</shDes>
+               <id>?</id>
+               <maximunAllowed>?</maximunAllowed>
+               <recurringCharge>
+                  <amount>?</amount>
+                  <unitOfMeasure>?</unitOfMeasure>
+                  <currency>?</currency>
+                  <type>?</type>
+               </recurringCharge>
+               <status>?</status>
+            </bundleProductOffering>
+            <layoutTypeAPP>?</layoutTypeAPP>
+            <isSellable>?</isSellable>
+            <deviceOffering>
+               <modality>?</modality>
+               <cost>?</cost>
+               <shDes>?</shDes>
+               <offerId>?</offerId>
+               <sku>?</sku>
+               <deviceName>?</deviceName>
+               <partNum>?</partNum>
+            </deviceOffering>
+            <shortDescription>?</shortDescription>
+            <version>?</version>
+            <familyOffer>?</familyOffer>
+            <typeOffer>?</typeOffer>
+            <lastUpdate>?</lastUpdate>
+            <name>?</name>
+            <offerId>?</offerId>
+            <recurringCharge>
+               <amount>?</amount>
+               <unitOfMeasure>?</unitOfMeasure>
+               <currency>?</currency>
+               <type>?</type>
+            </recurringCharge>
+            <marketSegment>?</marketSegment>
+            <status>?</status>
+         </productOffering>
+      </ns:productOfferingResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:mockService id="a61c4a45-830e-42c4-970f-05412c6e4dd6" port="8080" path="/" host="redhat-hp-notebook" name="MockService 2"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.mock.WsdlMockService@require-soap-action">false</con:setting></con:settings><con:properties/><con:mockOperation name="productOffering" id="36bb9c2a-9d46-4164-b99f-dfca69f05184" interface="productOfferingSOAP" operation="productOffering"><con:settings/><con:defaultResponse>Response 1</con:defaultResponse><con:dispatchStyle>SEQUENCE</con:dispatchStyle><con:response name="Response 1" id="6f5cc5aa-19d4-47a4-89b4-3fda83ba5264" httpResponseStatus="200" encoding="UTF-8"><con:settings/><con:responseContent><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ns:productOfferingResponse>
+         <productOffering>
+            <bundleProductOffering>
+               <minimumRequired>1</minimumRequired>
+               <quantity>$bundle.quantity</quantity>
+               <unitOfMeasure>Minutos</unitOfMeasure>
+               <isPromotionProduct>N</isPromotionProduct>
+               <channel>
+                  <legacySystem>null</legacySystem>
+                  <name>null</name>
+               </channel>
+               <isOfferProduct>true</isOfferProduct>
+               <description>Bolsa de Voz</description>
+               <isOptionProduct>false</isOptionProduct>
+               <oneTime>
+                  <duration>N</duration>
+                  <amount>N</amount>
+                  <unitOfMeasure>N</unitOfMeasure>
+                  <currency>N</currency>
+                  <type>N</type>
+               </oneTime>
+               <priority>null</priority>
+               <unitType>VOZ</unitType>
+               <name>Bolsa de Voz</name>
+               <offerId>123</offerId>
+               <shDes>FUNC3</shDes>
+               <id>123</id>
+               <maximunAllowed>1</maximunAllowed>
+               <recurringCharge>
+                  <amount>0</amount>
+                  <unitOfMeasure>Minutos</unitOfMeasure>
+                  <currency>CLP</currency>
+                  <type>Bundle</type>
+               </recurringCharge>
+               <status>a</status>
+               <occ>null</occ>
+               <sku>null</sku>
+            </bundleProductOffering>
+            <bundleProductOffering>
+               <minimumRequired>1</minimumRequired>
+               <quantity>$bundle.quantity</quantity>
+               <unitOfMeasure>Unitario</unitOfMeasure>
+               <isPromotionProduct>N</isPromotionProduct>
+               <channel>
+                  <legacySystem>null</legacySystem>
+                  <name>null</name>
+               </channel>
+               <isOfferProduct>true</isOfferProduct>
+               <description>Bolsa de Voz</description>
+               <isOptionProduct>false</isOptionProduct>
+               <oneTime>
+                  <duration>N</duration>
+                  <amount>N</amount>
+                  <unitOfMeasure>N</unitOfMeasure>
+                  <currency>N</currency>
+                  <type>N</type>
+               </oneTime>
+               <priority>null</priority>
+               <unitType>SMS</unitType>
+               <name>Bolsa de Voz</name>
+               <offerId>123</offerId>
+               <shDes>FUNC3</shDes>
+               <id>123</id>
+               <maximunAllowed>1</maximunAllowed>
+               <recurringCharge>
+                  <amount>0</amount>
+                  <unitOfMeasure>Minutos</unitOfMeasure>
+                  <currency>CLP</currency>
+                  <type>Bundle</type>
+               </recurringCharge>
+               <status>a</status>
+               <occ>null</occ>
+               <sku>null</sku>
+            </bundleProductOffering>
+            <layoutTypeAPP>PREPAID</layoutTypeAPP>
+            <isSellable>true</isSellable>
+            <shortDescription>FUNC3</shortDescription>
+            <version>0</version>
+            <familyOffer>Personas</familyOffer>
+            <typeOffer>Libre</typeOffer>
+            <lastUpdate>2011-10-01 00:00:00.0</lastUpdate>
+            <name>Employee</name>
+            <offerId>123</offerId>
+            <recurringCharge>
+               <amount>$productOffer.recurringCharge.amount</amount>
+               <unitOfMeasure>minutos</unitOfMeasure>
+               <currency>CLP</currency>
+               <type>Offer</type>
+            </recurringCharge>
+            <marketSegment>Consumer</marketSegment>
+            <status>P</status>
+         </productOffering>
+      </ns:productOfferingResponse>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:responseContent><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://0.0.0.0:8888/ocp/srv40074/productoffering/soap/v1.0"/></con:response><con:dispatchConfig/></con:mockOperation></con:mockService><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

@@ -7,10 +7,16 @@
     http://camel.apache.org/schema/spring/camel-spring.xsd">
     
     <bean id="integratorProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-
+		<property name="location" value="classpath:application.properties" />
 	</bean>
- 
-	<bean id="sqlFormatterProcessor" class="cl.wom.middleware.bean.SqlFormatterProcessor"></bean>
-	<bean id="sqlFormatterProcessorSOAP" class="cl.wom.middleware.bean.SqlFormatterProcessorSOAP"></bean>
+    
+    <bean id="mongoBean" class="com.mongodb.MongoClient">
+        <constructor-arg>
+            <ref bean="mongoClientURI" />
+        </constructor-arg>
+    </bean>
+    <bean id="mongoClientURI" class="com.mongodb.MongoClientURI">
+        <constructor-arg name="uri" value="mongodb://${camel.mongodb.user}:${camel.mongodb.pass}@${camel.mongodb.host}:${camel.mongodb.port}/${camel.mongodb.db}" />
+    </bean>
 	
 </beans>
