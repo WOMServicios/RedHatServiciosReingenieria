@@ -12,10 +12,10 @@
 		xmlns="http://camel.apache.org/schema/spring"
 		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
 		xmlns:ns="http://ws.wom.cl/wom/neg/billingaccountmanagement/applycarrierbillingrefund/v/1">
-		
+
 		<propertyPlaceholder id="placeholder"
 			location="classpath:sql.properties ,file:${env:APP_ENV}" />
-			
+
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
 			<handled>
@@ -35,24 +35,38 @@
 			<log message="${exception.message}"></log>
 			<to uri="velocity:velocity/ErrorHttp.vm" />
 		</onException>
-		
+
 
 		<!-- applycarrierbillingcharge -->
 		<route>
-			<from uri="jetty:http://{{carrier.refund.host}}:{{carrier.refund.port}}{{carrier.refund.url}}"/>
+			<from
+				uri="jetty:http://{{carrier.refund.host}}:{{carrier.refund.port}}{{carrier.refund.url}}" />
 			<log message="entra"></log>
-			
-			<to uri="velocity:velocity/applycarrierbillingrefund.vm" />
-			<to uri="cxf:http://10.120.147.126:80/esb/3GBSCS/Services/PSBookingRequestWrite?dataFormat=MESSAGE"></to>
-			
-			
-<!-- 			<setHeader headerName="occId"> -->
-<!-- 				<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/BookingRequestWriteReturn/occId/text()</xpath> -->
-<!-- 			</setHeader> -->
-			<log message="${body}"></log>
 
 
-<!-- 			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierRefund"></bean> -->
+			<!-- CONSUME SERVICIO -->
+			<!-- <to uri="velocity:velocity/applycarrierbillingrefund.vm" /> -->
+			<!-- <to uri="cxf:http://10.120.147.126:80/esb/3GBSCS/Services/PSBookingRequestWrite?dataFormat=MESSAGE"></to> -->
+			<!-- <log message="${body}"></log> -->
+
+
+
+			<!-- CAPTURA DATOS JSON -->
+			<setHeader headerName="userId">
+				<jsonpath>$.userId</jsonpath>
+			</setHeader>
+			
+			<setHeader headerName="payment">
+				<jsonpath>$.paymentProviderTransactionId</jsonpath>
+			</setHeader>
+
+			<log message="${headers.userId}"></log>
+			
+			<log message="${headers.payment}"></log>
+
+			<bean ref="sqlFormatterProcessor"
+				method="sqlParserCarrierRefund"></bean>
+
 		</route>
 	</camelContext>
 </beans>

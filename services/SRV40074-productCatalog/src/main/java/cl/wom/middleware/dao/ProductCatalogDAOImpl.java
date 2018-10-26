@@ -168,7 +168,7 @@ public class ProductCatalogDAOImpl {
 						+ "b.unit_free as quantity "
 						+ "from sysadm.rateplan a,"
 						+ "PROVI_BOLS.NEXTEL_CATALOGO_PRODUCTOS b "
-						+ "where  a.tmcode="+productOffering.getOfferId()+" and ROWNUM <= 10 "
+						+ "where  a.tmcode="+productOffering.getOfferId()+" "
 						+ " and REGEXP_LIKE(to_char(a.tmcode), '^(|'||REPLACE(REPLACE(UPPER(FAMILY_PLAN),'',UPPER"
 						+ "(to_char(a.tmcode))),';','|')||')$')";
 				ResultSet rsGetBundleOfferingA = conn.createStatement().executeQuery(queryGetBundleOfferingA);
@@ -256,7 +256,7 @@ public class ProductCatalogDAOImpl {
 						+ " PROVI_BOLS.NEXTEL_CATALOGO_PRODUCTOS x "
 						+ " where      a.tmcode="+productOffering.getOfferId()+"  and a.tmcode = b.tmcode  and b.sncode = c.sncode "
 						+ " and c.sscode = d.SVCODE  and d.srvcode = e.bscs_code   and e.SERVICE_ID = f.SERVICE_ID  and f.SUBSYSTEM_MARKET = 'PC2' "
-						+ " and f.register_command = x.ID_PCRF_PROD and ROWNUM <=10";
+						+ " and f.register_command = x.ID_PCRF_PROD ";
 				
 				ResultSet rsGetBundleOfferingB = conn.createStatement().executeQuery(queryGetBundleOfferingB);
 				while (rsGetBundleOfferingB.next()) {
@@ -342,7 +342,7 @@ public class ProductCatalogDAOImpl {
 						"    PROVI_BOLS.NEXTEL_CATALOGO_PLAN a," + 
 						"    sysadm.rateplan                 b where" + 
 						"    a.shdes_plan = '"+ShDesc+"'" + 
-						"and a.shdes_plan = b.shdes and ROWNUM <=10";				
+						"and a.shdes_plan = b.shdes ";				
 				ResultSet rsGetBundleOfferingC = conn.createStatement().executeQuery(queryGetBundleOfferingC);
 				while (rsGetBundleOfferingC.next()) {
 					BundleProductOffering bundleProductOffering = new BundleProductOffering();
@@ -427,7 +427,7 @@ public class ProductCatalogDAOImpl {
 							"    PROVI_BOLS.NEXTEL_CATALOGO_PLAN a," + 
 							"    sysadm.rateplan                 b where" + 
 							"    a.shdes_plan = '"+ShDesc+"'" + 
-							"and a.shdes_plan = b.shdes and ROWNUM <=10";
+							"and a.shdes_plan = b.shdes ";
 				          ResultSet rsGetBundleOfferingD = conn.createStatement().executeQuery(queryGetBundleOfferingD);
 				          while (rsGetBundleOfferingD.next()) {
 				            BundleProductOffering bundleProductOffering = new BundleProductOffering();
