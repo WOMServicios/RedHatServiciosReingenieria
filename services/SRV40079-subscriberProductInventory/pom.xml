@@ -5,12 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cl.wom.middleware.proxy</groupId>
-	<artifactId>SRV40074-productOffering</artifactId>
+	<artifactId>SRV40079-subscriberProductInventory</artifactId>
 	<version>1.0.0</version>
 	
 	
-	<name>SRV40075-getAccountInformation</name>
-	<description>Camel implementation for AccountInformation</description>
+	<name>SRV40079-subscriberProductInventory</name>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
