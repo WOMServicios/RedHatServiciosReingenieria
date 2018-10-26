@@ -4,173 +4,182 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>cl.wom</groupId>
+	<groupId>cl.wom.middleware.proxy</groupId>
 	<artifactId>SRV40079-subscriberProductInventory</artifactId>
-	<version>1.1.1</version>
+	<version>1.0.0</version>
+	
+	
+	<name>SRV40079-subscriberProductInventory</name>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- configure the version of Fuse want to use here -->
+		<fuse.version>7.0.1.fuse-000008-redhat-4</fuse.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- import the Fuse Spring Boot BOM first -->
+			<dependency>
+				<groupId>org.jboss.redhat-fuse</groupId>
+				<artifactId>fuse-springboot-bom</artifactId>
+				<version>${fuse.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 
 		<!-- Camel -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-undertow</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		
+		<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+    <version>20160810</version>
+</dependency>
 		
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-jetty</artifactId>
-			<version>2.18.1</version>
-		</dependency>
-				
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-spring-boot-starter</artifactId>
-			<version>2.18.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-stream-starter</artifactId>
-			<version>2.18.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core-starter</artifactId>
-			<version>2.18.1</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-velocity</artifactId>
-			<version>2.18.1</version>
-		</dependency>
-
-
-		<!-- test -->
-		<dependency>
-			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-test-spring</artifactId>
-			<version>2.18.1</version>
-			<scope>test</scope>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-core</artifactId>
-			<version>2.18.1</version>
+			<scope>provided</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring</artifactId>
-			<version>2.18.1</version>
+			<scope>provided</scope>
 		</dependency>
+		
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
-			<version>2.18.1</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-spring-boot</artifactId>
-			<version>2.18.1</version>
+			<scope>provided</scope>
 		</dependency>
-
-
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.apache.camel</groupId>
 			<artifactId>camel-restlet</artifactId>
-			<version>2.18.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		
-		<dependency>
-		  <groupId>org.apache.activemq</groupId>
-		  <artifactId>activemq-camel</artifactId>
-		  <version>5.11.0</version>
-		</dependency>
-
-		<dependency>
-		   <groupId>org.apache.activemq</groupId>
-		   <artifactId>activemq-pool</artifactId>
-		   <version>5.11.0</version>
-		</dependency>	
-		<dependency>
-		    <groupId>org.apache.camel</groupId>
-		    <artifactId>camel-jms</artifactId>
-		    <version>2.18.1</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.apache.camel</groupId>
-			<artifactId>camel-http</artifactId>
-			<version>2.18.1</version>
+			<artifactId>camel-jsonpath</artifactId>
+			<scope>provided</scope>
+		</dependency>
+			
+		<dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-stream</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+       <dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jetty</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		
 		<dependency>
-		    <groupId>org.apache.camel</groupId>
-		    <artifactId>camel-mongodb</artifactId>
-		    <version>2.18.1</version>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-jdbc</artifactId>
+			<scope>provided</scope>
+		</dependency>
+        
+        <dependency>
+			<groupId>ojdbc</groupId>
+			<artifactId>ojdbc</artifactId>
+			<version>14</version>
 		</dependency>
 		
-	</dependencies>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+			<scope>provided</scope>
+		</dependency>	
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-spring-boot-starter-jaxws</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http-jetty</artifactId>
+			<scope>provided</scope>
+		</dependency>
+</dependencies>
 
-	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
-
+<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>1.5.4.RELEASE</version>
-<!-- 				<executions> -->
-<!-- 					<execution> -->
-<!-- 						<goals> -->
-<!-- 							<goal>repackage</goal> -->
-<!-- 						</goals> -->
-<!-- 					</execution> -->
-<!-- 				</executions> -->
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.7</version>
 				<executions>
 					<execution>
-						<phase>process-resources</phase>
 						<goals>
-							<goal>resources</goal>
+							<goal>repackage</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-		<repository>
-			<id>spring-releases</id>
-			<url>https://repo.spring.io/libs-release</url>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>spring-releases</id>
-			<url>https://repo.spring.io/libs-release</url>
-		</pluginRepository>
-	</pluginRepositories>
 
 </project>

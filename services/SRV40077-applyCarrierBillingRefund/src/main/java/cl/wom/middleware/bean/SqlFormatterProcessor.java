@@ -12,7 +12,7 @@ public class SqlFormatterProcessor {
 	public String sqlParserCarrierRefund(Exchange ex) {
 		
 		String userId = (String) ex.getIn().getHeader("userId");
-		String payment = (String) ex.getIn().getHeader("paymentProviderTransactionId");
+		String payment = (String) ex.getIn().getHeader("paymet");
 		
 		System.out.println(userId);
 		System.out.println(payment);

@@ -1,0 +1,899 @@
+Setting client pid to 21844
+SERVER: changeConfig: settings -> {"xml":{"trace":{"server":"off"},"catalogs":[],"logs":{"client":true},"format":{"splitAttributes":false,"joinCDATALines":false,"joinContentLines":false,"joinCommentLines":false,"enabled":true},"fileAssociations":[],"completion":{"autoCloseTags":true}},"java":{"classPath":[],"externalDependencies":[],"testMethod":[],"testClass":[],"trace":{"server":"off"},"home":null,"jdt":{"ls":{"vmargs":"-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication"}},"errors":{"incompleteClasspath":{"severity":"warning"}},"configuration":{"updateBuildConfiguration":"interactive","maven":{"userSettings":null}},"import":{"gradle":{"enabled":true},"maven":{"enabled":true},"exclusions":["**/node_modules/**","**/.metadata/**","**/archetype-resources/**","**/META-INF/maven/**"]},"referencesCodeLens":{"enabled":false},"signatureHelp":{"enabled":false},"implementationsCodeLens":{"enabled":false},"format":{"enabled":true,"settings":{"url":null,"profile":null},"comments":{"enabled":true},"onType":{"enabled":true}},"saveActions":{"organizeImports":false},"contentProvider":{"preferred":null},"autobuild":{"enabled":true},"completion":{"enabled":true,"overwrite":true,"guessMethodArguments":false,"favoriteStaticMembers":["org.junit.Assert.*","org.junit.Assume.*","org.junit.jupiter.api.Assertions.*","org.junit.jupiter.api.Assumptions.*","org.junit.jupiter.api.DynamicContainer.*","org.junit.jupiter.api.DynamicTest.*","org.mockito.Mockito.*","org.mockito.ArgumentMatchers.*","org.mockito.Answers.*"],"importOrder":["java","javax","com","org"]},"progressReports":{"enabled":true},"debug":{"logLevel":"warn","settings":{"showHex":false,"showStaticVariables":true,"showQualifiedNames":false,"maxStringLength":0,"enableHotCodeReplace":true}},"test":{"report":{"position":"sideView"}}}}
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+  languageId = "xml"
+  version = 1
+  text = "<?xml version="1.0" encoding="UTF-8"?>\n<beans xmlns="http://www.springframework.org/schema/beans"\n	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n	xsi:schemaLocation="http://www.springframework.org/schema/beans \n	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd\n	http://camel.apache.org/schema/spring \n	http://camel.apache.org/schema/spring/camel-spring.xsd">\n\n	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"/>\n\n	<camelContext\n		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"\n		xmlns="http://camel.apache.org/schema/spring">\n		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: \n			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio \n			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el \n			archivo properties. Por defecto en opensfhit es develop -->\n		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->\n\n		<!-- <propertyPlaceholder id="placeholder"\n			location="classpath:application.properties,classpath:sql.properties" /> -->\n			<propertyPlaceholder id="placeholder"\n                location="file:${env:APP_ENV}, classpath:sql.properties"/>\n\n		<onException>\n			<exception>cl.wom.exception.services.ServiceError</exception>\n			<handled>\n				<constant>true</constant>\n			</handled>\n			<log message="ERROR: ${exception.message}"></log>\n			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="codigoError">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="messageError">\n				<simple>${exception.message}</simple>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<to uri="velocity:velocity/ErrorHttp.vm" />\n\n		</onException>\n\n		<!-- getcarrierbillingoffers -->\n		<route streamCache="true">\n			<from\n		\n				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />\n\n\n			<setHeader headerName="Accept">\n				<constant>application/json</constant>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<doTry>\n				<setHeader headerName="msisdn">\n					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>\n				</setHeader>\n				<doCatch>\n				<exception>org.apache.camel.ExpressionEvaluationException\n					</exception>\n					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n						<simple>422</simple>\n					</setHeader>\n					<to uri="velocity:velocity/422.vm" />\n					<setHeader headerName="Content-Type">\n						<constant>application/json</constant>\n					</setHeader>\n					<stop />\n				</doCatch>\n			</doTry>\n			<choice>\n				<when>\n					<simple>${headers.msisdn} == ""</simple>\n					<throwException\n						exceptionType="cl.wom.exception.services.ServiceError"\n						message="400" />\n				</when>\n\n				<when>\n					<simple>${headers.msisdn} != ""</simple>\n\n					<setBody>\n						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>\n					</setBody>\n					<setHeader headerName="interface">\n						<constant>getInfoSuscriptorCarrierBilling</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n\n					<setBody>\n						<simple>{{sql.getSuscripcionesCarrierExist}}</simple>\n					</setBody>\n\n					<setHeader headerName="interface">\n						<constant>getSuscripcionesCarrierExist</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n					<when>\n						<!-- <simple>${body} != 0</simple> cambiar -->\n						<simple>${body} != 0</simple>\n\n						<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />\n						<stop />\n					</when>\n					<when>\n						<!-- <simple>${body} == 0</simple> cambiar -->\n						<simple>${body} == 0</simple>\n						<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion \n							activa -busca el msisdn mas antiguo de la cuenta -->\n						<setHeader headerName="interface">\n							<constant>getCustomerContractMoreOld</constant>\n						</setHeader>\n						<setBody>\n							<simple>{{sql.getCustomerContractMoreOld}}</simple>\n						</setBody>\n						<to uri="bean:clienteProcessor" />\n\n						<when>\n							<simple>${body} == null</simple>\n							<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />\n							<stop />\n						</when>\n\n						<when>\n							<simple>${body} != null</simple>\n\n							<!-- valida la cuenta pagadora getCustomerPagador -->\n\n							<setBody>\n								<simple>{{sql.getCustomerPagador}}</simple>\n							</setBody>\n							<setHeader headerName="interface">\n								<constant>getCustomerPagador</constant>\n							</setHeader>\n							<to uri="bean:clienteProcessor" />\n							<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getCustomerPagador.vm" />\n								<stop />\n							</when>\n\n							<when>\n								<simple>${body} != null</simple>\n\n								<setBody>\n									<simple>{{sql.getofertacarrier}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>getofertacarrier</constant>\n								</setHeader>\n\n								<to uri="bean:clienteProcessor" />\n								\n								<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getOfertaCarrier.vm" />\n								<stop/>\n								</when>\n								\n								<when>\n								<simple>${body} != null</simple>\n						\n								<setBody>\n									<simple>{{sql.validacionpreinsert}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>validacionpreinsert</constant>\n								</setHeader>\n									<to uri="bean:clienteProcessor" />\n								<when>\n								<simple>${body} == 0</simple>\n								\n								<setBody>\n									<simple>{{sql.insertaregelegcarrierbilling}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>insertaregelegcarrierbilling</constant>\n								</setHeader>\n								<to uri="bean:clienteProcessor" />\n								</when>\n								<to uri="velocity:velocity/Success.vm" />\n							</when>\n							</when>\n						</when>\n\n\n					</when>\n\n\n				</when>\n\n			</choice>\n			<setHeader headerName="Content-Type">\n				<constant>application/json; charset=UTF-8</constant>\n			</setHeader>\n			<setHeader headerName="Encoding">\n				<constant>UTF-8</constant>\n			</setHeader>\n		</route>\n	</camelContext>\n</beans>"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+didOpen: TextDocumentItem [
+  uri = "git:/home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml.git?%7B%22path%22%3A%22%2Fhome%2Fkayajooks%2Fgit%2FRedHatServiciosReingenieria%2Fservices%2FSRV40062-getCarrierBillingOffers-1.0%2Fsrc%2Fmain%2Fresources%2Fspring-camel-context.xml%22%2C%22ref%22%3A%22%22%7D"
+  languageId = "xml"
+  version = 1
+  text = "<?xml version="1.0" encoding="UTF-8"?>\n<beans xmlns="http://www.springframework.org/schema/beans"\n	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n	xsi:schemaLocation="http://www.springframework.org/schema/beans \n	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd\n	http://camel.apache.org/schema/spring \n	http://camel.apache.org/schema/spring/camel-spring.xsd">\n\n	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"/>\n\n	<camelContext\n		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"\n		xmlns="http://camel.apache.org/schema/spring">\n		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: \n			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio \n			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el \n			archivo properties. Por defecto en opensfhit es develop -->\n		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->\n\n		<!-- <propertyPlaceholder id="placeholder"\n			location="classpath:application.properties,classpath:sql.properties" /> -->\n			<propertyPlaceholder id="placeholder"\n                location="file:${env:APP_ENV}, classpath:sql.properties"/>\n\n		<onException>\n			<exception>cl.wom.exception.services.ServiceError</exception>\n			<handled>\n				<constant>true</constant>\n			</handled>\n			<log message="ERROR: ${exception.message}"></log>\n			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="codigoError">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="messageError">\n				<simple>${exception.message}</simple>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<to uri="velocity:velocity/ErrorHttp.vm" />\n\n		</onException>\n\n		<!-- getcarrierbillingoffers -->\n		<route streamCache="true">\n			<from\n		\n				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />\n\n\n			<setHeader headerName="Accept">\n				<constant>application/json</constant>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<doTry>\n				<setHeader headerName="msisdn">\n					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>\n				</setHeader>\n				<doCatch>\n				<exception>org.apache.camel.ExpressionEvaluationException\n					</exception>\n					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n						<simple>422</simple>\n					</setHeader>\n					<to uri="velocity:velocity/422.vm" />\n					<setHeader headerName="Content-Type">\n						<constant>application/json</constant>\n					</setHeader>\n					<stop />\n				</doCatch>\n			</doTry>\n			<choice>\n				<when>\n					<simple>${headers.msisdn} == ""</simple>\n					<throwException\n						exceptionType="cl.wom.exception.services.ServiceError"\n						message="400" />\n				</when>\n\n				<when>\n					<simple>${headers.msisdn} != ""</simple>\n\n					<setBody>\n						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>\n					</setBody>\n					<setHeader headerName="interface">\n						<constant>getInfoSuscriptorCarrierBilling</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n\n					<setBody>\n						<simple>{{sql.getSuscripcionesCarrierExist}}</simple>\n					</setBody>\n\n					<setHeader headerName="interface">\n						<constant>getSuscripcionesCarrierExist</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n					<when>\n						<!-- <simple>${body} != 0</simple> cambiar -->\n						<simple>${body} != 0</simple>\n\n						<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />\n						<stop />\n					</when>\n					<when>\n						<!-- <simple>${body} == 0</simple> cambiar -->\n						<simple>${body} == 0</simple>\n						<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion \n							activa -busca el msisdn mas antiguo de la cuenta -->\n						<setHeader headerName="interface">\n							<constant>getCustomerContractMoreOld</constant>\n						</setHeader>\n						<setBody>\n							<simple>{{sql.getCustomerContractMoreOld}}</simple>\n						</setBody>\n						<to uri="bean:clienteProcessor" />\n\n						<when>\n							<simple>${body} == null</simple>\n							<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />\n							<stop />\n						</when>\n\n						<when>\n							<simple>${body} != null</simple>\n\n							<!-- valida la cuenta pagadora getCustomerPagador -->\n\n							<setBody>\n								<simple>{{sql.getCustomerPagador}}</simple>\n							</setBody>\n							<setHeader headerName="interface">\n								<constant>getCustomerPagador</constant>\n							</setHeader>\n							<to uri="bean:clienteProcessor" />\n							<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getCustomerPagador.vm" />\n								<stop />\n							</when>\n\n							<when>\n								<simple>${body} != null</simple>\n\n								<setBody>\n									<simple>{{sql.getofertacarrier}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>getofertacarrier</constant>\n								</setHeader>\n\n								<to uri="bean:clienteProcessor" />\n								\n								<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getOfertaCarrier.vm" />\n								<stop/>\n								</when>\n								\n								<when>\n								<simple>${body} != null</simple>\n						\n								<setBody>\n									<simple>{{sql.validacionpreinsert}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>validacionpreinsert</constant>\n								</setHeader>\n									<to uri="bean:clienteProcessor" />\n								<when>\n								<simple>${body} == 0</simple>\n								\n								<setBody>\n									<simple>{{sql.insertaregelegcarrierbilling}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>insertaregelegcarrierbilling</constant>\n								</setHeader>\n								<to uri="bean:clienteProcessor" />\n								</when>\n								<to uri="velocity:velocity/Success.vm" />\n							</when>\n							</when>\n						</when>\n\n\n					</when>\n\n\n				</when>\n\n			</choice>\n			<setHeader headerName="Content-Type">\n				<constant>application/json; charset=UTF-8</constant>\n			</setHeader>\n			<setHeader headerName="Encoding">\n				<constant>UTF-8</constant>\n			</setHeader>\n		</route>\n	</camelContext>\n</beans>"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+SERVER: changeWatchedFiles: size -> 1
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+didClose: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+didClose: TextDocumentIdentifier [
+  uri = "git:/home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml.git?%7B%22path%22%3A%22%2Fhome%2Fkayajooks%2Fgit%2FRedHatServiciosReingenieria%2Fservices%2FSRV40062-getCarrierBillingOffers-1.0%2Fsrc%2Fmain%2Fresources%2Fspring-camel-context.xml%22%2C%22ref%22%3A%22%22%7D"
+]
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+  languageId = "xml"
+  version = 1
+  text = "<?xml version="1.0" encoding="UTF-8"?>\n<beans xmlns="http://www.springframework.org/schema/beans"\n	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n	xsi:schemaLocation="http://www.springframework.org/schema/beans \n	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd\n	http://camel.apache.org/schema/spring \n	http://camel.apache.org/schema/spring/camel-spring.xsd">\n\n	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"/>\n\n	<camelContext\n		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"\n		xmlns="http://camel.apache.org/schema/spring">\n		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: \n			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio \n			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el \n			archivo properties. Por defecto en opensfhit es develop -->\n		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->\n\n		<!-- <propertyPlaceholder id="placeholder"\n			location="classpath:application.properties,classpath:sql.properties" /> -->\n			<propertyPlaceholder id="placeholder"\n                location="file:${env:APP_ENV}, classpath:sql.properties"/>\n\n		<onException>\n			<exception>cl.wom.exception.services.ServiceError</exception>\n			<handled>\n				<constant>true</constant>\n			</handled>\n			<log message="ERROR: ${exception.message}"></log>\n			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="codigoError">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="messageError">\n				<simple>${exception.message}</simple>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<to uri="velocity:velocity/ErrorHttp.vm" />\n\n		</onException>\n\n		<!-- getcarrierbillingoffers -->\n		<route streamCache="true">\n			<from\n		\n				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />\n\n\n			<setHeader headerName="Accept">\n				<constant>application/json</constant>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<doTry>\n				<setHeader headerName="msisdn">\n					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>\n				</setHeader>\n				<doCatch>\n				<exception>org.apache.camel.ExpressionEvaluationException\n					</exception>\n					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n						<simple>422</simple>\n					</setHeader>\n					<to uri="velocity:velocity/422.vm" />\n					<setHeader headerName="Content-Type">\n						<constant>application/json</constant>\n					</setHeader>\n					<stop />\n				</doCatch>\n			</doTry>\n			<choice>\n				<when>\n					<simple>${headers.msisdn} == ""</simple>\n					<throwException\n						exceptionType="cl.wom.exception.services.ServiceError"\n						message="400" />\n				</when>\n\n				<when>\n					<simple>${headers.msisdn} != ""</simple>\n\n					<setBody>\n						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>\n					</setBody>\n					<setHeader headerName="interface">\n						<constant>getInfoSuscriptorCarrierBilling</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n\n					<setBody>\n						<simple>{{sql.getSuscripcionesCarrierExist}}</simple>\n					</setBody>\n\n					<setHeader headerName="interface">\n						<constant>getSuscripcionesCarrierExist</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n					<when>\n						<!-- <simple>${body} != 0</simple> cambiar -->\n						<simple>${body} != 0</simple>\n\n						<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />\n						<stop />\n					</when>\n					<when>\n						<!-- <simple>${body} == 0</simple> cambiar -->\n						<simple>${body} == 0</simple>\n						<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion \n							activa -busca el msisdn mas antiguo de la cuenta -->\n						<setHeader headerName="interface">\n							<constant>getCustomerContractMoreOld</constant>\n						</setHeader>\n						<setBody>\n							<simple>{{sql.getCustomerContractMoreOld}}</simple>\n						</setBody>\n						<to uri="bean:clienteProcessor" />\n\n						<when>\n							<simple>${body} == null</simple>\n							<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />\n							<stop />\n						</when>\n\n						<when>\n							<simple>${body} != null</simple>\n\n							<!-- valida la cuenta pagadora getCustomerPagador -->\n\n							<setBody>\n								<simple>{{sql.getCustomerPagador}}</simple>\n							</setBody>\n							<setHeader headerName="interface">\n								<constant>getCustomerPagador</constant>\n							</setHeader>\n							<to uri="bean:clienteProcessor" />\n							<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getCustomerPagador.vm" />\n								<stop />\n							</when>\n\n							<when>\n								<simple>${body} != null</simple>\n\n								<setBody>\n									<simple>{{sql.getofertacarrier}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>getofertacarrier</constant>\n								</setHeader>\n\n								<to uri="bean:clienteProcessor" />\n								\n								<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getOfertaCarrier.vm" />\n								<stop/>\n								</when>\n								\n								<when>\n								<simple>${body} != null</simple>\n						\n								<setBody>\n									<simple>{{sql.validacionpreinsert}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>validacionpreinsert</constant>\n								</setHeader>\n									<to uri="bean:clienteProcessor" />\n								<when>\n								<simple>${body} == 0</simple>\n								\n								<setBody>\n									<simple>{{sql.insertaregelegcarrierbilling}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>insertaregelegcarrierbilling</constant>\n								</setHeader>\n								<to uri="bean:clienteProcessor" />\n								</when>\n								<to uri="velocity:velocity/Success.vm" />\n							</when>\n							</when>\n						</when>\n\n\n					</when>\n\n\n				</when>\n\n			</choice>\n			<setHeader headerName="Content-Type">\n				<constant>application/json; charset=UTF-8</constant>\n			</setHeader>\n			<setHeader headerName="Encoding">\n				<constant>UTF-8</constant>\n			</setHeader>\n		</route>\n	</camelContext>\n</beans>"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+didOpen: TextDocumentItem [
+  uri = "git:/home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml.git?%7B%22path%22%3A%22%2Fhome%2Fkayajooks%2Fgit%2FRedHatServiciosReingenieria%2Fservices%2FSRV40062-getCarrierBillingOffers-1.0%2Fsrc%2Fmain%2Fresources%2Fspring-camel-context.xml%22%2C%22ref%22%3A%22%22%7D"
+  languageId = "xml"
+  version = 1
+  text = "<?xml version="1.0" encoding="UTF-8"?>\n<beans xmlns="http://www.springframework.org/schema/beans"\n	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n	xsi:schemaLocation="http://www.springframework.org/schema/beans \n	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd\n	http://camel.apache.org/schema/spring \n	http://camel.apache.org/schema/spring/camel-spring.xsd">\n\n	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"/>\n\n	<camelContext\n		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"\n		xmlns="http://camel.apache.org/schema/spring">\n		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: \n			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio \n			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el \n			archivo properties. Por defecto en opensfhit es develop -->\n		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->\n\n		<!-- <propertyPlaceholder id="placeholder"\n			location="classpath:application.properties,classpath:sql.properties" /> -->\n			<propertyPlaceholder id="placeholder"\n                location="file:${env:APP_ENV}, classpath:sql.properties"/>\n\n		<onException>\n			<exception>cl.wom.exception.services.ServiceError</exception>\n			<handled>\n				<constant>true</constant>\n			</handled>\n			<log message="ERROR: ${exception.message}"></log>\n			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="codigoError">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="messageError">\n				<simple>${exception.message}</simple>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<to uri="velocity:velocity/ErrorHttp.vm" />\n\n		</onException>\n\n		<!-- getcarrierbillingoffers -->\n		<route streamCache="true">\n			<from\n		\n				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />\n\n\n			<setHeader headerName="Accept">\n				<constant>application/json</constant>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<doTry>\n				<setHeader headerName="msisdn">\n					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>\n				</setHeader>\n				<doCatch>\n				<exception>org.apache.camel.ExpressionEvaluationException\n					</exception>\n					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n						<simple>422</simple>\n					</setHeader>\n					<to uri="velocity:velocity/422.vm" />\n					<setHeader headerName="Content-Type">\n						<constant>application/json</constant>\n					</setHeader>\n					<stop />\n				</doCatch>\n			</doTry>\n			<choice>\n				<when>\n					<simple>${headers.msisdn} == ""</simple>\n					<throwException\n						exceptionType="cl.wom.exception.services.ServiceError"\n						message="400" />\n				</when>\n\n				<when>\n					<simple>${headers.msisdn} != ""</simple>\n\n					<setBody>\n						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>\n					</setBody>\n					<setHeader headerName="interface">\n						<constant>getInfoSuscriptorCarrierBilling</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n\n					<setBody>\n						<simple>{{sql.getSuscripcionesCarrierExist}}</simple>\n					</setBody>\n\n					<setHeader headerName="interface">\n						<constant>getSuscripcionesCarrierExist</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n					<when>\n						<!-- <simple>${body} != 0</simple> cambiar -->\n						<simple>${body} != 0</simple>\n\n						<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />\n						<stop />\n					</when>\n					<when>\n						<!-- <simple>${body} == 0</simple> cambiar -->\n						<simple>${body} == 0</simple>\n						<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion \n							activa -busca el msisdn mas antiguo de la cuenta -->\n						<setHeader headerName="interface">\n							<constant>getCustomerContractMoreOld</constant>\n						</setHeader>\n						<setBody>\n							<simple>{{sql.getCustomerContractMoreOld}}</simple>\n						</setBody>\n						<to uri="bean:clienteProcessor" />\n\n						<when>\n							<simple>${body} == null</simple>\n							<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />\n							<stop />\n						</when>\n\n						<when>\n							<simple>${body} != null</simple>\n\n							<!-- valida la cuenta pagadora getCustomerPagador -->\n\n							<setBody>\n								<simple>{{sql.getCustomerPagador}}</simple>\n							</setBody>\n							<setHeader headerName="interface">\n								<constant>getCustomerPagador</constant>\n							</setHeader>\n							<to uri="bean:clienteProcessor" />\n							<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getCustomerPagador.vm" />\n								<stop />\n							</when>\n\n							<when>\n								<simple>${body} != null</simple>\n\n								<setBody>\n									<simple>{{sql.getofertacarrier}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>getofertacarrier</constant>\n								</setHeader>\n\n								<to uri="bean:clienteProcessor" />\n								\n								<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getOfertaCarrier.vm" />\n								<stop/>\n								</when>\n								\n								<when>\n								<simple>${body} != null</simple>\n						\n								<setBody>\n									<simple>{{sql.validacionpreinsert}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>validacionpreinsert</constant>\n								</setHeader>\n									<to uri="bean:clienteProcessor" />\n								<when>\n								<simple>${body} == 0</simple>\n								\n								<setBody>\n									<simple>{{sql.insertaregelegcarrierbilling}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>insertaregelegcarrierbilling</constant>\n								</setHeader>\n								<to uri="bean:clienteProcessor" />\n								</when>\n								<to uri="velocity:velocity/Success.vm" />\n							</when>\n							</when>\n						</when>\n\n\n					</when>\n\n\n				</when>\n\n			</choice>\n			<setHeader headerName="Content-Type">\n				<constant>application/json; charset=UTF-8</constant>\n			</setHeader>\n			<setHeader headerName="Encoding">\n				<constant>UTF-8</constant>\n			</setHeader>\n		</route>\n	</camelContext>\n</beans>"
+]
+didClose: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+didClose: TextDocumentIdentifier [
+  uri = "git:/home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml.git?%7B%22path%22%3A%22%2Fhome%2Fkayajooks%2Fgit%2FRedHatServiciosReingenieria%2Fservices%2FSRV40062-getCarrierBillingOffers-1.0%2Fsrc%2Fmain%2Fresources%2Fspring-camel-context.xml%22%2C%22ref%22%3A%22%22%7D"
+]
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+  languageId = "xml"
+  version = 1
+  text = "<?xml version="1.0" encoding="UTF-8"?>\n<beans xmlns="http://www.springframework.org/schema/beans"\n	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n	xsi:schemaLocation="http://www.springframework.org/schema/beans \n	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd\n	http://camel.apache.org/schema/spring \n	http://camel.apache.org/schema/spring/camel-spring.xsd">\n\n	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"/>\n\n	<camelContext\n		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"\n		xmlns="http://camel.apache.org/schema/spring">\n		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: \n			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio \n			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el \n			archivo properties. Por defecto en opensfhit es develop -->\n		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->\n\n		<!-- <propertyPlaceholder id="placeholder"\n			location="classpath:application.properties,classpath:sql.properties" /> -->\n			<propertyPlaceholder id="placeholder"\n                location="file:${env:APP_ENV}, classpath:sql.properties"/>\n\n		<onException>\n			<exception>cl.wom.exception.services.ServiceError</exception>\n			<handled>\n				<constant>true</constant>\n			</handled>\n			<log message="ERROR: ${exception.message}"></log>\n			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="codigoError">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="messageError">\n				<simple>${exception.message}</simple>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<to uri="velocity:velocity/ErrorHttp.vm" />\n\n		</onException>\n\n		<!-- getcarrierbillingoffers -->\n		<route streamCache="true">\n			<from\n		\n				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />\n\n\n			<setHeader headerName="Accept">\n				<constant>application/json</constant>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<doTry>\n				<setHeader headerName="msisdn">\n					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>\n				</setHeader>\n				<doCatch>\n				<exception>org.apache.camel.ExpressionEvaluationException\n					</exception>\n					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n						<simple>422</simple>\n					</setHeader>\n					<to uri="velocity:velocity/422.vm" />\n					<setHeader headerName="Content-Type">\n						<constant>application/json</constant>\n					</setHeader>\n					<stop />\n				</doCatch>\n			</doTry>\n			<choice>\n				<when>\n					<simple>${headers.msisdn} == ""</simple>\n					<throwException\n						exceptionType="cl.wom.exception.services.ServiceError"\n						message="400" />\n				</when>\n\n				<when>\n					<simple>${headers.msisdn} != ""</simple>\n\n					<setBody>\n						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>\n					</setBody>\n					<setHeader headerName="interface">\n						<constant>getInfoSuscriptorCarrierBilling</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n\n					<setBody>\n						<simple>{{sql.getSuscripcionesCarrierExist}}</simple>\n					</setBody>\n\n					<setHeader headerName="interface">\n						<constant>getSuscripcionesCarrierExist</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n					<when>\n						<!-- <simple>${body} != 0</simple> cambiar -->\n						<simple>${body} != 0</simple>\n\n						<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />\n						<stop />\n					</when>\n					<when>\n						<!-- <simple>${body} == 0</simple> cambiar -->\n						<simple>${body} == 0</simple>\n						<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion \n							activa -busca el msisdn mas antiguo de la cuenta -->\n						<setHeader headerName="interface">\n							<constant>getCustomerContractMoreOld</constant>\n						</setHeader>\n						<setBody>\n							<simple>{{sql.getCustomerContractMoreOld}}</simple>\n						</setBody>\n						<to uri="bean:clienteProcessor" />\n\n						<when>\n							<simple>${body} == null</simple>\n							<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />\n							<stop />\n						</when>\n\n						<when>\n							<simple>${body} != null</simple>\n\n							<!-- valida la cuenta pagadora getCustomerPagador -->\n\n							<setBody>\n								<simple>{{sql.getCustomerPagador}}</simple>\n							</setBody>\n							<setHeader headerName="interface">\n								<constant>getCustomerPagador</constant>\n							</setHeader>\n							<to uri="bean:clienteProcessor" />\n							<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getCustomerPagador.vm" />\n								<stop />\n							</when>\n\n							<when>\n								<simple>${body} != null</simple>\n\n								<setBody>\n									<simple>{{sql.getofertacarrier}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>getofertacarrier</constant>\n								</setHeader>\n\n								<to uri="bean:clienteProcessor" />\n								\n								<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getOfertaCarrier.vm" />\n								<stop/>\n								</when>\n								\n								<when>\n								<simple>${body} != null</simple>\n						\n								<setBody>\n									<simple>{{sql.validacionpreinsert}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>validacionpreinsert</constant>\n								</setHeader>\n									<to uri="bean:clienteProcessor" />\n								<when>\n								<simple>${body} == 0</simple>\n								\n								<setBody>\n									<simple>{{sql.insertaregelegcarrierbilling}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>insertaregelegcarrierbilling</constant>\n								</setHeader>\n								<to uri="bean:clienteProcessor" />\n								</when>\n								<to uri="velocity:velocity/Success.vm" />\n							</when>\n							</when>\n						</when>\n\n\n					</when>\n\n\n				</when>\n\n			</choice>\n			<setHeader headerName="Content-Type">\n				<constant>application/json; charset=UTF-8</constant>\n			</setHeader>\n			<setHeader headerName="Encoding">\n				<constant>UTF-8</constant>\n			</setHeader>\n		</route>\n	</camelContext>\n</beans>"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+didClose: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+  languageId = "xml"
+  version = 1
+  text = "<?xml version="1.0" encoding="UTF-8"?>\n<beans xmlns="http://www.springframework.org/schema/beans"\n	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n	xsi:schemaLocation="http://www.springframework.org/schema/beans \n	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd\n	http://camel.apache.org/schema/spring \n	http://camel.apache.org/schema/spring/camel-spring.xsd">\n\n	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"/>\n\n	<camelContext\n		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"\n		xmlns="http://camel.apache.org/schema/spring">\n		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: \n			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio \n			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el \n			archivo properties. Por defecto en opensfhit es develop -->\n		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->\n\n		<!-- <propertyPlaceholder id="placeholder"\n			location="classpath:application.properties,classpath:sql.properties" /> -->\n			<propertyPlaceholder id="placeholder"\n                location="file:${env:APP_ENV}, classpath:sql.properties"/>\n\n		<onException>\n			<exception>cl.wom.exception.services.ServiceError</exception>\n			<handled>\n				<constant>true</constant>\n			</handled>\n			<log message="ERROR: ${exception.message}"></log>\n			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="codigoError">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="messageError">\n				<simple>${exception.message}</simple>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<to uri="velocity:velocity/ErrorHttp.vm" />\n\n		</onException>\n\n		<!-- getcarrierbillingoffers -->\n		<route streamCache="true">\n			<from\n		\n				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />\n\n\n			<setHeader headerName="Accept">\n				<constant>application/json</constant>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<doTry>\n				<setHeader headerName="msisdn">\n					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>\n				</setHeader>\n				<doCatch>\n				<exception>org.apache.camel.ExpressionEvaluationException\n					</exception>\n					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n						<simple>422</simple>\n					</setHeader>\n					<to uri="velocity:velocity/422.vm" />\n					<setHeader headerName="Content-Type">\n						<constant>application/json</constant>\n					</setHeader>\n					<stop />\n				</doCatch>\n			</doTry>\n			<choice>\n				<when>\n					<simple>${headers.msisdn} == ""</simple>\n					<throwException\n						exceptionType="cl.wom.exception.services.ServiceError"\n						message="400" />\n				</when>\n\n				<when>\n					<simple>${headers.msisdn} != ""</simple>\n\n					<setBody>\n						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>\n					</setBody>\n					<setHeader headerName="interface">\n						<constant>getInfoSuscriptorCarrierBilling</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n\n					<setBody>\n						<simple>{{sql.getSuscripcionesCarrierExist}}</simple>\n					</setBody>\n\n					<setHeader headerName="interface">\n						<constant>getSuscripcionesCarrierExist</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n					<when>\n						<!-- <simple>${body} != 0</simple> cambiar -->\n						<simple>${body} != 0</simple>\n\n						<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />\n						<stop />\n					</when>\n					<when>\n						<!-- <simple>${body} == 0</simple> cambiar -->\n						<simple>${body} == 0</simple>\n						<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion \n							activa -busca el msisdn mas antiguo de la cuenta -->\n						<setHeader headerName="interface">\n							<constant>getCustomerContractMoreOld</constant>\n						</setHeader>\n						<setBody>\n							<simple>{{sql.getCustomerContractMoreOld}}</simple>\n						</setBody>\n						<to uri="bean:clienteProcessor" />\n\n						<when>\n							<simple>${body} == null</simple>\n							<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />\n							<stop />\n						</when>\n\n						<when>\n							<simple>${body} != null</simple>\n\n							<!-- valida la cuenta pagadora getCustomerPagador -->\n\n							<setBody>\n								<simple>{{sql.getCustomerPagador}}</simple>\n							</setBody>\n							<setHeader headerName="interface">\n								<constant>getCustomerPagador</constant>\n							</setHeader>\n							<to uri="bean:clienteProcessor" />\n							<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getCustomerPagador.vm" />\n								<stop />\n							</when>\n\n							<when>\n								<simple>${body} != null</simple>\n\n								<setBody>\n									<simple>{{sql.getofertacarrier}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>getofertacarrier</constant>\n								</setHeader>\n\n								<to uri="bean:clienteProcessor" />\n								\n								<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getOfertaCarrier.vm" />\n								<stop/>\n								</when>\n								\n								<when>\n								<simple>${body} != null</simple>\n						\n								<setBody>\n									<simple>{{sql.validacionpreinsert}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>validacionpreinsert</constant>\n								</setHeader>\n									<to uri="bean:clienteProcessor" />\n								<when>\n								<simple>${body} == 0</simple>\n								\n								<setBody>\n									<simple>{{sql.insertaregelegcarrierbilling}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>insertaregelegcarrierbilling</constant>\n								</setHeader>\n								<to uri="bean:clienteProcessor" />\n								</when>\n								<to uri="velocity:velocity/Success.vm" />\n							</when>\n							</when>\n						</when>\n\n\n					</when>\n\n\n				</when>\n\n			</choice>\n			<setHeader headerName="Content-Type">\n				<constant>application/json; charset=UTF-8</constant>\n			</setHeader>\n			<setHeader headerName="Encoding">\n				<constant>UTF-8</constant>\n			</setHeader>\n		</route>\n	</camelContext>\n</beans>"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+definition: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+didClose: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/target/classes/spring-camel-context.xml"
+]
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+  languageId = "xml"
+  version = 1
+  text = "<?xml version="1.0" encoding="UTF-8"?>\n<classpath>\n	<classpathentry kind="src" output="target/classes" path="src/main/java">\n		<attributes>\n			<attribute name="optional" value="true"/>\n			<attribute name="maven.pomderived" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">\n		<attributes>\n			<attribute name="maven.pomderived" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">\n		<attributes>\n			<attribute name="maven.pomderived" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">\n		<attributes>\n			<attribute name="maven.pomderived" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry kind="src" output="target/test-classes" path="src/test/java">\n		<attributes>\n			<attribute name="optional" value="true"/>\n			<attribute name="maven.pomderived" value="true"/>\n			<attribute name="test" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry kind="src" path="target/generated-sources/annotations">\n		<attributes>\n			<attribute name="optional" value="true"/>\n			<attribute name="maven.pomderived" value="true"/>\n			<attribute name="ignore_optional_problems" value="true"/>\n			<attribute name="m2e-apt" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">\n		<attributes>\n			<attribute name="optional" value="true"/>\n			<attribute name="maven.pomderived" value="true"/>\n			<attribute name="ignore_optional_problems" value="true"/>\n			<attribute name="m2e-apt" value="true"/>\n			<attribute name="test" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry kind="output" path="target/classes"/>\n</classpath>\n"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+]
+didOpen: TextDocumentItem [
+  uri = "git:/home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath.git?%7B%22path%22%3A%22%2Fhome%2Fkayajooks%2Fgit%2FRedHatServiciosReingenieria%2Fservices%2FSRV40062-getCarrierBillingOffers-1.0%2F.classpath%22%2C%22ref%22%3A%22%22%7D"
+  languageId = "xml"
+  version = 1
+  text = "<?xml version="1.0" encoding="UTF-8"?>\n<classpath>\n	<classpathentry kind="src" output="target/classes" path="src/main/java">\n		<attributes>\n			<attribute name="optional" value="true"/>\n			<attribute name="maven.pomderived" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">\n		<attributes>\n			<attribute name="maven.pomderived" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">\n		<attributes>\n			<attribute name="maven.pomderived" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">\n		<attributes>\n			<attribute name="maven.pomderived" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry kind="src" output="target/test-classes" path="src/test/java">\n		<attributes>\n			<attribute name="optional" value="true"/>\n			<attribute name="maven.pomderived" value="true"/>\n			<attribute name="test" value="true"/>\n		</attributes>\n	</classpathentry>\n	<classpathentry kind="output" path="target/classes"/>\n</classpath>\n"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+]
+didClose: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath"
+]
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+  languageId = "java"
+  version = 1
+  text = "package cl.wom.util;\n\n\nimport java.sql.Connection;\n\nimport org.apache.camel.Exchange;\nimport org.apache.camel.Processor;\n\nimport cl.wom.beans.Cliente;\nimport cl.wom.database.ClienteDaoImpl;\nimport cl.wom.database.ConnectionFactory;\nimport cl.wom.database.ConnectionFactory.DataBaseSchema;\nimport cl.wom.exception.services.ServiceError;\n\npublic class ClienteProcessor implements Processor {\n	private ClienteDaoImpl clienteDaoImpl = new ClienteDaoImpl();\n\n	@Override\n	public void process(Exchange exchange) throws Exception {\n\n		String headerBD = (String) exchange.getIn().getHeader("interface");\n		System.err.println("base de datos " + headerBD);\n		String sql = (String) exchange.getIn().getBody();\n\n		Cliente cliente = null;\n		Connection co;\n\n		if (headerBD.equals("getInfoSuscriptorCarrierBilling")) {\n\n			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);\n\n			cliente = clienteDaoImpl.getInfoSuscriptorCarrierBilling(sql, co);\n			\n\n			if (cliente.getRut() == null) {\n				throw new ServiceError("416");\n			} else {\n				exchange.setProperty("customerIdProperty",cliente.getCustomerId());\n				exchange.setProperty("customerIdHighProperty",cliente.getCustomerIdHigh());\n				exchange.setProperty("numCelularProperty",cliente.getNumCelular());\n				exchange.setProperty("antiguedadProperty",cliente.getAntiguedad());\n				exchange.setProperty("contractIdProperty",cliente.getContractId());\n				exchange.setProperty("ratePlanProperty",cliente.getRateplan());\n				exchange.setProperty("cargoBasicoProperty",cliente.getCargoBasico());\n				exchange.getIn().setBody(cliente);\n			}\n\n			\n\n		}\n		\n		\n		if (headerBD.equals("getSuscripcionesCarrierExist")) {\n			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);\n\n			int contador = clienteDaoImpl.getSuscripcionesCarrierExist(sql, co);\n			System.err.println("getSuscripcionesCarrierExist "+contador);\n			\n			exchange.getIn().setBody(contador);\n\n		}\n		if(headerBD.equals("getCustomerContractMoreOld")) {\n			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);\n			\n\n			String dnNum = clienteDaoImpl.getCustomerContractMoreOld(sql, co);\n			exchange.getIn().setBody(dnNum);\n			\n		}\n		\n		if(headerBD.equals("getCustomerPagador")) {\n			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);\n			\n\n			String customerId = clienteDaoImpl.getCustomerPagador(sql, co);\n			\n\n			exchange.getIn().setBody(customerId);\n		\n			\n		}\n		\n		if (headerBD.equals("getofertacarrier")) {\n			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);\n\n			cliente = clienteDaoImpl.getofertacarrier(sql, co);\n			\n			\n\n			if (cliente != null) {\n				exchange.setProperty("idOfertaProperty",cliente.getIdOferta());\n				exchange.setProperty("desOfertaProperty",cliente.getDesOferta());\n				//variable creada para realizar prueba y no duplicar pk\n//				exchange.setProperty("fechaPruebaProperty",new java.util.Date().getSeconds());\n			\n				exchange.getIn().setBody(cliente);\n			} else {\n				exchange.getIn().setBody(cliente);\n			}\n\n		}\n		if (headerBD.equals("validacionpreinsert")) {\n			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);\n			Integer count=clienteDaoImpl.validacionPreInsert(sql, co);\n		\n			exchange.getIn().setBody(count);\n			exchange.getIn().setHeader("idOferta",exchange.getProperty("idOfertaProperty"));\n			exchange.getIn().setHeader("desOferta",exchange.getProperty("desOfertaProperty"));\n\n\n		}\n		if (headerBD.equals("insertaregelegcarrierbilling")) {\n			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);\n			clienteDaoImpl.insertaregelegcarrierbilling(sql, co);\n		\n			exchange.getIn().setHeader("idOferta",exchange.getProperty("idOfertaProperty"));\n			exchange.getIn().setHeader("desOferta",exchange.getProperty("desOfertaProperty"));\n\n\n		}\n\n\n	}\n\n}\n"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+didClose: TextDocumentIdentifier [
+  uri = "git:/home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/.classpath.git?%7B%22path%22%3A%22%2Fhome%2Fkayajooks%2Fgit%2FRedHatServiciosReingenieria%2Fservices%2FSRV40062-getCarrierBillingOffers-1.0%2F.classpath%22%2C%22ref%22%3A%22%22%7D"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+didClose: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/ClienteProcessor.java"
+]
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/PropertiesUtil.java"
+  languageId = "java"
+  version = 1
+  text = "package cl.wom.util;\n\n\nimport java.io.FileInputStream;\nimport java.io.FileNotFoundException;\nimport java.io.IOException;\nimport java.io.InputStream;\nimport java.util.Map;\nimport java.util.Map.Entry;\nimport java.util.Properties;\n\npublic class PropertiesUtil {\n	InputStream input = null;\n\n\n	public Properties getProperties (String fileName) {\n		String propertiesFile="";\n		Map<String, String> env = System.getenv();\n		for (Entry<String, String> envName : env.entrySet()) {\n			if(envName.getKey().equals(fileName)) {\n				propertiesFile = envName.getValue();\n			}\n		}\n		Properties prop = new Properties();\n		try {\n			String propFileName = propertiesFile;\n			input = new FileInputStream(propertiesFile);\n			\n			if (input != null) {\n				prop.load(input);\n			} else {\n				throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");\n			}\n		} catch (IOException e1) {\n			e1.printStackTrace();\n		}\n      	return prop;\n	}\n}"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/PropertiesUtil.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/PropertiesUtil.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/PropertiesUtil.java"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/PropertiesUtil.java"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/PropertiesUtil.java"
+]
+didClose: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/util/PropertiesUtil.java"
+]
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/middleware/proxy/SpringBootRestProxyApplication.java"
+  languageId = "java"
+  version = 1
+  text = "package cl.wom.middleware.proxy;\n\nimport org.springframework.boot.SpringApplication;\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\nimport org.springframework.context.annotation.ImportResource;\n\n@SpringBootApplication\n@ImportResource({"classpath:/spring-camel-context.xml"})\npublic class SpringBootRestProxyApplication {\n	public static void main(String[] args) {\n		SpringApplication.run(SpringBootRestProxyApplication.class, args);\n	}\n}"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/middleware/proxy/SpringBootRestProxyApplication.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/middleware/proxy/SpringBootRestProxyApplication.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+didClose: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/middleware/proxy/SpringBootRestProxyApplication.java"
+]
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ConnectionFactory.java"
+  languageId = "java"
+  version = 1
+  text = "package cl.wom.database;\n\nimport java.sql.Connection;\nimport java.sql.DriverManager;\nimport java.sql.SQLException;\nimport java.util.Properties;\n\nimport cl.wom.util.PropertiesUtil;\n\npublic class ConnectionFactory {\n\n	static Connection con = null;\n	static PropertiesUtil util = new PropertiesUtil();\n	static Properties prop = util.getProperties("APP_ENV");\n\n	static public enum DataBaseSchema {\n		BSCS, WAPPL;\n	}\n\n	public static Connection getConnection(DataBaseSchema shema) throws ClassNotFoundException, SQLException {\n		Class.forName("oracle.jdbc.driver.OracleDriver");\n		switch (shema) {\n		case BSCS:\n			return DriverManager.getConnection(\n					"jdbc:oracle:thin:@" + prop.getProperty("database.replica.host") + ":"\n							+ prop.getProperty("database.replica.port") + ":" + prop.getProperty("database.replica.name"),\n					prop.getProperty("database.replica.username"), prop.getProperty("database.replica.password"));\n		case WAPPL:\n			return DriverManager.getConnection(\n					"jdbc:oracle:thin:@" + prop.getProperty("database.wappl.host") + ":"\n							+ prop.getProperty("database.wappl.port") + ":" + prop.getProperty("database.wappl.name"),\n					prop.getProperty("database.wappl.username"), prop.getProperty("database.wappl.password"));\n		default:\n			return null;\n		}\n	}\n}\n"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ConnectionFactory.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ConnectionFactory.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ConnectionFactory.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+didClose: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ConnectionFactory.java"
+]
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ClienteDaoImpl.java"
+  languageId = "java"
+  version = 1
+  text = "package cl.wom.database;\n\n\nimport java.sql.Connection;\nimport java.sql.ResultSet;\nimport java.sql.SQLException;\nimport java.sql.Statement;\n\nimport cl.wom.beans.Cliente;\n\n\npublic class ClienteDaoImpl implements IClienteDao {\n\n\n	@Override\n	public Cliente getInfoSuscriptorCarrierBilling(String sql,Connection co) {\n\n	\n		Statement stm= null;\n		ResultSet rs=null;\n		\n		Cliente cliente=null;\n		\n		try {			\n			\n			stm=co.createStatement();\n			rs=stm.executeQuery(sql);\n		\n			 cliente=new Cliente();\n			 if(rs.next()) {\n				 \n					cliente.setRut(rs.getString("RUT"));\n					cliente.setCustomerId(rs.getString("CUSTOMER_ID"));\n					cliente.setCustomerIdHigh(rs.getString("CUSTOMER_ID_HIGH"));\n					cliente.setContractId(rs.getString("CONTRACT_ID"));\n					cliente.setNumCelular(rs.getString("NUM_CELULAR"));\n					cliente.setTipoContrato(rs.getString("TIPO_CONTRATO"));\n					cliente.setRateplan(rs.getString("RATEPLAN"));\n					cliente.setAntiguedad(rs.getString("ANTIGUEDAD"));\n					cliente.setCiclo(rs.getString("CICLO"));\n					cliente.setTipoContrato(rs.getString("ESTADO_CONTRATO"));\n					cliente.setFechaActivacion(rs.getDate("FECHA_ACTIVACION"));\n					cliente.setMercado(rs.getString("MERCADO"));\n					cliente.setCargoBasico(rs.getString("CARGO_BASICO"));\n			\n\n			 }\n			stm.close();\n			rs.close();\n			co.close();\n		} catch (SQLException e) {\n			System.out.println("Error: Clase ClienteDaoImple, método obtener");\n			e.printStackTrace();\n		}\n\n		return cliente;\n	}\n\n	@Override\n	public int getSuscripcionesCarrierExist(String sql, Connection co) {\n		Statement stm= null;\n		ResultSet rs=null;\n		\n		Cliente cliente=null;\n		\n		try {			\n			\n			stm=co.createStatement();\n			rs=stm.executeQuery(sql);\n		\n			 cliente=new Cliente();\n			 if(rs.next()) {\n				 \n				 cliente.setContador(rs.getString("CONTADOR"));\n					\n			\n\n			 }\n			stm.close();\n			rs.close();\n			co.close();\n		} catch (SQLException e) {\n			System.out.println("Error: Clase ClienteDaoImple, método obtener");\n			e.printStackTrace();\n		}\n\n		return Integer.parseInt(cliente.getContador());\n	}\n\n	@Override\n	public String getCustomerContractMoreOld(String sql, Connection co) {\n		Statement stm= null;\n		ResultSet rs=null;\n		\n		Cliente cliente=null;\n		\n		try {			\n			\n			stm=co.createStatement();\n			rs=stm.executeQuery(sql);\n		\n			 cliente=new Cliente();\n			 if(rs.next()) {\n				 \n				\n				 cliente.setDnNum(rs.getString("DN_NUM"));\n					\n			\n\n			 }\n			stm.close();\n			rs.close();\n			co.close();\n		} catch (SQLException e) {\n			System.out.println("Error: Clase ClienteDaoImple, método obtener");\n			e.printStackTrace();\n		}\n\n		return cliente.getDnNum();\n	}\n\n	@Override\n	public String getCustomerPagador(String sql, Connection co) {\n		Statement stm= null;\n		ResultSet rs=null;\n		\n		Cliente cliente=null;\n		\n		try {			\n			\n			stm=co.createStatement();\n			rs=stm.executeQuery(sql);\n		\n			 cliente=new Cliente();\n			 if(rs.next()) {\n				 \n				\n				 cliente.setCustomerId(rs.getString("CUSTOMER_ID"));\n					\n			\n\n			 }\n			stm.close();\n			rs.close();\n			co.close();\n		} catch (SQLException e) {\n			System.out.println("Error: Clase ClienteDaoImple, método obtener");\n			e.printStackTrace();\n		}\n\n		return cliente.getCustomerId();\n	}\n\n	@Override\n	public Cliente getofertacarrier(String sql, Connection co) {\n\n		Statement stm= null;\n		ResultSet rs=null;\n		\n		Cliente cliente=null;\n		\n		try {			\n			\n			stm=co.createStatement();\n			rs=stm.executeQuery(sql);\n		\n			 cliente=new Cliente();\n			 if(rs.next()) {\n				 \n				    cliente.setIdOferta(rs.getString("ID_OFERTA"));\n					cliente.setDesOferta(rs.getString("DES_OFERTA"));\n					cliente.setIdOccBscs(rs.getString("ID_OCC_BSCS"));\n					cliente.setMesesAntiguedad(rs.getString("MESES_ANTIGUEDAD"));\n					cliente.setValorMinimo(rs.getString("VALOR_MINIMO_PLAN"));\n					cliente.setFecDesde(rs.getDate("FEC_DESDE"));\n					cliente.setFecHasta(rs.getDate("FEC_HASTA"));\n					\n				\n			\n\n			 }\n			stm.close();\n			rs.close();\n			co.close();\n		} catch (SQLException e) {\n			System.out.println("Error: Clase ClienteDaoImple, método obtener");\n			e.printStackTrace();\n		}\n\n		return cliente;\n	}\n\n	@Override\n	public void insertaregelegcarrierbilling(String sql, Connection co) {\n		\n		System.err.println("query :" +sql);\n		Statement stm= null;\n		try {\n			stm=co.createStatement();\n			stm.executeUpdate(sql);\n			stm.close();\n		\n			co.close();\n		} catch (SQLException e) {\n			// TODO Auto-generated catch block\n			e.printStackTrace();\n		}\n			 \n			 \n		\n	\n\n}\n\n	@Override\n	public int validacionPreInsert(String sql, Connection co) {\n		Statement stm= null;\n		ResultSet rs=null;\n		int cont = 0;\n	\n		try {			\n			\n			stm=co.createStatement();\n			rs=stm.executeQuery(sql);\n		\n			\n			 if(rs.next()) {\n				 \n				cont=rs.getInt(1);\n	\n\n			 }\n			stm.close();\n			rs.close();\n			co.close();\n		} catch (SQLException e) {\n			System.out.println("Error: Clase ClienteDaoImple, método obtener");\n			e.printStackTrace();\n		}\n\n		return cont;\n	}\n}\n"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ClienteDaoImpl.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ClienteDaoImpl.java"
+]
+Cannot determine document symbols
+org.xml.sax.SAXParseException; lineNumber: 1; columnNumber: 1; El contenido no está permitido en el prólogo.
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:257)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:339)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:121)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.hasElementFromCamelNamespace(ParserXMLFileHelper.java:104)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getNodesOfType(ParserXMLFileHelper.java:154)
+	at com.github.cameltooling.lsp.internal.parser.ParserXMLFileHelper.getRouteNodes(ParserXMLFileHelper.java:146)
+	at com.github.cameltooling.lsp.internal.documentsymbol.DocumentSymbolProcessor.lambda$getDocumentSymbols$0(DocumentSymbolProcessor.java:51)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ClienteDaoImpl.java"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ClienteDaoImpl.java"
+]
+didClose: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/java/cl/wom/database/ClienteDaoImpl.java"
+]
+didOpen: TextDocumentItem [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+  languageId = "xml"
+  version = 1
+  text = "<?xml version="1.0" encoding="UTF-8"?>\n<beans xmlns="http://www.springframework.org/schema/beans"\n	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n	xsi:schemaLocation="http://www.springframework.org/schema/beans \n	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd\n	http://camel.apache.org/schema/spring \n	http://camel.apache.org/schema/spring/camel-spring.xsd">\n\n	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"/>\n\n	<camelContext\n		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"\n		xmlns="http://camel.apache.org/schema/spring">\n		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: \n			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio \n			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el \n			archivo properties. Por defecto en opensfhit es develop -->\n		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->\n\n		<!-- <propertyPlaceholder id="placeholder"\n			location="classpath:application.properties,classpath:sql.properties" /> -->\n			<propertyPlaceholder id="placeholder"\n                location="file:${env:APP_ENV}, classpath:sql.properties"/>\n\n		<onException>\n			<exception>cl.wom.exception.services.ServiceError</exception>\n			<handled>\n				<constant>true</constant>\n			</handled>\n			<log message="ERROR: ${exception.message}"></log>\n			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="codigoError">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="messageError">\n				<simple>${exception.message}</simple>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<to uri="velocity:velocity/ErrorHttp.vm" />\n\n		</onException>\n\n		<!-- getcarrierbillingoffers -->\n		<route streamCache="true">\n			<from\n		\n				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />\n\n\n			<setHeader headerName="Accept">\n				<constant>application/json</constant>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<doTry>\n				<setHeader headerName="msisdn">\n					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>\n				</setHeader>\n				<doCatch>\n				<exception>org.apache.camel.ExpressionEvaluationException\n					</exception>\n					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n						<simple>422</simple>\n					</setHeader>\n					<to uri="velocity:velocity/422.vm" />\n					<setHeader headerName="Content-Type">\n						<constant>application/json</constant>\n					</setHeader>\n					<stop />\n				</doCatch>\n			</doTry>\n			<choice>\n				<when>\n					<simple>${headers.msisdn} == ""</simple>\n					<throwException\n						exceptionType="cl.wom.exception.services.ServiceError"\n						message="400" />\n				</when>\n\n				<when>\n					<simple>${headers.msisdn} != ""</simple>\n\n					<setBody>\n						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>\n					</setBody>\n					<setHeader headerName="interface">\n						<constant>getInfoSuscriptorCarrierBilling</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n\n					<setBody>\n						<simple>{{sql.getSuscripcionesCarrierExist}}</simple>\n					</setBody>\n\n					<setHeader headerName="interface">\n						<constant>getSuscripcionesCarrierExist</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n					<when>\n						<!-- <simple>${body} != 0</simple> cambiar -->\n						<simple>${body} != 0</simple>\n\n						<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />\n						<stop />\n					</when>\n					<when>\n						<!-- <simple>${body} == 0</simple> cambiar -->\n						<simple>${body} == 0</simple>\n						<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion \n							activa -busca el msisdn mas antiguo de la cuenta -->\n						<setHeader headerName="interface">\n							<constant>getCustomerContractMoreOld</constant>\n						</setHeader>\n						<setBody>\n							<simple>{{sql.getCustomerContractMoreOld}}</simple>\n						</setBody>\n						<to uri="bean:clienteProcessor" />\n\n						<when>\n							<simple>${body} == null</simple>\n							<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />\n							<stop />\n						</when>\n\n						<when>\n							<simple>${body} != null</simple>\n\n							<!-- valida la cuenta pagadora getCustomerPagador -->\n\n							<setBody>\n								<simple>{{sql.getCustomerPagador}}</simple>\n							</setBody>\n							<setHeader headerName="interface">\n								<constant>getCustomerPagador</constant>\n							</setHeader>\n							<to uri="bean:clienteProcessor" />\n							<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getCustomerPagador.vm" />\n								<stop />\n							</when>\n\n							<when>\n								<simple>${body} != null</simple>\n\n								<setBody>\n									<simple>{{sql.getofertacarrier}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>getofertacarrier</constant>\n								</setHeader>\n\n								<to uri="bean:clienteProcessor" />\n								\n								<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getOfertaCarrier.vm" />\n								<stop/>\n								</when>\n								\n								<when>\n								<simple>${body} != null</simple>\n						\n								<setBody>\n									<simple>{{sql.validacionpreinsert}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>validacionpreinsert</constant>\n								</setHeader>\n									<to uri="bean:clienteProcessor" />\n								<when>\n								<simple>${body} == 0</simple>\n								\n								<setBody>\n									<simple>{{sql.insertaregelegcarrierbilling}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>insertaregelegcarrierbilling</constant>\n								</setHeader>\n								<to uri="bean:clienteProcessor" />\n								</when>\n								<to uri="velocity:velocity/Success.vm" />\n							</when>\n							</when>\n						</when>\n\n\n					</when>\n\n\n				</when>\n\n			</choice>\n			<setHeader headerName="Content-Type">\n				<constant>application/json; charset=UTF-8</constant>\n			</setHeader>\n			<setHeader headerName="Encoding">\n				<constant>UTF-8</constant>\n			</setHeader>\n		</route>\n	</camelContext>\n</beans>"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+documentSymbol: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+didOpen: TextDocumentItem [
+  uri = "git:/home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml.git?%7B%22path%22%3A%22%2Fhome%2Fkayajooks%2Fgit%2FRedHatServiciosReingenieria%2Fservices%2FSRV40062-getCarrierBillingOffers-1.0%2Fsrc%2Fmain%2Fresources%2Fspring-camel-context.xml%22%2C%22ref%22%3A%22%22%7D"
+  languageId = "xml"
+  version = 1
+  text = "<?xml version="1.0" encoding="UTF-8"?>\n<beans xmlns="http://www.springframework.org/schema/beans"\n	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n	xsi:schemaLocation="http://www.springframework.org/schema/beans \n	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd\n	http://camel.apache.org/schema/spring \n	http://camel.apache.org/schema/spring/camel-spring.xsd">\n\n	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"/>\n\n	<camelContext\n		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"\n		xmlns="http://camel.apache.org/schema/spring">\n		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: \n			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio \n			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el \n			archivo properties. Por defecto en opensfhit es develop -->\n		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->\n\n		<!-- <propertyPlaceholder id="placeholder"\n			location="classpath:application.properties,classpath:sql.properties" /> -->\n			<propertyPlaceholder id="placeholder"\n                location="file:${env:APP_ENV}, classpath:sql.properties"/>\n\n		<onException>\n			<exception>cl.wom.exception.services.ServiceError</exception>\n			<handled>\n				<constant>true</constant>\n			</handled>\n			<log message="ERROR: ${exception.message}"></log>\n			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="codigoError">\n				<simple>${exception.codigoError}</simple>\n			</setHeader>\n			<setHeader headerName="messageError">\n				<simple>${exception.message}</simple>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<to uri="velocity:velocity/ErrorHttp.vm" />\n\n		</onException>\n\n		<!-- getcarrierbillingoffers -->\n		<route streamCache="true">\n			<from\n		\n				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />\n\n\n			<setHeader headerName="Accept">\n				<constant>application/json</constant>\n			</setHeader>\n			<setHeader headerName="Content-Type">\n				<constant>application/json</constant>\n			</setHeader>\n			<doTry>\n				<setHeader headerName="msisdn">\n					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>\n				</setHeader>\n				<doCatch>\n				<exception>org.apache.camel.ExpressionEvaluationException\n					</exception>\n					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">\n						<simple>422</simple>\n					</setHeader>\n					<to uri="velocity:velocity/422.vm" />\n					<setHeader headerName="Content-Type">\n						<constant>application/json</constant>\n					</setHeader>\n					<stop />\n				</doCatch>\n			</doTry>\n			<choice>\n				<when>\n					<simple>${headers.msisdn} == ""</simple>\n					<throwException\n						exceptionType="cl.wom.exception.services.ServiceError"\n						message="400" />\n				</when>\n\n				<when>\n					<simple>${headers.msisdn} != ""</simple>\n\n					<setBody>\n						<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>\n					</setBody>\n					<setHeader headerName="interface">\n						<constant>getInfoSuscriptorCarrierBilling</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n\n					<setBody>\n						<simple>{{sql.getSuscripcionesCarrierExist}}</simple>\n					</setBody>\n\n					<setHeader headerName="interface">\n						<constant>getSuscripcionesCarrierExist</constant>\n					</setHeader>\n					<to uri="bean:clienteProcessor" />\n					<when>\n						<!-- <simple>${body} != 0</simple> cambiar -->\n						<simple>${body} != 0</simple>\n\n						<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />\n						<stop />\n					</when>\n					<when>\n						<!-- <simple>${body} == 0</simple> cambiar -->\n						<simple>${body} == 0</simple>\n						<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion \n							activa -busca el msisdn mas antiguo de la cuenta -->\n						<setHeader headerName="interface">\n							<constant>getCustomerContractMoreOld</constant>\n						</setHeader>\n						<setBody>\n							<simple>{{sql.getCustomerContractMoreOld}}</simple>\n						</setBody>\n						<to uri="bean:clienteProcessor" />\n\n						<when>\n							<simple>${body} == null</simple>\n							<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />\n							<stop />\n						</when>\n\n						<when>\n							<simple>${body} != null</simple>\n\n							<!-- valida la cuenta pagadora getCustomerPagador -->\n\n							<setBody>\n								<simple>{{sql.getCustomerPagador}}</simple>\n							</setBody>\n							<setHeader headerName="interface">\n								<constant>getCustomerPagador</constant>\n							</setHeader>\n							<to uri="bean:clienteProcessor" />\n							<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getCustomerPagador.vm" />\n								<stop />\n							</when>\n\n							<when>\n								<simple>${body} != null</simple>\n\n								<setBody>\n									<simple>{{sql.getofertacarrier}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>getofertacarrier</constant>\n								</setHeader>\n\n								<to uri="bean:clienteProcessor" />\n								\n								<when>\n								<simple>${body} == null</simple>\n								<to uri="velocity:velocity/getOfertaCarrier.vm" />\n								<stop/>\n								</when>\n								\n								<when>\n								<simple>${body} != null</simple>\n						\n								<setBody>\n									<simple>{{sql.validacionpreinsert}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>validacionpreinsert</constant>\n								</setHeader>\n									<to uri="bean:clienteProcessor" />\n								<when>\n								<simple>${body} == 0</simple>\n								\n								<setBody>\n									<simple>{{sql.insertaregelegcarrierbilling}}</simple>\n								</setBody>\n								<setHeader headerName="interface">\n									<constant>insertaregelegcarrierbilling</constant>\n								</setHeader>\n								<to uri="bean:clienteProcessor" />\n								</when>\n								<to uri="velocity:velocity/Success.vm" />\n							</when>\n							</when>\n						</when>\n\n\n					</when>\n\n\n				</when>\n\n			</choice>\n			<setHeader headerName="Content-Type">\n				<constant>application/json; charset=UTF-8</constant>\n			</setHeader>\n			<setHeader headerName="Encoding">\n				<constant>UTF-8</constant>\n			</setHeader>\n		</route>\n	</camelContext>\n</beans>"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+hover: TextDocumentIdentifier [
+  uri = "file:///home/kayajooks/git/RedHatServiciosReingenieria/services/SRV40062-getCarrierBillingOffers-1.0/src/main/resources/spring-camel-context.xml"
+]
+Shutting down language server
+Stopping language server

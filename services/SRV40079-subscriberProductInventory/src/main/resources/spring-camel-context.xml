@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-    http://camel.apache.org/schema/spring
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+    http://camel.apache.org/schema/spring 
     http://camel.apache.org/schema/spring/camel-spring.xsd">
-
+    
     <import resource="bean-definitions.xml"/>
-
-    <camelContext  xmlns="http://camel.apache.org/schema/spring">
-        <propertyPlaceholder id="placeholder" location="classpath:application.properties"/>
-
-        <route>
-            <from uri="jetty:{{camel.from.endpoint}}"/>
-
-			<to uri="velocity:velocity/request-mongo-productInventory.vm"></to>
-            <convertBodyTo type="java.lang.String"></convertBodyTo>
-            <log message="Request Mongo: ${body}" />    
-            <to uri="mongodb:mongoBean?database={{camel.mongodb.db}}&amp;collection=productInventory&amp;operation=findOneByQuery" />
-			<log message="Response Mongo: ${body}" />
-			
-			<!-- En caso de no encontrar datos en la respuesta -->
-            <choice>
-                <when>
-	                <simple>${body} == null</simple>
-	                <to uri="velocity:velocity/response-mongo-nodata.vm" ></to>
-                </when>
-            </choice>
-
-            <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
-        </route>
-
+    
+    <camelContext
+      xmlns="http://camel.apache.org/schema/spring"
+      xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+      xmlns:ns="http://ws.wom.cl/wom/neg/productcatalogmanagement/productoffering/v/1">      
+      
+		 <propertyPlaceholder id="placeholder" location="file:${env:APP_ENV}"/>
+	
+		<onException>
+			    <exception>java.lang.Exception</exception>
+			    <handled><simple>true</simple></handled>
+			    
+			    <setHeader headerName="errorcode"><constant>500</constant></setHeader>
+			    <setHeader headerName="errorMessage"><simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
+	
+			    <log message="error: ${exception.message}"></log>
+			    <to uri="velocity:velocity/rest-response-serviceexception.vm"/>
+			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+		</onException>
+			       
+		<route>
+				<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
+				
+				<bean ref="sqlFormatterProcessor" method="sqlParserProductOffering"></bean>
+				<to uri="velocity:velocity/rest-response-success.vm"></to>
+				<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+		</route>
+	
     </camelContext>
 </beans>

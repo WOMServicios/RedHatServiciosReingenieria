@@ -1,0 +1,71 @@
+{
+  "product": [
+    {
+      "userLastMod": "userLastMod",
+      "seqNo": "seqNo",
+      "requestId": "requestId",
+      "name": "name",
+      "transactionNo": "transactionNo",
+      "subscriberId": "subscriberId",
+      "offerId": "offerId",
+      "startOffer": "2000-01-23T04:56:07.000+00:00",
+      "atsPrepaidInd": "atsPrepaidInd",
+      "shortDescription": "shortDescription"
+    },
+    {
+      "userLastMod": "userLastMod",
+      "seqNo": "seqNo",
+      "requestId": "requestId",
+      "name": "name",
+      "transactionNo": "transactionNo",
+      "subscriberId": "subscriberId",
+      "offerId": "offerId",
+      "startOffer": "2000-01-23T04:56:07.000+00:00",
+      "atsPrepaidInd": "atsPrepaidInd",
+      "shortDescription": "shortDescription"
+    }
+  ],
+  "bundleProduct": [
+    {
+      "bundleTraffic": "bundleTraffic",
+      "bundleRecurrence": "bundleRecurrence",
+      "bundleId": "bundleId",
+      "bundleChannelActive": "bundleChannelActive",
+      "bundlePaymentMethod": "bundlePaymentMethod",
+      "subscriberId": "subscriberId",
+      "isOfferProduct": true,
+      "bundleTransactionCode": "bundleTransactionCode",
+      "isOptionProduct": true,
+      "bundleType": "bundleType",
+      "bundleTariff": 0.8008282,
+      "bundlePromotion": "bundlePromotion",
+      "bundleUnit": "bundleUnit",
+      "bundleName": "bundleName",
+      "bundleDesc": "bundleDesc",
+      "bundleQuantity": "bundleQuantity",
+      "bundleSaleDate": "2000-01-23T04:56:07.000+00:00",
+      "bundleExpirationDate": "2000-01-23T04:56:07.000+00:00"
+    },
+    {
+      "bundleTraffic": "bundleTraffic",
+      "bundleRecurrence": "bundleRecurrence",
+      "bundleId": "bundleId",
+      "bundleChannelActive": "bundleChannelActive",
+      "bundlePaymentMethod": "bundlePaymentMethod",
+      "subscriberId": "subscriberId",
+      "isOfferProduct": true,
+      "bundleTransactionCode": "bundleTransactionCode",
+      "isOptionProduct": true,
+      "bundleType": "bundleType",
+      "bundleTariff": 0.8008282,
+      "bundlePromotion": "bundlePromotion",
+      "bundleUnit": "bundleUnit",
+      "bundleName": "bundleName",
+      "bundleDesc": "bundleDesc",
+      "bundleQuantity": "bundleQuantity",
+      "bundleSaleDate": "2000-01-23T04:56:07.000+00:00",
+      "bundleExpirationDate": "2000-01-23T04:56:07.000+00:00"
+    }
+  ],
+  "subscriberId": "subscriberId"
+}
