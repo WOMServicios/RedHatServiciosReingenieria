@@ -48,12 +48,12 @@
 					<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 					</when>
 					<when>
-						<simple>${headers.offerId.toString().length()} > 5 </simple>
+						<simple>${headers.productOffering.offerId.toString().length()} > 5 </simple>
 						<to uri="velocity:velocity/soap-responselengthofferId.vm"></to>
 						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 					</when>
 					<when>
-						<simple>${headers.shortDesc.length()} > 5 </simple>
+						<simple>${headers.productOffering.shortDesc.length()} > 5 </simple>
 						<to uri="velocity:velocity/soap-responselengthshortDesc.vm"></to>
 						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 					</when>

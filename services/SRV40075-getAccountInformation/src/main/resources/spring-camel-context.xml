@@ -19,6 +19,11 @@
 			location="classpath:sql.properties ,file:${env:APP_ENV}" />
 			
 
+
+
+
+
+
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:http://{{rest.account.host}}:{{rest.account.port}}{{rest.account.url}}"/>
@@ -26,7 +31,22 @@
 			
 			<bean ref="sqlFormatterProcessor"
 				method="sqlParserAccountInformation"></bean>
-			
+
+			<onException>
+				<exception>java.lang.Exception</exception>
+				<handled>
+					<constant>true</constant>
+				</handled>
+				<log message="ERROR: ${exception.message}"></log>
+				<setHeader headerName="codigoError">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="messageError">
+					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
+
+				<to uri="velocity:velocity/soap-fault.vm" />
+			</onException>
+
 			<choice>
 				<when>
 					<simple>${body} == null</simple>
@@ -43,6 +63,9 @@
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:http://{{rest.subscriber.host}}:{{rest.subscriber.port}}{{rest.subscriber.url}}"/>
 			
+			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
+			
+			
 			<onException>
 				<exception>java.lang.Exception</exception>
 				<handled>
@@ -55,10 +78,8 @@
 				<setHeader headerName="messageError">
 					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
 
-				<to uri="velocity:velocity/response-sql-error.vm" />
+				<to uri="velocity:velocity/soap-fault.vm" />
 			</onException>		
-			
-			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
 			<to uri="direct:fullRequest" />
