@@ -183,7 +183,6 @@
             		<xsd:element name="bchRunDate" 	 type="xsd:string"></xsd:element>
             	</xsd:sequence>
             </xsd:complexType>
-<<<<<<< HEAD
             <xsd:element name="accountFault">
             	<xsd:complexType>
             		<xsd:sequence>
@@ -204,8 +203,6 @@
             		</xsd:sequence>
             	</xsd:complexType>
             </xsd:element>
-=======
->>>>>>> 80b6074407b16a49e02f1baa9ccef62858787301
 		</xsd:schema>
   </wsdl:types>
   <wsdl:message name="accountRequest">
