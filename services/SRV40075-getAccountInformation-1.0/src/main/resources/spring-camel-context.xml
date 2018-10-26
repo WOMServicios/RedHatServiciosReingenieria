@@ -17,12 +17,6 @@
 			/> -->
 		<propertyPlaceholder id="placeholder"
 			location="classpath:sql.properties ,file:${env:APP_ENV}" />
-			
-
-
-
-
-
 
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
@@ -50,7 +44,7 @@
 			<choice>
 				<when>
 					<simple>${body} == null</simple>
-					<to uri="velocity:velocity/response-sql-error.vm"></to>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="453" />
 				</when>
 			</choice>
 
@@ -65,7 +59,13 @@
 			
 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 			
-			
+			<choice>
+				<when>
+					<simple>${body} == null</simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="453" />
+				</when>
+			</choice>
+		
 			<onException>
 				<exception>java.lang.Exception</exception>
 				<handled>
@@ -76,10 +76,12 @@
 					<simple>${exception.codigoError}</simple>
 				</setHeader>
 				<setHeader headerName="messageError">
-					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
+					<simple>${exception.message}</simple></setHeader>
 
 				<to uri="velocity:velocity/soap-fault.vm" />
-			</onException>		
+			</onException>
+			
+
 
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
 			<to uri="direct:fullRequest" />

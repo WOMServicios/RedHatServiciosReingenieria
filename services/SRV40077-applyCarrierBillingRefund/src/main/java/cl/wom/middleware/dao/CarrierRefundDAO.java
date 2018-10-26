@@ -22,6 +22,10 @@ public class CarrierRefundDAO {
 		userId = userId == null ? "" : userId;
 		payment = payment == null ? "" : payment;
 		
+		System.out.println(userId);
+		System.out.println(payment);
+		
+		
 		FacturacionRefund facturacionRefund = null;
 		Connection conn = null;
 		Statement stmt;
@@ -31,8 +35,9 @@ public class CarrierRefundDAO {
 			conn = ConnectionFactory.getConnection(DataBaseSchema.WAPPL, prop);
 			stmt = conn.createStatement();
 			
-			String queryRefund = "SELECT COUNT(USER_ID) AS CONTADOR FROM CARRIERBILLING.RECEP_PAGOS_CARRIER_BILING_TO WHERE USER_ID = " + userId + " AND PAYMENT_PROVIDER_TRANSACTION = " + payment + " AND RESPONSE_PAY ='OK' AND ACTION ='AUTORIZED'";
+			String queryRefund = "SELECT COUNT(USER_ID) AS CONTADOR FROM CARRIERBILLING.RECEP_PAGOS_CARRIER_BILING_TO WHERE USER_ID = ' " + userId + " ' AND PAYMENT_PROVIDER_TRANSACTION = ' " + payment + " ' AND RESPONSE_PAY ='OK' AND ACTION ='AUTORIZED'";
 			ResultSet rsCont = stmt.executeQuery(queryRefund);
+			
 			
 			if(rsCont.next()) {
 				

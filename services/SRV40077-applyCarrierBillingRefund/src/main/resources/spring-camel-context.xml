@@ -52,17 +52,17 @@
 
 
 			<!-- CAPTURA DATOS JSON -->
-			<setHeader headerName="userId">
-				<jsonpath>$.userId</jsonpath>
-			</setHeader>
+<!-- 			<setHeader headerName="userId"> -->
+<!-- 				<jsonpath>$.userId</jsonpath> -->
+<!-- 			</setHeader> -->
 			
-			<setHeader headerName="payment">
-				<jsonpath>$.paymentProviderTransactionId</jsonpath>
-			</setHeader>
+<!-- 			<setHeader headerName="paymentProviderTransactionId"> -->
+<!-- 				<jsonpath>$.paymentProviderTransactionId</jsonpath> -->
+<!-- 			</setHeader> -->
 
-			<log message="${headers.userId}"></log>
+<!-- 			<log message="${headers.userId}"></log> -->
 			
-			<log message="${headers.payment}"></log>
+			<log message="${headers.paymentProviderTransactionId}"></log>
 
 			<bean ref="sqlFormatterProcessor"
 				method="sqlParserCarrierRefund"></bean>
