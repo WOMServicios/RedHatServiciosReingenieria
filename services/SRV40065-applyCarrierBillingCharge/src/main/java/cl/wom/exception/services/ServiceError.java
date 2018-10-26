@@ -32,18 +32,24 @@ public class ServiceError extends Exception{
 	   
 	   switch(codigoError){
 	   case 400:
-		   mensaje="Error, 400";
+		   mensaje="bad request";
 		   break;
-	   case 500:
-		   mensaje="Error, 500";
+	   case 453:
+		   mensaje="No Data Found";
 		   break;
-	   case 503:
-		   mensaje="Error, 503";
+	   case 454:
+		   mensaje="Unprocessable Entity";
 		   break;
-	   default:
-		   mensaje="Error, sin codigo de error reconocido";
+	   case 452:
+		   mensaje="Excceds the maximun length";
 		   break;
+	   case 455:
+		   mensaje="DataBase Error SQL Exception";
+		   break;		   
 	   }
+	   		   
+	   
+	   
 	   return mensaje;
    }
    
