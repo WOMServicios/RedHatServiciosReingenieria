@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.camel.Exchange;
 import org.json.JSONArray;
 
-import cl.wom.middleware.dao.ProductCatalogDAOImpl;
+import cl.wom.middleware.dao.ProductInventoryDAO;
 import cl.wom.middleware.vo.ProductOffering;
 
 public class SqlFormatterProcessor {
@@ -16,7 +16,7 @@ public class SqlFormatterProcessor {
 		String offerId   = (String)ex.getIn().getHeader("productOffering.offerId");
 		String shortDes  = (String)ex.getIn().getHeader("productOffering.shortDesc");
 		
- 		ProductCatalogDAOImpl productCatalogDAOImpl = new ProductCatalogDAOImpl();
+ 		ProductInventoryDAO productCatalogDAOImpl = new ProductInventoryDAO();
  		List<ProductOffering>  listProductOffering =  productCatalogDAOImpl.getProductCatalog(offerId, shortDes);
 
  		

@@ -6,7 +6,7 @@ import java.util.List;
 
 import cl.wom.middleware.vo.ProductOffering;
 
-public class ProductCatalogDAOImpl {
+public class ProductInventoryDAO {
 	
 	public List<ProductOffering> getProductCatalog(String OfferID, String shortDesc) throws SQLException  {
  		System.out.println("entrando a la clase");
