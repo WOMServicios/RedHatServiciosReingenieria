@@ -5,11 +5,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>cl.wom.middleware.proxy</groupId>
-	<artifactId>SRV400XX-getCarrierBillingCancel</artifactId>
-	<version>1.0.0</version>
+	<artifactId>SRV40083-cancelCarrierBillingCharge</artifactId>
+	<version>1.0</version>
 	
 	
-	<name>SRV400XX-getCarrierBillingCancel</name>
+	<name>SRV40083-cancelCarrierBillingCharge</name>
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
