@@ -1,0 +1,4 @@
+{
+    "responseCode": "${headers.codigoError}",
+    "responseMessage": "${headers.messageError}"
+}
