@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://camel.apache.org/schema/spring 
+	http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor" />
+
+	<camelContext
+		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
+		xmlns="http://camel.apache.org/schema/spring">
+		<!--Cargamos el archivo de propiedades correspondiente al ambiente NOTA: 
+			esto debe ser descomentado para subir a openshift, se debe eliminar el espacio 
+			entre "$ {" y comentar o eliminar la linea donde se encuentra en duro el 
+			archivo properties. Por defecto en opensfhit es develop -->
+		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
+
+		<!-- <propertyPlaceholder id="placeholder" location="classpath:application.properties,classpath:sql.properties" 
+			/> -->
+		<propertyPlaceholder id="placeholder"
+			location="file:${env:APP_ENV}, classpath:sql.properties" />
+
+		<onException>
+			<exception>cl.wom.exception.services.ServiceError</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+
+
+			<setHeader headerName="codigoError">
+				<simple>${exception.codigoError}</simple>
+			</setHeader>
+			<setHeader headerName="messageError">
+				<simple>${exception.message}</simple>
+			</setHeader>
+			<setHeader headerName="Content-Type">
+				<constant>application/json</constant>
+			</setHeader>
+			<to uri="velocity:velocity/ErrorHttp.vm" />
+
+		</onException>
+
+		<!-- getcarrierbillingoffers -->
+		<route streamCache="true">
+			<from
+
+				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />
+
+
+			<doTry>
+				<setHeader headerName="requestId">
+					<jsonpath>$.requestId</jsonpath>
+				</setHeader>
+				<setHeader headerName="bangoTransactionId">
+					<jsonpath>$.bangoTransactionId</jsonpath>
+				</setHeader>
+				<setHeader headerName="merchantTransactionId">
+					<jsonpath>$.merchantTransactionId</jsonpath>
+				</setHeader>
+				<setHeader headerName="userId">
+					<jsonpath>$.userId</jsonpath>
+				</setHeader>
+				<setHeader headerName="amount">
+					<jsonpath>$.amount</jsonpath>
+				</setHeader>
+				<setHeader headerName="currency">
+					<jsonpath>$.currency</jsonpath>
+				</setHeader>
+				<setHeader headerName="merchantAccountKey">
+					<jsonpath>$.merchantAccountKey</jsonpath>
+				</setHeader>
+				<setHeader headerName="productKey">
+					<jsonpath>$.productKey</jsonpath>
+				</setHeader>
+				<setHeader headerName="productDescription">
+					<jsonpath>$.productDescription</jsonpath>
+				</setHeader>
+				<setHeader headerName="productCategory">
+					<jsonpath>$.productCategory</jsonpath>
+				</setHeader>
+				<setHeader headerName="supportContact">
+					<jsonpath>$.supportContact</jsonpath>
+				</setHeader>
+				<doCatch>
+					<exception>org.apache.camel.ExpressionEvaluationException
+					</exception>
+					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+						<simple>422</simple>
+					</setHeader>
+					<to uri="velocity:velocity/422.vm" />
+					<setHeader headerName="Content-Type">
+						<constant>application/json</constant>
+					</setHeader>
+					<stop />
+				</doCatch>
+			</doTry>
+			<choice>
+				<when>
+					<simple>
+					${headers.requestId} == "" || 
+					${headers.bangoTransactionId} == "" || 
+					${headers.merchantTransactionId} == "" || 
+					${headers.userId} == "" || 
+					${headers.amount} == "" || 
+					${headers.currency} == "" || 
+					${headers.merchantAccountKey} == "" || 
+					${headers.productKey} == "" || 
+					${headers.productDescription} == "" || 
+					${headers.productCategory} == "" || 
+					${headers.supportContact} == "" 
+					</simple>
+					<throwException
+						exceptionType="cl.wom.exception.services.ServiceError"
+						message="400" />
+				</when>
+				<otherwise>
+
+					<setBody>
+						<simple>{{sql.getDatosFacturacion}}</simple>
+					</setBody>
+
+					<setHeader headerName="interface">
+						<constant>getDatosFacturacion</constant>
+					</setHeader>
+
+					<to uri="bean:clienteProcessor" />
+
+					<setBody>
+						<simple>{{sql.paymentTransactionId}}</simple>
+					</setBody>
+
+					<setHeader headerName="interface">
+						<constant>paymentTransactionId</constant>
+					</setHeader>
+
+					<to uri="bean:clienteProcessor" />
+					<to uri="velocity:velocity/Success.vm" />
+
+
+				</otherwise>
+
+			</choice>
+			<setHeader headerName="Content-Type">
+				<constant>application/json; charset=UTF-8</constant>
+			</setHeader>
+			<setHeader headerName="Encoding">
+				<constant>UTF-8</constant>
+			</setHeader>
+		</route>
+	</camelContext>
+</beans>

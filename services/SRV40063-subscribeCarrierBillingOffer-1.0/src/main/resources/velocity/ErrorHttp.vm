@@ -1,4 +1,4 @@
 {
-    "responseCode": "${headers.codigoError}",
-    "responseMessage": "credential: ${headers.credential} ${headers.messageError}"
+    "responseCode":"${headers.codigoError}",
+    "responseMessage":"credential: ${headers.credential} ${headers.messageError}"
 }

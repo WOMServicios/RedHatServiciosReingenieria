@@ -1,0 +1,9 @@
+{
+  "responseCode": "OK",
+  "responseMessage": "Success",
+  "paymentProviderTransactionId":"${body}",
+  "extensionData":{
+    "key": "value" 
+  }
+  
+}

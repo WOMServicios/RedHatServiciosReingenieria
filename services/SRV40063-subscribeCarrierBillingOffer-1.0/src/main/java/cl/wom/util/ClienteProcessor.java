@@ -19,6 +19,11 @@ public class ClienteProcessor implements Processor {
 
 	@Override
 	public void process(Exchange exchange) throws Exception {
+		
+		if(exchange.getIn().getHeader("credential").toString().length()>=30) {
+			throw new ServiceError("452");
+		}
+
 
 		String sql = (String) exchange.getIn().getBody();
 		 clienteDaoImpl = new ClienteDaoImpl();	
@@ -27,7 +32,7 @@ public class ClienteProcessor implements Processor {
 
 		if(cliente.getMsisdn() == null) {
 	
-			 throw new ServiceError("416");
+			 throw new ServiceError("453");
 			
 		}
 		

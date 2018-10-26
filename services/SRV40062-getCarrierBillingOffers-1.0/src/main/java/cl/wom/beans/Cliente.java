@@ -18,7 +18,7 @@ public class Cliente implements Serializable {
 	private String rateplan;
 	private String antiguedad;
 	private String ciclo;
-	private char estadoContrato;
+	private String estadoContrato;
 	private Date fechaActivacion;
 	private String mercado;
 	private String cargoBasico;
@@ -108,11 +108,13 @@ public class Cliente implements Serializable {
 		this.ciclo = ciclo;
 	}
 
-	public char getEstadoContrato() {
+	
+
+	public String getEstadoContrato() {
 		return estadoContrato;
 	}
 
-	public void setEstadoContrato(char estadoContrato) {
+	public void setEstadoContrato(String estadoContrato) {
 		this.estadoContrato = estadoContrato;
 	}
 

@@ -21,21 +21,26 @@ public class ClienteProcessor implements Processor {
 	public void process(Exchange exchange) throws Exception {
 
 		String headerBD = (String) exchange.getIn().getHeader("interface");
-
-		System.err.println("base de datos " + headerBD);
+			
+	
 		String sql = (String) exchange.getIn().getBody();
-
+	
 		Cliente cliente = null;
 		Connection co;
 
 		if (headerBD.equals("getrespuestaeligibilidad")) {
+			
+			
+			if(exchange.getProperty("userIdProperty").toString().length()>=50) {
+				throw new ServiceError("452");
+			}
 
 	
 			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 
 			int count = clienteDaoImpl.getrespuestaeligibilidad(sql, co);
 			
-			System.err.println("count de gestrespuestaeligibilidad es: "+count);
+		
 			exchange.setProperty("countProperty", count);
 			exchange.getIn().setBody(count);
 		}
@@ -52,9 +57,10 @@ public class ClienteProcessor implements Processor {
 			co = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 
 			cliente = clienteDaoImpl.getInfoSuscriptorCarrierBilling(sql, co);
+			
 
 			if (cliente.getRut() == null) {
-				throw new ServiceError("416");
+				throw new ServiceError("453");
 			} else {
 				exchange.setProperty("customerIdProperty",cliente.getCustomerId());
 				exchange.setProperty("customerIdHighProperty",cliente.getCustomerIdHigh());
@@ -75,7 +81,7 @@ public class ClienteProcessor implements Processor {
 			
 
 			int contador = clienteDaoImpl.getSuscripcionesCarrierExist(sql, co);
-			System.err.println("getSuscripcionesCarrierExist "+contador);
+		
 			
 			exchange.getIn().setBody(contador);
 
@@ -95,7 +101,6 @@ public class ClienteProcessor implements Processor {
 		
 
 				exchange.getIn().setBody(customerId);
-			
 
 		}
 

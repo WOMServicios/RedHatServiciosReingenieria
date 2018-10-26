@@ -34,8 +34,11 @@ public class ServiceError extends Exception{
 	   case 400:
 		   mensaje="bad request";
 		   break;
-	   case 416:
+	   case 453:
 		   mensaje="No Data Found";
+		   break;
+	   case 452 :
+		   mensaje= "userId exceeds the maximum length";
 		   break;
 	 
 	   }

@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import cl.wom.beans.Cliente;
 
@@ -152,10 +154,11 @@ public class ClienteDaoImpl implements IClienteDao {
 	}
 
 	@Override
-	public Cliente getofertacarrier(String sql, Connection co) {
+	public List<Cliente> getofertacarrier(String sql, Connection co) {
 
 		Statement stm= null;
 		ResultSet rs=null;
+		List<Cliente> clientes=new ArrayList<>();
 		
 		Cliente cliente=null;
 		
@@ -164,21 +167,17 @@ public class ClienteDaoImpl implements IClienteDao {
 			stm=co.createStatement();
 			rs=stm.executeQuery(sql);
 		
-			 cliente=new Cliente();
-			 if(rs.next()) {
-				 
+			
+			  while (rs.next()) {
+				  cliente=new Cliente();
 				    cliente.setIdOferta(rs.getString("ID_OFERTA"));
 					cliente.setDesOferta(rs.getString("DES_OFERTA"));
-					cliente.setIdOccBscs(rs.getString("ID_OCC_BSCS"));
-					cliente.setMesesAntiguedad(rs.getString("MESES_ANTIGUEDAD"));
-					cliente.setValorMinimo(rs.getString("VALOR_MINIMO_PLAN"));
-					cliente.setFecDesde(rs.getDate("FEC_DESDE"));
-					cliente.setFecHasta(rs.getDate("FEC_HASTA"));
-					
-				
+
+					 clientes.add(cliente);
 			
 
 			 }
+			
 			stm.close();
 			rs.close();
 			co.close();
@@ -186,8 +185,9 @@ public class ClienteDaoImpl implements IClienteDao {
 			System.out.println("Error: Clase ClienteDaoImple, método obtener");
 			e.printStackTrace();
 		}
+	
 
-		return cliente;
+		return clientes;
 	}
 
 	@Override
@@ -205,10 +205,6 @@ public class ClienteDaoImpl implements IClienteDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			 
-			 
-		
-	
 
 }
 
@@ -217,7 +213,7 @@ public class ClienteDaoImpl implements IClienteDao {
 		Statement stm= null;
 		ResultSet rs=null;
 		int cont = 0;
-	
+	System.err.println(sql +"a probar");
 		try {			
 			
 			stm=co.createStatement();

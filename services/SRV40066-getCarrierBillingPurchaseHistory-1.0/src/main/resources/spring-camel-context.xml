@@ -19,14 +19,12 @@
 			archivo properties. Por defecto en opensfhit es develop -->
 	
 	 <propertyPlaceholder id="placeholder" location="classpath:sql.properties ,file:${env:APP_ENV}"/>
-
-
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
 			<handled>
 				<constant>true</constant>
 			</handled>
-			<log message="ERROR: ${exception.message}"></log>
+		
 			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
 				<simple>${exception.codigoError}</simple>
 			</setHeader>
@@ -60,18 +58,15 @@
 					<jsonpath>$.fecha_hasta</jsonpath>
 				</setHeader>
 				<doCatch>
-					<exception>org.apache.camel.ExpressionEvaluationException
+				<exception>org.apache.camel.ExpressionEvaluationException
 					</exception>
-				
 					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-						<simple>422</simple>
+						<simple>454</simple>
 					</setHeader>
-						
-					<to uri="velocity:velocity/422.vm" />
+					<to uri="velocity:velocity/454.vm" />
 					<setHeader headerName="Content-Type">
 						<constant>application/json</constant>
 					</setHeader>
-						
 					<stop />
 				</doCatch>
 			</doTry>

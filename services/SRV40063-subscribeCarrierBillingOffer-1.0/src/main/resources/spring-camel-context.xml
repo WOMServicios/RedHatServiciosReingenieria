@@ -39,25 +39,25 @@
 			<from 
 				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />
 			<doTry>
-				<setHeader headerName="credential" id="_setHeader3">
+				<setHeader headerName="credential" >
 					<jsonpath>$.credential</jsonpath>
 				</setHeader>
-				<setHeader headerName="credentialType" id="_setHeader4">
+				<setHeader headerName="credentialType" >
 					<jsonpath>$.credentialType</jsonpath>
 				</setHeader>
-				<setHeader headerName="channel" id="_setHeader5">
+				<setHeader headerName="channel" >
 					<jsonpath>$.channel</jsonpath>
 				</setHeader>
-				<setHeader headerName="networkKey" id="_setHeader6">
+				<setHeader headerName="networkKey" >
 					<jsonpath>$.networkKey</jsonpath>
 				</setHeader>
 				<doCatch>
-				<exception>org.apache.camel.ExpressionEvaluationException
+			<exception>org.apache.camel.ExpressionEvaluationException
 					</exception>
 					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-						<simple>422</simple>
+						<simple>454</simple>
 					</setHeader>
-					<to uri="velocity:velocity/422.vm" />
+					<to uri="velocity:velocity/454.vm" />
 					<setHeader headerName="Content-Type">
 						<constant>application/json</constant>
 					</setHeader>

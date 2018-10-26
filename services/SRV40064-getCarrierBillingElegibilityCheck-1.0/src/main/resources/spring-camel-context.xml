@@ -12,20 +12,14 @@
 		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
 		xmlns="http://camel.apache.org/schema/spring">
 
-		<!-- <propertyPlaceholder id="placeholder"
-			location="classpath:application.properties,classpath:sql.properties" />
- -->
-<propertyPlaceholder id="placeholder"
-                location="classpath:${env:APP_ENV}.properties, classpath:${env:SQL_ENV}.properties"/>
+	 <propertyPlaceholder id="placeholder"
+                location="file:${env:APP_ENV}, classpath:sql.properties"/>
+
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
 			<handled>
 				<constant>true</constant>
 			</handled>
-			<log message="ERROR: ${exception.message}"></log>
-			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-				<simple>${exception.codigoError}</simple>
-			</setHeader>
 			<setHeader headerName="codigoError">
 				<simple>${exception.codigoError}</simple>
 			</setHeader>
@@ -65,9 +59,9 @@
 				<exception>org.apache.camel.ExpressionEvaluationException
 					</exception>
 					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-						<simple>422</simple>
+						<simple>454</simple>
 					</setHeader>
-					<to uri="velocity:velocity/422.vm" />
+					<to uri="velocity:velocity/454.vm" />
 					<setHeader headerName="Content-Type">
 						<constant>application/json</constant>
 					</setHeader>
@@ -79,8 +73,7 @@
 				<when>
 					<simple>
 						${headers.requestId} == "" ||
-						${property.userIdProperty} ==
-						"" ||
+						${property.userIdProperty} == "" ||
 						${headers.userIdType} == "" ||
 						${headers.key1} == "" ||
 						${headers.key2} == ""
@@ -105,12 +98,13 @@
 
 					<to uri="bean:clienteProcessor" />
 
-
+			
 
 					<!-- devuelve diferente de cero sale con exito -->
 					<when>
 						<!-- <simple>${property.countProperty} != 0</simple> cambiar -->
 						<simple>${property.countProperty} != 0</simple>
+						
 						<setBody>
 							<simple>{{sql.paymentTransactionId}}</simple>
 						</setBody>
@@ -129,7 +123,7 @@
 					<when>
 						<!-- <simple>${property.countProperty} == 0</simple> cambiar -->
 						<simple>${property.countProperty} == 0</simple>
-						<log message="${property.userIdProperty} vamos" />
+						
 						<setBody>
 							<simple>{{sql.getInfoSuscriptorCarrierBilling}}</simple>
 						</setBody>
@@ -151,14 +145,15 @@
 						<to uri="bean:clienteProcessor" />
 						<when>
 							<!-- <simple>${body} != 0</simple> cambiar -->
-							<simple>${body} == 0 </simple>
-							<log message="llegue a exit"></log>
+							<simple>${body} != 0 </simple>
+							
+							
 							<to uri="velocity:velocity/getSuscripcionesCarrierExist.vm" />
 							<stop></stop>
 						</when>
 						<when>
 							<!-- <simple>${body.contador} == 0</simple> cambiar -->
-							<simple>${body} != 0</simple>
+							<simple>${body} == 0</simple>
 							<!-- getCustomerContractMoreOld para ver si el cliente posee una subcripion 
 								activa -busca el msisdn mas antiguo de la cuenta -->
 

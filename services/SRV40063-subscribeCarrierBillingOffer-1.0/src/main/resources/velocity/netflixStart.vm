@@ -1,7 +1,6 @@
-
 {
-	"credential": "${body.codId}",
-	"credentialType": "SUBNO",
-	"channel": "CHL_WOM",
-	"networkKey": "mobile"
+	"credential":"${body.codId}",
+	"credentialType":"SUBNO",
+	"channel":"CHL_WOM",
+	"networkKey":"mobile"
 }
