@@ -55,13 +55,8 @@
 				<setHeader headerName="messageError">
 					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
 
-<<<<<<< HEAD
 				<to uri="velocity:velocity/response-sql-error.vm" />
 			</onException>		
-=======
-				<to uri="velocity:velocity/soap-fault.vm" />
-			</onException>			
->>>>>>> 80b6074407b16a49e02f1baa9ccef62858787301
 			
 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 
