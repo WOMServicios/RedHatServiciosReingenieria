@@ -13,30 +13,26 @@ public class ServiceError extends Exception{
 		getMessage();
 	}
 	
-	   @Override
-	   public String getMessage(){
-		   String mensaje="";
-		   
-		   switch(codigoError){
-		   case 400:
+	 @Override
+	    public String getMessage(){
+	         
+	        String mensaje="";
+	         
+	        switch(codigoError){
+	 	   case 400:
 			   mensaje="bad request";
-			   break;
-		   case 453:
+			   break;		  
+		   case 416:
 			   mensaje="No Data Found";
 			   break;
-		   case 454:
-			   mensaje="Unprocessable Entity";
-			   break;
-		   case 452:
-			   mensaje="Excceds the maximun length";
-			   break;
-		   case 455:
-			   mensaje="DataBase Error SQL Exception";
-			   break;		   
-		   }
-		   
-		   return mensaje;
-	   }
+	       default:
+	           mensaje="Error, sin codigo de error reconocido";
+	           break;
+	        }
+	         
+	        return mensaje;
+	         
+	    }
 	 
 	 public int getCodigoError() {
 		 return codigoError;

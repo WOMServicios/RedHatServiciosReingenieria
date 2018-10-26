@@ -6,5 +6,9 @@
     http://camel.apache.org/schema/spring 
     http://camel.apache.org/schema/spring/camel-spring.xsd">
     
+    <bean id="integratorProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+
+	</bean>
+ 
 	<bean id="sqlFormatterProcessor" class="cl.wom.middleware.bean.SqlFormatterProcessor"></bean>
 </beans>

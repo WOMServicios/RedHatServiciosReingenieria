@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="ee54e5d9-3aff-4249-a738-2f2322063c5a" activeEnvironment="Default" name="REST Project 2" resourceRoot="" soapui-version="5.4.0" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:RestService" id="d673efa6-32ad-49d6-88f2-582b097524e6" wadlVersion="http://wadl.dev.java.net/2009/02" name="http://0.0.0.0:8889" type="rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache/><con:endpoints><con:endpoint>http://0.0.0.0:8889</con:endpoint></con:endpoints><con:resource name="Cancel" path="/transaction/cancel" id="3fedb847-018f-4c90-a659-5ebc3d2b9f07"><con:settings/><con:parameters/><con:method name="Cancel 1" id="de4a795b-a0ff-41cb-8228-a6e80baf24ab" method="POST"><con:settings/><con:parameters/><con:request name="Request 1" id="43227fbb-a8f8-49a4-9085-11a0a8a6af72" mediaType="application/json" postQueryString="false"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:endpoint>http://0.0.0.0:8889</con:endpoint><con:request>{
+   "requestId": "b4af1d2e-cc24-4a53-b4d7-8e54817635b7",
+   "bangoTransactionId": "2005897110",
+   "merchantTransactionId": "MerchantIdentifier-c0ab9651e9f47809799176b8d325415",
+   "paymentProviderTransactionId": "PP-5a5164105ca648ceaef2bf152850304",
+   "userId": "bd2bcf08a2894bb7bf67d0631903bf30",
+   "amount": 9.99,
+   "currency": "CLP",
+}</con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/></con:soapui-project>

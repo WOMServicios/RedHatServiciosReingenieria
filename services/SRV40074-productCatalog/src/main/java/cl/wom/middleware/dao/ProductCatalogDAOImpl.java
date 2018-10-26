@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import cl.wom.middleware.proxy.ServiceError;
 import cl.wom.middleware.util.ConnectionFactory;
 import cl.wom.middleware.util.ConnectionFactory.DataBaseSchema;
 import cl.wom.middleware.util.PropertiesUtil;
-import cl.wom.middleware.util.Util;
 import cl.wom.middleware.vo.BundleProductOffering;
 import cl.wom.middleware.vo.Channel;
-import cl.wom.middleware.vo.DeviceOffering;
 import cl.wom.middleware.vo.OneTime;
 import cl.wom.middleware.vo.ProductOffering;
 import cl.wom.middleware.vo.RecurringCharge;
@@ -22,7 +21,7 @@ import cl.wom.middleware.vo.RecurringCharge;
 public class ProductCatalogDAOImpl {
 
 	
-	public List<ProductOffering> getProductCatalog(String OfferID, String shortDesc) throws SQLException  {
+	public List<ProductOffering> getProductCatalog(String OfferID, String shortDesc) throws ServiceError  {
  		System.out.println("entrando a la clase");
 
  		 PropertiesUtil util = new PropertiesUtil();
@@ -60,7 +59,7 @@ public class ProductCatalogDAOImpl {
 		try {
 			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 			stmt = conn.createStatement();
-			System.out.println("vmos bien");
+
 			String getOfferIdQuery ="select a.tmcode from sysadm.rateplan a, PROVI_BOLS.NEXTEL_CATALOGO_PLAN c where "+whereCondition +" and a.SHDES = c.SHDES_PLAN";
 			System.out.println("getOfferIdQuery: "+getOfferIdQuery);
 			String offerId = "";
@@ -488,13 +487,17 @@ public class ProductCatalogDAOImpl {
 	 		System.out.println("exito en la clase");
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw e;
+			throw new ServiceError("455");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new ServiceError("455");
 		}finally {
 			if (conn!=null)
 				try {
 					conn.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
+					throw new ServiceError("455");
 				}
 		}
 		return listProductOffering;
