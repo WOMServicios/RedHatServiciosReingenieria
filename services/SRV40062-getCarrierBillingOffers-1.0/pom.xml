@@ -139,6 +139,11 @@
 			<artifactId>ojdbc</artifactId>
 			<version>14</version>
 		</dependency>
+		<dependency>
+    <groupId>org.json</groupId>
+    <artifactId>json</artifactId>
+      <scope>provided</scope>
+</dependency>
 	</dependencies>
 <build>
 		<plugins>

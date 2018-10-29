@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+    http://camel.apache.org/schema/spring 
+    http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<import resource="bean-definitions.xml" />
+
+	<camelContext
+		xmlns="http://camel.apache.org/schema/spring"
+		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+		xmlns:ns="http://ws.wom.cl/wom/neg/billingaccountmanagement/applycarrierbillingrefund/v/1">
+
+		<propertyPlaceholder id="placeholder"
+			location="classpath:sql.properties ,file:${env:APP_ENV}" />
+
+		<onException>
+			<exception>cl.wom.exception.services.ServiceError</exception>
+			<handled>
+				<constant>true</constant>
+			</handled>
+			<log loggingLevel="ERROR" message="errorr" />
+			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+				<simple>${exception.codigoError}</simple>
+			</setHeader>
+			<setHeader headerName="codigoError">
+				<simple>${exception.codigoError}</simple>
+			</setHeader>
+			<log message="${exception.codigoError}"></log>
+			<setHeader headerName="messageError">
+				<simple>Bad Request - ${exception.message}</simple>
+			</setHeader>
+			<log message="${exception.message}"></log>
+			<to uri="velocity:velocity/ErrorHttp.vm" />
+		</onException>
+
+
+		<!-- applycarrierbillingcharge -->
+		<route>
+			<from
+				uri="jetty:http://{{carrier.refund.host}}:{{carrier.refund.port}}{{carrier.refund.url}}" />
+			<log message="entra"></log>
+
+
+			<!-- CONSUME SERVICIO -->
+			<!-- <to uri="velocity:velocity/applycarrierbillingrefund.vm" /> -->
+			<!-- <to uri="cxf:http://10.120.147.126:80/esb/3GBSCS/Services/PSBookingRequestWrite?dataFormat=MESSAGE"></to> -->
+			<!-- <log message="${body}"></log> -->
+
+
+
+			<!-- CAPTURA DATOS JSON -->
+<!-- 			<setHeader headerName="userId"> -->
+<!-- 				<jsonpath>$.userId</jsonpath> -->
+<!-- 			</setHeader> -->
+			
+<!-- 			<setHeader headerName="paymentProviderTransactionId"> -->
+<!-- 				<jsonpath>$.paymentProviderTransactionId</jsonpath> -->
+<!-- 			</setHeader> -->
+
+<!-- 			<log message="${headers.userId}"></log> -->
+			
+			<log message="${headers.paymentProviderTransactionId}"></log>
+
+			<bean ref="sqlFormatterProcessor"
+				method="sqlParserCarrierRefund"></bean>
+
+		</route>
+	</camelContext>
+</beans>

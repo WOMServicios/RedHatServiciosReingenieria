@@ -11,6 +11,7 @@ public class SqlFormatterProcessor {
 		
 		String subscriberId   = (String)ex.getIn().getHeader("subscriberId");
 		
+
  		SubscriberDAOImpl subscriberDAOImpl = new SubscriberDAOImpl();
  		Subscriber subscriber = subscriberDAOImpl.getSubscriber(subscriberId);
 

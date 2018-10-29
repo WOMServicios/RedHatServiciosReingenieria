@@ -28,16 +28,18 @@ public class ServiceError extends Exception{
     */
    @Override
    public String getMessage(){
-	   String mensaje="";
+   String mensaje="";
 	   
 	   switch(codigoError){
 	   case 400:
 		   mensaje="bad request";
 		   break;
-	   case 416:
+	   case 453:
 		   mensaje="No Data Found";
 		   break;
-	 
+	   case 452 :
+		   mensaje= "msisdn exceeds the maximum length";
+		   break;
 	   }
 	   return mensaje;
    }

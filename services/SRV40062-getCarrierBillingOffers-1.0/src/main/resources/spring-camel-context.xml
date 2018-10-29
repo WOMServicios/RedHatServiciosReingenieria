@@ -27,10 +27,7 @@
 			<handled>
 				<constant>true</constant>
 			</handled>
-			<log message="ERROR: ${exception.message}"></log>
-			<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-				<simple>${exception.codigoError}</simple>
-			</setHeader>
+			
 			<setHeader headerName="codigoError">
 				<simple>${exception.codigoError}</simple>
 			</setHeader>
@@ -62,12 +59,12 @@
 					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>
 				</setHeader>
 				<doCatch>
-				<exception>org.apache.camel.ExpressionEvaluationException
+			<exception>org.apache.camel.ExpressionEvaluationException
 					</exception>
 					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-						<simple>422</simple>
+						<simple>454</simple>
 					</setHeader>
-					<to uri="velocity:velocity/422.vm" />
+					<to uri="velocity:velocity/454.vm" />
 					<setHeader headerName="Content-Type">
 						<constant>application/json</constant>
 					</setHeader>
@@ -158,34 +155,12 @@
 								<to uri="bean:clienteProcessor" />
 								
 								<when>
-								<simple>${body} == null</simple>
+								<simple>${body} == 0 </simple>
 								<to uri="velocity:velocity/getOfertaCarrier.vm" />
 								<stop/>
 								</when>
-								
-								<when>
-								<simple>${body} != null</simple>
 						
-								<setBody>
-									<simple>{{sql.validacionpreinsert}}</simple>
-								</setBody>
-								<setHeader headerName="interface">
-									<constant>validacionpreinsert</constant>
-								</setHeader>
-									<to uri="bean:clienteProcessor" />
-								<when>
-								<simple>${body} == 0</simple>
-								
-								<setBody>
-									<simple>{{sql.insertaregelegcarrierbilling}}</simple>
-								</setBody>
-								<setHeader headerName="interface">
-									<constant>insertaregelegcarrierbilling</constant>
-								</setHeader>
-								<to uri="bean:clienteProcessor" />
-								</when>
-								<to uri="velocity:velocity/Success.vm" />
-							</when>
+									<to uri="velocity:velocity/Success.vm" />
 							</when>
 						</when>
 

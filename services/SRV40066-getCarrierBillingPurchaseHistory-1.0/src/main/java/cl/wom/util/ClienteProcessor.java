@@ -15,6 +15,11 @@ public class ClienteProcessor implements Processor {
 	private  Cliente cliente;
 	public void process(Exchange exchange) throws Exception {
 		
+		
+		if(exchange.getIn().getHeader("msisdn").toString().length()>=30) {
+			throw new ServiceError("452");
+		}
+
 	
 		String sql = (String) exchange.getIn().getBody();
 	
@@ -23,9 +28,9 @@ public class ClienteProcessor implements Processor {
 		cliente=clienteDaoImpl.getCliente(sql,con);
 
 		if(cliente.getNumCelular() == null) {
-			System.out.println("numeroo "+exchange.getIn().getHeader("msisdn"));
+		
 	
-			 throw new ServiceError("416");
+			 throw new ServiceError("453");
 			
 		}
 		

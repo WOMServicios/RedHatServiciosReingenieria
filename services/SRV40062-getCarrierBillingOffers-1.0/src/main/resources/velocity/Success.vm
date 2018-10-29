@@ -1,6 +1,6 @@
 {
-”responseCode”: “OK”,
-”responseMessage”: “Success”,
-”idoferta”: “${headers.idOferta}”,
-“desoferta”: “${headers.desOferta}”
+	"responseCode": "OK",
+	"responseMessage": "Success",
+	"oferta_disponible":${body}
+
 }
