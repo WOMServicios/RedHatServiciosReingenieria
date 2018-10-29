@@ -2,8 +2,7 @@ package cl.wom.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+;
 
 public class Cliente implements Serializable {
 
@@ -18,9 +17,122 @@ public class Cliente implements Serializable {
 	private Date fechaActivacion;
 	private Date fechaDesactivacion;
 	private String secuencia;
+	private String requestId;
+	private String bangoTransactionId;
+	private String merchanTransactionId;
+	private String PaymentProviderTransaction;
+	private String UserId;
+	private String amount;
+	private String currency;
+	private String responsePay;
+	private String descriptionResponsePay;
+	private Date datePay;
+	private  String merchantAccountKey;
+	private String productKey;
+	private String ProductDescription;
+	private String productCategory;
+	private String SupportContact;
+	private String action;
 	
 	
 	
+	
+	public String getMerchanTransactionId() {
+		return merchanTransactionId;
+	}
+	public void setMerchanTransactionId(String merchanTransactionId) {
+		this.merchanTransactionId = merchanTransactionId;
+	}
+	public String getRequestId() {
+		return requestId;
+	}
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
+	}
+	public String getBangoTransactionId() {
+		return bangoTransactionId;
+	}
+	public void setBangoTransactionId(String bangoTransactionId) {
+		this.bangoTransactionId = bangoTransactionId;
+	}
+	public String getPaymentProviderTransaction() {
+		return PaymentProviderTransaction;
+	}
+	public void setPaymentProviderTransaction(String paymentProviderTransaction) {
+		PaymentProviderTransaction = paymentProviderTransaction;
+	}
+	public String getUserId() {
+		return UserId;
+	}
+	public void setUserId(String userId) {
+		UserId = userId;
+	}
+	public String getAmount() {
+		return amount;
+	}
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+	public String getCurrency() {
+		return currency;
+	}
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}
+	public String getResponsePay() {
+		return responsePay;
+	}
+	public void setResponsePay(String responsePay) {
+		this.responsePay = responsePay;
+	}
+	public String getDescriptionResponsePay() {
+		return descriptionResponsePay;
+	}
+	public void setDescriptionResponsePay(String descriptionResponsePay) {
+		this.descriptionResponsePay = descriptionResponsePay;
+	}
+	public Date getDatePay() {
+		return datePay;
+	}
+	public void setDatePay(Date datePay) {
+		this.datePay = datePay;
+	}
+	public String getMerchantAccountKey() {
+		return merchantAccountKey;
+	}
+	public void setMerchantAccountKey(String merchantAccountKey) {
+		this.merchantAccountKey = merchantAccountKey;
+	}
+	public String getProductKey() {
+		return productKey;
+	}
+	public void setProductKey(String productKey) {
+		this.productKey = productKey;
+	}
+	public String getProductDescription() {
+		return ProductDescription;
+	}
+	public void setProductDescription(String productDescription) {
+		ProductDescription = productDescription;
+	}
+	public String getProductCategory() {
+		return productCategory;
+	}
+	public void setProductCategory(String productCategory) {
+		this.productCategory = productCategory;
+	}
+	public String getSupportContact() {
+		return SupportContact;
+	}
+	public void setSupportContact(String supportContact) {
+		SupportContact = supportContact;
+	}
+	public String getAction() {
+		return action;
+	}
+	public void setAction(String action) {
+		this.action = action;
+	}
 	public String getSecuencia() {
 		return secuencia;
 	}
@@ -75,15 +187,21 @@ public class Cliente implements Serializable {
 	public void setFechaDesactivacion(Date fechaDesactivacion) {
 		this.fechaDesactivacion = fechaDesactivacion;
 	}
-	
 	@Override
 	public String toString() {
 		return "Cliente [msisdn=" + msisdn + ", customerId=" + customerId + ", codId=" + codId + ", rateplan="
 				+ rateplan + ", tipoContrato=" + tipoContrato + ", estado=" + estado + ", fechaActivacion="
-				+ fechaActivacion + ", fechaDesactivacion=" + fechaDesactivacion + "]";
+				+ fechaActivacion + ", fechaDesactivacion=" + fechaDesactivacion + ", secuencia=" + secuencia
+				+ ", requestId=" + requestId + ", bangoTransactionId=" + bangoTransactionId + ", merchanTransactionId="
+				+ merchanTransactionId + ", PaymentProviderTransaction=" + PaymentProviderTransaction + ", UserId="
+				+ UserId + ", amount=" + amount + ", currency=" + currency + ", responsePay=" + responsePay
+				+ ", descriptionResponsePay=" + descriptionResponsePay + ", datePay=" + datePay
+				+ ", merchantAccountKey=" + merchantAccountKey + ", productKey=" + productKey + ", ProductDescription="
+				+ ProductDescription + ", productCategory=" + productCategory + ", SupportContact=" + SupportContact
+				+ ", action=" + action + "]";
 	}
 	
-	
+
 	
 	
 
