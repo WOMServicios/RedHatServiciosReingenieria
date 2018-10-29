@@ -1,6 +1,5 @@
 package cl.wom.util;
 
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,15 +8,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
+
 public class PropertiesUtil {
 	InputStream input = null;
 
-
-	public Properties getProperties (String fileName) {
-		String propertiesFile="";
+	public Properties getPropertiesEnvironment(String fileName) {
+		String propertiesFile = "";
 		Map<String, String> env = System.getenv();
 		for (Entry<String, String> envName : env.entrySet()) {
-			if(envName.getKey().equals(fileName)) {
+			if (envName.getKey().equals(fileName)) {
 				propertiesFile = envName.getValue();
 			}
 		}
@@ -25,7 +24,7 @@ public class PropertiesUtil {
 		try {
 			String propFileName = propertiesFile;
 			input = new FileInputStream(propertiesFile);
-			
+
 			if (input != null) {
 				prop.load(input);
 			} else {
@@ -34,6 +33,20 @@ public class PropertiesUtil {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-      	return prop;
+		return prop;
 	}
+
+	public Properties getProperties(String fileName) throws FileNotFoundException {
+		
+
+		Properties prop = new Properties();
+		try {
+			prop.load(PropertiesUtil.class.getClassLoader().getResourceAsStream("sql.properties"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+      	return prop;
+
+	}
+
 }

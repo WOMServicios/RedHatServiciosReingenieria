@@ -31,7 +31,7 @@
 				<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
 				
 				<bean ref="sqlFormatterProcessor" method="sqlParserProductInventory"></bean>
-				<to uri="velocity:velocity/rest-response-success.vm"></to>
+
 				<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 		</route>
 	

@@ -12,16 +12,17 @@ import cl.wom.middleware.util.ConnectionFactory.DataBaseSchema;
 import cl.wom.middleware.vo.ProductOffer;
 
 public class ProductOfferDAOImpl {
-	public static List<ProductOffer> getProductOffer(String query) throws SQLException{
+	public static List<ProductOffer> getProductOffer(String sql) throws SQLException{
 		
 		Connection conn = null;
 		Statement stmt;
 		List<ProductOffer> listProductOffer= new ArrayList <ProductOffer>();
 		
+		
 		try {
 			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 			stmt = conn.createStatement();
-			ResultSet rsGetproductOffer = conn.createStatement().executeQuery(query);
+			ResultSet rsGetproductOffer = conn.createStatement().executeQuery(sql);
 
 //			a.CO_ID              as subscriberId,
 //			a.tmcode             as offerId,

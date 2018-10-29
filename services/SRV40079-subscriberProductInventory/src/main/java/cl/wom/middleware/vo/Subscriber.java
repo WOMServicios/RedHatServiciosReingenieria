@@ -46,12 +46,12 @@ public class Subscriber {
 		this.productBundle = productBundle;
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "Subscriber [subscriberId=" + subscriberId + "]";
+		return "Subscriber [subscriberId=" + subscriberId + ", productOffer=" + productOffer + ", productBundle="
+				+ productBundle + "]";
 	}
-	
-	
-	
 
 }
