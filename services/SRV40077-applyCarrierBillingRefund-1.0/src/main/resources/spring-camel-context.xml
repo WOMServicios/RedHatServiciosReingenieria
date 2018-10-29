@@ -37,11 +37,10 @@
 		</onException>
 
 
-		<!-- applycarrierbillingcharge -->
+		<!-- applycarrierbillingRefund -->
 		<route>
 			<from
 				uri="jetty:http://{{carrier.refund.host}}:{{carrier.refund.port}}{{carrier.refund.url}}" />
-			<log message="entra"></log>
 
 
 			<!-- CONSUME SERVICIO -->
@@ -49,24 +48,10 @@
 			<!-- <to uri="cxf:http://10.120.147.126:80/esb/3GBSCS/Services/PSBookingRequestWrite?dataFormat=MESSAGE"></to> -->
 			<!-- <log message="${body}"></log> -->
 
-
-
-			<!-- CAPTURA DATOS JSON -->
-<!-- 			<setHeader headerName="userId"> -->
-<!-- 				<jsonpath>$.userId</jsonpath> -->
-<!-- 			</setHeader> -->
+			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierRefund"></bean>
 			
-<!-- 			<setHeader headerName="paymentProviderTransactionId"> -->
-<!-- 				<jsonpath>$.paymentProviderTransactionId</jsonpath> -->
-<!-- 			</setHeader> -->
-
-<!-- 			<log message="${headers.userId}"></log> -->
 			
-			<log message="${headers.paymentProviderTransactionId}"></log>
-
-			<bean ref="sqlFormatterProcessor"
-				method="sqlParserCarrierRefund"></bean>
-
+			
 		</route>
 	</camelContext>
 </beans>
