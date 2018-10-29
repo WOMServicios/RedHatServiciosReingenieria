@@ -99,17 +99,17 @@
 			<choice>
 				<when>
 					<simple>
-					${headers.requestId} == "" || 
-					${headers.bangoTransactionId} == "" || 
-					${headers.merchantTransactionId} == "" || 
-					${headers.userId} == "" || 
-					${headers.amount} == "" || 
-					${headers.currency} == "" || 
-					${headers.merchantAccountKey} == "" || 
-					${headers.productKey} == "" || 
-					${headers.productDescription} == "" || 
-					${headers.productCategory} == "" || 
-					${headers.supportContact} == "" 
+						${headers.requestId} == "" ||
+						${headers.bangoTransactionId} == "" ||
+						${headers.merchantTransactionId} == "" ||
+						${headers.userId} == "" ||
+						${headers.amount} == "" ||
+						${headers.currency} == "" ||
+						${headers.merchantAccountKey} == "" ||
+						${headers.productKey} == "" ||
+						${headers.productDescription} == "" ||
+						${headers.productCategory} == "" ||
+						${headers.supportContact} == ""
 					</simple>
 					<throwException
 						exceptionType="cl.wom.exception.services.ServiceError"
@@ -136,9 +136,9 @@
 					</setHeader>
 
 					<to uri="bean:clienteProcessor" />
+
+
 					<to uri="velocity:velocity/Success.vm" />
-
-
 				</otherwise>
 
 			</choice>

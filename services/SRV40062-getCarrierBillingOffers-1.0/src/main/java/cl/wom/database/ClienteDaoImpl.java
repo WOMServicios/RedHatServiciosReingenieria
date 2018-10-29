@@ -51,7 +51,6 @@ public class ClienteDaoImpl implements IClienteDao {
 			rs.close();
 			co.close();
 		} catch (SQLException e) {
-			System.out.println("Error: Clase ClienteDaoImple, método obtener");
 			e.printStackTrace();
 		}
 
@@ -82,7 +81,6 @@ public class ClienteDaoImpl implements IClienteDao {
 			rs.close();
 			co.close();
 		} catch (SQLException e) {
-			System.out.println("Error: Clase ClienteDaoImple, método obtener");
 			e.printStackTrace();
 		}
 
@@ -114,7 +112,6 @@ public class ClienteDaoImpl implements IClienteDao {
 			rs.close();
 			co.close();
 		} catch (SQLException e) {
-			System.out.println("Error: Clase ClienteDaoImple, método obtener");
 			e.printStackTrace();
 		}
 
@@ -146,7 +143,6 @@ public class ClienteDaoImpl implements IClienteDao {
 			rs.close();
 			co.close();
 		} catch (SQLException e) {
-			System.out.println("Error: Clase ClienteDaoImple, método obtener");
 			e.printStackTrace();
 		}
 
@@ -182,7 +178,6 @@ public class ClienteDaoImpl implements IClienteDao {
 			rs.close();
 			co.close();
 		} catch (SQLException e) {
-			System.out.println("Error: Clase ClienteDaoImple, método obtener");
 			e.printStackTrace();
 		}
 	
@@ -193,7 +188,7 @@ public class ClienteDaoImpl implements IClienteDao {
 	@Override
 	public void insertaregelegcarrierbilling(String sql, Connection co) {
 		
-		System.err.println("query :" +sql);
+		
 		Statement stm= null;
 		try {
 			stm=co.createStatement();
@@ -213,7 +208,6 @@ public class ClienteDaoImpl implements IClienteDao {
 		Statement stm= null;
 		ResultSet rs=null;
 		int cont = 0;
-	System.err.println(sql +"a probar");
 		try {			
 			
 			stm=co.createStatement();
@@ -230,7 +224,6 @@ public class ClienteDaoImpl implements IClienteDao {
 			rs.close();
 			co.close();
 		} catch (SQLException e) {
-			System.out.println("Error: Clase ClienteDaoImple, método obtener");
 			e.printStackTrace();
 		}
 

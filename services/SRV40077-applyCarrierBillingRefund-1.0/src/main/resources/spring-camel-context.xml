@@ -37,11 +37,10 @@
 		</onException>
 
 
-		<!-- applycarrierbillingcharge -->
+		<!-- applycarrierbillingRefund -->
 		<route>
 			<from
 				uri="jetty:http://{{carrier.refund.host}}:{{carrier.refund.port}}{{carrier.refund.url}}" />
-			<log message="entra"></log>
 
 
 			<!-- CONSUME SERVICIO -->
@@ -51,7 +50,7 @@
 
 			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierRefund"></bean>
 			
-			<log message="Respuesta: ${body}"></log>
+			
 			
 		</route>
 	</camelContext>
