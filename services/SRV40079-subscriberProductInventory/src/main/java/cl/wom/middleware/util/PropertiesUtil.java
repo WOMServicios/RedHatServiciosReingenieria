@@ -13,7 +13,7 @@ public class PropertiesUtil {
 	InputStream input = null;
 
 
-	public Properties getProperties (String fileName) {
+	public Properties getRemoteProperties (String fileName) {
 		String propertiesFile="";
 		Map<String, String> env = System.getenv();
 		for (Entry<String, String> envName : env.entrySet()) {
@@ -36,4 +36,18 @@ public class PropertiesUtil {
 		}
       	return prop;
 	}
+	
+	
+	public Properties getLocalProperties() {
+		
+		Properties prop = new Properties();
+		try {
+			prop.load(PropertiesUtil.class.getClassLoader().getResourceAsStream("sql.properties"));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+      	return prop;
+	}
+	
+	
 }

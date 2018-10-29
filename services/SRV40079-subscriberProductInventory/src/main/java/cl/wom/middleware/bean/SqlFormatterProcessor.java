@@ -10,11 +10,9 @@ public class SqlFormatterProcessor {
 	public String sqlParserProductInventory(Exchange ex) throws SQLException {
 		
 		String subscriberId   = (String)ex.getIn().getHeader("subscriberId");
-		
 
  		SubscriberDAOImpl subscriberDAOImpl = new SubscriberDAOImpl();
  		Subscriber subscriber = subscriberDAOImpl.getSubscriber(subscriberId);
-
  		
  		JSONArray jsonObj = new org.json.JSONArray(subscriber);
  		

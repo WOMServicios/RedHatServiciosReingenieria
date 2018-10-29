@@ -5,11 +5,11 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 	static PropertiesUtil prop = new PropertiesUtil();
-	static String user = prop.getProperties("database.bscs.username").toString();
-	static String password = prop.getProperties("database.bscs.password").toString();
-	static String host = prop.getProperties("database.bscs.host").toString();
-	static String port = prop.getProperties("database.bscs.port").toString();
-	static String databaseName = prop.getProperties("database.bscs.databasename").toString();
+	static String user = prop.getRemoteProperties("database.bscs.username").toString();
+	static String password = prop.getRemoteProperties("database.bscs.password").toString();
+	static String host = prop.getRemoteProperties("database.bscs.host").toString();
+	static String port = prop.getRemoteProperties("database.bscs.port").toString();
+	static String databaseName = prop.getRemoteProperties("database.bscs.databasename").toString();
 	
 	static Connection conn = null;
 
