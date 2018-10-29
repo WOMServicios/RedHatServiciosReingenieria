@@ -22,8 +22,7 @@ public class ProductOfferDAOImpl {
 			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 			stmt = conn.createStatement();
 			ResultSet rsGetproductOffer = conn.createStatement().executeQuery(query);
-			
-//			select 
+
 //			a.CO_ID              as subscriberId,
 //			a.tmcode             as offerId,
 //			b.des                as name,
@@ -34,12 +33,6 @@ public class ProductOfferDAOImpl {
 //			a.request_id         as requestId,
 //			a.transactionNo      as transactionNo,
 //			a.userlastmod        as userLastMod
-//			from 
-//			     sysadm.RATEPLAN_HIST a,
-//			     sysadm.rateplan      b
-//			where
-//			    a.CO_ID=1155127 -- variable
-//			and a.TMCODE = b.TMCODE;
 			
 			while(rsGetproductOffer.next()) {
 				ProductOffer productOffer= new ProductOffer();
