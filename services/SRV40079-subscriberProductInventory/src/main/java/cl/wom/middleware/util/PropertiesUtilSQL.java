@@ -1,6 +1,5 @@
 package cl.wom.middleware.util;
 
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,18 +8,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 
-public class PropertiesUtil {
+public class PropertiesUtilSQL {
 	InputStream input = null;
 
 
-	public Properties getRemoteProperties (String fileName) {
-		String propertiesFile="";
-		Map<String, String> env = System.getenv();
-		for (Entry<String, String> envName : env.entrySet()) {
-			if(envName.getKey().equals(fileName)) {
-				propertiesFile = envName.getValue();
-			}
-		}
+	public Properties getProperties (String fileName) {
+		String propertiesFile="/src/main/resources/sql.properties";
+
 		Properties prop = new Properties();
 		try {
 			String propFileName = propertiesFile;
@@ -36,18 +30,5 @@ public class PropertiesUtil {
 		}
       	return prop;
 	}
-	
-	
-	public Properties getLocalProperties() {
-		
-		Properties prop = new Properties();
-		try {
-			prop.load(PropertiesUtil.class.getClassLoader().getResourceAsStream("sql.properties"));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-      	return prop;
-	}
-	
-	
+
 }
