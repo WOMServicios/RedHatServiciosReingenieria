@@ -71,8 +71,8 @@ public String getIsOptionProduct() {
 return isOptionProduct;
 }
 
-public void setIsOptionProduct(String string) {
-this.isOptionProduct = string;
+public void setIsOptionProduct(String isOptionProduct) {
+this.isOptionProduct = isOptionProduct;
 }
 
 public String getIsOfferProduct() {
