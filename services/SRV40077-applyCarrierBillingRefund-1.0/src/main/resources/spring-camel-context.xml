@@ -30,10 +30,16 @@
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
-			<to uri="velocity:velocity/ErrorHttp.vm" />
-
+			<choice>
+				<when>
+					<simple>${exception.codigoError} == 400 || ${exception.codigoError} == 452 || ${exception.codigoError} == 454 || ${exception.codigoError} == 455 </simple>
+					<to uri="velocity:velocity/ErrorHttp.vm" />
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/rest-response.vm" />
+				</otherwise>
+			</choice>
 		</onException>
-
 
 		<!-- applycarrierbillingRefund -->
 		<route streamCache="true">
@@ -47,51 +53,44 @@
 				<setHeader headerName="userId"><jsonpath>$.userId</jsonpath></setHeader>
 				<setHeader headerName="amount"><jsonpath>$.amount</jsonpath></setHeader>
 				<setHeader headerName="currency"><jsonpath>$.currency</jsonpath></setHeader>
-				<setHeader headerName="responseCode"><constant>OK</constant></setHeader>
-				<setHeader headerName="responseMessage"><constant>Success</constant></setHeader>
+				<setHeader headerName="date" ><simple>${date:now:yyyy-MM-dd'T'HH:mm:ssZ}</simple></setHeader>
 				<setHeader headerName="Exchange.HTTP_RESPONSE_CODE"><simple>422</simple></setHeader>
 				<to uri="velocity:velocity/422.vm" />
 				<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
-			<choice>
-				<when>
-					<simple>
-					${headers.requestId} == "" || 
-					${headers.bangoTransactionId} == "" || 
-					${headers.merchantTransactionId} == "" || 
-					${headers.paymentProviderTransactionId} == "" ||
-					${headers.userId} == "" || 
-					${headers.amount} == "" || 
-					${headers.currency} == ""
-					</simple>
-					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" /> </when>
+			<choice><when><simple>
+						${headers.requestId.trim()} == "" || ${headers.bangoTransactionId.trim()} == "" || 
+						${headers.merchantTransactionId.trim()} == "" || ${headers.paymentProviderTransactionId.trim()} == "" ||
+						${headers.userId.trim()} == "" || ${headers.amount.toString().trim()} == "" || 
+						${headers.currency.trim()} == ""
+					</simple><throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" /> </when>
 			</choice>
-
+			<choice><when><simple>
+						${headers.requestId.length()} > 50 || ${headers.bangoTransactionId.length()} > 50 || 
+						${headers.merchantTransactionId.length()} > 50 || ${headers.paymentProviderTransactionId.length()} > 50 ||
+						${headers.userId.length()} > 50 || ${headers.amount.toString().length()} > 7 || 
+						${headers.currency.length()} > 50
+					</simple><throwException exceptionType="cl.wom.exception.services.ServiceError" message="452" /> </when>
+			</choice>
+			
 			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierRefund"></bean>
-			
-			<setHeader headerName="date" ><simple>${date:now:yyyy-MM-dd'T'HH:mm:ssZ}</simple></setHeader>
-			
-			<log message="${headers.date}"></log>
-			
 			
 			<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean>
 			
 <!-- 			 CONSUME SERVICIO -->
-<!-- 			<to uri="velocity:velocity/soap-request.vm" /> -->
-<!-- 			<to uri="cxf:http://{{wsdl.host}}{{wsdl.url}}"></to> -->
-<!-- 			<setHeader headerName="occId"><xpath>/soapenv:Envelope/soapenv:Body/*/*[local-name() = 'occId']/text()</xpath></setHeader> -->
+			<to uri="velocity:velocity/soap-request.vm" />
+			<to uri="cxf:http://{{wsdl.host}}{{wsdl.url}}"></to>
 			
-
-<!-- 		<log message="occId ${headers.occId}"></log> -->
-<!-- 			<choice> -->
-<!-- 				<when> -->
-<!-- 					<simple>${headers.occId} > 0 </simple> -->
-<!-- 					<to uri="velocity:velocity/rest-response-success.vm" /> -->
-<!-- 					<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean> -->
-<!-- 				</when> -->
-<!-- 				<otherwise> -->
-<!-- 					<to uri="velocity:velocity/rest-response-error.vm" /> -->
-<!-- 				</otherwise> -->
-<!-- 			</choice> -->
+			<setHeader headerName="occId"><xpath>/soapenv:Envelope/soapenv:Body/*/*[local-name() = 'occId']/text()</xpath></setHeader>
+			
+			<choice>
+				<when>
+					<simple>${headers.occId} > 0 </simple>
+					<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean>
+				</when>
+				<otherwise>
+					<to uri="velocity:velocity/rest-response-error.vm" />
+				</otherwise>
+			</choice>
 
 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 			
