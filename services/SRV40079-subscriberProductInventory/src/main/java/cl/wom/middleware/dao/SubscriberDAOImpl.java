@@ -32,6 +32,9 @@ public class SubscriberDAOImpl {
 		String query4 = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql_productBundle3"),subscriberId);
 		String query5 = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql_productBundle4"),subscriberId);
 		
+		
+
+		
 		try {
 			conn = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 			stmt = conn.createStatement();		

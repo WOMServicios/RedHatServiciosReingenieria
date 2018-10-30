@@ -95,7 +95,7 @@
 		<convertBodyTo type="org.w3c.dom.Document"></convertBodyTo>
 	
 		<setHeader headerName="offerId">
-			<xpath resultType="java.lang.Long">/soapenv:Envelope/soapenv:Body/ns:productOffering/offerId/text()</xpath>
+			<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:productOffering/offerId/text()</xpath>
 		</setHeader>
 		<setHeader headerName="shortDesc">
 			<xpath resultType="java.lang.String">/soapenv:Envelope/soapenv:Body/ns:productOffering/shortDesc/text()</xpath>
@@ -115,7 +115,7 @@
 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
 			</when>
 			<when>
-				<simple>${headers.offerId.toString().length()} > 3 </simple>
+				<simple>${headers.offerId.length()} > 3 </simple>
 				<to uri="velocity:velocity/soap-responselengthofferId.vm"></to>
 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
 			</when>

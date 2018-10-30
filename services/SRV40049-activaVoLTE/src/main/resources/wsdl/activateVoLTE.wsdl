@@ -58,7 +58,7 @@
   </wsdl:binding>
   <wsdl:service name="activateVoLTE">
     <wsdl:port binding="tns:activateVoLTESOAP" name="activateVoLTESOAP">
-      <soap:address location="http://0.0.0.0:8888/ocp/srv40049/activavolte/soap/v1.0/"/>
+      <soap:address location="http://0.0.0.0:8888/ocp/srv40049-1-0/soap/activavolte"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
