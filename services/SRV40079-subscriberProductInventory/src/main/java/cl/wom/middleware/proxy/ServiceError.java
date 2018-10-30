@@ -28,8 +28,17 @@ public class ServiceError extends Exception{
 	       default:
 	           mensaje="Error, sin codigo de error reconocido";
 	           break;
-	        }
-	         
+			case 454:
+			   mensaje ="Invalid data type";
+			   break;
+				
+			case 452:
+			   mensaje= "userId exceeds the maximum length";
+			   break;
+			case 455:
+			   mensaje="DataBase Error SQL Exception";
+			   break;	
+	        }       
 	        return mensaje;
 	         
 	    }
