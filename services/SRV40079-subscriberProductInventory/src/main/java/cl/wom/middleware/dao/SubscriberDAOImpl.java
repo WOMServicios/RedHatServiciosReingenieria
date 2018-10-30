@@ -21,7 +21,6 @@ public class SubscriberDAOImpl {
 	public Subscriber getSubscriber(String subscriberId) throws SQLException, ServiceError, ClassNotFoundException {
 		PropertiesUtil sqlProperties = new PropertiesUtil();
 		Subscriber subscriber =new Subscriber();
-		subscriber.setSubscriberId(subscriberId);
 		Connection conn = null;
 		Statement stmt;
 		List<ProductOffer> listProductOffer= new ArrayList <ProductOffer>();
@@ -41,6 +40,7 @@ public class SubscriberDAOImpl {
 			while(rsGetproductOffer.next()){
 				ProductOffer productOffer=new ProductOffer();
 				
+				subscriber.setSubscriberId(rsGetproductOffer.getString("subscriberId"));
 				productOffer.setSubscriberId(rsGetproductOffer.getString("subscriberId"));
 				productOffer.setOfferId(rsGetproductOffer.getString("offerId"));
 				productOffer.setName(rsGetproductOffer.getString("name"));

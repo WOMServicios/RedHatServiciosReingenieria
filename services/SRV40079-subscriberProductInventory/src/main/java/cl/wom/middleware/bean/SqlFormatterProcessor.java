@@ -2,7 +2,6 @@ package cl.wom.middleware.bean;
 import java.sql.SQLException;
 import org.apache.camel.Exchange;
 import com.google.gson.Gson;
-
 import cl.wom.middleware.dao.SubscriberDAOImpl;
 import cl.wom.middleware.proxy.ServiceError;
 import cl.wom.middleware.vo.Subscriber;
@@ -15,7 +14,10 @@ public class SqlFormatterProcessor {
 
  		SubscriberDAOImpl subscriberDAOImpl = new SubscriberDAOImpl();
  		Subscriber subscriber = subscriberDAOImpl.getSubscriber(subscriberId);
- 		System.out.println(subscriber.toString());
+ 		if(subscriber.getProductOffer().isEmpty() || subscriber.getProductOffer().size() == 0) {
+ 			return "";
+ 		}
+
  		Gson gson = new Gson();
  		String jsonObj = gson.toJson(subscriber);
  		

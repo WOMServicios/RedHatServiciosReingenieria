@@ -29,10 +29,31 @@
 			       
 		<route>
 				<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
-				
-				<bean ref="sqlFormatterProcessor" method="sqlParserProductInventory"></bean>
-
-				<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+				<choice>
+					<when>
+						<simple>${headers.subscriberId.toString().trim()} == "" || ${headers.subscriberId} == null </simple>
+						<to uri="velocity:velocity/response-nodata.vm"></to>
+						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+					</when>
+					<when>
+						<simple>${headers.subscriberId.trim()} == "" || ${headers.subscriberId} == null </simple>
+						<to uri="velocity:velocity/response-nodata.vm"></to>
+						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+					</when>
+					<otherwise>
+						<bean ref="sqlFormatterProcessor" method="sqlParserProductInventory"></bean>
+						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+						
+						<when>
+		            		<simple>${body} == ""</simple>
+		            		<to uri="velocity:velocity/response-sql-nodata.vm"></to>
+		            		<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>	            		
+		            	</when>
+		            	<otherwise>
+							<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+						</otherwise>
+					</otherwise>
+				</choice>
 		</route>
 	
     </camelContext>
