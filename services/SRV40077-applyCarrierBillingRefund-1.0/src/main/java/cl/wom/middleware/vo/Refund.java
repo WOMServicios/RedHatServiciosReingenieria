@@ -25,7 +25,7 @@ public class Refund {
 		return shDesPlan;
 	}
 	public void setShDesPlan(String shDesPlan) {
-		this.msisdn = shDesPlan;
+		this.shDesPlan = shDesPlan;
 	}
 	public Integer getCustomerId() {
 		return customerId;
@@ -69,12 +69,12 @@ public class Refund {
 	public void setFechaDesactivacion(Date fechaDesactivacion) {
 		this.fechaDesactivacion = fechaDesactivacion;
 	}
-	
 	@Override
 	public String toString() {
-		return "Cliente [msisdn=" + msisdn + ", customerId=" + customerId + ", codId=" + codId + ", rateplan="
-				+ rateplan + ", tipoContrato=" + tipoContrato + ", estado=" + estado + ", fechaActivacion="
-				+ fechaActivacion + ", fechaDesactivacion=" + fechaDesactivacion + "]";
+		return "Refund [msisdn=" + msisdn + ", shDesPlan=" + shDesPlan + ", customerId=" + customerId + ", codId="
+				+ codId + ", rateplan=" + rateplan + ", tipoContrato=" + tipoContrato + ", estado=" + estado
+				+ ", fechaActivacion=" + fechaActivacion + ", fechaDesactivacion=" + fechaDesactivacion + "]";
 	}
+
 	
 }

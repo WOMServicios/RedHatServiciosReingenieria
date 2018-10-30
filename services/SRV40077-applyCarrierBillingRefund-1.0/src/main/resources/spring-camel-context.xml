@@ -38,44 +38,18 @@
 		<!-- applycarrierbillingRefund -->
 		<route streamCache="true">
 			<from
-				uri="jetty:http://{{carrier.refund.host}}:{{carrier.refund.port}}{{carrier.refund.url}}" />
+				uri="jetty:http://{{carrier.refund.host}}:{{carrier.refund.port}}{{carrier.refund.url}}?restletMethod=post" />
 
-
-		<doTry>
-				<setHeader headerName="requestId">
-					<jsonpath>$.requestId</jsonpath>
-				</setHeader>
-				<setHeader headerName="bangoTransactionId">
-					<jsonpath>$.bangoTransactionId</jsonpath>
-				</setHeader>
-				<setHeader headerName="merchantTransactionId">
-					<jsonpath>$.merchantTransactionId</jsonpath>
-				</setHeader>
-				<setHeader headerName="paymentProviderTransactionId">
-					<jsonpath>$.paymentProviderTransactionId</jsonpath>
-				</setHeader>
-				<setHeader headerName="userId">
-					<jsonpath>$.userId</jsonpath>
-				</setHeader>
-				<setHeader headerName="amount">
-					<jsonpath>$.amount</jsonpath>
-				</setHeader>
-				<setHeader headerName="currency">
-					<jsonpath>$.currency</jsonpath>
-				</setHeader>
-				<doCatch>
-					<exception>org.apache.camel.ExpressionEvaluationException
-					</exception>
-					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-						<simple>422</simple>
-					</setHeader>
-					<to uri="velocity:velocity/422.vm" />
-					<setHeader headerName="Content-Type">
-						<constant>application/json</constant>
-					</setHeader>
-					<stop />
-				</doCatch>
-			</doTry>
+				<setHeader headerName="requestId"><jsonpath>$.requestId</jsonpath></setHeader>
+				<setHeader headerName="bangoTransactionId"><jsonpath>$.bangoTransactionId</jsonpath></setHeader>
+				<setHeader headerName="merchantTransactionId"><jsonpath>$.merchantTransactionId</jsonpath></setHeader>
+				<setHeader headerName="paymentProviderTransactionId"><jsonpath>$.paymentProviderTransactionId</jsonpath></setHeader>
+				<setHeader headerName="userId"><jsonpath>$.userId</jsonpath></setHeader>
+				<setHeader headerName="amount"><jsonpath>$.amount</jsonpath></setHeader>
+				<setHeader headerName="currency"><jsonpath>$.currency</jsonpath></setHeader>
+				<setHeader headerName="Exchange.HTTP_RESPONSE_CODE"><simple>422</simple></setHeader>
+				<to uri="velocity:velocity/422.vm" />
+				<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 			<choice>
 				<when>
 					<simple>
@@ -93,19 +67,29 @@
 				</when>
 			</choice>
 
-
 			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierRefund"></bean>
 			
-			<log message="CONSUMO DEL SERVICIO: ${body}"></log>
+			<setHeader headerName="date" ><simple>${date:now:yyyyMMdd}"</simple></setHeader>
 			
-<!-- 			<!-- CONSUME SERVICIO --> -->
-<!-- 			<to uri="velocity:velocity/soap-request.vm" /> -->
-<!-- 			<to uri="cxf:http://10.120.147.126:80/esb/3GBSCS/Services/PSBookingRequestWrite?dataFormat=MESSAGE"></to> -->
-<!-- 				<setHeader headerName="occId"><xpath>/soapenv:Envelope/soapenv:Body/*/*[local-name() = 'occId']/text()</xpath></setHeader> -->
-<!-- 			<setHeader headerName="Content-Type"> -->
-<!-- 				<constant>application/json</constant> -->
-<!-- 			</setHeader> -->
-<!-- 			<log message="occId: ${headers.occId}"></log> -->
+<!-- 			 CONSUME SERVICIO -->
+			<to uri="velocity:velocity/soap-request.vm" />
+<!-- 			<to uri="cxf:http://{{wsdl.host}}{{wsdl.url}}"></to> -->
+<!-- 			<setHeader headerName="occId"><xpath>/soapenv:Envelope/soapenv:Body/*/*[local-name() = 'occId']/text()</xpath></setHeader> -->
+			
+
+<!-- 		<log message="occId ${headers.occId}"></log> -->
+<!-- 			<choice> -->
+<!-- 				<when> -->
+<!-- 					<simple>${headers.occId} > 0 </simple> -->
+<!-- 					<to uri="velocity:velocity/rest-response-success.vm" /> -->
+					
+<!-- 				</when> -->
+<!-- 				<otherwise> -->
+<!-- 					<to uri="velocity:velocity/rest-response-error.vm" /> -->
+<!-- 				</otherwise> -->
+<!-- 			</choice> -->
+
+			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 			
 		</route>
 	</camelContext>
