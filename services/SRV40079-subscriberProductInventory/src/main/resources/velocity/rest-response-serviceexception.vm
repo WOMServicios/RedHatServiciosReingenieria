@@ -1,1 +1,1 @@
-{ "status": "${headers.errorCode}", "description": "${headers.errorMessage}" }
+{ "status": "${headers.codeERROR}", "description": "${headers.errorMessage}" }

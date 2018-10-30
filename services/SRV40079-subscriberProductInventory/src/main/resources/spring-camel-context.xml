@@ -16,12 +16,18 @@
 		 <propertyPlaceholder id="placeholder" location="file:${env:APP_ENV}"/>
 	
 		<onException>
-			    <exception>java.lang.Exception</exception>
+			    <exception>cl.wom.middleware.proxy.ServiceError</exception>
 			    <handled><simple>true</simple></handled>
-			    
-			    <setHeader headerName="errorcode"><constant>500</constant></setHeader>
 			    <setHeader headerName="errorMessage"><simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
-	
+				<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="codeError">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="messageError">
+					<simple>${exception.message}</simple>
+				</setHeader>	
 			    <log message="error: ${exception.message}"></log>
 			    <to uri="velocity:velocity/rest-response-serviceexception.vm"/>
 			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
@@ -31,13 +37,15 @@
 				<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
 				<choice>
 					<when>
-						<simple>${headers.subscriberId.toString().trim()} == "" || ${headers.subscriberId} == null </simple>
+						<simple>${headers.subscriberId.trim()} == "" || ${headers.subscriberId} == null </simple>
 						<to uri="velocity:velocity/response-nodata.vm"></to>
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" />
 						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 					</when>
 					<when>
-						<simple>${headers.subscriberId.trim()} == "" || ${headers.subscriberId} == null </simple>
+						<simple>${headers.subscriberId.length()} > 7 </simple>
 						<to uri="velocity:velocity/response-nodata.vm"></to>
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="452" />
 						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 					</when>
 					<otherwise>
