@@ -37,7 +37,7 @@
 				<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
 				<choice>
 					<when>
-						<simple>${headers.subscriberId.trim()} == "" </simple>
+						<simple>${headers.subscriberId.trim()} == "" || ${headers.subscriberId} == null </simple>
 						<to uri="velocity:velocity/response-nodata.vm"></to>
 						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" />
 						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>

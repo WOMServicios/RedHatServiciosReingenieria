@@ -11,7 +11,7 @@ public class ValidationUtil {
 	}
 	public static boolean isLong(String cadena){
 		try {
-			Integer.parseInt(cadena);
+			Long.parseLong(cadena.trim());
 			return true;
 		} catch (NumberFormatException nfe){
 			return false;

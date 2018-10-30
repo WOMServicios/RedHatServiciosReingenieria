@@ -20,7 +20,7 @@ public class SubscriberDAOImpl {
 	
 	public Subscriber getSubscriber(String subscriberId) throws SQLException, ServiceError, ClassNotFoundException {
 		PropertiesUtil sqlProperties = new PropertiesUtil();
-		Subscriber subscriber =new Subscriber();
+		Subscriber subscriber = new Subscriber();
 		Connection conn = null;
 		Statement stmt;
 		List<ProductOffer> listProductOffer= new ArrayList <ProductOffer>();
