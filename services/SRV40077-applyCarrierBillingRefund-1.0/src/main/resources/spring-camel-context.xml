@@ -47,6 +47,8 @@
 				<setHeader headerName="userId"><jsonpath>$.userId</jsonpath></setHeader>
 				<setHeader headerName="amount"><jsonpath>$.amount</jsonpath></setHeader>
 				<setHeader headerName="currency"><jsonpath>$.currency</jsonpath></setHeader>
+				<setHeader headerName="responseCode"><constant>OK</constant></setHeader>
+				<setHeader headerName="responseMessage"><constant>Success</constant></setHeader>
 				<setHeader headerName="Exchange.HTTP_RESPONSE_CODE"><simple>422</simple></setHeader>
 				<to uri="velocity:velocity/422.vm" />
 				<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
@@ -61,18 +63,20 @@
 					${headers.amount} == "" || 
 					${headers.currency} == ""
 					</simple>
-					<throwException
-						exceptionType="cl.wom.exception.services.ServiceError"
-						message="400" />
-				</when>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" /> </when>
 			</choice>
 
 			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierRefund"></bean>
 			
-			<setHeader headerName="date" ><simple>${date:now:yyyyMMdd}"</simple></setHeader>
+			<setHeader headerName="date" ><simple>${date:now:yyyy-MM-dd'T'HH:mm:ssZ}</simple></setHeader>
+			
+			<log message="${headers.date}"></log>
+			
+			
+			<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean>
 			
 <!-- 			 CONSUME SERVICIO -->
-			<to uri="velocity:velocity/soap-request.vm" />
+<!-- 			<to uri="velocity:velocity/soap-request.vm" /> -->
 <!-- 			<to uri="cxf:http://{{wsdl.host}}{{wsdl.url}}"></to> -->
 <!-- 			<setHeader headerName="occId"><xpath>/soapenv:Envelope/soapenv:Body/*/*[local-name() = 'occId']/text()</xpath></setHeader> -->
 			
@@ -82,7 +86,7 @@
 <!-- 				<when> -->
 <!-- 					<simple>${headers.occId} > 0 </simple> -->
 <!-- 					<to uri="velocity:velocity/rest-response-success.vm" /> -->
-					
+<!-- 					<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean> -->
 <!-- 				</when> -->
 <!-- 				<otherwise> -->
 <!-- 					<to uri="velocity:velocity/rest-response-error.vm" /> -->
