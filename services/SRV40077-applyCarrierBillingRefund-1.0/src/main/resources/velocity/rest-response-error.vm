@@ -1,7 +1,7 @@
 {
     "responseCode": "DATA_INVALID",
     "responseMessage": "Request data was invalid",
-    "paymentProviderTransactionId":  "PP-5a5164105ca648ceaef2bf1528503021",
+    "paymentProviderTransactionId":  "${headers.paymentProviderTransactionId}",
     "extensionData" : {
         "key1":"value1",
         "key2":"value2"
