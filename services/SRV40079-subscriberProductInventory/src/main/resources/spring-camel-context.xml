@@ -34,7 +34,7 @@
 		</onException>
 			       
 		<route>
-				<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
+				<from uri="jetty:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.url}}"/>
 				<choice>
 					<when>
 						<simple>${headers.subscriberId.trim()} == "" || ${headers.subscriberId} == null </simple>
@@ -54,7 +54,7 @@
 						
 						<when>
 		            		<simple>${body} == ""</simple>
-		            		<to uri="velocity:velocity/response-sql-nodata.vm"></to>
+		            		<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="453" />
 		            		<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>	            		
 		            	</when>
 		            	<otherwise>
