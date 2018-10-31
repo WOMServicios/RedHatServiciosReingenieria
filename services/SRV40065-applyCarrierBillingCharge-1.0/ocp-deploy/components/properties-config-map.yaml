@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    component: '#(deploy-name)#'
+    group: fuse7-java-openshift
+    version: '#(version.service)#'
+  name: #(deploy-name)#-properties
+data:
+  #(deploy-name)#.properties: >-
+  
+    ### Variables globales de log y camel ###
+
+    logging.level=${LOGLEVEL}
+
+    camel.timeout.redelivery-delay=#(prop.camel.timeout.redelivery-delay)#
+
+    camel.timeout.max-delivery=#(prop.camel.timeout.max-delivery)#
+
+    camel.soap.basicauth.user=#(prop.camel.soap.basicauth.user)#
+
+    camel.soap.basicauth.pass=#(prop.camel.soap.basicauth.pass)#
+    
+    ### Variables para base de datos replica ###
+
+    database.replica.name=#(prop.database.replica.name)#
+
+    database.replica.port=#(prop.database.replica.port)#
+
+    database.replica.host=#(prop.database.replica.host)#
+
+    database.replica.username=#(prop.database.replica.username)#
+
+    database.replica.password=#(prop.database.replica.password)#
+    
+    ### Variables para base de datos wappl ###
+
+    database.wappl.name=#(prop.database.wappl.name)#
+
+    database.wappl.port=#(prop.database.wappl.port)#
+
+    database.wappl.host=#(prop.database.wappl.host)#
+
+    database.wappl.username=#(prop.database.wappl.username)#
+
+    database.wappl.password=#(prop.database.wappl.password)#
+
+    ### Variables para servicio REST ###
+
+    service.rest.host=#(prop.service.rest.host)#
+
+    service.rest.port=#(prop.service.rest.port)#
+
+    service.rest.resource=#(prop.service.rest.resource)#
+
+    spring.datasource.initialize=#(prop.spring.datasource.initialize)#
