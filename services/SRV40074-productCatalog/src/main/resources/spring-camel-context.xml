@@ -21,40 +21,43 @@
 	<!-- TODO: LIMPIAR VELOCITIES -->	       
 	<route>
 		<from uri="jetty:http://{{camel.from.endpointhost}}:{{camel.from.endpointport}}{{camel.from.endpointurl}}"/>
-			
+
 		<onException>
-			    <exception>java.lang.Exception</exception>
+			    <exception>cl.wom.middleware.proxy.ServiceError</exception>
 			    <handled><simple>true</simple></handled>
-			    
-			    <setHeader headerName="errorcode"><constant>500</constant></setHeader>
 			    <setHeader headerName="errorMessage"><simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
-	
-			    <log message="error: ${exception.message}"></log>
-			    <to uri="velocity:velocity/response-sql-error.vm"/>
+				<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="codeError">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="messageError">
+					<simple>${exception.message}</simple>
+				</setHeader>	
+			    <log loggingLevel="ERROR" message="error: ${exception.message}"></log>
+				<to uri="velocity:velocity/response-sql-error.vm"/>
 			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 		</onException>
 					
 			<log message="offerId: ${headers.productOffering.offerId}"></log>
 			<choice>
 					<when>
-						<simple>${headers.productOffering.offerId} == null and ${headers.productOffering.shortDesc} == null and ${headers.productOffering.marketSeg} == null </simple>
-					<to uri="velocity:velocity/response-nodata.vm"></to>
-					<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>		
+						<simple>${headers.productOffering.offerId} == null and ${headers.productOffering.shortDesc} == null </simple>
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" />
 					</when>
 					<when>
 						<simple>${headers.productOffering.offerId} == "" and ${headers.productOffering.shortDesc} == "" and ${headers.productOffering.marketSeg} == "" </simple>
-					<to uri="velocity:velocity/response-nodata.vm"></to>
-					<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" />
 					</when>
 					<when>
 						<simple>${headers.productOffering.offerId.toString().length()} > 5 </simple>
-						<to uri="velocity:velocity/soap-responselengthofferId.vm"></to>
-						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="452" />
+
 					</when>
 					<when>
 						<simple>${headers.productOffering.shortDesc.length()} > 5 </simple>
-						<to uri="velocity:velocity/soap-responselengthshortDesc.vm"></to>
-						<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="452" />
 					</when>
 			 
 		     		<otherwise>
@@ -63,8 +66,7 @@
 		            <choice>
 		            	<when>
 		            		<simple>${body} == ""</simple>
-		            		<to uri="velocity:velocity/response-sql-nodata.vm"></to>
-		            		<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>	            		
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="453" />	            		
 		            	</when>
 		            </choice>           
 		            <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
@@ -82,14 +84,21 @@
 		dataFormat=MESSAGE" />
 		
 		<onException>
-			    <exception>java.lang.Exception</exception>
+			    <exception>cl.wom.middleware.proxy.ServiceError</exception>
 			    <handled><simple>true</simple></handled>
-			    
-			    <setHeader headerName="errorcode"><simple resultType="java.lang.String">500</simple></setHeader>
 			    <setHeader headerName="errorMessage"><simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
-	
-			    <log message="error: ${exception.message}"></log>
+				<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="codeError">
+					<simple>${exception.codigoError}</simple>
+				</setHeader>
+				<setHeader headerName="messageError">
+					<simple>${exception.message}</simple>
+				</setHeader>	
+			    <log loggingLevel="ERROR" message="error: ${exception.message}"></log>
 			    <to uri="velocity:velocity/soap-response-error.vm"/>
+			    <setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
 		</onException>		
 		
 		<convertBodyTo type="org.w3c.dom.Document"></convertBodyTo>
@@ -105,33 +114,28 @@
 		
 		<choice>
 			<when>
-				<simple>${headers.offerId} == null and ${headers.shortDesc.trim()} == "" </simple>
-				<to uri="velocity:velocity/response-SOAPnodata.vm"></to>
-				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+				<simple>${headers.offerId.trim()} == "" and ${headers.shortDesc.trim()} == "" </simple>
+				<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="400" />
 			</when>
 			<when>
-				<simple>${headers.offerId} != null and ${headers.shortDesc.trim()} != "" </simple>
+				<simple>${headers.offerId.trim()} != "" and ${headers.shortDesc.trim()} != "" </simple>
 				<to uri="velocity:velocity/response-SOAPdataduplicate.vm"></to>
 				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
 			</when>
 			<when>
 				<simple>${headers.offerId.length()} > 3 </simple>
-				<to uri="velocity:velocity/soap-responselengthofferId.vm"></to>
-				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="452" />
 			</when>
 			<when>
 				<simple>${headers.shortDesc.length()} > 5 </simple>
-				<to uri="velocity:velocity/soap-responselengthshortDesc.vm"></to>
-				<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>
+						<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="452" />
 			</when>
 		     		<otherwise>
 							<bean ref="sqlFormatterProcessor" method="sqlParserProductOfferingSOAP"></bean>           
 				            <choice>
 				            	<when>
 				            		<simple>${body} == ""</simple>
-				            		<log message="Log Body : ${body}"></log>
-				            		<to uri="velocity:velocity/soap-response-sqlnodata.vm"></to>
-				            		<setHeader headerName="Content-Type"><constant>application/xml</constant></setHeader>	            		
+									<throwException exceptionType="cl.wom.middleware.proxy.ServiceError" message="453" />
 				            	</when> 
 				            	<otherwise>
 				            		<to uri="velocity:velocity/soap-response-success.vm"></to>           

@@ -1,7 +1,7 @@
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
    <soapenv:Body>
       <soapenv:Fault>
-         <faultcode>ERROR.${headers.errorcode}</faultcode>
+         <faultcode>ERROR.${headers.codeError}</faultcode>
          <faultstring>${headers.errorMessage}</faultstring>
       </soapenv:Fault>
    </soapenv:Body>

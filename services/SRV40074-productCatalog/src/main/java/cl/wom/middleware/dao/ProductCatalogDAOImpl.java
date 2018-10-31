@@ -6,12 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
-
 import cl.wom.middleware.proxy.ServiceError;
 import cl.wom.middleware.util.ConnectionFactory;
 import cl.wom.middleware.util.ConnectionFactory.DataBaseSchema;
-import cl.wom.middleware.util.PropertiesUtil;
 import cl.wom.middleware.vo.BundleProductOffering;
 import cl.wom.middleware.vo.Channel;
 import cl.wom.middleware.vo.OneTime;
@@ -23,26 +20,7 @@ public class ProductCatalogDAOImpl {
 	
 	public List<ProductOffering> getProductCatalog(String OfferID, String shortDesc) throws ServiceError  {
  		System.out.println("entrando a la clase");
-
- 		 PropertiesUtil util = new PropertiesUtil();
- 		 Properties prop = util.getProperties("APP_ENV");
-//		Properties prop = Util.getProperties("APP_ENV");
-//		Properties sql = Util.getProperties("SQL_ENV");
-
-		//Donde APP_ENV es la variable de enbtorno
-
-		//System.setProperty("database.bscs.host", "10.120.241.44");
-		//System.setProperty("database.bscs.port", "1540");
-		//System.setProperty("database.bscs.databasename", "BSCSUAT");
-		//System.setProperty("database.bscs.username", "VMD");
-		//System.setProperty("database.bscs.password", "VMD");
-		
-		String user = prop.getProperty("database.bscs.username");
-		String password = prop.getProperty("database.bscs.password");
-		String host = prop.getProperty("database.bscs.host");
-		String port = prop.getProperty("database.bscs.port");
-		String databaseName = prop.getProperty("database.bscs.databasename");
-		
+	
 		String whereCondition = "";
 		if (!"".equals(OfferID) && OfferID != null)
 			whereCondition = "a.tmcode="+OfferID+"";
