@@ -47,7 +47,7 @@ public class CarrierRefundDAO {
 				ResultSet rsContCharge = stmtWAPP.executeQuery(queryCharge);
 				rsContCharge.next();
 
-				if (rsContCharge.getInt("CONTADOR") == 0) {
+				if (rsContCharge.getInt("CONTADOR") != 0) {
 					throw new ServiceError("USER_NOT_ENABLED");
 				} else {
 					String queryDatos = "select a.dn_num as msisdn, d.shdes as shdes_plan, c.customer_id as customer_id, c.co_id as co_id, c.tmcode as rate_plan, decode(d.ATS_PREPAID_IND,'M','Control','N','Postpaid','P','Prepaid') as tipo_Contrato, c.CH_STATUS as estado, c.CO_ACTIVATED as fecha_activacion, b.cs_deactiv_date as fecha_desactivacion from sysadm.directory_number a, sysadm.contr_services_cap b, sysadm.contract_all c, sysadm.rateplan d where c.co_id = '"
@@ -77,6 +77,7 @@ public class CarrierRefundDAO {
 							refund.setEstado(rsDatos.getString("ESTADO"));
 							refund.setFechaActivacion(rsDatos.getDate("FECHA_ACTIVACION"));
 							refund.setFechaDesactivacion(rsDatos.getDate("FECHA_DESACTIVACION"));
+						
 						}
 					}
 				}

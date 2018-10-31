@@ -1,5 +1,5 @@
 {
-    "responseCode": "${headers.codigoError}",
-    "responseMessage": "${headers.messageError}",
+    "responseCode": "${headers.codigo}",
+    "responseMessage": "${headers.message}",
     "paymentProviderTransactionId":  "${headers.paymentProviderTransactionId}"
 }

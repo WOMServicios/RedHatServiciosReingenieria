@@ -21,10 +21,10 @@
 			<handled>
 				<constant>true</constant>
 			</handled>
-			<setHeader headerName="codigoError">
+			<setHeader headerName="codigo">
 				<simple>${exception.codigoError}</simple>
 			</setHeader>
-			<setHeader headerName="messageError">
+			<setHeader headerName="message">
 				<simple>${exception.message}</simple>
 			</setHeader>
 			<setHeader headerName="Content-Type">
@@ -53,7 +53,7 @@
 				<setHeader headerName="userId"><jsonpath>$.userId</jsonpath></setHeader>
 				<setHeader headerName="amount"><jsonpath>$.amount</jsonpath></setHeader>
 				<setHeader headerName="currency"><jsonpath>$.currency</jsonpath></setHeader>
-				<setHeader headerName="date" ><simple>${date:now:yyyy-MM-dd'T'HH:mm:ssZ}</simple></setHeader>
+				<setHeader headerName="date" ><simple>${date:now:yyyy-MM-dd'T'HH:mm:ss.SSSZ}</simple></setHeader>
 				<setHeader headerName="Exchange.HTTP_RESPONSE_CODE"><simple>422</simple></setHeader>
 				<to uri="velocity:velocity/422.vm" />
 				<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
@@ -74,7 +74,7 @@
 			
 			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierCharge"></bean>
 			
-			<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean>
+<!-- 			<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean> -->
 			
 <!-- 			 CONSUME SERVICIO -->
 			<to uri="velocity:velocity/soap-request.vm" />
@@ -85,11 +85,11 @@
 			<choice>
 				<when>
 					<simple>${headers.occId} > 0 </simple>
-					<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean>
+					<setHeader headerName="codigo"><constant>OK</constant></setHeader>
+					<setHeader headerName="message"><constant>Succes</constant></setHeader>
+<!-- 					<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean> -->
+					<to uri="velocity:velocity/rest-response.vm" />
 				</when>
-				<otherwise>
-					<to uri="velocity:velocity/rest-response-error.vm" />
-				</otherwise>
 			</choice>
 
 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>

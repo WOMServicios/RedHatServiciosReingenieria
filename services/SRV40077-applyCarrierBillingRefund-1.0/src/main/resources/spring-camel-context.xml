@@ -75,8 +75,6 @@
 			
 			
 			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierRefund"></bean>
-			<log message="pasa"></log>
-			<log message="cuerpo: ${body}"></log>
 			
 <!-- 			 CONSUME SERVICIO -->
 			<to uri="velocity:velocity/soap-request.vm" />

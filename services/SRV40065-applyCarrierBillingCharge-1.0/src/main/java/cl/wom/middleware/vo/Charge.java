@@ -6,8 +6,8 @@ public class Charge {
 	
 	private String msisdn;
 	private String shDesPlan;
-	private Integer customerId;
-	private Integer codId;
+	private Long customerId;
+	private Long codId;
 	private Integer rateplan;
 	private String tipoContrato;
 	private String estado;
@@ -27,16 +27,16 @@ public class Charge {
 	public void setShDesPlan(String shDesPlan) {
 		this.shDesPlan = shDesPlan;
 	}
-	public Integer getCustomerId() {
+	public Long getCustomerId() {
 		return customerId;
 	}
-	public void setCustomerId(Integer customerId) {
+	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
-	public Integer getCodId() {
+	public Long getCodId() {
 		return codId;
 	}
-	public void setCodId(Integer codId) {
+	public void setCodId(Long codId) {
 		this.codId = codId;
 	}
 	public Integer getRateplan() {
