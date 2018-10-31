@@ -1,9 +1,0 @@
-{
-    "responseCode": "DATA_INVALID",
-    "responseMessage": "Request data was invalid",
-    "paymentProviderTransactionId":  "${headers.paymentProviderTransactionId}",
-    "extensionData" : {
-        "key1":"value1",
-        "key2":"value2"
-    }
-}

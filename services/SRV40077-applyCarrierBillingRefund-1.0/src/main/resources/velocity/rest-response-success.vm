@@ -1,9 +1,0 @@
-{
-    "responseMessage": "OK",
-    "responseMessage": "Success",
-    "paymentProviderTransactionId": "PP-5a5164105ca648ceaef2bf1528503020",
-    "extensionData" : {
-        "key1":"value1",
-        "key2":"value2"
-    }
-}

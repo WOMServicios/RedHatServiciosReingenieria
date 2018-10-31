@@ -23,8 +23,7 @@
 			<from uri="jetty:http://{{rest.account.host}}:{{rest.account.port}}{{rest.account.url}}"/>
 			<from uri="direct:fullRequest" />
 			
-			<bean ref="sqlFormatterProcessor"
-				method="sqlParserAccountInformation"></bean>
+			<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformation"></bean>
 
 			<onException>
 				<exception>java.lang.Exception</exception>
@@ -37,7 +36,6 @@
 				</setHeader>
 				<setHeader headerName="messageError">
 					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
-
 				<to uri="velocity:velocity/soap-fault.vm" />
 			</onException>
 
