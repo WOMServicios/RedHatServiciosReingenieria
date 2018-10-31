@@ -33,7 +33,7 @@ public class ServiceError extends Exception{
 			   break;
 				
 			case 452:
-			   mensaje= "userId exceeds the maximum length";
+			   mensaje= "exceeds the maximum length";
 			   break;
 			case 455:
 			   mensaje="DataBase Error SQL Exception";

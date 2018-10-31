@@ -1,7 +1,7 @@
 package cl.wom.middleware.bean;
 import java.sql.SQLException;
 import org.apache.camel.Exchange;
-import com.google.gson.Gson;
+import org.json.JSONObject;
 import cl.wom.middleware.dao.SubscriberDAOImpl;
 import cl.wom.middleware.proxy.ServiceError;
 import cl.wom.middleware.util.ValidationUtil;
@@ -26,8 +26,7 @@ public class SqlFormatterProcessor {
  			return "";
  		}
 
- 		Gson gson = new Gson();
- 		String jsonObj = gson.toJson(subscriber);
+ 		JSONObject jsonObj = new JSONObject(subscriber);
  		
  		if (jsonObj.length() > 0)
  			return jsonObj.toString();
