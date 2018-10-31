@@ -1,0 +1,45 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ws="http://www.lhsgroup.com/ws_v2_NII_1" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" xmlns:soap-env="soap-env">
+     <soapenv:Header>
+        <wsse:Security soap-env:actor="http://schemas.xmlsoap.org/soap/actor/next" soap-env:mustUnderstand="0" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+           <wsse:UsernameToken xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+              <wsse:Username>BOLSAPP</wsse:Username>
+              <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">SY</wsse:Password>
+           </wsse:UsernameToken>
+        </wsse:Security>
+     </soapenv:Header>
+     <soapenv:Body>
+        <ws:BookingRequestWrite>
+           <java:input>
+              <ws:actionCode>I</ws:actionCode>  
+              <ws:amount>
+                 <ws:amount>${headers.amount}</ws:amount>    
+                 <ws:currency>${headers.currency}</ws:currency> 
+              </ws:amount>
+              <ws:coId>${body.codId}</ws:coId> 
+              <ws:csId>${body.customerId}</ws:csId> 
+              <ws:feeClass>3</ws:feeClass>
+              <ws:feeType>N</ws:feeType>  
+              <ws:numPeriods>1</ws:numPeriods> 
+              <ws:remark>NETFLIX PREMIUN</ws:remark>
+              <ws:rpcodePub>${body.shDesPlan}</ws:rpcodePub>  
+              <ws:rsCode>50</ws:rsCode>           
+              <ws:sncodePub>BR001</ws:sncodePub>  
+              <ws:spcodePub>OCC</ws:spcodePub>    
+              <ws:validFrom>
+                 <ws:date>${headers.date}</ws:date>
+              </ws:validFrom>
+              <ws:validTo>
+                 <ws:date>${headers.date}</ws:date>
+              </ws:validTo>
+           </java:input>
+           <java:sessionChange>
+              <ws:values>
+                 <ws:item>
+                    <ws:key>BU_ID</ws:key> 
+                    <ws:value>2</ws:value>   
+                 </ws:item>
+              </ws:values>
+           </java:sessionChange>
+        </ws:BookingRequestWrite>
+     </soapenv:Body>
+  </soapenv:Envelope>

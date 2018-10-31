@@ -44,7 +44,7 @@
 		<!-- applycarrierbillingRefund -->
 		<route streamCache="true">
 			<from
-				uri="jetty:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />
+				uri="jetty:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.url}}?restletMethod=post" />
 
 				<setHeader headerName="requestId"><jsonpath>$.requestId</jsonpath></setHeader>
 				<setHeader headerName="bangoTransactionId"><jsonpath>$.bangoTransactionId</jsonpath></setHeader>
@@ -72,7 +72,7 @@
 					</simple><throwException exceptionType="cl.wom.exception.services.ServiceError" message="452" /> </when>
 			</choice>
 			
-			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierRefund"></bean>
+			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierCharge"></bean>
 			
 			<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean>
 			
@@ -91,7 +91,9 @@
 					<to uri="velocity:velocity/rest-response-error.vm" />
 				</otherwise>
 			</choice>
+
 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
+			
 		</route>
 	</camelContext>
 </beans>
