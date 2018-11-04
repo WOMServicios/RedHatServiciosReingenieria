@@ -28,7 +28,7 @@
 				<setHeader headerName="messageError">
 					<simple>${exception.message}</simple>
 				</setHeader>	
-			    <log message="error: ${exception.message}"></log>
+			    <log loggingLevel="ERROR" message="error: ${exception.message}"></log>
 			    <to uri="velocity:velocity/rest-response-serviceexception.vm"/>
 			    <setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 		</onException>

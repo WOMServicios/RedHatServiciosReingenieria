@@ -134,12 +134,7 @@
 			<artifactId>ojdbc</artifactId>
 			<version>14</version>
 		</dependency>
-		
-		<dependency>
-	       <groupId>com.google.code.gson</groupId>
-	       <artifactId>gson</artifactId>
-			<scope>provided</scope>
-</dependency>
+
 </dependencies>
 
 <build>
