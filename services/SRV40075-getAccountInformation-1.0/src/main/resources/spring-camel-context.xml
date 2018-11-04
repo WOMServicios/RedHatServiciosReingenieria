@@ -23,8 +23,6 @@
 			<from uri="jetty:http://{{rest.account.host}}:{{rest.account.port}}{{rest.account.url}}"/>
 			<from uri="direct:fullRequest" />
 			
-			<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformation"></bean>
-
 			<onException>
 				<exception>java.lang.Exception</exception>
 				<handled>
@@ -36,8 +34,25 @@
 				</setHeader>
 				<setHeader headerName="messageError">
 					<simple>${exception.message.replaceAll('(\\r|\\n)','').replaceAll('\"','')}</simple></setHeader>
-				<to uri="velocity:velocity/soap-fault.vm" />
+				<to uri="velocity:velocity/response-error.vm" />
+				<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 			</onException>
+			<choice>
+				<when>
+					<simple>${headers.rut.trim()} == "" and ${headers.accountId.trim()} == "" </simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+				</when>
+				<when>
+					<simple>${headers.rut} != null and ${headers.accountId} != null </simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+				</when>
+				<when>
+					<simple>${headers.rut.length()} > 50 and ${headers.accountId.length()} > 50 </simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+				</when>
+			</choice>
+			
+			<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformation"></bean>
 
 			<choice>
 				<when>
@@ -54,6 +69,22 @@
 		<route>
 			<!-- TODO: Cambiar nombre del servicio por el propocionado por Arquitectura -->
 			<from uri="jetty:http://{{rest.subscriber.host}}:{{rest.subscriber.port}}{{rest.subscriber.url}}"/>
+			
+			<choice>
+				<when>
+					<simple>${headers.rut.trim()} == "" and ${headers.accountId.trim()} == "" </simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+				</when>
+				<when>
+					<simple>${headers.rut} != null and ${headers.accountId} != null </simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+				</when>
+				<when>
+					<simple>${headers.rut.length()} > 50 and ${headers.accountId.length()} > 50 </simple>
+					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+				</when>	
+			</choice>
+			
 			
 			<bean ref="sqlFormatterProcessor" method="sqlGetRutAccountManager"></bean>
 			
@@ -76,11 +107,12 @@
 				<setHeader headerName="messageError">
 					<simple>${exception.message}</simple></setHeader>
 
-				<to uri="velocity:velocity/soap-fault.vm" />
+				<to uri="velocity:velocity/response-error.vm" />
+				<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
 			</onException>
 			
-
-
+			
+			
 			<setHeader headerName="rut"><simple>${body}</simple></setHeader>
 			<to uri="direct:fullRequest" />
 		</route>
@@ -138,6 +170,7 @@
 								<simple>${headers.rut} != "" and ${headers.accountId} != "" </simple>
 								<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
 							</when>
+							
 							<otherwise>
 								<bean ref="sqlFormatterProcessor" method="sqlParserAccountInformationSOAP"></bean>
 								<when>
@@ -161,6 +194,10 @@
 						</when>
 						<when>
 							<simple>${headers.resourceType} == "" and ${headers.resourceValue} != ""</simple>
+							<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
+						</when>
+						<when>
+							<simple>${headers.resourceType.length()} > 50 and ${headers.resourceValue.length()} > 50</simple>
 							<throwException exceptionType="cl.wom.exception.services.ServiceError" message="400" />
 						</when>
 						<otherwise>

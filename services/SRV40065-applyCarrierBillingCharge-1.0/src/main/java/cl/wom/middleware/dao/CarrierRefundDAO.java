@@ -28,11 +28,13 @@ public class CarrierRefundDAO {
 
 			conWAPP = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 			conBSCS = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
-			stmtWAPP = conWAPP.createStatement();
-			stmtBCSC = conBSCS.createStatement();
+//			stmtWAPP = conWAPP.createStatement();
+//			stmtBCSC = conBSCS.createStatement();
 
 			// TODO cambiar query archivo parametros
 			String queryRefund = "select count(*) as count from CARRIERBILLING.RECEP_PAGOS_CARRIER_BILING_TO where USER_ID = TRIM('" + userId + "') AND PAYMENT_PROVIDER_TRANSACTION = TRIM('" + payment + "') AND RESPONSE_PAY ='OK' AND ACTION ='AUTORIZED' AND DATE_PAY <= SYSDATE -1";
+			System.out.println("queryRefund: "+queryRefund);
+			
 			ResultSet rsContCharge = stmtWAPP.executeQuery(queryRefund);
 			System.out.println(rsContCharge);
 			rsContCharge.next();
