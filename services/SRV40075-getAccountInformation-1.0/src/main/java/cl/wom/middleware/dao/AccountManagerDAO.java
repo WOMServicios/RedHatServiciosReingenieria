@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -22,9 +23,12 @@ import cl.wom.middleware.vo.Subscribers;
 public class AccountManagerDAO {
 
 	static PropertiesUtil util = new PropertiesUtil();
+	PropertiesUtil sqlProperties = new PropertiesUtil();
 	static Properties prop = util.getProperties("APP_ENV");
 
 	public AccountInformation getAccountInformation(String rut, String accountId) throws ServiceError {
+		
+		
 
 		rut = rut == null ? "" : rut;
 		accountId = accountId == null ? "" : accountId;
@@ -37,11 +41,8 @@ public class AccountManagerDAO {
 			stmt = conn.createStatement();
 
 			// 1.1 o 1.2
-			String whereCondition = rut.equals("") ? "a.customer_id = TRIM(" + accountId + ")"
-					: "a.cscompregno = TRIM('" + rut + "')";
-			String queryAccounts = "SELECT a.cscompregno as rut,a.CUSTOMER_ID as accountId,a.CUSTOMER_ID_HIGH as accountIdHigh,a.cslevel as csLevel,a.CUSTCODE as custCode,a.CSTYPE as accountType,a.CSACTIVATED as accountActivate,a.CSDEACTIVATED as accountDeactivate,a.CUSTOMER_ID_EXT  as externalAccountId,a.CSST as state,a.DOCTYPE_ID as docTypeId,b.DOCTYPE_DESC as docTypeDesc,b.DOCTYPE_OUTPUT_CODE as docTypeOutputCode,a.CUSTOMER_ID as accountId_biilcycle,d.BILLCYCLE as billCycle_billcycle,d.description as billCycleDes_billcycle,d.interval_type as intervalType,d.last_run_date as lastRunDate,d.bch_run_date as bchRunDate FROM sysadm.customer_all a, sysadm.DOCUMENT_TYPE_SII_CODE b, SYSADM.BILLCYCLE_ACTUAL_VIEW  c, SYSADM.BILLCYCLES  d WHERE "
-					+ whereCondition
-					+ " and a.DOCTYPE_ID  = b.DOCTYPE_ID and a.CUSTOMER_ID = c.CUSTOMER_ID and c.billcycle   = d.billcycle";
+			String accountConditiom = rut.equals("") ? "a.customer_id = TRIM(" + accountId + ")" : "a.cscompregno = TRIM('" + rut + "')";
+			String queryAccounts = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySubscriber"),accountConditiom);
 			ResultSet rsAccounts = conn.createStatement().executeQuery(queryAccounts);
 
 			if (rsAccounts.next()) {
@@ -55,10 +56,8 @@ public class AccountManagerDAO {
 					// Incorporación de subscriptores al objeto account
 					List<Subscribers> listasubscribers = new ArrayList<Subscribers>();
 					// 2.1 o 2.2
-					String querySubscribers = "SELECT a.cscompregno      as rut, b.customer_id      as accountId, b.co_id as subscriberId, b.type as subscriberType, b.co_code          as subscriberIdContract, b.CO_SIGNED        as subscriberActivate, b.CO_EXPIR_DATE    as subscriberExpired, b.CH_STATUS        as state FROM sysadm.customer_all           a, SYSADM.contract_all           b, SYSADM.CONTRACT_HISTORY       c WHERE "
-							+ whereCondition
-							+ " and a.customer_id = b.customer_id and b.co_id       = c.co_id and c.ch_seqno = (select max(x.ch_seqno) FROM SYSADM.CONTRACT_HISTORY x WHERE x.co_id = c.co_id and x.ch_status   = 'a')";
-					ResultSet rsSubscribers = conn.createStatement().executeQuery(querySubscribers);
+					String querySubscriber = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySubscriber"),accountConditiom);
+					ResultSet rsSubscribers = conn.createStatement().executeQuery(querySubscriber);
 
 					while (rsSubscribers.next()) {
 
@@ -78,10 +77,8 @@ public class AccountManagerDAO {
 						// Incorporación de SubscriberResouces al objeto subscriber
 						List<SubscriberResources> listaSubscriberResources = new ArrayList<SubscriberResources>();
 						// 3.1.1
-						String whereCondition2 = subid.equals("") ? "a.customer_id = '" + acoid + "'"
-								: "a.co_id = '" + subid + "'";
-						String querySubscriberResources = "SELECT a.co_id as subscriberId,b.dn_id as resourceId,c.dn_num as resourceValue, 'Número de celular del subscriptor' as resourceDescription, b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate,b.CS_STATUS as resourceState, 'MSISDN' as resourceType FROM sysadm.contract_all a, SYSADM.contr_services_cap  b, sysadm.directory_number c WHERE "
-								+ whereCondition2 + " and a.co_id = b.co_id and b.dn_id = c.dn_id and b.sncode = 3";
+						String subscriberCondition = subid.equals("") ? "a.customer_id = '" + acoid + "'" : "a.co_id = '" + subid + "'";
+						String querySubscriberResources = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySubscriberResources"),subscriberCondition);
 						ResultSet rsSubscriberResoucers = conn.createStatement().executeQuery(querySubscriberResources);
 						while (rsSubscriberResoucers.next()) {
 							SubscriberResources subscriberResources = new SubscriberResources();
@@ -167,18 +164,13 @@ public class AccountManagerDAO {
 			if ((resourceType.equals("MSISDN"))) {
 
 				// 3.1.2
-				String queryMSISDN = "SELECT a.co_id as subscriberId,b.dn_id as resourceId,c.dn_num as resourceValue, 'Número de celular del subscriptor' as resourceDescription, b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate,b.CS_STATUS as resourceState, 'MSISDN' as resourceType FROM sysadm.contract_all a, SYSADM.contr_services_cap  b, sysadm.directory_number    c WHERE C.DN_NUM = TRIM('"
-						+ resourceValue + "') and a.co_id = b.co_id and b.dn_id = c.dn_id and b.sncode = 3";
-
+				String queryMSISDN = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryMSISDN"),resourceValue);
 				ResultSet rsSubId = stmt.executeQuery(queryMSISDN);
 
 				if (rsSubId.next()) {
 					String subId = rsSubId.getString("SUBSCRIBERID");
 
-					String querySubId = "SELECT a.cscompregno      as rut, b.customer_id      as accountId, b.co_id            as subscriberId, b.type             as subscriberType, b.co_code          as subscriberIdContract, b.CO_SIGNED        as subscriberActivate, b.CO_EXPIR_DATE    as subscriberExpired, b.CH_STATUS        as state FROM sysadm.customer_all           a, SYSADM.contract_all           b, SYSADM.CONTRACT_HISTORY       c WHERE b.co_id = TRIM("
-							+ subId
-							+ ") and a.customer_id = b.customer_id and b.co_id       = c.co_id and c.ch_seqno = (SELECT max(x.ch_seqno) FROM SYSADM.CONTRACT_HISTORY x WHERE x.co_id = c.co_id and x.ch_status   = 'a')";
-
+					String querySubId = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySubId"),subId);
 					ResultSet rsRut = stmt.executeQuery(querySubId);
 
 					if (rsRut.next()) {
@@ -187,21 +179,14 @@ public class AccountManagerDAO {
 				}
 
 			} else if ((resourceType.equals("IMEI"))) {
-				System.out.println("IMEI");
-
-				String queryIMEI = "SELECT a.co_id as subscriberId, b.dn_id as resourceId, d.eq_serial_num as resourceValue, (e.description||'-'||e.company)  as resourceDescription, b.CS_ACTIV_DATE as resourceActivate, b.CS_DEACTIV_DATE as resourceDeactivate, d.eq_status as resourceState, 'IMEI' as resourceType FROM sysadm.contract_all a, sysadm.contr_services_cap  b, sysadm.contr_devices c, sysadm.equipment d, sysadm.equipment_type e WHERE d.eq_serial_num = TRIM('"
-						+ resourceValue
-						+ "') and b.co_id   = a.co_id and b.co_id   = c.co_id and c.eq_id   = d.equipment_id and d.equipment_type_id = e.equipment_type_id";
-
+				
+				String queryIMEI = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryIMEI"),resourceValue);
 				ResultSet rsSubId = stmt.executeQuery(queryIMEI);
 
 				if (rsSubId.next()) {
 					String subId = rsSubId.getString("SUBSCRIBERID");
 
-					String querySubId = "SELECT a.cscompregno      as rut, b.customer_id      as accountId, b.co_id            as subscriberId, b.type             as subscriberType, b.co_code          as subscriberIdContract, b.CO_SIGNED        as subscriberActivate, b.CO_EXPIR_DATE    as subscriberExpired, b.CH_STATUS        as state FROM sysadm.customer_all           a, SYSADM.contract_all           b, SYSADM.CONTRACT_HISTORY       c WHERE b.co_id = TRIM("
-							+ subId
-							+ ") and a.customer_id = b.customer_id and b.co_id       = c.co_id and c.ch_seqno = (SELECT max(x.ch_seqno) FROM SYSADM.CONTRACT_HISTORY x WHERE x.co_id = c.co_id and x.ch_status   = 'a')";
-
+					String querySubId = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySubId"),subId);
 					ResultSet rsRut = stmt.executeQuery(querySubId);
 
 					if (rsRut.next()) {
@@ -210,20 +195,14 @@ public class AccountManagerDAO {
 				}
 
 			} else if ((resourceType.equals("IMSI"))) {
-				System.out.println("IMSI");
 				// 3.2.2
-				String queryIMSI = "SELECT a.co_id as subscriberId, b.dn_id as resourceId,d.port_num as resourceValue,'Número de IMSI del subscriptor'     as resourceDescription, b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate, D.PORT_STATUS as resourceState, 'IMSI' as resourceType FROM sysadm.contract_all a, sysadm.contr_services_cap  b, sysadm.contr_devices c, sysadm.port d WHERE d.port_num = TRIM('"
-						+ resourceValue + "') and b.co_id   = a.co_id and b.co_id   = c.co_id and c.port_id = d.port_id";
-
+				String queryIMSI = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryIMSI"),resourceValue);
 				ResultSet rsSubId = stmt.executeQuery(queryIMSI);
 
 				if (rsSubId.next()) {
 					String subId = rsSubId.getString("SUBSCRIBERID");
 
-					String querySubId = "SELECT a.cscompregno      as rut, b.customer_id      as accountId, b.co_id            as subscriberId, b.type             as subscriberType, b.co_code          as subscriberIdContract, b.CO_SIGNED        as subscriberActivate, b.CO_EXPIR_DATE    as subscriberExpired, b.CH_STATUS        as state FROM sysadm.customer_all           a, SYSADM.contract_all           b, SYSADM.CONTRACT_HISTORY       c WHERE b.co_id = TRIM("
-							+ subId
-							+ ") and a.customer_id = b.customer_id and b.co_id       = c.co_id and c.ch_seqno = (SELECT max(x.ch_seqno) FROM SYSADM.CONTRACT_HISTORY x WHERE x.co_id = c.co_id and x.ch_status   = 'a')";
-
+					String querySubId = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySubId"),subId);
 					ResultSet rsRut = stmt.executeQuery(querySubId);
 
 					if (rsRut.next()) {
@@ -232,22 +211,14 @@ public class AccountManagerDAO {
 				}
 
 			} else if ((resourceType.equals("ICCID"))) {
-				System.out.println("ICCID");
-
 				// 3.3.2
-				String queryICCID = "SELECT a.co_id as subscriberId, b.dn_id as resourceId,E.SM_SERIALNUM as resourceValue, 'Número de ICCID del subscriptor'    as resourceDescription,b.CS_ACTIV_DATE as resourceActivate,b.CS_DEACTIV_DATE as resourceDeactivate,E.SM_STATUS as resourceState, 'ICCID' as resourceType FROM sysadm.contract_all a, sysadm.contr_services_cap  b,sysadm.contr_devices c, sysadm.port d, sysadm.storage_medium e WHERE E.SM_SERIALNUM = TRIM('"
-						+ resourceValue
-						+ "') and b.co_id   = a.co_id and b.co_id   = c.co_id and c.port_id = d.port_id AND D.sm_id   = E.sm_id";
-
+				String queryICCID = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryICCID"),resourceValue);
 				ResultSet rsSubId = stmt.executeQuery(queryICCID);
 
 				if (rsSubId.next()) {
 					String subId = rsSubId.getString("SUBSCRIBERID");
 
-					String querySubId = "SELECT a.cscompregno as rut, b.customer_id as accountId, b.co_id as subscriberId, b.type as subscriberType, b.co_code as subscriberIdContract, b.CO_SIGNED as subscriberActivate, b.CO_EXPIR_DATE as subscriberExpired, b.CH_STATUS as state FROM sysadm.customer_all a, SYSADM.contract_all b, SYSADM.CONTRACT_HISTORY c WHERE b.co_id = TRIM("
-							+ subId
-							+ ") and a.customer_id = b.customer_id and b.co_id = c.co_id and c.ch_seqno = (SELECT max(x.ch_seqno) FROM SYSADM.CONTRACT_HISTORY x WHERE x.co_id = c.co_id and x.ch_status   = 'a')";
-
+					String querySubId = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySubId"),subId);
 					ResultSet rsRut = stmt.executeQuery(querySubId);
 
 					if (rsRut.next()) {

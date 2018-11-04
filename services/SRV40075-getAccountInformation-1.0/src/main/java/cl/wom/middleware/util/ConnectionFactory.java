@@ -48,7 +48,7 @@ public class ConnectionFactory {
 				 props.setProperty("user", user);
 				 props.setProperty("password", password);
 				 
-				 return DriverManager.getConnection("jdbc:oracle:thin:@" + host + ":" + port + ":" + databaseName, props);				
+//				 return DriverManager.getConnection("jdbc:oracle:thin:@" + host + ":" + port + ":" + databaseName, props);				
 			default:
 			return null;
 		}

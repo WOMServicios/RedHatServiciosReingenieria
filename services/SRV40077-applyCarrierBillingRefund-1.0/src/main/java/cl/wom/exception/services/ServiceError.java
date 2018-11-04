@@ -37,6 +37,9 @@ public class ServiceError extends Exception {
 		case "USER_SUSPENDED":
 			mensajeExcetion = "The user is suspended from using the service (permanent block)";
 			break;
+		case "RETRIABLE_ERROR":
+			mensajeExcetion = "API errored but request can be re-tried";
+			break;
 		case "400":
 			mensajeExcetion ="bad request";
 			break;

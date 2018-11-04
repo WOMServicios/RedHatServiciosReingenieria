@@ -4,23 +4,29 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.MessageFormat;
 
 import cl.wom.exception.services.ServiceError;
 import cl.wom.middleware.util.ConnectionFactory;
+import cl.wom.middleware.util.PropertiesUtil;
 import cl.wom.middleware.util.ConnectionFactory.DataBaseSchema;
 import cl.wom.middleware.vo.Charge;
 
-public class CarrierRefundDAO {
+public class CarrierChargeDAO {
 	
 	Connection conWAPP = null;
 	Connection conBSCS = null;
 	Statement stmtWAPP;
 	Statement stmtBCSC;
+	
+	PropertiesUtil sqlProperties = new PropertiesUtil();
+	
 
+	
 	public  Charge getFacturacionCharge(String userId, String payment) throws ServiceError {
-
+		
 		userId = userId == null ? "" : userId;
-		payment = payment == null ? "" : payment;	
+		payment = payment == null ? "" : payment;
 		
 		Charge charge = null;
 
@@ -28,27 +34,22 @@ public class CarrierRefundDAO {
 
 			conWAPP = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 			conBSCS = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
-//			stmtWAPP = conWAPP.createStatement();
-//			stmtBCSC = conBSCS.createStatement();
+			stmtWAPP = conWAPP.createStatement();
+			stmtBCSC = conBSCS.createStatement();
 
 			// TODO cambiar query archivo parametros
-			String queryRefund = "select count(*) as count from CARRIERBILLING.RECEP_PAGOS_CARRIER_BILING_TO where USER_ID = TRIM('" + userId + "') AND PAYMENT_PROVIDER_TRANSACTION = TRIM('" + payment + "') AND RESPONSE_PAY ='OK' AND ACTION ='AUTORIZED' AND DATE_PAY <= SYSDATE -1";
-			System.out.println("queryRefund: "+queryRefund);
-			
-			ResultSet rsContCharge = stmtWAPP.executeQuery(queryRefund);
-			System.out.println(rsContCharge);
+			String queryAuthorized = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryAuthorized"),userId,payment);
+			ResultSet rsContCharge = stmtWAPP.executeQuery(queryAuthorized);
 			rsContCharge.next();
 
-			if (rsContCharge.getInt("count") > 0) {
+			if (rsContCharge.getInt("count") == 0) {
 				throw new ServiceError("ALREADY_REFUNDED");
 			} else {
-					String queryDatos = "select a.dn_num as msisdn, d.shdes as shdes_plan, c.customer_id as customer_id, c.co_id as co_id, c.tmcode as rate_plan, decode(d.ATS_PREPAID_IND,'M','Control','N','Postpaid','P','Prepaid') as tipo_Contrato, c.CH_STATUS as estado, c.CO_ACTIVATED as fecha_activacion, b.cs_deactiv_date as fecha_desactivacion from sysadm.directory_number a, sysadm.contr_services_cap b, sysadm.contract_all c, sysadm.rateplan d where c.co_id = '"
-							+ userId
-							+ "'and a.dn_id = b.dn_id and b.sncode = 3 and b.co_id = c.co_id AND b.cs_deactiv_date IS NULL and c.tmcode = d.tmcode";
-
-					ResultSet rsDatos = stmtBCSC.executeQuery(queryDatos);
+					String queryDatos = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryDatos"),userId);
+					ResultSet rsDatos = stmtWAPP.executeQuery(queryDatos);
 
 					if (rsDatos.next()) {
+						
 
 						if (rsDatos.getInt("CO_ID") == 0) {
 							throw new ServiceError("USER_NOT_FUND");
@@ -89,31 +90,25 @@ public class CarrierRefundDAO {
 		return charge;
 	}
 
-	public String insertCarrierRefund(String requestId, String bangoTransactionId, String merchantTransactionId, 
-			String paymentProviderTransactionId, String userId, Integer amount, String currency,
+	public String insertCarrierCharge(String requestId, String bangoTransactionId, String merchantTransactionId, 
+			String userId, Integer amount, String currency,
 			String responseCode, String responseMessage, String occId) throws ClassNotFoundException, SQLException {
 		
 		
-		try {
-		conWAPP = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
-		
-		String querySecuencia ="Select 'WOM_CHARGE'|| '_'|| TO_CHAR(SYSDATE, 'yyyymmddhh24mmss') || '_' ||CARRIERBILLING.SEC_PAYMENT_TRANSACTION.nextval as SECUENCIA from dual";
-		
+		String paymentProviderTransactionId = "";
+		String querySecuencia = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySecuencia"),0);
+		System.out.println("querySecuencia: "+querySecuencia);
 		ResultSet rsSecuencia = stmtWAPP.executeQuery(querySecuencia);
-		rsSecuencia.next();
+		if (rsSecuencia.next()) 
+			paymentProviderTransactionId = rsSecuencia.getString("SECUENCIA");
 		
-		String paymentPro = rsSecuencia.getString("SECUENCIA");
 		
-		System.out.println(paymentPro);
-		
-//		String queryInsert = "INSERT INTO CARRIERBILLING.RECEP_PAGOS_CARRIER_BILING_TO ( REQUEST_ID , BANGO_TRANSACTION_ID , MERCHAN_TRANSACTION_ID , PAYMENT_PROVIDER_TRANSACTION , USER_ID , AMOUNT , CURRENCY , RESPONSE_PAY , DESCRIPTION_RESPONSE_PAY , DATE_PAY , OCCID, ACTION) VALUES('"+requestId+"','"+bangoTransactionId+"','"+merchantTransactionId+"','"+paymentProviderTransactionId+"','"+userId+"',"+amount+",'"+currency+"','"+responseCode+"','"+responseMessage+"',SYSDATE,'"+occId+"','REFUND')";
-//		
-//		ResultSet rsInsert = stmtWAPP.executeQuery(queryInsert);
-//		
-//		if(!rsInsert.next()) {
-//			System.out.println("ERROR");
-//		}
-		
+		try {
+			conWAPP = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
+			
+			String queryInsert = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryInsert"),requestId,bangoTransactionId,merchantTransactionId,paymentProviderTransactionId,userId,amount,currency,responseCode,responseMessage,occId);
+			stmtWAPP.executeUpdate(queryInsert);	
+			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -126,6 +121,6 @@ public class CarrierRefundDAO {
 					e.printStackTrace();
 				}
 		}
-		return null;
+		return paymentProviderTransactionId;
 	}
 }
