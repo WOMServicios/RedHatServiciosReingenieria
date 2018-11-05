@@ -19,7 +19,7 @@ public class ProductCatalogDAOImpl {
 
 	
 	public List<ProductOffering> getProductCatalog(String OfferID, String shortDesc) throws ServiceError  {
- 		System.out.println("entrando a la clase");
+//		PropertiesUtil sqlProperties = new PropertiesUtil();
 	
 		String whereCondition = "";
 		if (!"".equals(OfferID) && OfferID != null)
@@ -57,7 +57,7 @@ public class ProductCatalogDAOImpl {
 				return listProductOffering;
 			
 			System.out.println("OfferId:"+offerId+""+"ShDesc:"+ShDesc);
-			//GetProductOfferID 1.1
+//			GetProductOfferID 1.1
 			String queryGetProductOffering="select a.tmcode as offerId, "
 					+ "a.des as name,"
 					+ "a.SHDES as shortDescription,"
@@ -80,7 +80,9 @@ public class ProductCatalogDAOImpl {
 					+ "from sysadm.rateplan_version x "
 					+ " where x.tmcode = "+offerId+" and x.tmcode  = b.tmcode and x.STATUS='P') "
 					+ "and b.STATUS='P' and a.SHDES = c.SHDES_PLAN";
-			//String queryGetProductOffering=sql.getProperty("queryGetProductOffering");
+//			String queryGetProductOffering=MessageFormat.format(sqlProperties.getProperties("sql_1_1"), whereCondition,offerId);
+			
+			
 			ResultSet rsGetProductOffering = conn.createStatement().executeQuery(queryGetProductOffering);		
 			while (rsGetProductOffering.next()) {
 				ProductOffering productOffering = new ProductOffering();
