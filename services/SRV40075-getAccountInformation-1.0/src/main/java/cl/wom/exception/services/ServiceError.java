@@ -19,6 +19,7 @@ public class ServiceError extends Exception{
    public ServiceError(String msg) {
       super(msg);
       this.codigoError=Integer.parseInt(msg);
+      this.printStackTrace();
       getMessage();
    }
    
@@ -28,6 +29,7 @@ public class ServiceError extends Exception{
     */
    @Override
    public String getMessage(){
+	   
 	   String mensaje="";
 	   
 	   switch(codigoError){
