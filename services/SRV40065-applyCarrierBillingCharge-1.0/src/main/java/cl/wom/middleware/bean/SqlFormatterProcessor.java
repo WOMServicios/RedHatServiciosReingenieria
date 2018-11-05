@@ -17,9 +17,6 @@ public class SqlFormatterProcessor {
 		String userId = (String) ex.getIn().getHeader("userId");
 		String payment = (String) ex.getIn().getHeader("paymentProviderTransactionId");
 		
-		System.out.println(userId);
-		System.out.println(payment);
-		
 		CarrierChargeDAO carrierRefundDAO = new CarrierChargeDAO();
 		Charge charge = carrierRefundDAO.getFacturacionCharge(userId, payment);
 		
@@ -30,7 +27,7 @@ public class SqlFormatterProcessor {
 	}
 	
 	
-	public void sqlInsertCarrierCharge(Exchange ex) throws ClassNotFoundException, SQLException {
+	public void sqlInsertCarrierCharge(Exchange ex) throws ClassNotFoundException, SQLException, ServiceError {
 		
 		String requestId = (String) ex.getIn().getHeader("requestId");
 		String bangoTransactionId = (String) ex.getIn().getHeader("bangoTransactionId");
@@ -42,6 +39,7 @@ public class SqlFormatterProcessor {
 		String responseMessage = (String) ex.getIn().getHeader("mensaje");
 		String occId = (String) ex.getIn().getHeader("occId");
 		
+		System.out.println("occId: "+occId);
 		CarrierChargeDAO carrierChargeDAO = new CarrierChargeDAO();
 		String paymentProviderTransactionId = carrierChargeDAO.insertCarrierCharge(requestId,bangoTransactionId,merchantTransactionId,userId,amount,currency,responseCode,responseMessage,occId);
 		

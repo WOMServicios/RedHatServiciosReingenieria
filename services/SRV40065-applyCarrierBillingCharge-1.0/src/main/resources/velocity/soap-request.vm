@@ -17,7 +17,7 @@
               </ws:amount>
               <ws:coId>${body.codId}</ws:coId>
               <ws:csId>${body.customerId}</ws:csId>
-              <ws:feeClass>${headers.class}</ws:feeClass>
+              <ws:feeClass>3</ws:feeClass>
               <ws:feeType>${headers.type}</ws:feeType>
               <ws:numPeriods>${headers.periods}</ws:numPeriods>
               <ws:remark>${headers.remark}</ws:remark>
@@ -26,10 +26,10 @@
               <ws:sncodePub>${headers.codePub}</ws:sncodePub>
               <ws:spcodePub>${headers.pub}</ws:spcodePub>
               <ws:validFrom>
-                 <ws:date>2018-10-31T01:04:53.000-04:00</ws:date>
+                 <ws:date>2018-11-05T01:04:53.000-04:00</ws:date>
               </ws:validFrom>
               <ws:validTo>
-                 <ws:date>2018-10-31T01:04:53.000-04:00</ws:date>
+                 <ws:date>2018-11-05T01:04:53.000-04:00</ws:date>
               </ws:validTo>
            </java:input>
            <java:sessionChange>

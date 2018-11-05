@@ -28,7 +28,6 @@ public class AccountManagerDAO {
 
 	public AccountInformation getAccountInformation(String rut, String accountId) throws ServiceError {
 		
-		
 
 		rut = rut == null ? "" : rut;
 		accountId = accountId == null ? "" : accountId;
@@ -41,9 +40,12 @@ public class AccountManagerDAO {
 			stmt = conn.createStatement();
 
 			// 1.1 o 1.2
-			String accountConditiom = rut.equals("") ? "a.customer_id = TRIM(" + accountId + ")" : "a.cscompregno = TRIM('" + rut + "')";
-			String queryAccounts = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySubscriber"),accountConditiom);
-			ResultSet rsAccounts = conn.createStatement().executeQuery(queryAccounts);
+			String whereCondition = rut.equals("") ? "a.customer_id = TRIM(" + accountId + ")"
+					: "a.cscompregno = TRIM('" + rut + "')";
+			System.out.println(whereCondition);
+			String queryAccounts= MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryAccount"), whereCondition);
+			System.out.println("query account: " + queryAccounts);
+			ResultSet rsAccounts = stmt.executeQuery(queryAccounts);
 
 			if (rsAccounts.next()) {
 				accountInformation = new AccountInformation();
@@ -56,7 +58,7 @@ public class AccountManagerDAO {
 					// Incorporación de subscriptores al objeto account
 					List<Subscribers> listasubscribers = new ArrayList<Subscribers>();
 					// 2.1 o 2.2
-					String querySubscriber = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySubscriber"),accountConditiom);
+					String querySubscriber = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySubscriber"),whereCondition);
 					ResultSet rsSubscribers = conn.createStatement().executeQuery(querySubscriber);
 
 					while (rsSubscribers.next()) {

@@ -36,9 +36,12 @@ public class CarrierChargeDAO {
 			conBSCS = ConnectionFactory.getConnection(DataBaseSchema.BSCS);
 			stmtWAPP = conWAPP.createStatement();
 			stmtBCSC = conBSCS.createStatement();
+			
+			
 
 			// TODO cambiar query archivo parametros
 			String queryAuthorized = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryAuthorized"),userId,payment);
+			//System.out.println(queryAuthorized);
 			ResultSet rsContCharge = stmtWAPP.executeQuery(queryAuthorized);
 			rsContCharge.next();
 
@@ -46,7 +49,8 @@ public class CarrierChargeDAO {
 				throw new ServiceError("ALREADY_REFUNDED");
 			} else {
 					String queryDatos = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryDatos"),userId);
-					ResultSet rsDatos = stmtWAPP.executeQuery(queryDatos);
+					//System.out.println(queryDatos);
+					ResultSet rsDatos = stmtBCSC.executeQuery(queryDatos);
 
 					if (rsDatos.next()) {
 						
@@ -76,8 +80,10 @@ public class CarrierChargeDAO {
 			return charge;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			throw new ServiceError("455");
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new ServiceError("455");
 		} finally {
 			if (conWAPP != null || conBSCS != null)
 				try {
@@ -85,19 +91,23 @@ public class CarrierChargeDAO {
 					conBSCS.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
+					throw new ServiceError("455");
 				}
 		}
-		return charge;
 	}
 
 	public String insertCarrierCharge(String requestId, String bangoTransactionId, String merchantTransactionId, 
 			String userId, Integer amount, String currency,
-			String responseCode, String responseMessage, String occId) throws ClassNotFoundException, SQLException {
+			String responseCode, String responseMessage, String occId) throws ClassNotFoundException, SQLException, ServiceError {
 		
 		
 		String paymentProviderTransactionId = "";
 		String querySecuencia = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.querySecuencia"),0);
 		System.out.println("querySecuencia: "+querySecuencia);
+		
+		conWAPP = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
+		stmtWAPP = conWAPP.createStatement();
+		
 		ResultSet rsSecuencia = stmtWAPP.executeQuery(querySecuencia);
 		if (rsSecuencia.next()) 
 			paymentProviderTransactionId = rsSecuencia.getString("SECUENCIA");
@@ -107,18 +117,22 @@ public class CarrierChargeDAO {
 			conWAPP = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 			
 			String queryInsert = MessageFormat.format(sqlProperties.getLocalProperties().getProperty("sql.queryInsert"),requestId,bangoTransactionId,merchantTransactionId,paymentProviderTransactionId,userId,amount,currency,responseCode,responseMessage,occId);
+			System.out.println(queryInsert);
 			stmtWAPP.executeUpdate(queryInsert);	
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			throw new ServiceError("455");
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new ServiceError("455");
 		} finally {
 			if (conWAPP != null)
 				try {
 					conWAPP.close();
 				} catch (SQLException e) {
 					e.printStackTrace();
+					throw new ServiceError("455");
 				}
 		}
 		return paymentProviderTransactionId;

@@ -11,6 +11,7 @@
 	<camelContext
 		xmlns="http://camel.apache.org/schema/spring"
 		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+		xmlns:ws="http://www.lhsgroup.com/ws_v2_NII_1"
 		xmlns:ns="http://ws.wom.cl/wom/neg/billingaccountmanagement/applycarrierbillingrefund/v/1">
 
 		<propertyPlaceholder id="placeholder"
@@ -30,7 +31,6 @@
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
-			
 			<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierCharge"></bean>
 			<to uri="velocity:velocity/rest-response.vm" />
 		</onException>
@@ -82,20 +82,27 @@
 			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierCharge"></bean>
 			
 			<!-- Servicio retorno occID -->
-			<to uri="velocity:velocity/soap-request.vm" />
-			<to uri="cxf:http://{{wsdl.host}}{{wsdl.url}}"></to>
+<!-- 			<to uri="velocity:velocity/soap-request.vm" /> -->
+<!-- 			<to uri="cxf:http://{{wsdl.host}}{{wsdl.url}}"></to> -->
 			
-			<setHeader headerName="occId"><xpath>/soapenv:Envelope/soapenv:Body/*/*[local-name() = 'occId']/text()</xpath></setHeader>
+<!-- 			<log message="respuesta del servicio: ${body}"></log> -->
+<!-- 			<convertBodyTo type="java.lang.String"></convertBodyTo> -->
 			
+<!-- 			<setHeader headerName="occId"><xpath>//*[local-name() = 'occId']/text()</xpath></setHeader> -->
+			
+			<setHeader headerName="occId"><constant>1</constant></setHeader>
 			<choice>
 				<when>
 					<simple>${headers.occId} > 0 </simple>
+					
 					<setHeader headerName="codigo"><constant>OK</constant></setHeader>
 					<setHeader headerName="message"><constant>SUCCESS</constant></setHeader>
 					<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierCharge"></bean>
 					<to uri="velocity:velocity/rest-response.vm" />
 				</when>
 				<otherwise>
+					<log message="occId:  ${headers.occId}"></log>
+<!-- 					<setHeader headerName="occId"><constant>-1</constant></setHeader> -->
 					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="RETRIABLE_ERROR" />
 				</otherwise>
 			</choice>
