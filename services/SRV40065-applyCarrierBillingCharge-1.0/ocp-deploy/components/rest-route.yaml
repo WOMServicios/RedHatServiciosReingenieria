@@ -8,7 +8,9 @@ metadata:
   name: '#(deploy-name)#-route-rest'
 spec:
   host: '#(project-id)#.#(wildcard)#'
-  path: '#(prop.service.rest.resource)#'
+  path: '#(prop.service.rest.url)#'
+  port:
+    targetPort: '#(prop.service.rest.url)#'
   to:
     kind: Service
     name: '#(deploy-name)#'

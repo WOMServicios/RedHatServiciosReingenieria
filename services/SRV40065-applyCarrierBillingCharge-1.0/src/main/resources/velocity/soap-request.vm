@@ -2,41 +2,41 @@
      <soapenv:Header>
         <wsse:Security soap-env:actor="http://schemas.xmlsoap.org/soap/actor/next" soap-env:mustUnderstand="0" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
            <wsse:UsernameToken xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
-              <wsse:Username>BOLSAPP</wsse:Username>
-              <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">SY</wsse:Password>
+              <wsse:Username>${headers.user}</wsse:Username>
+              <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">${headers.pass}</wsse:Password>
            </wsse:UsernameToken>
         </wsse:Security>
      </soapenv:Header>
      <soapenv:Body>
         <ws:BookingRequestWrite>
            <java:input>
-              <ws:actionCode>I</ws:actionCode>
+              <ws:actionCode>${headers.actionCode}</ws:actionCode>
               <ws:amount>
                  <ws:amount>${headers.amount}</ws:amount>
                  <ws:currency>${headers.currency}</ws:currency>
               </ws:amount>
-              <ws:coId>7227063</ws:coId>
-              <ws:csId>593432</ws:csId>
+              <ws:coId>${body.codId}</ws:coId>
+              <ws:csId>${body.customerId}</ws:csId>
               <ws:feeClass>3</ws:feeClass>
-              <ws:feeType>N</ws:feeType>
-              <ws:numPeriods>1</ws:numPeriods>
-              <ws:remark>NETFLIX PREMIUN</ws:remark>
-              <ws:rpcodePub>WOM10</ws:rpcodePub>
-              <ws:rsCode>50</ws:rsCode>
-              <ws:sncodePub>BR001</ws:sncodePub>
-              <ws:spcodePub>OCC</ws:spcodePub>
+              <ws:feeType>${headers.type}</ws:feeType>
+              <ws:numPeriods>${headers.periods}</ws:numPeriods>
+              <ws:remark>${headers.remark}</ws:remark>
+              <ws:rpcodePub>${body.shDesPlan}</ws:rpcodePub>
+              <ws:rsCode>${headers.code}</ws:rsCode>
+              <ws:sncodePub>${headers.codePub}</ws:sncodePub>
+              <ws:spcodePub>${headers.pub}</ws:spcodePub>
               <ws:validFrom>
-                 <ws:date>2018-10-31T01:04:53.000-04:00</ws:date>
+                 <ws:date>2018-11-05T01:04:53.000-04:00</ws:date>
               </ws:validFrom>
               <ws:validTo>
-                 <ws:date>2018-10-31T01:04:53.000-04:00</ws:date>
+                 <ws:date>2018-11-05T01:04:53.000-04:00</ws:date>
               </ws:validTo>
            </java:input>
            <java:sessionChange>
               <ws:values>
                  <ws:item>
-                    <ws:key>BU_ID</ws:key>
-                    <ws:value>2</ws:value>
+                    <ws:key>${headers.key}</ws:key>
+                    <ws:value>${headers.value}</ws:value>
                  </ws:item>
               </ws:values>
            </java:sessionChange>

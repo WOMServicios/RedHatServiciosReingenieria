@@ -11,6 +11,7 @@
 	<camelContext
 		xmlns="http://camel.apache.org/schema/spring"
 		xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+		xmlns:ws="http://www.lhsgroup.com/ws_v2_NII_1"
 		xmlns:ns="http://ws.wom.cl/wom/neg/billingaccountmanagement/applycarrierbillingrefund/v/1">
 
 		<propertyPlaceholder id="placeholder"
@@ -30,15 +31,8 @@
 			<setHeader headerName="Content-Type">
 				<constant>application/json</constant>
 			</setHeader>
-			<choice>
-				<when>
-					<simple>${exception.codigoError} == 400 || ${exception.codigoError} == 452 || ${exception.codigoError} == 454 || ${exception.codigoError} == 455 </simple>
-					<to uri="velocity:velocity/ErrorHttp.vm" />
-				</when>
-				<otherwise>
-					<to uri="velocity:velocity/rest-response.vm" />
-				</otherwise>
-			</choice>
+			<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierCharge"></bean>
+			<to uri="velocity:velocity/rest-response.vm" />
 		</onException>
 
 		<!-- applycarrierbillingRefund -->
@@ -54,6 +48,18 @@
 				<setHeader headerName="amount"><jsonpath>$.amount</jsonpath></setHeader>
 				<setHeader headerName="currency"><jsonpath>$.currency</jsonpath></setHeader>
 				<setHeader headerName="date" ><simple>${date:now:yyyy-MM-dd'T'HH:mm:ss.SSSZ}</simple></setHeader>
+				<setHeader headerName="user"><simple>{{service.user}}</simple></setHeader>
+				<setHeader headerName="pass"><simple>{{service.pass}}</simple></setHeader>
+				<setHeader headerName="actionCode"><simple>{{service.actionCode}}</simple></setHeader>
+				<setHeader headerName="class"><simple>{{service.class}}</simple></setHeader>
+				<setHeader headerName="type"><simple>{{service.type}}</simple></setHeader>
+				<setHeader headerName="periods"><simple>{{service.periods}}</simple></setHeader>
+				<setHeader headerName="remark"><simple>{{service.remark}}</simple></setHeader>
+				<setHeader headerName="code"><simple>{{service.code}}</simple></setHeader>
+				<setHeader headerName="codePub"><simple>{{service.codePub}}</simple></setHeader>
+				<setHeader headerName="pub"><simple>{{service.pub}}</simple></setHeader>
+				<setHeader headerName="key"><simple>{{service.key}}</simple></setHeader>
+				<setHeader headerName="value"><simple>{{service.value}}</simple></setHeader>
 				<setHeader headerName="Exchange.HTTP_RESPONSE_CODE"><simple>422</simple></setHeader>
 				<to uri="velocity:velocity/422.vm" />
 				<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>
@@ -72,24 +78,33 @@
 					</simple><throwException exceptionType="cl.wom.exception.services.ServiceError" message="452" /> </when>
 			</choice>
 			
+			<!-- Implementación de logica del servicio a nivel de base de datos -->
 			<bean ref="sqlFormatterProcessor" method="sqlParserCarrierCharge"></bean>
 			
-<!-- 			<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean> -->
+			<!-- Servicio retorno occID -->
+<!-- 			<to uri="velocity:velocity/soap-request.vm" /> -->
+<!-- 			<to uri="cxf:http://{{wsdl.host}}{{wsdl.url}}"></to> -->
 			
-<!-- 			 CONSUME SERVICIO -->
-			<to uri="velocity:velocity/soap-request.vm" />
-			<to uri="cxf:http://{{wsdl.host}}{{wsdl.url}}"></to>
+<!-- 			<log message="respuesta del servicio: ${body}"></log> -->
+<!-- 			<convertBodyTo type="java.lang.String"></convertBodyTo> -->
 			
-			<setHeader headerName="occId"><xpath>/soapenv:Envelope/soapenv:Body/*/*[local-name() = 'occId']/text()</xpath></setHeader>
+<!-- 			<setHeader headerName="occId"><xpath>//*[local-name() = 'occId']/text()</xpath></setHeader> -->
 			
+			<setHeader headerName="occId"><constant>1</constant></setHeader>
 			<choice>
 				<when>
 					<simple>${headers.occId} > 0 </simple>
+					
 					<setHeader headerName="codigo"><constant>OK</constant></setHeader>
-					<setHeader headerName="message"><constant>Succes</constant></setHeader>
-<!-- 					<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierRefund"></bean> -->
+					<setHeader headerName="message"><constant>SUCCESS</constant></setHeader>
+					<bean ref="sqlFormatterProcessor" method="sqlInsertCarrierCharge"></bean>
 					<to uri="velocity:velocity/rest-response.vm" />
 				</when>
+				<otherwise>
+					<log message="occId:  ${headers.occId}"></log>
+<!-- 					<setHeader headerName="occId"><constant>-1</constant></setHeader> -->
+					<throwException exceptionType="cl.wom.exception.services.ServiceError" message="RETRIABLE_ERROR" />
+				</otherwise>
 			</choice>
 
 			<setHeader headerName="Content-Type"><constant>application/json</constant></setHeader>

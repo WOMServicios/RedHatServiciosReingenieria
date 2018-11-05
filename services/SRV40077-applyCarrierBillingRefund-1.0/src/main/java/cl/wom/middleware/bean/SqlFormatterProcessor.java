@@ -30,24 +30,22 @@ public class SqlFormatterProcessor {
 	}
 	
 	
-	public String sqlInsertCarrierRefund(Exchange ex) throws ClassNotFoundException, SQLException {
+	public void sqlInsertCarrierRefund(Exchange ex) throws ClassNotFoundException, SQLException {
 		
 		String requestId = (String) ex.getIn().getHeader("requestId");
 		String bangoTransactionId = (String) ex.getIn().getHeader("bangoTransactionId");
 		String merchantTransactionId = (String) ex.getIn().getHeader("merchantTransactionId");
-		String paymentProviderTransactionId = (String) ex.getIn().getHeader("paymentProviderTransactionId");
 		String userId = (String) ex.getIn().getHeader("userId");
 		Integer amount = (Integer) ex.getIn().getHeader("amount");
 		String currency = (String) ex.getIn().getHeader("currency");
 		String responseCode = (String) ex.getIn().getHeader("responseCode");
 		String responseMessage = (String) ex.getIn().getHeader("responseMessage");
-		String occId = (String) ex.getIn().getHeader("name");
+		String occId = (String) ex.getIn().getHeader("occId");
 		
 		CarrierRefundDAO carrierRefundDAO = new CarrierRefundDAO();
-		String res = carrierRefundDAO.insertCarrierRefund(requestId,bangoTransactionId,merchantTransactionId,paymentProviderTransactionId,userId,
-				amount,currency,responseCode,responseMessage,occId);
+		String paymentProviderTransactionId = carrierRefundDAO.insertCarrierRefund(requestId,bangoTransactionId,merchantTransactionId,userId,amount,currency,responseCode,responseMessage,occId);
 		
-		return res;
+		ex.getIn().setHeader("paymentProviderTransactionId", paymentProviderTransactionId);
 	}
 
 }
