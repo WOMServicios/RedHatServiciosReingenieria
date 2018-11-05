@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    component: '#(deploy-name)#'
+    group: fuse7-java-openshift
+    version: '#(version.service)#'
+  name: #(deploy-name)#-properties
+data:
+  #(deploy-name)#.properties: >-
+  
+    ### Variables globales de log y camel ###
+
+    logging.level=${LOGLEVEL}
+
+    camel.timeout.redelivery-delay=#(prop.camel.timeout.redelivery-delay)#
+
+    camel.timeout.max-delivery=#(prop.camel.timeout.max-delivery)#
+    
+    ### Variables para base de datos replica ###
+
+    sql.bscsdesa.url=#(prop.sql.bscsdesa.url)#
+
+    sql.bscsdesa.port=#(prop.sql.bscsdesa.port)#
+
+    sql.bscsdesa.host=#(prop.database.replica.host)#
+    
+    sql.bscsdesa.databasename=#(prop.sql.bscsdesa.databasename)#
+
+    sql.bscsdesa.username=#(prop.database.replica.username)#
+
+    sql.bscsdesa.password=#(prop.database.replica.password)#
+    
+    ### Variables para base de datos wappl ###
+
+    sql.wappldesa.url=#(prop.sql.wappldesa.url)#
+
+    sql.wappldesa.port=#(prop.sql.wappldesa.port)#
+
+    sql.wappldesa.host=#(prop.sql.wappldesa.host)#
+
+    sql.wappldesa.username=#(prop.sql.wappldesa.username)#
+
+    sql.wappldesa.password=#(prop.sql.wappldesa.password)#
+
+    sql.wappldesa.databasename=#(prop.sql.wappldesa.databasename)#
+
+    ### Variables para servicio REST ###
+
+    service.soap.host=#(prop.service.rest.host)#
+
+    service.soap.port=#(prop.service.rest.port)#
+
+    service.soap.resource=#(prop.service.rest.resource)#
+
+    spring.datasource.initialize=#(prop.spring.datasource.initialize)#
+
+    sql.timeout=#(prop.sql.timeout)#
+
+    telnet.tcp=#(prop.telnet.tcp)#

@@ -31,6 +31,12 @@ public class ServiceError extends Exception{
 		   case 453:
 			   mensaje="No Data Found";
 			   break;
+		   case 454:
+			   mensaje="Invalid data type";
+			   break;
+		   case 455:
+			   mensaje="DataBase Error SQL Exception";
+			   break;
 	       default:
 	           mensaje="Error, sin codigo de error reconocido";
 	           break;
