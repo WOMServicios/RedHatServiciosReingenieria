@@ -1,21 +1,8 @@
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels:
-    component: '#(deploy-name)#'
-    group: fuse7-java-openshift
-    version: '#(version.service)#'
-  name: #(deploy-name)#-properties
 data:
-  #(deploy-name)#.properties: >-
+  #(deploy-name)#.properties: |-
   
     ### Variables globales de log y camel ###
-
-    logging.level=${LOGLEVEL}
-
-    camel.timeout.redelivery-delay=#(prop.camel.timeout.redelivery-delay)#
-
-    camel.timeout.max-delivery=#(prop.camel.timeout.max-delivery)#
     
     ### Variables para base de datos replica ###
 
@@ -23,13 +10,13 @@ data:
 
     sql.bscsdesa.port=#(prop.sql.bscsdesa.port)#
 
-    sql.bscsdesa.host=#(prop.database.replica.host)#
+    sql.bscsdesa.host=#(prop.sql.bscsdesa.host)#
     
     sql.bscsdesa.databasename=#(prop.sql.bscsdesa.databasename)#
 
-    sql.bscsdesa.username=#(prop.database.replica.username)#
+    sql.bscsdesa.username=#(prop.sql.bscsdesa.username)#
 
-    sql.bscsdesa.password=#(prop.database.replica.password)#
+    sql.bscsdesa.password=#(prop.sql.bscsdesa.password)#
     
     ### Variables para base de datos wappl ###
 
@@ -45,16 +32,24 @@ data:
 
     sql.wappldesa.databasename=#(prop.sql.wappldesa.databasename)#
 
-    ### Variables para servicio REST ###
+    ### Variables para servicio SOAP ###
 
-    service.soap.host=#(prop.service.rest.host)#
+    service.soap.host=#(prop.service.soap.host)#
 
-    service.soap.port=#(prop.service.rest.port)#
+    service.soap.port=#(prop.service.soap.port)#
 
-    service.soap.resource=#(prop.service.rest.resource)#
+    service.soap.resource=#(prop.service.soap.resource)#
 
     spring.datasource.initialize=#(prop.spring.datasource.initialize)#
 
     sql.timeout=#(prop.sql.timeout)#
 
     telnet.tcp=#(prop.telnet.tcp)#
+    
+    kind: ConfigMap
+metadata:
+  labels:
+    component: '#(deploy-name)#'
+    group: fuse7-java-openshift
+    version: '#(version.service)#'
+  name: #(deploy-name)#-properties
