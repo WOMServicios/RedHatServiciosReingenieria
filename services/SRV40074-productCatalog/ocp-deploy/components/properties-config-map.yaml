@@ -1,13 +1,6 @@
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  labels:
-    component: '#(deploy-name)#'
-    group: fuse7-java-openshift
-    version: '#(version.service)#'
-  name: #(deploy-name)#-properties
 data:
-  #(deploy-name)#.properties: >-
+  #(deploy-name)#.properties: |-
 
     ### Variables globales de log y camel ###
 
@@ -23,8 +16,6 @@ data:
 
     database.bscs.password=#(prop.database.bscs.password)#
 
-    ### Variables para base de datos wappl ###
-
     ### Variables para servicio SOAP ###
 
     camel.soap.endpointhost=#(prop.camel.soap.endpointhost)#
@@ -35,9 +26,16 @@ data:
 
     ### Variables para servicio REST ###
 
-    camel.rest.endpointhost=#(prop.camel.rest.endpointhost)#
+    camel.from.endpointhost=#(prop.camel.from.endpointhost)#
 
-    camel.rest.endpointport=#(prop.camel.rest.endpointport)#
+    camel.from.endpointport=#(prop.camel.from.endpointport)#
 
-    camel.rest.endpointurl=#(prop.camel.rest.endpointurl)#
-
+    camel.from.endpointurl=#(prop.camel.from.endpointurl)#
+    
+    kind: ConfigMap
+metadata:
+  labels:
+    component: '#(deploy-name)#'
+    group: fuse7-java-openshift
+    version: '#(version.service)#'
+  name: #(deploy-name)#-properties
