@@ -34,11 +34,11 @@ data:
 
     ### Variables para servicio SOAP ###
 
-    service.soap.host=#(prop.service.soap.host)#
+    services.soap.host=#(prop.services.soap.host)#
 
-    service.soap.port=#(prop.service.soap.port)#
+    services.soap.port=#(prop.services.soap.port)#
 
-    service.soap.resource=#(prop.service.soap.resource)#
+    services.soap.resource=#(prop.services.soap.resource)#
 
     spring.datasource.initialize=#(prop.spring.datasource.initialize)#
 
