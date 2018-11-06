@@ -8,7 +8,7 @@ metadata:
   name: '#(deploy-name)#-route-soap'
 spec:
   host: '#(project-id)#.#(wildcard)#'
-  path: '#(prop.service.soap.resource)#'
+  path: '#(prop.services.soap.resource)#'
   to:
     kind: Service
     name: '#(deploy-name)#'

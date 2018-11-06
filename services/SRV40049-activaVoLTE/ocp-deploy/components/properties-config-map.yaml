@@ -46,7 +46,7 @@ data:
 
     telnet.tcp=#(prop.telnet.tcp)#
     
-    kind: ConfigMap
+kind: ConfigMap
 metadata:
   labels:
     component: '#(deploy-name)#'

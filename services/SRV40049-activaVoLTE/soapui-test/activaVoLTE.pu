@@ -1,0 +1,79 @@
+@startuml
+header
+<FONT SIZE=21>
+endheader
+title <FONT SIZE=30><u><i>SRV40049-volteProvision
+skinparam monochrome false
+
+box "<FONT SIZE=25><b>CORE NETWORK\n"
+participant "<FONT SIZE=19><b>SPG" as spg
+end box
+participant "<FONT SIZE=19><b>OPENSHIFT\n<b>CAMEL" as camel
+participant "<FONT SIZE=19><b>Gateway\n<FONT SIZE=19><b>SPG" as gateway
+
+box "<FONT SIZE=25><b>BSCS\n"
+database "<FONT SIZE=19><b>BSCS" as bscs
+database "<FONT SIZE=19><b>Auditoria" as auditoria
+end box
+
+autonumber "<b>[00]"
+skinparam SequenceGroupBackgroundColor darkblue
+skinparam SequenceGroupHeaderFontColor #FFC400
+spg->camel:==activateVoLTE(msisdn,imsi)\n=SOAP
+note left
+== Request activateVoLTE(msisdn,imsi)
+==
+==<IMSI>460000009123456</IMSI> (valor variable)
+==<MSISDN>8613707550901</MSISDN> (valor variable)
+end note
+activate camel
+camel->auditoria:==spg_new_request_pr(msisdn)
+auditoria->camel:==Response (request_id,errorCode,Message)
+
+camel->gateway:==SPGCMD:AUTOPROV:MSISDN=569xxxxxxxx\n==TELNET
+gateway->camel:==SPGCMD:AUTOPROV:RESP_CODE=<ERR_CODE>,RESP_MSG= <ERR_MSG>
+note left
+== Evaluar el resultado
+del comando TELNET, en caso
+de éxito el flujo continúa en el paso 10,
+de otra manera,se ejecuta el
+ paso 08 y 09 y termina el flujo.
+end note
+alt <FONT SIZE=19><b><i>Response NOK TELNET
+camel-->auditoria:==spg_set_bscs_status_pr(errorCode,Message)
+camel->spg:activateVoLTEResponse(cod_error,msg_error)
+
+else <FONT SIZE=19><b><i>Response OK TELNET
+camel-->auditoria:==spg_set_prov_status_pr(request_id,telnet_errorCode,telnet_Message)
+camel->bscs:==spg_add_bscs_services_pr(msisdn)
+bscs->camel:==Response(errorCode,Message)
+
+
+note left
+== Evaluar el resultado
+de la activación de servicios en BSCS,
+en caso de éxito,el flujo continúa, de lo contrario,
+se debe reintentar desde el paso [11] hasta un
+resultado correcto, con un máximo de 3 iteraciones.
+end note
+loop <FONT SIZE=19><b><i> i=3 EVALUA RESPONSE BSCS
+camel-->auditoria:==spg_set_bscs_status_pr(cod_error,msg_error)
+
+alt <FONT SIZE= 19><b><i>Response OK BSCS_SERVICES
+camel->spg:==activateVoLTEResponse(cod_error,msg_error)
+else <FONT SIZE= 19><b><i>Response NOK BSCS_SERVICES
+camel->bscs:==spg_add_bscs_services_pr(msisdn)
+bscs->camel:==Response(errorCode,Message)
+
+
+
+end
+
+deactivate camel
+end
+camel->spg:==activateVoLTEResponse(cod_error,msg_error)
+end
+
+
+
+@enduml
