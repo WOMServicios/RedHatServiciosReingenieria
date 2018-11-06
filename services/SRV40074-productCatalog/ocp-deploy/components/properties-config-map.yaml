@@ -32,7 +32,7 @@ data:
 
     camel.from.endpointurl=#(prop.camel.from.endpointurl)#
     
-    kind: ConfigMap
+kind: ConfigMap
 metadata:
   labels:
     component: '#(deploy-name)#'

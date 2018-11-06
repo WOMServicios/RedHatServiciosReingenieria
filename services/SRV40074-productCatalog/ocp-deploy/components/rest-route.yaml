@@ -8,7 +8,7 @@ metadata:
   name: '#(deploy-name)#-route-rest'
 spec:
   host: '#(project-id)#.#(wildcard)#'
-  path: '#(prop.camel.rest.endpointurl)#'
+  path: '#(prop.camel.from.endpointurl)#'
   to:
     kind: Service
     name: '#(deploy-name)#'

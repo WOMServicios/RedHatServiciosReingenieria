@@ -19,7 +19,7 @@ objects:
           port: 8888
           protocol: TCP
           targetPort: 8888
-	- name: service-rest
+        - name: service-rest
           port: 8889
           protocol: TCP
           targetPort: 8889

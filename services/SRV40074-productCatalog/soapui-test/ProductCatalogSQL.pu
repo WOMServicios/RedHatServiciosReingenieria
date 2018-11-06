@@ -1,0 +1,142 @@
+@startuml
+header
+<FONT SIZE=21>
+endheader
+title <FONT SIZE=30><u><i>SRV40074-productCatalog SQL
+skinparam monochrome false
+
+box "<FONT SIZE=25><b>CUSTOMER NETWORK\n"
+participant "<FONT SIZE=19><b>Customer" as customer
+end box
+participant "<FONT SIZE=19><b>OPENSHIFT\n<b>CAMEL" as camel
+database "<FONT SIZE=19><b>BSCS Data Base\n<FONT SIZE=19><b>SQL" as sql
+
+
+alt <FONT SIZE= 14><b><i>Búsqueda por offerId
+  customer->camel:==GET REST/SOAP productoCatalog(OfferId)
+  activate camel
+
+  note left
+  == Búsqueda por OfferID
+  Se genera búsqueda y completitud de respuesta
+  mediante el criterio offerId , puede ser llamado
+  tanto por servicio REST como SOAP
+  end note
+
+  camel->sql:==getProductOffering(offerId) - 1.1
+  activate sql
+  sql->camel:==ProductOfferingObj getProductOffering()
+  deactivate sql
+  alt <FONT SIZE= 14><b><i>Error tipo sql-Exception
+  camel->customer:==Return SQL Error
+  else
+  camel->camel:==Incorporación resultado al objeto
+  |||
+  end
+  camel->sql:==getBundleOffering(IsOptionProduct=true, offerId) 2.1.1
+  activate sql
+  sql->camel:==BundleOfferingObj getBundleOffering()
+  deactivate sql
+  alt <FONT SIZE= 14><b><i>Error tipo sql-Exception
+  camel->customer:==Return SQL Error
+  else
+  camel->camel:==Incorporación resultado al objeto
+  |||
+  end
+  camel->sql:==getBundleOffering(IsOfferProduct=true, offerId) 2.2.1
+  activate sql
+  sql->camel:==BundleOfferingObj getBundleOffering()
+  deactivate sql
+  alt <FONT SIZE= 14><b><i>Error tipo sql-Exception
+  camel->customer:==Return SQL Error
+  else
+  camel->camel:==Incorporación resultado al objeto
+  |||
+  end
+  camel->sql:==getBundleOffering(IsOptionProduct=true, offerId) 2.2.2
+  activate sql
+  sql->camel:==BundleOfferingObj getBundleOffering()
+  deactivate sql
+  alt <FONT SIZE= 14><b><i>Error tipo sql-Exception
+  camel->customer:==Return SQL Error
+  else
+  camel->camel:==Incorporación resultado al objeto
+  |||
+  end
+  camel->sql:==getBundleOffering(IsOfferProduct=true, offerId) 2.2.3
+  activate sql
+  sql->camel:==BundleOfferingObj getBundleOffering()
+  deactivate sql
+  alt <FONT SIZE= 14><b><i>Error tipo sql-Exception
+  camel->customer:==Return SQL Error
+  else
+  camel->camel:==Incorporación resultado al objeto
+  |||
+  end
+  camel->customer:==ProductCatalogObject productoCatalog()
+end
+||45||
+alt <FONT SIZE= 14><b><i>Búsqueda por shortDescription
+  customer->camel:==GET REST/SOAP productoCatalog(shortDescription)
+  activate camel
+
+  note left
+  == Búsqueda por shortDescription
+  Se genera búsqueda y completitud de respuesta
+  mediante el criterio shortDescription, puede
+  ser llamado tanto por servicio REST como SOAP
+  end note
+
+  camel->sql:==getProductOffering(shortDescription) - 1.2
+  activate sql
+  sql->camel:==ProductOfferingObj(offerId) getProductOffering()
+  deactivate sql
+  alt <FONT SIZE= 14><b><i>Error tipo sql-Exception
+  camel->customer:==Return SQL Error
+  else
+  camel->camel:==Incorporación resultado al objeto
+  |||
+  end
+  camel->sql:==getBundleOffering(IsOptionProduct=true, offerId) - 2.1.1
+  activate sql
+  sql->camel:==BundleOfferingObj getBundleOffering()
+  deactivate sql
+  alt <FONT SIZE= 14><b><i>Error tipo sql-Exception
+  camel->customer:==Return SQL Error
+  else
+  camel->camel:==Incorporación resultado al objeto
+  |||
+  end
+  camel->sql:==getBundleOffering(IsOfferProduct=true, offerId) 2.2.1
+  activate sql
+  sql->camel:==BundleOfferingObj getBundleOffering()
+  deactivate sql
+  alt <FONT SIZE= 14><b><i>Error tipo sql-Exception
+  camel->customer:==Return SQL Error
+  else
+  camel->camel:==Incorporación resultado al objeto
+  |||
+  end
+  camel->sql:==getBundleOffering(IsOptionProduct=true, offerId) 2.2.2
+  activate sql
+  sql->camel:==BundleOfferingObj getBundleOffering()
+  deactivate sql
+  alt <FONT SIZE= 14><b><i>Error tipo sql-Exception
+  camel->customer:==Return SQL Error
+  else
+  camel->camel:==Incorporación resultado al objeto
+  |||
+  end
+  camel->sql:==getBundleOffering(IsOfferProduct=true, offerId) 2.2.3
+  activate sql
+  sql->camel:==BundleOfferingObj getBundleOffering()
+  deactivate sql
+  alt <FONT SIZE= 14><b><i>Error tipo sql-Exception
+  camel->customer:==Return SQL Error
+  else
+  camel->camel:==Incorporación resultado al objeto
+  |||
+  end
+  camel->customer:==ProductCatalogObject productoCatalog()
+end
+@enduml
