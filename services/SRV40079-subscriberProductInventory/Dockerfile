@@ -1,4 +1,4 @@
-FROM cllnxsatellite.novalte.corp:5000/wom-ocp_docker_images-fuse7_fuse-java-openshift:1.1
+FROM 10.120.1.131:5000/fuse7-java-openshift-appdynamics:latest
 
 LABEL maintainer="WOM" \
     author="VSTS"

@@ -98,12 +98,6 @@
 			<artifactId>camel-restlet</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>provided</scope>
-		</dependency>
 		
 		<dependency>
 			<groupId>org.apache.camel</groupId>
