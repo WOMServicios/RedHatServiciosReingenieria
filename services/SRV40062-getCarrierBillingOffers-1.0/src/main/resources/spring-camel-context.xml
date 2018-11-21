@@ -6,7 +6,7 @@
 	http://camel.apache.org/schema/spring 
 	http://camel.apache.org/schema/spring/camel-spring.xsd">
 
-	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor"/>
+	<bean id="clienteProcessor" class="cl.wom.util.ClienteProcessor" />
 
 	<camelContext
 		id="camelContext-0423f187-258d-455e-82e8-783bcda7f4af"
@@ -17,17 +17,17 @@
 			archivo properties. Por defecto en opensfhit es develop -->
 		<!--<propertyPlaceholder id="placeholder" location="classpath:$ {env:PFX_ENV}.properties"/> -->
 
-		<!-- <propertyPlaceholder id="placeholder"
-			location="classpath:application.properties,classpath:sql.properties" /> -->
-			<propertyPlaceholder id="placeholder"
-                location="file:${env:APP_ENV}, classpath:sql.properties"/>
+		<!-- <propertyPlaceholder id="placeholder" location="classpath:application.properties,classpath:sql.properties" 
+			/> -->
+		<propertyPlaceholder id="placeholder"
+			location="file:${env:APP_ENV}, classpath:sql.properties" />
 
 		<onException>
 			<exception>cl.wom.exception.services.ServiceError</exception>
 			<handled>
 				<constant>true</constant>
 			</handled>
-			
+
 			<setHeader headerName="codigoError">
 				<simple>${exception.codigoError}</simple>
 			</setHeader>
@@ -44,7 +44,7 @@
 		<!-- getcarrierbillingoffers -->
 		<route streamCache="true">
 			<from
-		
+
 				uri="restlet:http://{{service.rest.host}}:{{service.rest.port}}{{service.rest.resource}}?restletMethod=post" />
 
 
@@ -59,11 +59,10 @@
 					<jsonpath resultType="java.lang.String">$.msisdn</jsonpath>
 				</setHeader>
 				<doCatch>
-			<exception>org.apache.camel.ExpressionEvaluationException
+					<exception>org.apache.camel.ExpressionEvaluationException
 					</exception>
-					<setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
-						<simple>454</simple>
-					</setHeader>
+					<!-- <setHeader headerName="Exchange.HTTP_RESPONSE_CODE"> <simple>454</simple> 
+						</setHeader> -->
 					<to uri="velocity:velocity/454.vm" />
 					<setHeader headerName="Content-Type">
 						<constant>application/json</constant>
@@ -118,14 +117,16 @@
 						</setBody>
 						<to uri="bean:clienteProcessor" />
 
+
+
 						<when>
-							<simple>${body} == null</simple>
+							<simple>${body} == 1</simple>
 							<to uri="velocity:velocity/getCustomerContractMoreOld.vm" />
 							<stop />
 						</when>
 
 						<when>
-							<simple>${body} != null</simple>
+							<simple>${body} == 0</simple>
 
 							<!-- valida la cuenta pagadora getCustomerPagador -->
 
@@ -153,14 +154,14 @@
 								</setHeader>
 
 								<to uri="bean:clienteProcessor" />
-								
+
 								<when>
-								<simple>${body} == 0 </simple>
-								<to uri="velocity:velocity/getOfertaCarrier.vm" />
-								<stop/>
+									<simple>${body} == 0 </simple>
+									<to uri="velocity:velocity/getOfertaCarrier.vm" />
+									<stop />
 								</when>
-						
-									<to uri="velocity:velocity/Success.vm" />
+
+								<to uri="velocity:velocity/Success.vm" />
 							</when>
 						</when>
 

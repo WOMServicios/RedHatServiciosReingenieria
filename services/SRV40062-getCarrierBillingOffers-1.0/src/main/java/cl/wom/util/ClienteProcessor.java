@@ -32,6 +32,7 @@ public class ClienteProcessor implements Processor {
 			
 			
 			if(exchange.getIn().getHeader("msisdn").toString().length()>=30) {
+				//exchange.setProperty("exceds", 0);
 				throw new ServiceError("452");
 			}
 
@@ -42,20 +43,20 @@ public class ClienteProcessor implements Processor {
 			
 
 			if (cliente.getRut() == null) {
-				throw new ServiceError("453");
+				throw new ServiceError("MSISDN no disponible");
 			} else {
 				exchange.setProperty("customerIdProperty",cliente.getCustomerId());
-				System.err.println(exchange.getProperty("customerIdProperty")+ "customerId");
+			
 				exchange.setProperty("customerIdHighProperty",cliente.getCustomerIdHigh());
 				exchange.setProperty("numCelularProperty",cliente.getNumCelular());
 				exchange.setProperty("antiguedadProperty",cliente.getAntiguedad());
 				exchange.setProperty("contractIdProperty",cliente.getContractId());
 				exchange.setProperty("ratePlanProperty",cliente.getRateplan());
 				exchange.setProperty("cargoBasicoProperty",cliente.getCargoBasico());
+				exchange.setProperty("msisdnProperty", exchange.getIn().getHeader("msisdn"));
 				exchange.getIn().setBody(cliente);
 			}
 
-			
 
 		}
 		
@@ -65,7 +66,9 @@ public class ClienteProcessor implements Processor {
 
 			int contador = clienteDaoImpl.getSuscripcionesCarrierExist(sql, co);
 			
-			
+			if(contador != 0) {
+				throw new ServiceError("Cliente ya posse un subscripcion activa");
+			}
 			exchange.getIn().setBody(contador);
 
 		}
@@ -74,7 +77,21 @@ public class ClienteProcessor implements Processor {
 			
 
 			String dnNum = clienteDaoImpl.getCustomerContractMoreOld(sql, co);
-			exchange.getIn().setBody(dnNum);
+			 String msisdn = (String) exchange.getProperty("numCelularProperty");
+            
+            
+          
+            
+           int cont=0;
+  	
+			if(!dnNum.equals(msisdn)) {
+				cont=1;
+				throw new ServiceError("MISISDN no coincide con el responsable de pago");
+				
+				
+			}
+			exchange.getIn().setBody(cont);
+		
 			
 		}
 		
@@ -83,6 +100,9 @@ public class ClienteProcessor implements Processor {
 			
 
 			String customerId = clienteDaoImpl.getCustomerPagador(sql, co);
+			if(customerId==null) {
+				throw new ServiceError("No existe responsable de pago");
+			}
 			
 
 			exchange.getIn().setBody(customerId);
@@ -97,7 +117,7 @@ public class ClienteProcessor implements Processor {
 			
 			
 	 		JSONArray jsonObj = new org.json.JSONArray(clientes);
-	 		System.err.println(jsonObj.toString());
+	 		
 	 		int count;
 
 			if (clientes.size()>0) {
@@ -106,7 +126,6 @@ public class ClienteProcessor implements Processor {
 					co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 					count =clienteDaoImpl.validacionPreInsert("SELECT COUNT(*) FROM CARRIERBILLING.CONT_OFFER_CARRIER_BILLING_TO WHERE ID_OFERTA ='"+c.getIdOferta()+"' AND CUSTOMER_ID="+exchange.getProperty("customerIdProperty"), co);
 					
-					System.err.println(count+"vamos a ver");
 					if(count==0) {
 					co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
 					clienteDaoImpl.insertaregelegcarrierbilling("INSERT INTO CARRIERBILLING.CONT_OFFER_CARRIER_BILLING_TO (ID_OFERTA,CUSTOMER_ID,NUM_CELULAR,CONTRATO_ID,RATEPLAN,ANTIGUEDAD,CARGO_BASICO,ESTADO_OFERTA) VALUES ('"+c.getIdOferta()+"', "+exchange.getProperty("customerIdProperty")+", '"+exchange.getProperty("numCelularProperty")+"', "+exchange.getProperty("contractIdProperty")+", '"+exchange.getProperty("ratePlanProperty")+"', "+exchange.getProperty("antiguedadProperty")+", "+exchange.getProperty("cargoBasicoProperty")+", 2)", co);
@@ -117,7 +136,7 @@ public class ClienteProcessor implements Processor {
 			
 				exchange.getIn().setBody(jsonObj.toString());
 			} else {
-				exchange.getIn().setBody(jsonObj.toString() );
+				throw new ServiceError("No existe oferta carrier billing");
 			}
 
 		}
@@ -129,7 +148,6 @@ public class ClienteProcessor implements Processor {
 			exchange.getIn().setHeader("idOferta",exchange.getProperty("idOfertaProperty"));
 			exchange.getIn().setHeader("desOferta",exchange.getProperty("desOfertaProperty"));
 
-
 		}
 		if (headerBD.equals("insertaregelegcarrierbilling")) {
 			co = ConnectionFactory.getConnection(DataBaseSchema.WAPPL);
@@ -138,9 +156,7 @@ public class ClienteProcessor implements Processor {
 			exchange.getIn().setHeader("idOferta",exchange.getProperty("idOfertaProperty"));
 			exchange.getIn().setHeader("desOferta",exchange.getProperty("desOfertaProperty"));
 
-
 		}
-
 
 	}
 

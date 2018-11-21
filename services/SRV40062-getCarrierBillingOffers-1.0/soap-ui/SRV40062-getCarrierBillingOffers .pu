@@ -1,0 +1,165 @@
+@startuml
+title <FONT SIZE=21><u><i>getCarrierBIllingOffers
+header
+<FONT SIZE=21><u>Version 02
+endheader
+skinparam monochrome false
+autonumber "<b>[00]"
+actor "<FONT SIZE=19><b>CLIENTE" as user
+participant "<FONT COLOR=white SIZE=19><b>APP" as app #purple
+box
+participant "<FONT COLOR=WHITE SIZE=19><b>OpenShift - Camel" as openshift #red
+end box
+database "<FONT SIZE=19><b>BSCS_REPLICA" as bscs_r
+database "<FONT SIZE=19><b>WAPPLDESA" as new_wom_BD
+group SRV40062-getCarrierBillingOffers
+  |||
+user-[#purple]>app:==El cliente ingresa a la APP de WOM
+
+app-[#purple]>openshift:==[Orquestacion]"getCarrierBIllingOffers" (msisdn)
+note left
+=Request/POST
+==
+==Ingresa al flujo
+{
+    ”msisdn” : “5691111111”
+}
+end note
+activate openshift #red
+openshift-[#red]>bscs_r:==Sentencia SQL "getInfoSuscriptorCarrierBilling" (String:msisdn)
+
+bscs_r-[#red]>openshift:==SQL Response
+note left
+==InfoSuscriptorCarrierBilling
+==
+(rut,
+customer_id ,
+customer_id_high,
+contract_id ,
+num_celular ,
+tipo_contrato ,
+ratePlan,
+antiguedad ,
+ciclo ,
+estado_contrato ,
+fecha_activacion ,
+mercado,
+cargo_basico)
+end note
+
+alt getInfoSuscriptorCarrierBilling()=Null
+openshift -> app:=NOK
+app-[#purple]>user
+note left
+responseCode:NOK
+responseMessage: MSISDN no disponible
+end note
+else getInfoSuscriptorCarrierBilling() OK
+openshift -> new_wom_BD:=ExistCarrierBilling SQL "getSuscripcionesCarrierExist" (msisdn)
+
+activate new_wom_BD
+new_wom_BD -> openshift : =Response
+deactivate new_wom_BD
+note left
+=ExistCarrierBilling?
+exist
+==
+si es cero continua
+end note
+alt getSuscripcionesCarrierExist() !=1
+openshift -> app:NOK
+app-[#purple]>user
+note left
+responseCode:NOK
+responseMessage: Cliente ya posee un subscripcion activa
+end note
+else getSuscripcionesCarrierExist()==1
+openshift -> bscs_r:=SQL "getCustomerContractMoreOld" (customerId)
+
+activate bscs_r
+bscs_r -> openshift:=Response
+note left
+=getCustomerContractMoreOld
+==
+msisdn mas antiguo
+end note
+deactivate bscs_r
+
+alt getCustomerContractMoreOld != msisdn <-variable de entrada
+openshift -[#red]> app:NOK
+app-[#purple]>user
+note left
+responseCode:NOK
+responseMessage: Misisdn no coincide con el responsable de pago
+end note
+else getCustomerContractMoreOld OK (response msisdn)
+openshift -[#red]> bscs_r:=SQL getCustomerPagador (customerId)
+
+activate bscs_r
+bscs_r -[#red]>  openshift:=Response
+note left
+=getCustomerPagador
+==
+customer_id pagador
+end note
+deactivate bscs_r
+
+alt getCustomerPagador==null
+openshift -[#red]> app:=NOK
+app -[#purple]>user
+note left
+responseCode:NOK
+responseMessage: No existe responsable de pago
+end note
+else getCustomerPagador OK (response customerId)
+openshift -[#red]> new_wom_BD: =SQL getofertacarrier (antiguedad,accesfee)
+
+activate new_wom_BD
+new_wom_BD -[#red]>openshift:=Response
+note left
+=getofertacarrier
+==
+ID_OFERTA <-Valor Importante
+DES_OFERTA
+ID_OCC_BSCS
+MESES_ANTIGUEDAD
+VALOR_MINIMO_PLAN
+FEC_DESDE
+FEC_HASTA
+end note
+deactivate new_wom_BD
+
+alt getofertacarrier==null
+openshift -[#red]> app:=NOK
+app-[#purple]>user
+note left
+responseCode:NOK
+responseMessage: No existe oferta carrier billing
+end note
+else getofertacarrier OK (response idofertaCarrierbilling)
+openshift -[#red]> new_wom_BD:= SQL insertaregcarrierbilling
+
+openshift -[#red]> app:=OK
+deactivate openshift
+app-[#purple]>user:=Oferta disponible
+note left
+=El servicio informa la oferta disponible
+==
+Se genera response del servicio de "getCarrierBIllingOffers"
+https:/[HOST]:[puerto]/CarrierBilling/getCarrierBIllingOffers
+==
+end note
+user-[#purple]>app:=Cliente acepta la Oferta
+note right
+Continua siguiente diagrama...
+end note
+end
+end
+end
+|||
+deactivate openshift
+|||
+end
+end
+end
+@enduml

@@ -14,4 +14,5 @@ public interface IClienteDao {
 	public List<Cliente> getofertacarrier (String sql, Connection co);
 	public void insertaregelegcarrierbilling (String sql, Connection co);
 	public int validacionPreInsert (String sql, Connection co);
+	public String paymentTransactionId (String sql, Connection co);
 }

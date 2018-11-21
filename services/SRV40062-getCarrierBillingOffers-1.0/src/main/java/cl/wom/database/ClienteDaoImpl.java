@@ -229,4 +229,32 @@ public class ClienteDaoImpl implements IClienteDao {
 
 		return cont;
 	}
+	
+	@Override
+    public String paymentTransactionId(String sql, Connection co) {
+        Statement stm= null;
+        ResultSet rs=null;
+        
+        Cliente cliente=null;
+        
+        try {            
+            
+            stm=co.createStatement();
+            rs=stm.executeQuery(sql);
+        
+             cliente=new Cliente();
+             if(rs.next()) {
+                
+                 cliente.setSecuencia(rs.getString("SECUENCIA"));
+                    
+                         }
+            stm.close();
+            rs.close();
+            co.close();
+        } catch (SQLException e) {
+            System.out.println("Error: Clase ClienteDaoImple, método obtener");
+            e.printStackTrace();
+        }        return cliente.getSecuencia();
+    
+    }
 }

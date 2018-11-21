@@ -2,8 +2,7 @@ package cl.wom.beans;
 
 import java.io.Serializable;
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+
 
 public class Cliente implements Serializable {
 
@@ -31,10 +30,22 @@ public class Cliente implements Serializable {
 	private String valorMinimo;
 	private Date fecDesde;
 	private Date fecHasta;
+	private String paymentProviderTransaction;
+    private String secuencia;
 
 	public Cliente() {
 
 	}
+	
+	public String getSecuencia() {
+        return secuencia;
+    }    public void setSecuencia(String secuencia) {
+        this.secuencia = secuencia;
+    }    public String getPaymentProviderTransaction() {
+        return paymentProviderTransaction;
+    }    public void setPaymentProviderTransaction(String paymentProviderTransaction) {
+        this.paymentProviderTransaction = paymentProviderTransaction;
+    }
 
 	public String getRut() {
 		return rut;
